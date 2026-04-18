@@ -298,6 +298,23 @@ tr:nth-child(even) td{background:var(--grey-light);}
 /* ══ BUSINESS SCALING PAGE ══ */
 .biz-scale-page{background:linear-gradient(160deg,#080818 0%,#121228 45%,#0A2010 100%);color:#fff;min-height:100vh;padding:56px 80px 48px;page-break-after:always;display:flex;flex-direction:column;}
 .biz-scale-page::after{content:"HOPI TECHNOLOGY · \00A9 2026";display:block;margin-top:auto;padding-top:16px;text-align:right;font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:rgba(232,117,10,0.35);font-family:'Segoe UI',Arial,sans-serif;font-weight:600;}
+/* BSL — Business Scale Layer (AIQ-00043) */
+.bsl-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.bsl-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.bsl-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.bsl-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.bsl-motto-row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;}
+.bsl-ci{font-size:18px;margin-bottom:6px;}
+.bsl-cl{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.bsl-cb{font-size:9px;line-height:1.6;}
+.bsl-sl{font-size:8px;font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.8px;}
+.bsl-sb{font-size:8px;line-height:1.55;}
+.bsl-motto-label{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.bsl-motto-text{font-size:22px;font-weight:900;font-style:italic;letter-spacing:.5px;}
+@media(min-width:3200px){.bsl-grid-5,.bsl-grid-3{gap:18px;}.bsl-ci{font-size:32px;margin-bottom:10px;}.bsl-cl{font-size:13px;margin-bottom:9px;}.bsl-cb{font-size:15px;}.bsl-sl{font-size:13px;margin-bottom:5px;}.bsl-sb{font-size:14px;}.bsl-motto-label{font-size:13px;margin-bottom:8px;}.bsl-motto-text{font-size:38px;}.bsl-motto-row{gap:20px;}}
+@media(min-width:1920px){.bsl-grid-5,.bsl-grid-3{gap:12px;}.bsl-ci{font-size:24px;margin-bottom:8px;}.bsl-cl{font-size:10px;margin-bottom:8px;}.bsl-cb{font-size:12px;}.bsl-sl{font-size:10px;margin-bottom:4px;}.bsl-sb{font-size:11px;}.bsl-motto-label{font-size:10px;margin-bottom:7px;}.bsl-motto-text{font-size:28px;}.bsl-motto-row{gap:16px;}}
+@media(max-width:1366px){.bsl-grid-5{grid-template-columns:repeat(3,1fr);}.bsl-grid-4{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){.bsl-grid-5{grid-template-columns:repeat(2,1fr);}.bsl-grid-4{grid-template-columns:1fr;}.bsl-grid-3{grid-template-columns:1fr;}.bsl-motto-row{grid-template-columns:1fr;}}
 /* ══ STAMP ANIMATION ══ */
 @keyframes hopiTechStamp{0%{opacity:0;transform:translateX(55px) scale(0.88);}65%{opacity:1;transform:translateX(-3px) scale(1.04);}82%{transform:translateX(1px) scale(0.99);}100%{opacity:1;transform:translateX(0) scale(1);}}
 /* ══ SCREEN NAV BUTTONS ══ */
@@ -3462,7 +3479,7 @@ body{padding-top:52px;}
     </p>
   </div>
 
-  <h3 data-i18n="s00_prob_h3">Tři problémy, které portal řeší</h3>
+  <h3 data-i18n="s00_prob_h3">Tři problémy, které portál řeší</h3>
   <div class="problem-row">
     <div class="problem-card">
       <div class="pc-icon">🔀</div>
@@ -5746,7 +5763,7 @@ const PREZ_TR = {
   s00_label:    { cz: '00 — Pro management',                          en: '00 — For Management' },
   s00_h2:       { cz: 'Co budujeme a proč — pohled pro vedení',       en: 'What We Are Building and Why — Management View' },
   s00_hero_h3:  { cz: 'Jednoduchá odpověď na složitou otázku',        en: 'A Simple Answer to a Complex Question' },
-  s00_prob_h3:  { cz: 'Tři problémy, které portal řeší',             en: 'Three Problems the Portal Solves' },
+  s00_prob_h3:  { cz: 'Tři problémy, které portál řeší',             en: 'Three Problems the Portal Solves' },
   s00_p1_before:{ cz: 'Dnes: Roztříštěnost',                          en: 'Today: Fragmentation' },
   s00_p1_h4:    { cz: 'Data všude jinde',                             en: 'Data Everywhere Else' },
   s00_p1_after: { cz: 'Řešení: Jeden portál',                        en: 'Solution: One Portal' },
@@ -5757,7 +5774,7 @@ const PREZ_TR = {
   s00_p3_h4:    { cz: 'Vedení nemá celkový obraz',                    en: 'Management Has No Full Picture' },
   s00_p3_after: { cz: 'Řešení: AI & živá data',                      en: 'Solution: AI & Live Data' },
   s00_val_h3:   { cz: 'Co management získá',                          en: 'What Management Gets' },
-  s00_vc1:      { cz: 'přihlášení na vše\n(Microsoft SSO)',           en: 'sign-in for everything\n(Microsoft SSO)' },
+  s00_vc1:      { cz: 'přihlášení na vše\n(Microsoft SSO)',           en: 'one login for all\n(Microsoft SSO)' },
   s00_vc2:      { cz: 'jazyků UI\nv jedné platformě',                 en: 'UI languages\nin one platform' },
   s00_vc3:      { cz: 'společností\nv jednom pohledu',                en: 'companies\nin one view' },
   s00_vc4:      { cz: 'AI asistent\nvždy k dispozici',                en: 'AI assistant\nalways available' },
@@ -5783,7 +5800,7 @@ const PREZ_TR = {
 
   // ── s02: Strategic Vision ──
   s02_label:    { cz: '02 — Vize',                                    en: '02 — Vision' },
-  s02_h2:       { cz: 'Strategická vize — Nasaditelný organizační model', en: 'Strategic Vision — Deployable Organisational Model' },
+  s02_h2:       { cz: 'Strategická vize — Nasaditelný organizační model', en: 'Strategic Vision — Scalable Organisational Model' },
   s02_hier_h3:  { cz: 'Hierarchická struktura portálů',               en: 'Hierarchical Portal Structure' },
   s02_stat1:    { cz: 'zemí',                                         en: 'countries' },
   s02_stat2:    { cz: 'divizí',                                       en: 'divisions' },

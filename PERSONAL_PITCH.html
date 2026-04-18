@@ -84,6 +84,9 @@ body{padding-top:52px;}
 }
 .biz-scale-page::after{
   content:"HOPI TECHNOLOGY · \00A9 2026 · Záměr Davida Gogely";
+}
+body.lang-en .biz-scale-page::after{
+  content:"HOPI TECHNOLOGY · \00A9 2026 · David Gogela's Vision";
   display:block;margin-top:auto;padding-top:16px;text-align:right;
   font-size:9px;letter-spacing:1.6px;text-transform:uppercase;
   color:rgba(232,117,10,0.3);font-family:'Segoe UI',Arial,sans-serif;font-weight:600;
@@ -209,17 +212,17 @@ body{padding-top:52px;}
       </svg>
       <div style="font-size:9px;font-weight:700;color:rgba(232,117,10,.65);letter-spacing:1.5px;margin-top:6px;text-transform:uppercase;">HOPI AppIQ</div>
     </div>
-    <div id="pw-title">Záměr Davida Gogely</div>
-    <div id="pw-subtitle">HOPI TECHNOLOGY · důvěrný dokument</div>
+    <div id="pw-title"><span class="lang-cz">Záměr Davida Gogely</span><span class="lang-en" style="display:none;">David Gogela's Vision</span></div>
+    <div id="pw-subtitle"><span class="lang-cz">HOPI TECHNOLOGY · důvěrný dokument</span><span class="lang-en" style="display:none;">HOPI TECHNOLOGY · confidential document</span></div>
     <hr id="pw-divider">
-    <div id="pw-label">Přístupové heslo:</div>
+    <div id="pw-label"><span class="lang-cz">Přístupové heslo:</span><span class="lang-en" style="display:none;">Access password:</span></div>
     <div id="pw-input-wrap">
       <input id="pw-input" type="password" placeholder="Zadejte heslo…" autocomplete="off" spellcheck="false">
       <button id="pw-toggle" onclick="togglePwShow()" title="Zobrazit/skrýt heslo">👁</button>
     </div>
-    <button id="pw-btn" onclick="checkPw()">Otevřít dokument →</button>
+    <button id="pw-btn" onclick="checkPw()"><span class="lang-cz">Otevřít dokument →</span><span class="lang-en" style="display:none;">Open document →</span></button>
     <div id="pw-error"></div>
-    <div id="pw-footer">Tento dokument je určen výhradně jeho příjemci.</div>
+    <div id="pw-footer"><span class="lang-cz">Tento dokument je určen výhradně jeho příjemci.</span><span class="lang-en" style="display:none;">This document is intended exclusively for its recipient.</span></div>
   </div>
 </div>
 
@@ -540,8 +543,8 @@ body{padding-top:52px;}
             <span class="lang-en" style="display:none;">2027 · 20 years</span>
           </div>
           <div class="bsl-cb" style="color:rgba(255,255,255,.65);">
-            <span class="lang-cz"><strong style="color:#60D080;">HOPI Technology</strong> · AppIQ · nová kapitola</span>
-            <span class="lang-en" style="display:none;"><strong style="color:#60D080;">HOPI Technology</strong> · AppIQ · new chapter</span>
+            <span class="lang-cz"><strong style="color:#60D080;">HOPI TECHNOLOGY</strong> · AppIQ · nová kapitola</span>
+            <span class="lang-en" style="display:none;"><strong style="color:#60D080;">HOPI TECHNOLOGY</strong> · AppIQ · new chapter</span>
           </div>
         </div>
 
@@ -562,7 +565,7 @@ body{padding-top:52px;}
         <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Real Estate</span>
         <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Energetics</span>
         <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">IT &amp; Management</span>
-        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(80,200,130,.12);border:1px solid rgba(80,200,130,.35);color:#60D080;">+ HOPI Technology ↗</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(80,200,130,.12);border:1px solid rgba(80,200,130,.35);color:#60D080;">+ HOPI TECHNOLOGY ↗</span>
       </div>
     </div>
 
@@ -1173,7 +1176,8 @@ function checkPw(){
     if(window.ppMusicStart) window.ppMusicStart();
   } else {
     inp.classList.add('error');
-    document.getElementById('pw-error').textContent = 'Nesprávné heslo. Zkuste znovu.';
+    var isCz = document.getElementById('btn-cz').classList.contains('active');
+    document.getElementById('pw-error').textContent = isCz ? 'Nesprávné heslo. Zkuste znovu.' : 'Incorrect password. Please try again.';
     setTimeout(function(){
       inp.classList.remove('error');
       inp.value = '';
@@ -1292,6 +1296,8 @@ function setLang(lang){
   document.querySelectorAll('.lang-en').forEach(function(el){ el.style.display = isCz ? 'none' : ''; });
   document.getElementById('btn-cz').classList.toggle('active', isCz);
   document.getElementById('btn-en').classList.toggle('active', !isCz);
+  document.body.classList.toggle('lang-en', !isCz);
+  document.getElementById('pw-input').placeholder = isCz ? 'Zadejte heslo\u2026' : 'Enter password\u2026';
 }
 </script>
 </body>
