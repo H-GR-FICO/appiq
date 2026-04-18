@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="cs" class="">
 <head>
 <meta charset="UTF-8">
@@ -30,6 +30,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--dark);color:#fff;f
   padding:0 32px;
 }
 .nav-left{display:flex;align-items:center;gap:10px;}
+@keyframes hopiTechStamp{0%{opacity:0;transform:translateX(55px) scale(0.88);}65%{opacity:1;transform:translateX(-3px) scale(1.04);}82%{transform:translateX(1px) scale(0.99);}100%{opacity:1;transform:translateX(0) scale(1);}}
 .nav-logo-bar{width:3px;height:38px;background:var(--hopi-green);border-radius:2px;}
 .nav-logo-text{display:flex;flex-direction:column;gap:1px;}
 .nav-logo-hopi{font-size:22px;font-weight:900;color:#fff;letter-spacing:2px;line-height:1;}
@@ -62,7 +63,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:var(--dark);color:#fff;f
 .hero-eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--hopi-green);margin-bottom:20px;font-weight:700;}
 .hero-title{font-size:64px;font-weight:900;line-height:1.05;margin-bottom:12px;}
 .hero-title .t-hopi{color:#fff;}
-.hero-title .t-app{color:rgba(255,255,255,.75);font-weight:400;}
+.hero-title .t-app{color:#E8750A;font-weight:400;}
 .hero-title .t-iq{color:var(--hopi-green);}
 .hero-slogan{font-size:22px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:8px;}
 .hero-tagline{font-size:14px;color:rgba(255,255,255,.4);font-style:italic;margin-bottom:48px;}
@@ -190,10 +191,94 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
 .lang-en{display:none;}
 
 /* ── RESPONSIVE ── */
+
+/* ── LARGE (1920px+) — Full HD & large monitors ── */
+@media(min-width:1920px){
+  .hero-title{font-size:clamp(64px,3.5vw,100px);}
+  .hero-slogan{font-size:clamp(22px,1.4vw,34px);}
+  .section,.preview-section{max-width:1400px;padding:100px 60px;}
+  .hopiq-inner{max-width:1400px;}
+  .hopiq-section{padding:100px 60px;}
+  .launch-section{padding:100px 60px;}
+  .section-title,.hopiq-title,.launch-title{font-size:clamp(36px,2vw,52px);}
+  .section-sub{font-size:clamp(15px,.9vw,20px);max-width:800px;}
+  .pillars-grid{gap:28px;}
+}
+
+/* ── ULTRAWIDE (3200px+) — David's 3440×1440 ── */
+@media(min-width:3200px){
+  .hero-title{font-size:clamp(100px,3.8vw,140px);}
+  .hero-slogan{font-size:clamp(34px,1.7vw,52px);}
+  .hero-tagline{font-size:clamp(14px,.8vw,22px);}
+  .section,.preview-section{max-width:2000px;padding:120px 80px;}
+  .hopiq-inner{max-width:2000px;}
+  .hopiq-section{padding:120px 80px;}
+  .launch-section{padding:120px 80px;}
+  .launch-inner{max-width:1200px;}
+  .section-title,.hopiq-title,.launch-title{font-size:clamp(52px,2.4vw,72px);}
+  .section-sub{font-size:clamp(18px,1vw,26px);max-width:1100px;}
+  .top-nav{height:70px;}
+  .pillars-grid{gap:36px;}
+  .hopiq-inner{gap:80px;}
+}
+
+/* ── TABLET LANDSCAPE (max 1200px) ── */
+@media(max-width:1200px){
+  .section,.preview-section{padding:70px 32px;}
+  .hopiq-section{padding:70px 32px;}
+  .launch-section{padding:70px 32px;}
+  .hopiq-inner{gap:40px;}
+}
+
+/* ── TABLET (max 768px) ── */
 @media(max-width:768px){
-  .hero-title{font-size:40px;}
-  .pillars-grid,.hopiq-inner,.preview-highlights{grid-template-columns:1fr;}
   .top-nav{padding:0 16px;}
+  .nav-hopi-logo{display:none;}
+  #idx-music-label{display:none;}
+
+  .hero-title{font-size:clamp(32px,8vw,56px);}
+  .hero-slogan{font-size:18px;}
+  .hero{padding:90px 24px 48px;}
+  .hero-cta{flex-direction:column;align-items:center;}
+  .btn-primary,.btn-secondary{width:100%;max-width:300px;justify-content:center;}
+
+  .section,.preview-section{padding:60px 24px;}
+  .hopiq-section{padding:60px 24px;}
+  .launch-section{padding:60px 24px;}
+  .section-title,.hopiq-title,.launch-title{font-size:28px;}
+  .section-sub{font-size:14px;}
+
+  .pillars-grid{grid-template-columns:1fr;}
+  .hopiq-inner{grid-template-columns:1fr;gap:32px;}
+  .preview-highlights{grid-template-columns:1fr;}
+  .ph{border-right:none;}
+
+  .launch-cta{flex-direction:column;align-items:center;}
+}
+
+/* ── MOBILE (max 480px) ── */
+@media(max-width:480px){
+  .top-nav{padding:0 12px;height:50px;}
+  .nav-right{gap:4px;}
+  #archNavBtn,#oilNavBtn{display:none;}
+  #nav-hopi-tech{display:none!important;}/* hide stamp animation on phones — nav overflow */
+
+  .hero-title{font-size:clamp(26px,7.5vw,40px);}
+  .hero-slogan{font-size:15px;}
+  .hero-tagline{font-size:12px;margin-bottom:32px;}
+  .hero{padding:72px 16px 36px;}
+  .hero-scroll{margin-top:36px;}
+
+  .section,.preview-section{padding:48px 16px;}
+  .hopiq-section{padding:48px 16px;}
+  .launch-section{padding:48px 16px;}
+  .section-title,.hopiq-title,.launch-title{font-size:22px;}
+  .section-sub{font-size:13px;}
+  .vision-wrap{padding:24px 16px;}
+  .vision-quote{font-size:14px;}
+
+  #hopiq-fab{bottom:16px;right:16px;width:48px;height:48px;}
+  .fab-tooltip{right:60px;}
 }
 
 /* ── OIL — OPEN ISSUE LIST ── */
@@ -204,6 +289,39 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
   transition:all .2s;white-space:nowrap;
 }
 .oil-nav-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.5);}
+
+/* ── TECH ARCH panel ──────────────────────────────────────────── */
+.arch-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:4000;display:none;align-items:flex-start;justify-content:flex-end;}
+.arch-overlay.open{display:flex;}
+.arch-panel{background:#fff;width:1080px;max-width:98vw;height:100vh;display:flex;flex-direction:column;box-shadow:-6px 0 40px rgba(0,0,0,.4);animation:oilSlideIn .22s ease;}
+.arch-hdr{background:#1a237e;color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.arch-hdr-title{font-size:15px;font-weight:700;flex:1;}
+.arch-hdr-sub{font-size:11px;opacity:.7;margin-top:2px;}
+.arch-close-btn{background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer;padding:4px 8px;border-radius:4px;line-height:1;}
+.arch-close-btn:hover{background:rgba(255,255,255,.15);}
+.arch-tabs{display:flex;gap:0;border-bottom:2px solid #e0e0e0;background:#f5f7ff;flex-shrink:0;}
+.arch-tab{padding:9px 20px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;letter-spacing:.05em;border-bottom:3px solid transparent;margin-bottom:-2px;font-family:'Segoe UI',Arial,sans-serif;color:#666;transition:all .15s;}
+.arch-tab.active{color:#1a237e;border-bottom-color:#1a237e;}
+.arch-tab:hover:not(.active){color:#333;background:#eceeff;}
+.arch-body{flex:1;overflow-y:auto;padding:16px;}
+.arch-sec-hdr{font-size:11px;font-weight:700;color:#1a237e;letter-spacing:.1em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid #1a237e;margin-bottom:8px;margin-top:20px;}
+.arch-sec-hdr:first-child{margin-top:0;}
+.arch-tbl{width:100%;border-collapse:collapse;font-size:12.5px;color:#222;margin-bottom:4px;}
+.arch-tbl th{background:#eef0ff;font-weight:600;padding:5px 8px;text-align:left;font-size:11px;color:#444;border-bottom:1px solid #ccd;white-space:nowrap;}
+.arch-tbl td{padding:5px 8px;border-bottom:1px solid #f0f0f0;vertical-align:top;font-family:'Segoe UI',Arial,sans-serif;}
+.arch-tbl tr:hover td{background:#f0f2ff;}
+.arch-code{display:inline-block;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700;font-family:'Courier New',monospace;letter-spacing:.4px;white-space:nowrap;color:#fff;}
+.arch-code.scr{background:#6a1b9a;}
+.arch-code.sld{background:#bf360c;}
+.arch-code.doc{background:#1b5e20;}
+.arch-code.mod{background:#37474f;}
+.arch-code.idx{background:#0d47a1;}
+.arch-code.app{background:#006064;}
+.arch-code.lf{background:#b71c1c;}
+.arch-code.bc{background:#880e4f;}
+.arch-map-pre{background:#0a0e1a;color:#7ec8e3;font-family:'Courier New','Lucida Console',monospace;font-size:12px;line-height:1.7;padding:18px 20px;border-radius:8px;overflow-x:auto;white-space:pre;margin:0;}
+.arch-fetch-note{font-size:11px;color:#888;font-style:italic;margin-top:12px;padding:8px 12px;background:#f5f5f5;border-radius:6px;border-left:3px solid #ccc;}
+
 .oil-overlay{
   position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:4000;
   display:none;align-items:flex-start;justify-content:flex-end;
@@ -351,6 +469,83 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
 .oil-domain-badge{display:inline-block;background:#e8f0fe;color:#1a56aa;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600;white-space:nowrap;}
 .oil-module-badge{display:inline-block;background:#f0faf0;color:#2e7d32;border-radius:4px;padding:1px 7px;font-size:11px;white-space:nowrap;}
 .oil-comp-text{font-size:11px;color:#666;}
+
+/* ── OIL AUDITY TAB ── */
+.oil-aud-mode-btn{background:#f3e8ff;border:1px solid #b39ddb;border-radius:16px;padding:3px 12px;font-size:12px;cursor:pointer;transition:all .15s;font-family:'Segoe UI',Arial,sans-serif;color:#6a1b9a;font-weight:600;}
+.oil-aud-mode-btn:hover{background:#e1d0f8;}
+.oil-aud-mode-btn.active{background:#6a1b9a;color:#fff;border-color:#6a1b9a;}
+.oil-aud-card{background:#fafafa;border:1px solid #e0e0e0;border-radius:10px;margin-bottom:18px;overflow:hidden;}
+.oil-aud-card-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(90deg,#f3e8ff,#fafafa);border-bottom:1px solid #e8d5ff;cursor:pointer;}
+.oil-aud-card-hdr:hover{background:linear-gradient(90deg,#e8d5ff,#f5f0ff);}
+.oil-aud-id{font-size:11px;font-weight:900;color:#6a1b9a;letter-spacing:.5px;background:#e8d5ff;border-radius:4px;padding:2px 7px;white-space:nowrap;}
+.oil-aud-title{font-size:13px;font-weight:700;color:#222;flex:1;}
+.oil-aud-date{font-size:11px;color:#888;white-space:nowrap;}
+.oil-aud-status-badge{font-size:10px;font-weight:700;letter-spacing:.5px;border-radius:10px;padding:2px 9px;}
+.oil-aud-status-open{background:#fff3e0;color:#e65100;border:1px solid #ffcc80;}
+.oil-aud-status-progress{background:#e3f2fd;color:#1565c0;border:1px solid #90caf9;}
+.oil-aud-status-closed{background:#e8f5e9;color:#1b5e20;border:1px solid #a5d6a7;}
+.oil-aud-body{padding:14px 16px;}
+.oil-aud-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.oil-aud-scope-pill{font-size:10px;background:#f0f0f0;color:#555;border-radius:10px;padding:2px 8px;border:1px solid #ddd;}
+.oil-aud-area-pill{font-size:10px;background:#e8d5ff;color:#6a1b9a;border-radius:10px;padding:2px 8px;border:1px solid #d0aaff;}
+.oil-aud-stats-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.oil-aud-stat-box{text-align:center;flex:1;min-width:56px;background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:7px 4px;}
+.oil-aud-stat-num{font-size:20px;font-weight:900;line-height:1;}
+.oil-aud-stat-lbl{font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#999;margin-top:2px;}
+.oil-aud-stat-total .oil-aud-stat-num{color:#333;}
+.oil-aud-stat-high  .oil-aud-stat-num{color:#c62828;}
+.oil-aud-stat-med   .oil-aud-stat-num{color:#e67700;}
+.oil-aud-stat-low   .oil-aud-stat-num{color:#1565c0;}
+.oil-aud-stat-fixed .oil-aud-stat-num{color:#2e7d32;}
+/* Stacked severity bar */
+.oil-aud-bar-wrap{margin-bottom:8px;}
+.oil-aud-bar-lbl{font-size:10px;color:#888;margin-bottom:4px;font-weight:600;}
+.oil-aud-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:#eee;}
+.oil-aud-seg-high{background:#ef5350;}
+.oil-aud-seg-med {background:#ffa726;}
+.oil-aud-seg-low {background:#42a5f5;}
+.oil-aud-seg-fixed{background:#66bb6a;}
+/* Resolution progress */
+.oil-aud-progress-wrap{margin-bottom:12px;}
+.oil-aud-progress-lbl{display:flex;justify-content:space-between;font-size:10px;color:#888;margin-bottom:4px;}
+.oil-aud-progress-bar{height:8px;background:#e0e0e0;border-radius:4px;overflow:hidden;}
+.oil-aud-progress-fill{height:100%;background:linear-gradient(90deg,#43a047,#66bb6a);border-radius:4px;transition:width .4s;}
+/* Findings table */
+.oil-aud-findings-toggle{background:#f5f5f5;border:1px solid #ddd;border-radius:6px;padding:5px 14px;font-size:12px;cursor:pointer;color:#555;font-family:'Segoe UI',Arial,sans-serif;margin-bottom:10px;}
+.oil-aud-findings-toggle:hover{background:#ebebeb;}
+.oil-aud-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.oil-aud-tbl th{background:#f5f0ff;color:#6a1b9a;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;text-align:left;border-bottom:2px solid #d0aaff;}
+.oil-aud-tbl td{padding:6px 8px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+.oil-aud-tbl tr:hover td{background:#faf5ff;}
+.oil-aud-sev{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;}
+.oil-aud-sev-HIGH{background:#ffebee;color:#c62828;border:1px solid #ef9a9a;}
+.oil-aud-sev-MED {background:#fff3e0;color:#e67700;border:1px solid #ffcc80;}
+.oil-aud-sev-LOW {background:#e3f2fd;color:#1565c0;border:1px solid #90caf9;}
+.oil-aud-fstatus{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;cursor:pointer;}
+.oil-aud-fstatus-OPEN{background:#fff8e1;color:#f57f17;border:1px solid #ffe082;}
+.oil-aud-fstatus-FIXED{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;}
+.oil-aud-link{font-size:10px;background:#e8f0fe;color:#1a56aa;border-radius:4px;padding:1px 6px;text-decoration:none;white-space:nowrap;}
+
+/* ── MUSIC BUTTON ── */
+#index-music-btn{
+  display:flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid rgba(255,255,255,.22);
+  color:rgba(255,255,255,.7);border-radius:6px;
+  padding:4px 10px;font-size:11px;font-weight:700;
+  cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;
+  letter-spacing:.3px;transition:all .2s;white-space:nowrap;
+}
+#index-music-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.45);}
+#index-music-btn.playing{border-color:rgba(0,200,80,.5);color:#60D080;background:rgba(0,125,50,.12);}
+#index-music-btn .idx-waves{display:none;gap:2px;align-items:flex-end;height:12px;}
+#index-music-btn.playing .idx-waves{display:flex;}
+#index-music-btn.playing .idx-music-icon{display:none;}
+.idx-waves span{display:block;width:2px;background:#60D080;border-radius:1px;animation:idxWave 0.7s ease-in-out infinite;}
+.idx-waves span:nth-child(1){height:4px;animation-delay:0s;}
+.idx-waves span:nth-child(2){height:10px;animation-delay:.12s;}
+.idx-waves span:nth-child(3){height:6px;animation-delay:.24s;}
+.idx-waves span:nth-child(4){height:8px;animation-delay:.08s;}
+@keyframes idxWave{0%,100%{transform:scaleY(.4);}50%{transform:scaleY(1);}}
 </style>
 </head>
 <body>
@@ -358,21 +553,36 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
 <!-- TOP NAV -->
 <nav class="top-nav">
   <div class="nav-left">
-    <!-- HOPI AppIQ Platform Logo — real brand vectors -->
-    <svg viewBox="0 0 1450 240.6796" height="34" xmlns="http://www.w3.org/2000/svg" style="display:block;">
-      <rect width="30.1059" height="240.6796" fill="#007d32"/>
-      <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
-      <rect x="648" y="20" width="3" height="200" fill="rgba(255,255,255,0.15)" rx="1"/>
-      <text x="672" y="194" fill="rgba(255,255,255,0.72)" font-family="'Segoe UI',Arial,sans-serif" font-size="192" font-weight="300">App</text>
-      <text x="1118" y="196" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text>
-    </svg>
+    <!-- HOPI AppIQ LF2 + by HOPI TECHNOLOGY — stamp animation on load -->
+    <div id="nav-brand-wrap" style="position:relative;display:flex;align-items:center;gap:10px;">
+      <svg viewBox="0 0 1260 240.6796" height="34" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0;">
+        <rect width="30.1059" height="240.6796" fill="#007d32"/>
+        <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+        <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+      </svg>
+      <div id="nav-hopi-tech" style="display:flex;align-items:center;gap:8px;opacity:0;flex-shrink:0;">
+        <span style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;font-family:'Segoe UI',Arial,sans-serif;font-style:italic;">by</span>
+        <svg viewBox="0 0 660 318" height="40" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0;">
+          <rect x="629.8941" width="30.1059" height="318" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
+        </svg>
+      </div>
+      <div id="nav-stamp-flash" style="position:absolute;inset:0;pointer-events:none;border-radius:6px;opacity:0;background:rgba(255,220,100,0.75);"></div>
+    </div>
   </div>
   <div class="nav-right">
     <div class="lang-switch">
       <button class="lang-btn active" id="lbtn-cz" onclick="setLang('cs')">CZ</button>
       <button class="lang-btn" id="lbtn-en" onclick="setLang('en')">EN</button>
     </div>
+    <button class="oil-nav-btn" id="archNavBtn" onclick="openTechArch()">&#128506; Tech Arch</button>
     <button class="oil-nav-btn" id="oilNavBtn" onclick="openOIL()">&#128203; OIL</button>
+    <button id="index-music-btn" onclick="idxMusicToggle()" title="Battle Theme soundtrack">
+      <span id="idx-music-icon" class="idx-music-icon">🎵</span>
+      <span id="idx-music-label"><span class="lang-cz">Hudba</span><span class="lang-en" style="display:none;">Music</span></span>
+      <span class="idx-waves"><span></span><span></span><span></span><span></span></span>
+    </button>
     <div class="nav-hopi-logo">
       <!-- HOPI Holding Corporate Logo — real brand vectors -->
       <svg viewBox="0 0 1668.3749 240.6796" height="26" xmlns="http://www.w3.org/2000/svg" style="display:block;">
@@ -403,19 +613,25 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
     "Build smart. Deploy fast. Scale everywhere."
   </div>
   <div class="hero-tagline">AI-powered enterprise application platform</div>
+  <div style="font-size:10px;letter-spacing:2.2px;color:rgba(232,117,10,0.55);font-weight:700;text-transform:uppercase;margin-top:6px;font-family:'Segoe UI',Arial,sans-serif;">a HOPI TECHNOLOGY platform</div>
 
   <div class="hero-cta">
-    <a class="btn-primary btn-orange" href="#launch" id="portal-link">
+    <a class="btn-primary btn-orange" href="PORTAL_PRESENTATION.html" id="prez-link" target="_blank">
+      &#9654;
+      <span class="lang-cz">Otevřít prezentaci</span>
+      <span class="lang-en">Open Presentation</span>
+    </a>
+    <a class="btn-primary" href="#launch" id="portal-link">
       &#9654;
       <span class="lang-cz">Spustit portál</span>
       <span class="lang-en">Launch Portal</span>
     </a>
-    <a class="btn-secondary" href="PORTAL_PRESENTATION.html" id="prez-link">
-      &#128196;
-      <span class="lang-cz">Otevřít prezentaci</span>
-      <span class="lang-en">Open Presentation</span>
+    <a class="btn-secondary" href="#" id="portal-mobile-link" target="_blank" style="border-color:rgba(0,125,50,.5);color:#60D080;display:inline-flex;align-items:center;gap:6px;">
+      📱
+      <span class="lang-cz">Mobile <span style="font-size:9px;background:rgba(0,125,50,.3);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;">PREVIEW</span></span>
+      <span class="lang-en">Mobile <span style="font-size:9px;background:rgba(0,125,50,.3);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;">PREVIEW</span></span>
     </a>
-    <button class="btn-secondary" onclick="window.open('PORTAL_PRESENTATION.html','_blank');setTimeout(()=>window.print(),800);">
+    <button class="btn-secondary" onclick="window.open(window._prezUrl?window._prezUrl():'PORTAL_PRESENTATION.html','_blank');setTimeout(()=>window.print(),800);">
       &#128438;
       <span class="lang-cz">Export PDF</span>
       <span class="lang-en">Export PDF</span>
@@ -580,8 +796,8 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
     <span class="lang-en">Platform Documentation</span>
   </div>
   <h2 class="section-title">
-    <span class="lang-cz">Cílový koncept v6</span>
-    <span class="lang-en">Target Concept v6</span>
+    <span class="lang-cz">Cílový koncept <span id="idx-prez-ver-h2">…</span></span>
+    <span class="lang-en">Target Concept <span id="idx-prez-ver-h2-en">…</span></span>
   </h2>
   <div class="section-sub">
     <span class="lang-cz">Kompletní architektonický dokument — vize, architektura, fáze, tým, přijímací kritéria.</span>
@@ -590,7 +806,7 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
 
   <div class="preview-wrap">
     <div class="preview-header">
-      <span class="preview-title">HOPI AppIQ — <span class="lang-cz">Cílový koncept platformy</span><span class="lang-en">Platform Target Concept</span> v6.0</span>
+      <span class="preview-title">HOPI AppIQ — <span class="lang-cz">Cílový koncept platformy</span><span class="lang-en">Platform Target Concept</span> <span id="idx-prez-ver">…</span></span>
       <a class="btn-primary" href="PORTAL_PRESENTATION.html" style="padding:7px 18px;font-size:12px;">
         <span class="lang-cz">Otevřít</span><span class="lang-en">Open</span> &#8599;
       </a>
@@ -602,6 +818,150 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
       <div class="ph"><div class="ph-num">9</div><div class="ph-label"><span class="lang-cz">Jazyků UI</span><span class="lang-en">UI languages</span></div><div class="ph-title">CZ, SK, HU, PL, DE, RO, BG, HR, EN</div></div>
       <div class="ph"><div class="ph-num">12</div><div class="ph-label"><span class="lang-cz">Platform Services</span><span class="lang-en">Platform Services</span></div><div class="ph-title"><span class="lang-cz">Sdílené přes všechny oblasti</span><span class="lang-en">Shared across all areas</span></div></div>
       <div class="ph"><div class="ph-num">5</div><div class="ph-label"><span class="lang-cz">Sub-portálů v plánu</span><span class="lang-en">Sub-portals planned</span></div><div class="ph-title">Finance, Operations, Purchasing, HR, IT</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-div">
+
+<!-- BRAND IDENTITY -->
+<section class="section" id="s-brand">
+  <div class="section-label">Brand Identity</div>
+  <h2 class="section-title">
+    <span class="lang-cz">Brand je první dojem produktu</span>
+    <span class="lang-en">Brand Is the First Impression</span>
+  </h2>
+  <div class="section-sub">
+    <span class="lang-cz">Vizuální identita HOPI AppIQ — od prvních nápadů po finální logotypy. LF3 je výsledná kombinace obou světů.</span>
+    <span class="lang-en">Visual identity of HOPI AppIQ — from early concepts to final logotypes. LF3 is the ultimate combination of both worlds.</span>
+  </div>
+
+  <!-- ── Brainstorming — small thumbnails ── -->
+  <div style="margin-bottom:48px;">
+    <div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-transform:uppercase;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:12px;">
+      <span class="lang-cz">Brainstorming — původní koncepty</span>
+      <span class="lang-en">Brainstorming — early concepts</span>
+      <span style="flex:1;height:1px;background:rgba(255,255,255,.07);display:inline-block;"></span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+      <!-- L1 -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 1450 240.6796" height="18" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="30.1059" height="240.6796" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><rect x="648" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/><text x="672" y="194" fill="rgba(255,255,255,.72)" font-family="'Segoe UI',Arial,sans-serif" font-size="192" font-weight="300">App</text><text x="1118" y="196" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L1</div>
+      </div>
+      <!-- L2 -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 1450 240.6796" height="18" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="30.1059" height="240.6796" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><rect x="640" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/><text x="666" y="200" fill="#fff" font-family="'Segoe UI',Arial,sans-serif" font-size="168" font-weight="700">App</text><text x="1080" y="202" fill="#00cc55" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L2</div>
+      </div>
+      <!-- L3 Stacked -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 640 370" height="36" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="30.1059" height="370" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><rect x="50" y="218" width="568" height="1.5" fill="rgba(255,255,255,.1)"/><text x="88" y="318" fill="rgba(255,255,255,.62)" font-family="'Segoe UI',Arial,sans-serif" font-size="88" font-weight="300">App</text><text x="336" y="320" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="100" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L3</div>
+      </div>
+      <!-- L4 IQ Mark -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 860 240" height="24" xmlns="http://www.w3.org/2000/svg" style="display:block"><defs><linearGradient id="brl4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00a03a"/><stop offset="100%" stop-color="#004d1f"/></linearGradient></defs><rect width="240" height="240" rx="18" fill="url(#brl4)"/><text x="120" y="165" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="116" font-weight="900">IQ</text><rect x="256" y="38" width="2" height="164" fill="rgba(255,255,255,.1)"/><text x="272" y="136" fill="#fff" font-family="'Segoe UI',Arial,sans-serif" font-size="86" font-weight="900" letter-spacing="5">HOPI</text><text x="274" y="196" fill="rgba(255,255,255,.52)" font-family="'Segoe UI',Arial,sans-serif" font-size="52" font-weight="300">App</text><text x="464" y="198" fill="#00cc55" font-family="'Segoe UI',Arial,sans-serif" font-size="56" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L4</div>
+      </div>
+      <!-- separator -->
+      <div style="width:1px;height:44px;background:rgba(255,255,255,.07);margin:0 2px;align-self:center;"></div>
+      <!-- B1 Hexagon -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><defs><linearGradient id="brb1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b040"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs><polygon points="60,7 108,33.5 108,86.5 60,113 12,86.5 12,33.5" fill="url(#brb1)"/><text x="60" y="73" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="40" font-weight="900" letter-spacing="-2">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B1</div>
+      </div>
+      <!-- B2 Grid -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><rect x="8" y="8" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="45" y="8" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="82" y="8" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="8" y="45" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="45" y="45" width="30" height="30" rx="5" fill="#007d32"/><text x="60" y="66" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="900">IQ</text><rect x="82" y="45" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="8" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="45" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="82" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B2</div>
+      </div>
+      <!-- B3 Neural -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><line x1="60" y1="13" x2="60" y2="37" stroke="#007d32" stroke-width="1.5" opacity=".6"/><line x1="107" y1="37" x2="79" y2="50" stroke="#007d32" stroke-width="1.5" opacity=".5"/><line x1="94" y1="99" x2="73" y2="73" stroke="#007d32" stroke-width="1.5" opacity=".55"/><line x1="26" y1="99" x2="47" y2="73" stroke="#007d32" stroke-width="1.5" opacity=".55"/><line x1="13" y1="37" x2="41" y2="50" stroke="#007d32" stroke-width="1.5" opacity=".5"/><circle cx="60" cy="60" r="25" fill="#007d32"/><text x="60" y="68" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="22" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B3</div>
+      </div>
+      <!-- B4 Circuit H -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><rect x="18" y="14" width="22" height="92" rx="4" fill="#007d32"/><rect x="80" y="14" width="22" height="92" rx="4" fill="#007d32"/><rect x="40" y="50" width="40" height="20" rx="3" fill="#007d32"/></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B4</div>
+      </div>
+      <!-- B5 Shield -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 130" width="37" height="40"><defs><linearGradient id="brb5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00aa44"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs><path d="M60,7 L113,27 L113,68 Q113,108 60,125 Q7,108 7,68 L7,27 Z" fill="url(#brb5)"/><text x="60" y="82" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="38" font-weight="900" letter-spacing="-1">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B5</div>
+      </div>
+      <!-- B6 Diamond -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><defs><linearGradient id="brb6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00aa44"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs><rect x="23" y="23" width="74" height="74" rx="10" fill="url(#brb6)" transform="rotate(45 60 60)"/><text x="60" y="68" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="28" font-weight="900" letter-spacing="-1">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B6</div>
+      </div>
+      <!-- link to brand concepts -->
+      <div style="margin-left:auto;align-self:center;">
+        <a href="BRAND_CONCEPTS.html" style="font-size:10px;color:rgba(0,125,50,.7);border:1px solid rgba(0,125,50,.25);border-radius:6px;padding:5px 12px;text-decoration:none;white-space:nowrap;transition:all .2s;" onmouseover="this.style.color='#00b040';this.style.borderColor='rgba(0,125,50,.5)'" onmouseout="this.style.color='rgba(0,125,50,.7)';this.style.borderColor='rgba(0,125,50,.25)'">
+          <span class="lang-cz">Všechny koncepty &#8599;</span>
+          <span class="lang-en">All concepts &#8599;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Vývoj finální identity ── -->
+  <div>
+    <div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-transform:uppercase;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;">
+      <span class="lang-cz">Vývoj finální identity</span>
+      <span class="lang-en">Final Identity Evolution</span>
+      <span style="flex:1;height:1px;background:rgba(255,255,255,.07);display:inline-block;"></span>
+    </div>
+    <!-- LF1 + LF2 side by side -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <!-- LF1 -->
+      <div style="background:#111128;border:1px solid rgba(232,117,10,.3);border-radius:12px;padding:24px;position:relative;">
+        <div style="position:absolute;top:0;right:14px;background:#E8750A;color:#fff;font-size:8px;font-weight:800;letter-spacing:1.2px;padding:2px 9px;border-radius:0 0 6px 6px;">LF1</div>
+        <div style="display:flex;justify-content:center;align-items:center;padding:16px 8px;background:rgba(255,255,255,.02);border-radius:8px;margin-bottom:14px;min-height:90px;">
+          <svg viewBox="0 0 660 318" height="60" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;"><rect width="30.1059" height="318" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">HOPI TECHNOLOGY</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;">Identita nové 6. divize. HOPI brand path + "TECHNOLOGY" oranžová stacked pod HOPI.</div>
+      </div>
+      <!-- LF2 -->
+      <div style="background:#111128;border:1px solid rgba(232,117,10,.3);border-radius:12px;padding:24px;position:relative;">
+        <div style="position:absolute;top:0;right:14px;background:#E8750A;color:#fff;font-size:8px;font-weight:800;letter-spacing:1.2px;padding:2px 9px;border-radius:0 0 6px 6px;">LF2</div>
+        <div style="display:flex;justify-content:center;align-items:center;padding:16px 8px;background:rgba(255,255,255,.02);border-radius:8px;margin-bottom:14px;min-height:90px;">
+          <svg viewBox="0 0 1260 240.6796" height="46" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;"><rect width="30.1059" height="240.6796" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">HOPI AppIQ</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;">Platforma a produkt. "App" oranžová + "IQ" zelená — bez separátoru, jeden textový prvek.</div>
+      </div>
+    </div>
+    <!-- LF3 WINNER — full width -->
+    <div style="background:linear-gradient(135deg,#151005,#111128);border:1px solid rgba(255,185,0,.4);border-radius:14px;padding:30px 32px;position:relative;box-shadow:0 0 40px rgba(255,185,0,.06);">
+      <div style="position:absolute;top:0;right:16px;background:linear-gradient(135deg,#E8750A,#ffb830);color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 12px;border-radius:0 0 8px 8px;">★ LF3 · FINÁLNÍ KOMBINACE</div>
+      <div style="display:flex;justify-content:center;align-items:center;padding:20px 12px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:20px;min-height:80px;">
+        <svg viewBox="0 0 2000 318" height="52" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;">
+          <rect width="30.1059" height="318" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+          <text x="1300" y="148" text-anchor="middle" fill="rgba(255,255,255,0.22)" font-family="'Segoe UI',Arial,sans-serif" font-size="58" font-style="italic">by</text>
+          <g transform="translate(1340,0)">
+            <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+            <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
+            <rect x="629.8941" width="30.1059" height="318" fill="#007d32"/>
+          </g>
+        </svg>
+      </div>
+      <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:5px;">HOPI AppIQ · by · HOPI TECHNOLOGY</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.7;">LF2 + LF1 v jednom SVG. Zelená čára vlevo (AppIQ) + zelená čára vpravo (TECHNOLOGY) — logo se uzavírá. Jeden vizuální celek propojující platformu a divizi.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <a href="BRAND_CONCEPTS.html" style="font-size:10px;color:rgba(255,185,0,.65);border:1px solid rgba(255,185,0,.2);border-radius:6px;padding:5px 12px;text-decoration:none;white-space:nowrap;transition:all .2s;" onmouseover="this.style.color='rgba(255,185,0,.9)';this.style.borderColor='rgba(255,185,0,.4)'" onmouseout="this.style.color='rgba(255,185,0,.65)';this.style.borderColor='rgba(255,185,0,.2)'">
+            <span class="lang-cz">Brand Concepts &#8599;</span>
+            <span class="lang-en">Brand Concepts &#8599;</span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -621,10 +981,15 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
       <span class="lang-en">First deployment of the HOPI AppIQ platform — Group Controlling portal. Fully functional prototype (Phase 0) with closing calendar, tracking, org chart, reporting, FX rates and launchers for SAP, BNS, Power BI and SharePoint.</span>
     </p>
     <div class="launch-cta">
-      <a class="btn-primary btn-orange" href="#" id="app-launch-btn">
-        &#9654;
-        <span class="lang-cz">Spustit portál (SharePoint)</span>
-        <span class="lang-en">Launch Portal (SharePoint)</span>
+      <a class="btn-primary btn-orange" href="#" id="app-launch-btn" target="_blank">
+        🖥️
+        <span class="lang-cz">Desktop</span>
+        <span class="lang-en">Desktop</span>
+      </a>
+      <a class="btn-secondary" href="#" id="app-mobile-btn" target="_blank" style="border-color:rgba(0,125,50,.5);color:#2D8B3A;display:inline-flex;align-items:center;gap:6px;">
+        📱
+        <span class="lang-cz">Mobile <span style="font-size:9px;background:rgba(0,125,50,.2);border:1px solid rgba(0,125,50,.4);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;color:#60D080;">PREVIEW</span></span>
+        <span class="lang-en">Mobile <span style="font-size:9px;background:rgba(0,125,50,.2);border:1px solid rgba(0,125,50,.4);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;color:#60D080;">PREVIEW</span></span>
       </a>
       <a class="btn-secondary" href="PORTAL_PRESENTATION.html">
         &#128196;
@@ -645,7 +1010,7 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
   <div class="footer-logo">
     <div class="footer-logo-bar"></div>
     <span class="footer-hopi">HOPI</span>
-    <span class="footer-appiq">App<strong style="color:var(--hopi-green);">IQ</strong></span>
+    <span class="footer-appiq"><span style="color:#E8750A;">App</span><strong style="color:var(--hopi-green);">IQ</strong></span>
   </div>
   <div class="footer-tagline">"Build smart. Deploy fast. Scale everywhere."</div>
   <div class="footer-links">
@@ -656,11 +1021,14 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
     <a href="#s-preview">
       <span class="lang-cz">Dokumentace</span><span class="lang-en">Documentation</span>
     </a>
+    <a href="#s-brand">
+      <span class="lang-cz">Brand Identity</span><span class="lang-en">Brand Identity</span>
+    </a>
     <a href="#launch">
       <span class="lang-cz">Spustit portál</span><span class="lang-en">Launch Portal</span>
     </a>
     <a href="PORTAL_PRESENTATION.html">
-      <span class="lang-cz">Prezentace v6</span><span class="lang-en">Presentation v6</span>
+      <span class="lang-cz">Prezentace <span id="idx-prez-ver-footer">…</span></span><span class="lang-en">Presentation <span id="idx-prez-ver-footer-en">…</span></span>
     </a>
   </div>
   <div class="footer-copy">
@@ -671,7 +1039,14 @@ footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;te
   </div>
 </footer>
 
+<script src="_ver.js"></script>
+<script src="RESPONSIVE_DATA.js"></script>
 <script>
+(function(){
+  var ids = ['idx-prez-ver','idx-prez-ver-footer','idx-prez-ver-footer-en','idx-prez-ver-h2','idx-prez-ver-h2-en'];
+  ids.forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=PREZ_VERSION; });
+})();
+
 // LANGUAGE SWITCHER — JS-driven, bez CSS kaskády
 var _INLINE = new Set(['SPAN','A','STRONG','EM','B','I','BUTTON','LABEL','CODE','TD','TH','LI']);
 function setLang(lang){
@@ -686,17 +1061,27 @@ function setLang(lang){
   if(btnEn) btnEn.classList.toggle('active', lang==='en');
 }
 
-// PORTAL LAUNCH LINK — GitHub Pages: app/index.html
-var _portalUrl = 'app/index.html';
-document.getElementById('app-launch-btn').href = _portalUrl;
-document.getElementById('app-launch-btn').target = '_blank';
-document.getElementById('portal-link').href = _portalUrl;
-document.getElementById('portal-link').target = '_blank';
+// PORTAL LAUNCH LINKS
+var _portalUrl       = '../../HOPI_AppIQ/Release/index.html';
+var _portalMobileUrl = '../../HOPI_AppIQ/Development/index.html?view=mobile';
 
-// PRESENTATION LINK — GitHub Pages: PORTAL_PRESENTATION.html (same folder)
-const prezPath = 'PORTAL_PRESENTATION.html';
-document.getElementById('prez-link').href = prezPath;
-document.querySelectorAll('a[href="PORTAL_PRESENTATION.html"]').forEach(a => a.href = prezPath);
+document.getElementById('app-launch-btn').href    = _portalUrl;
+document.getElementById('portal-link').href        = _portalUrl;
+document.getElementById('portal-link').target      = '_blank';
+
+document.getElementById('app-mobile-btn').href     = _portalMobileUrl;
+document.getElementById('portal-mobile-link').href = _portalMobileUrl;
+
+// PRESENTATION LINK - relativní cesta ke stejné složce (funguje v Development i Release)
+// target="_blank" = nová záložka = user-activated = AudioContext.resume() funguje bez gestikulace
+var prezPath = 'PORTAL_PRESENTATION.html';
+(function(){
+  var el = document.getElementById('prez-link');
+  if(el){ el.href = prezPath; el.target = '_blank'; }
+  document.querySelectorAll('a[href="PORTAL_PRESENTATION.html"]').forEach(function(a){
+    a.target = '_blank';
+  });
+})();
 
 // PARTICLE NETWORK ANIMATION
 (function(){
@@ -736,6 +1121,52 @@ document.addEventListener('DOMContentLoaded', function() {
   setLang(saved);
 });
 
+// ══ STAMP SOUND + FLASH ══
+function playStampSound(){
+  try{
+    var ac=new(window.AudioContext||window.webkitAudioContext)();
+    var sr=ac.sampleRate,dur=0.13;
+    var buf=ac.createBuffer(1,Math.ceil(sr*dur),sr);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++){
+      var t=i/sr;
+      var env=Math.pow(1-t/dur,2.5)*Math.exp(-t*28);
+      d[i]=(Math.random()*2-1)*env*0.85;
+    }
+    var src=ac.createBufferSource();src.buffer=buf;
+    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=650;
+    var g=ac.createGain();g.gain.value=0.7;
+    src.connect(lp);lp.connect(g);g.connect(ac.destination);
+    src.start();
+  }catch(e){}
+}
+function doStampFlash(id){
+  var f=document.getElementById(id);
+  if(!f)return;
+  f.style.transition='none';
+  f.style.opacity='0.6';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    f.style.transition='opacity 0.5s ease-out';
+    f.style.opacity='0';
+  });});
+}
+
+// ══ HEADER STAMP ANIMATION — fires on every page load ══
+(function(){
+  window.addEventListener('DOMContentLoaded',function(){
+    setTimeout(function(){
+      var el=document.getElementById('nav-hopi-tech');
+      if(!el)return;
+      el.style.animation='hopiTechStamp 0.5s cubic-bezier(0.22,1,0.36,1) forwards';
+      el.addEventListener('animationend',function(){
+        el.style.opacity='1';
+        playStampSound();
+        doStampFlash('nav-stamp-flash');
+      },{once:true});
+    },900);
+  });
+})();
+
 // ─────────────────────────────────────────────────────────────
 // OIL — OPEN ISSUE LIST
 // ─────────────────────────────────────────────────────────────
@@ -745,6 +1176,8 @@ var _oilFilter     = 'ALL';
 var _oilSort       = {col:null, dir:1};
 var _oilEditOpen   = null;
 var _oilSettings   = {autoSort:true, hideClosed:false, defaultFilter:'ALL'};
+var _oilMode       = 'tasks';   /* 'tasks' | 'audits' */
+var _oilAudExpanded = {};       /* AUD-id -> bool (findings rozbaleny) */
 
 var OIL_FLOW = {
   'OPEN':        { label:'🔵 OPEN',        cls:'st-OPEN',        next:'IN_PROGRESS' },
@@ -786,6 +1219,176 @@ function openOIL() {
 function closeOIL() {
   document.getElementById('oilOverlay').classList.remove('open');
 }
+
+// ── TECH ARCH PANEL ──────────────────────────────────────────────
+var _archCache = null;   // fetched ARCH_MAP.md text ('' = fetch failed)
+var _archTab   = 'PREZ';
+
+function openTechArch() {
+  document.getElementById('archOverlay').classList.add('open');
+  if (_archCache === null) {
+    document.getElementById('archBody').innerHTML =
+      '<div style="text-align:center;padding:50px;color:#888;font-family:Segoe UI,Arial,sans-serif;font-size:13px;">&#9200; Na&#269;&#237;t&#225;m ARCH_MAP.md&hellip;</div>';
+    // Cesta: index.html je v Development/, ARCH_MAP.md je o 2 složky výš
+    fetch('./ARCH_MAP.md')
+      .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+      .then(function(t){ _archCache = t; _renderArch(); })
+      .catch(function(){
+        // Fallback: ARCH_MAP_DATA.js (embedded copy — funguje vždy vč. file://)
+        _archCache = (typeof ARCH_MAP_DATA !== 'undefined' && ARCH_MAP_DATA) ? ARCH_MAP_DATA : '';
+        _renderArch();
+      });
+  } else {
+    _renderArch();
+  }
+}
+function closeTechArch() {
+  document.getElementById('archOverlay').classList.remove('open');
+}
+function archTabClick(tab) {
+  _archTab = tab;
+  document.querySelectorAll('.arch-tab').forEach(function(b){
+    b.classList.toggle('active', b.dataset.t === tab);
+  });
+  _renderArch();
+}
+
+function _archEsc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function _archCodeBadge(code){
+  if(!code||code==='—'||code==='-'||!code.trim()) return '<span style="color:#bbb;">—</span>';
+  var c='arch-code', lc=code.toLowerCase();
+  if(lc.indexOf('scr')===0) c+=' scr';
+  else if(lc.indexOf('sld')===0) c+=' sld';
+  else if(lc.indexOf('doc')===0) c+=' doc';
+  else if(lc.indexOf('mod')===0) c+=' mod';
+  else if(lc.indexOf('idx')===0) c+=' idx';
+  else if(lc.indexOf('app')===0) c+=' app';
+  else if(lc.indexOf('lf')===0)  c+=' lf';
+  else if(lc.indexOf('bc')===0)  c+=' bc';
+  return '<span class="'+c+'">'+_archEsc(code)+'</span>';
+}
+function _archCellHtml(cell, colIdx, isCodeCol){
+  if(colIdx===0 && isCodeCol) return _archCodeBadge(cell);
+  return _archEsc(cell).replace(/`([^`]+)`/g,'<code style="background:#f0f0f0;padding:1px 4px;border-radius:3px;font-size:11px;font-family:Courier New,monospace;">$1</code>');
+}
+function _archParseTables(lines){
+  var tables=[], title='', headers=null, rows=[];
+  function flush(){ if(headers&&rows.length) tables.push({title:title,headers:headers,rows:rows}); headers=null; rows=[]; }
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i];
+    var sm=l.match(/^#{2,4}\s*[▸►]?\s*(.+)/);
+    if(sm&&!l.match(/^## ══/)){ flush(); title=sm[1].trim(); continue; }
+    if(l.startsWith('|')){
+      var cells=l.split('|').slice(1,-1).map(function(c){return c.trim();});
+      if(cells.every(function(c){return /^[-:]+$/.test(c);})) continue;
+      if(!headers){headers=cells;}else{rows.push(cells);}
+    } else if(headers){ flush(); }
+  }
+  flush();
+  return tables;
+}
+function _archRenderTable(tbl){
+  if(!tbl||!tbl.rows.length) return '';
+  var h0=(tbl.headers[0]||'').toLowerCase();
+  var isCode=h0==='kód'||h0==='kod'||h0==='id';
+  var html='<div class="arch-sec-hdr">'+_archEsc(tbl.title)+'</div>';
+  html+='<table class="arch-tbl"><thead><tr>';
+  tbl.headers.forEach(function(h){html+='<th>'+_archEsc(h)+'</th>';});
+  html+='</tr></thead><tbody>';
+  tbl.rows.forEach(function(row){
+    html+='<tr>';
+    row.forEach(function(cell,ci){html+='<td>'+_archCellHtml(cell,ci,isCode)+'</td>';});
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  return html;
+}
+function _archExtractCodeBlock(text){
+  var m=text.match(/```[^\n]*\n([\s\S]+?)\n?```/);
+  return m?m[1]:'';
+}
+function _renderResp(){
+  if(typeof RESPONSIVE_DATA==='undefined'){
+    return '<div style="padding:20px 24px;font-family:Segoe UI,Arial,sans-serif;font-size:13px;color:#c62828;background:#fff8f8;border-radius:8px;border:1px solid #fcc;">&#9888; RESPONSIVE_DATA.js nebylo nalezeno.</div>';
+  }
+  var d=RESPONSIVE_DATA;
+  var SC={'green':'#2D8B3A','yellow':'#C07000','red':'#C0392B'};
+  var SL={'green':'OK','yellow':'PŘIJATELNÉ','red':'RIZIKO'};
+  var html='<div style="font-family:Segoe UI,Arial,sans-serif;">';
+  html+='<div style="padding:6px 0 14px;font-size:11px;color:#888;">Verze: <b style="color:#1a237e;">'+_archEsc(d.version)+'</b> &nbsp;·&nbsp; Aktualizováno: '+_archEsc(d.lastUpdated)+'</div>';
+  d.streams.forEach(function(s){
+    html+='<div class="arch-sec-hdr" style="margin-top:16px;">'+_archEsc(s.id)+' — '+_archEsc(s.name)+'</div>';
+    html+='<div style="font-size:10px;color:#888;font-family:monospace;margin-bottom:4px;">'+_archEsc(s.file)+'</div>';
+    if(s.recommendation) html+='<div style="font-size:11px;color:#1a237e;background:#eef1ff;border-radius:5px;padding:5px 10px;margin-bottom:8px;">&#128204; '+_archEsc(s.recommendation)+'</div>';
+    html+='<table class="arch-tbl" style="width:100%;table-layout:fixed;">';
+    html+='<colgroup><col style="width:110px"><col style="width:150px"><col style="width:80px"><col><col style="width:90px"></colgroup>';
+    html+='<thead><tr><th>Rozsah</th><th>Formát</th><th style="text-align:center;">Status</th><th>Poznámka</th><th>OIL úkol</th></tr></thead><tbody>';
+    s.breakpoints.forEach(function(bp){
+      var col=SC[bp.status]||'#888';
+      var lbl=SL[bp.status]||bp.status;
+      html+='<tr>';
+      html+='<td style="font-family:monospace;font-size:10px;font-weight:700;color:#1a237e;white-space:nowrap;">'+_archEsc(bp.range)+'</td>';
+      html+='<td style="font-size:11px;">'+_archEsc(bp.label)+'</td>';
+      html+='<td style="text-align:center;"><span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+col+'18;color:'+col+';border:1px solid '+col+'55;white-space:nowrap;">'+lbl+'</span></td>';
+      html+='<td style="font-size:10.5px;color:#444;line-height:1.45;">'+_archEsc(bp.note)+'</td>';
+      html+='<td style="font-size:11px;">'+(bp.oil?'<span class="arch-code">'+_archEsc(bp.oil)+'</span>':'<span style="color:#bbb;">—</span>')+'</td>';
+      html+='</tr>';
+    });
+    html+='</tbody></table>';
+  });
+  html+='<p class="arch-fetch-note">Source: RESPONSIVE_DATA.js &mdash; aktualizovat p&#345;i zm&#283;n&#283; responsive CSS</p>';
+  html+='</div>';
+  return html;
+}
+
+function _renderArch(){
+  var body=document.getElementById('archBody');
+  // RESP tab čte z RESPONSIVE_DATA.js — nezávisí na ARCH_MAP.md
+  if(_archTab==='RESP'){
+    body.innerHTML=_renderResp();
+    return;
+  }
+  if(!_archCache){
+    body.innerHTML='<div style="padding:20px 24px;font-family:Segoe UI,Arial,sans-serif;font-size:13px;color:#c62828;background:#fff8f8;border-radius:8px;border:1px solid #fcc;">&#9888; ARCH_MAP.md se nepoda&#345;ilo na&#269;&#237;st.<br><br>Pravd&#283;podobn&#225; p&#345;&#237;&#269;ina: str&#225;nka je otev&#345;en&#225; p&#345;es <code>file://</code> protokol.<br>Otev&#345;ete p&#345;es HTTP server nebo GitHub Pages pro plnou funkci.</div>';
+    return;
+  }
+  var lines=_archCache.split('\n');
+  var sections={PREZ:[],WEB:[],APP:[],MAP:[],FILES:[]};
+  var cur=null;
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i];
+    if(/^## ══ PREZ/.test(l))      cur='PREZ';
+    else if(/^## ══ WEB/.test(l))  cur='WEB';
+    else if(/^## ══ APP/.test(l))  cur='APP';
+    else if(/^## ══ MAPA/.test(l)) cur='MAP';
+    else if(/^## ══ SOUBORY/.test(l)||/^## ══ CO JEŠTĚ/.test(l)) cur='FILES';
+    if(cur) sections[cur].push(l);
+  }
+  var html='';
+  if(_archTab==='MAP'){
+    html='<div class="arch-sec-hdr">Mapa vazeb &mdash; file connections</div>';
+    var mapBlock=_archExtractCodeBlock(sections.MAP.join('\n'));
+    if(mapBlock) html+='<pre class="arch-map-pre">'+_archEsc(mapBlock)+'</pre>';
+    var filesBlock=_archExtractCodeBlock(sections.FILES.join('\n'));
+    if(filesBlock){
+      html+='<div class="arch-sec-hdr" style="margin-top:20px;">Soubory projektu</div>';
+      html+='<pre class="arch-map-pre">'+_archEsc(filesBlock)+'</pre>';
+    }
+    html+='<p class="arch-fetch-note">Source: ARCH_MAP.md &mdash; na&#269;ten dynamicky p&#345;es fetch()</p>';
+  } else {
+    var tbls=_archParseTables(sections[_archTab]||[]);
+    if(!tbls.length){
+      html='<div style="padding:24px;color:#888;font-size:13px;font-family:Segoe UI,Arial,sans-serif;">&#10006; &#381;&#225;dn&#225; data pro tento stream.</div>';
+    } else {
+      tbls.forEach(function(t){html+=_archRenderTable(t);});
+      html+='<p class="arch-fetch-note">Source: ARCH_MAP.md &mdash; na&#269;ten dynamicky p&#345;es fetch()</p>';
+    }
+  }
+  body.innerHTML=html;
+}
+// ── END TECH ARCH ─────────────────────────────────────────────────
 
 function oilFilterClick(f) {
   _oilFilter = f;
@@ -837,6 +1440,163 @@ function toggleOILSettings() {
     if (df) df.value   = _oilSettings.defaultFilter;
   }
 }
+
+// ── AUDIT MODE ──
+function switchOILMode(mode) {
+  _oilMode = mode;
+  var btn  = document.getElementById('oilAuditBtn');
+  var tl   = document.getElementById('oilTaskList');
+  var ap   = document.getElementById('oilAuditPanel');
+  var body = document.querySelector('.oil-body');
+  if (btn) btn.classList.toggle('active', mode === 'audits');
+  if (tl)  tl.style.display = (mode === 'audits') ? 'none' : 'block';
+  if (ap)  ap.style.display = (mode === 'audits') ? 'block' : 'none';
+  /* scroll to top so audit card is visible */
+  if (body) body.scrollTop = 0;
+  /* filter buttons dim in audit mode */
+  var fbtns = document.querySelectorAll('.oil-filter-btn');
+  fbtns.forEach(function(b){ b.style.opacity = (mode === 'audits') ? '.35' : '1'; b.style.pointerEvents = (mode === 'audits') ? 'none' : ''; });
+  if (mode === 'audits') renderAuditTab(); else renderOIL();
+}
+
+function oilToggleFinding(audId) {
+  _oilAudExpanded[audId] = !_oilAudExpanded[audId];
+  renderAuditTab();
+}
+
+function oilCycleFindingStatus(audId, fId) {
+  if (!_oilData || !_oilData.audits) return;
+  var aud = _oilData.audits.find(function(a){ return a.id === audId; });
+  if (!aud) return;
+  var f = aud.findings.find(function(x){ return x.id === fId; });
+  if (!f) return;
+  f.status = (f.status === 'OPEN') ? 'FIXED' : 'OPEN';
+  /* recalculate audit status */
+  var openCount = aud.findings.filter(function(x){ return x.status === 'OPEN'; }).length;
+  aud.status = openCount === 0 ? 'CLOSED' : openCount < aud.findings.length ? 'IN PROGRESS' : 'OPEN';
+  renderAuditTab();
+}
+
+function renderAuditTab() {
+  var el = document.getElementById('oilAuditPanel');
+  if (!el) return;
+  _renderAuditTabInner(el);
+}
+function _renderAuditTabInner(el) {
+  var audits = (_oilData && _oilData.audits) ? _oilData.audits : [];
+  if (!audits.length) {
+    var ver = (_oilData && _oilData.version) ? _oilData.version : '?';
+    el.innerHTML = '<div style="text-align:center;padding:40px 20px;">'
+      + '<div style="font-size:32px;margin-bottom:12px;">&#128269;</div>'
+      + '<div style="font-size:15px;font-weight:700;color:#333;margin-bottom:8px;">Audity nejsou načteny</div>'
+      + '<div style="font-size:12px;color:#999;margin-bottom:20px;">Verze OIL.json v pam&#283;ti: <code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;">' + ver + '</code> &mdash; pot&#345;ebn&#225;: <code style="background:#f5f5f5;padding:1px 5px;border-radius:3px;">3.0+</code></div>'
+      + '<button onclick="connectOIL()" style="background:#6a1b9a;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Segoe UI,Arial,sans-serif;">&#128279; Na&#269;&#237;st OIL.json</button>'
+      + '<div style="font-size:11px;color:#bbb;margin-top:12px;">Vyberte soubor <code>OIL.json</code> v ko&#345;eni projektu (slozka CO_PROJECT)</div>'
+      + '</div>';
+    return;
+  }
+  var SEV_ORD = {HIGH:0, MED:1, LOW:2};
+  var html = '<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;">'
+    + '<div style="font-size:13px;font-weight:700;color:#6a1b9a;">&#128269; Audit Log</div>'
+    + '<div style="font-size:11px;color:#999;">'+audits.length+' audit'+(audits.length>1?'y':'')
+    + ' &nbsp;&middot;&nbsp; '
+    + audits.reduce(function(s,a){ return s + (a.findings||[]).length; }, 0)+' n\u00E1lez\u016F celkem'
+    + ' &nbsp;&middot;&nbsp; '
+    + audits.reduce(function(s,a){ return s + (a.findings||[]).filter(function(f){ return f.status==='FIXED'; }).length; }, 0)+' vy\u0159e\u0161eno'
+    + '</div></div>';
+
+  audits.forEach(function(aud) {
+    var ff    = aud.findings || [];
+    var total = ff.length;
+    var high  = ff.filter(function(f){ return f.severity==='HIGH'; }).length;
+    var med   = ff.filter(function(f){ return f.severity==='MED';  }).length;
+    var low   = ff.filter(function(f){ return f.severity==='LOW';  }).length;
+    var fixed = ff.filter(function(f){ return f.status==='FIXED';  }).length;
+    var open  = total - fixed;
+    var pct   = total ? Math.round(fixed/total*100) : 0;
+    var expanded = !!_oilAudExpanded[aud.id];
+
+    var stCls = aud.status==='CLOSED' ? 'closed' : aud.status==='IN PROGRESS' ? 'progress' : 'open';
+    var stLbl = aud.status==='CLOSED' ? '\u2705 Vy\u0159e\u0161eno' : aud.status==='IN PROGRESS' ? '\uD83D\uDFE0 Prob\u00EDh\u00E1' : '\uD83D\uDD34 Otev\u0159eno';
+
+    html += '<div class="oil-aud-card">';
+    /* HEADER */
+    html += '<div class="oil-aud-card-hdr" onclick="oilToggleFinding(\''+_oilEsc(aud.id)+'\')">'
+      + '<span class="oil-aud-id">'+_oilEsc(aud.id)+'</span>'
+      + '<span class="oil-aud-title">'+_oilEsc(aud.title)+'</span>'
+      + '<span class="oil-aud-date">'+_oilEsc(aud.date)+'</span>'
+      + '<span class="oil-aud-status-badge oil-aud-status-'+stCls+'">'+stLbl+'</span>'
+      + '<span style="font-size:12px;color:#999;margin-left:4px;">'+(expanded?'&#9650;':'&#9660;')+'</span>'
+      + '</div>';
+
+    /* BODY (always visible) */
+    html += '<div class="oil-aud-body">';
+    /* meta pills */
+    html += '<div class="oil-aud-meta">';
+    (aud.scope||[]).forEach(function(s){ html += '<span class="oil-aud-scope-pill">&#128196; '+_oilEsc(s)+'</span>'; });
+    (aud.areas||[]).forEach(function(a){ html += '<span class="oil-aud-area-pill">'+_oilEsc(a)+'</span>'; });
+    html += '</div>';
+    /* stats boxes */
+    html += '<div class="oil-aud-stats-row">'
+      + '<div class="oil-aud-stat-box oil-aud-stat-total"><div class="oil-aud-stat-num">'+total+'</div><div class="oil-aud-stat-lbl">N\u00E1lez\u016F</div></div>'
+      + '<div class="oil-aud-stat-box oil-aud-stat-high"><div class="oil-aud-stat-num">'+high+'</div><div class="oil-aud-stat-lbl">HIGH</div></div>'
+      + '<div class="oil-aud-stat-box oil-aud-stat-med"><div class="oil-aud-stat-num">'+med+'</div><div class="oil-aud-stat-lbl">MED</div></div>'
+      + '<div class="oil-aud-stat-box oil-aud-stat-low"><div class="oil-aud-stat-num">'+low+'</div><div class="oil-aud-stat-lbl">LOW</div></div>'
+      + '<div class="oil-aud-stat-box oil-aud-stat-fixed"><div class="oil-aud-stat-num">'+fixed+'</div><div class="oil-aud-stat-lbl">&#9989; Vy\u0159.</div></div>'
+      + '<div class="oil-aud-stat-box" style="flex:2;"><div class="oil-aud-stat-num" style="color:'+(pct===100?'#2e7d32':pct>50?'#e67700':'#c62828')+';">'+pct+'%</div><div class="oil-aud-stat-lbl">Vy\u0159e\u0161eno</div></div>'
+      + '</div>';
+    /* stacked severity bar */
+    if (total > 0) {
+      var hw = Math.round(high/total*100), mw = Math.round(med/total*100), lw = Math.round(low/total*100), fw = 100-hw-mw-lw;
+      html += '<div class="oil-aud-bar-wrap">'
+        + '<div class="oil-aud-bar-lbl">Z\u00E1va\u017Enost n\u00E1lez\u016F</div>'
+        + '<div class="oil-aud-bar">'
+        + (hw?'<div class="oil-aud-seg-high" style="flex:'+high+';" title="HIGH: '+high+'"></div>':'')
+        + (med?'<div class="oil-aud-seg-med"  style="flex:'+med+';" title="MED: '+med+'"></div>':'')
+        + (low?'<div class="oil-aud-seg-low"  style="flex:'+low+';"  title="LOW: '+low+'"></div>':'')
+        + (fixed?'<div class="oil-aud-seg-fixed" style="flex:'+fixed+';" title="Vy\u0159e\u0161eno: '+fixed+'"></div>':'')
+        + '</div></div>';
+    }
+    /* resolution progress */
+    html += '<div class="oil-aud-progress-wrap">'
+      + '<div class="oil-aud-progress-lbl"><span>Pokrok vy\u0159e\u0161en\u00ED</span><span>'+fixed+' / '+total+'</span></div>'
+      + '<div class="oil-aud-progress-bar"><div class="oil-aud-progress-fill" style="width:'+pct+'%"></div></div>'
+      + '</div>';
+
+    /* FINDINGS TABLE (expandable) */
+    if (expanded && ff.length) {
+      html += '<div>';
+      html += '<table class="oil-aud-tbl"><thead><tr>'
+        + '<th style="width:110px;">ID</th><th style="width:90px;">Oblast</th><th style="width:60px;">Z\u00E1v.</th>'
+        + '<th>Popis</th><th style="width:70px;">Status</th><th style="width:70px;">AIQ link</th>'
+        + '</tr></thead><tbody>';
+      var sorted = ff.slice().sort(function(a,b){
+        if (a.status==='FIXED' && b.status!=='FIXED') return 1;
+        if (a.status!=='FIXED' && b.status==='FIXED') return -1;
+        return (SEV_ORD[a.severity]||9)-(SEV_ORD[b.severity]||9);
+      });
+      sorted.forEach(function(f){
+        var fsCls = 'oil-aud-fstatus-'+(f.status==='FIXED'?'FIXED':'OPEN');
+        var fsLbl = f.status==='FIXED' ? '\u2705 Vy\u0159.' : '\uD83D\uDD34 Otev\u0159.';
+        html += '<tr style="'+(f.status==='FIXED'?'opacity:.55;':'')+'">'
+          + '<td><code style="font-size:10px;color:#6a1b9a;">'+_oilEsc(f.id)+'</code></td>'
+          + '<td><span style="font-size:10px;color:#555;">'+_oilEsc(f.area)+'</span></td>'
+          + '<td><span class="oil-aud-sev oil-aud-sev-'+_oilEsc(f.severity)+'">'+_oilEsc(f.severity)+'</span></td>'
+          + '<td style="font-size:11px;">'+_oilEsc(f.description)+'</td>'
+          + '<td><span class="oil-aud-fstatus '+fsCls+'" onclick="oilCycleFindingStatus(\''+_oilEsc(aud.id)+'\',\''+_oilEsc(f.id)+'\')" title="Klik = zm\u011Bnit stav">'+fsLbl+'</span></td>'
+          + '<td>'+(f.linkedAIQ?'<span class="oil-aud-link">'+_oilEsc(f.linkedAIQ)+'</span>':'<span style="color:#ccc;font-size:10px;">\u2014</span>')+'</td>'
+          + '</tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+    if (aud.note) {
+      html += '<div style="margin-top:10px;font-size:11px;color:#888;border-top:1px solid #f0f0f0;padding-top:8px;">&#128196; '+_oilEsc(aud.note)+'</div>';
+    }
+    html += '</div></div>'; /* end body + card */
+  });
+
+  el.innerHTML = html;
+} /* end _renderAuditTabInner */
 
 function applyOILSettings() {
   var as = document.getElementById('oilSetAutoSort');
@@ -1026,8 +1786,11 @@ function renderOIL() {
   if (!el) return;
   var sub = document.getElementById('oilHdrSub');
   if (_oilData && sub) {
-    sub.textContent = 'Aktualizace: '+(_oilData.lastUpdated||'\u2014')+' \u00B7 '+_oilData.tasks.length+' \u00FAkol\u016F';
+    var audCount = (_oilData.audits||[]).length;
+    sub.textContent = 'Aktualizace: '+(_oilData.lastUpdated||'\u2014')+' \u00B7 '+_oilData.tasks.length+' \u00FAkol\u016F'+(audCount?' \u00B7 '+audCount+' audit\u016F':'');
   }
+  /* if in audit mode, delegate to renderAuditTab */
+  if (_oilMode === 'audits') { renderAuditTab(); return; }
   if (!_oilData || !_oilData.tasks || !_oilData.tasks.length) {
     el.innerHTML = '<div class="oil-empty">Na\u010dt\u011Bte OIL.json tla\u010D\u00EDtkem <strong>&#128279; Na\u010D\u00EDst OIL.json</strong><br>nebo p\u0159idejte prvn\u00ED \u00FAkol p\u0159es <strong>+ P\u0159idat \u00FAkol</strong>.</div>';
     return;
@@ -1165,21 +1928,133 @@ function renderOIL() {
 document.addEventListener('keydown', function(e){
   if (e.key !== 'Escape') return;
   if (_oilEditOpen) { oilCloseInlineEdit(); }
+  else if (document.getElementById('archOverlay').classList.contains('open')) { closeTechArch(); }
   else { closeOIL(); }
 });
 
-// Auto-load z localStorage cache při startu stránky
+// Auto-load: 1) localStorage cache (okamžitě), 2) fetch OIL.json ze souboru (čerstvá data)
 (function(){
+  /* --- krok 1: localStorage (sync, okamžitě) --- */
   var cached = null;
   try { cached = localStorage.getItem('hopi_oil_cache'); } catch(e){}
   if (cached) { try { _oilData = JSON.parse(cached); } catch(e){} }
+  if (_oilData && !_oilData.audits) { _oilData.audits = []; }
   try {
     var s = localStorage.getItem('hopi_oil_settings');
     if (s) _oilSettings = Object.assign(_oilSettings, JSON.parse(s));
   } catch(e){}
-  // apply saved default filter
   _oilFilter = _oilSettings.defaultFilter || 'ALL';
   setTimeout(updateOILBadge, 0);
+
+  /* --- krok 2: fetch OIL.json (async, přebije cache pokud novější) --- */
+  fetch('./OIL.json?_=' + Date.now())
+    .then(function(r){ if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(function(text){
+      var fresh = JSON.parse(text);
+      _oilData = fresh;
+      if (!_oilData.audits) _oilData.audits = [];
+      try { localStorage.setItem('hopi_oil_cache', text); } catch(e){}
+      updateOILBadge();
+      renderOIL();
+    })
+    .catch(function(){ /* fetch selhal (file://, CORS) — zůstaneme u cache */ });
+})();
+
+// ── Hudební podkres ──
+(function(){
+  var _audio=null,_playing=false,_shouldPlay=false,_fadeId=null,_starting=false;
+
+  function audio(){
+    if(!_audio){
+      _audio=new Audio('./_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3');
+      _audio.loop=true; _audio.preload='auto'; _audio.volume=0;
+    }
+    return _audio;
+  }
+
+  function fadeTo(vol,ms,cb){
+    if(_fadeId){clearInterval(_fadeId);_fadeId=null;}
+    var a=audio(),n=Math.max(1,Math.round(ms/40)),i=0,v0=a.volume;
+    _fadeId=setInterval(function(){
+      i++; a.volume=Math.min(1,Math.max(0,v0+(vol-v0)*(i/n)));
+      if(i>=n){clearInterval(_fadeId);_fadeId=null;if(cb)cb();}
+    },40);
+  }
+
+  function ui(on){
+    var btn=document.getElementById('index-music-btn');
+    var lbl=document.getElementById('idx-music-label');
+    var ico=document.getElementById('idx-music-icon');
+    if(btn)btn.classList[on?'add':'remove']('playing');
+    if(lbl){
+      var czEl=lbl.querySelector('.lang-cz'), enEl=lbl.querySelector('.lang-en');
+      if(czEl) czEl.textContent=on?'Ztlumit':'Hudba';
+      if(enEl) enEl.textContent=on?'Mute':'Music';
+    }
+    if(ico)ico.textContent=on?'':'🎵';
+    // Aktualizuj href všech odkazů na prezentaci — přidej ?m=1 pokud hudba hraje
+    var suffix=on?'?m=1':'';
+    document.querySelectorAll('a[href*="PORTAL_PRESENTATION"]').forEach(function(a){
+      a.href='PORTAL_PRESENTATION.html'+suffix;
+    });
+    window._prezUrl=function(){ return 'PORTAL_PRESENTATION.html'+(on?'?m=1':''); };
+  }
+
+  function tryPlay(fast){
+    if(_playing||_starting)return;
+    _starting=true;
+    var a=audio(); a.volume=0; a.muted=true;
+    var pr=a.play();
+    if(pr&&pr.then){
+      pr.then(function(){
+        _starting=false; a.muted=false;
+        _playing=true; _shouldPlay=true;
+        ui(true);
+        try{localStorage.setItem('hopi_music_on','1');}catch(e){}
+        fadeTo(0.7,fast?250:600);
+      },function(){
+        _starting=false; a.muted=false;
+        _playing=false; ui(false);
+      });
+    } else {
+      _starting=false; a.muted=false; a.volume=0;
+      _playing=true; _shouldPlay=true;
+      ui(true);
+      try{localStorage.setItem('hopi_music_on','1');}catch(e){}
+      fadeTo(0.7,fast?250:600);
+    }
+  }
+
+  function stopPlay(){
+    _shouldPlay=false;
+    if(!_playing)return;
+    _playing=false;
+    fadeTo(0,1200,function(){if(_audio)_audio.pause();});
+    ui(false);
+    try{localStorage.setItem('hopi_music_on','0');}catch(e){}
+  }
+
+  window.idxMusicToggle=function(){
+    if(_playing)stopPlay();else{_shouldPlay=true;tryPlay(true);}
+  };
+
+  _shouldPlay=true; // každé nové načtení = click-to-start povoleno
+  var _wasOn=false; try{_wasOn=localStorage.getItem('hopi_music_on')==='1';}catch(e){}
+  if(_wasOn) tryPlay(true);
+
+  function _notMusicBtn(e){
+    var b=document.getElementById('index-music-btn');
+    return !b||!(e.target===b||b.contains(e.target));
+  }
+  window.addEventListener('pointerdown',function(e){ if(_notMusicBtn(e)&&_shouldPlay&&!_playing&&!_starting)tryPlay(true); },true);
+  window.addEventListener('click',function(e){ if(_notMusicBtn(e)&&_shouldPlay&&!_playing&&!_starting)tryPlay(true); },true);
+  window.addEventListener('keydown',function(){ if(_shouldPlay&&!_playing&&!_starting)tryPlay(true); },true);
+
+  document.addEventListener('visibilitychange',function(){
+    if(!_audio)return;
+    if(document.hidden){fadeTo(0,600);}
+    else if(_playing){fadeTo(0.7,400);}
+  });
 })();
 </script>
 
@@ -1197,6 +2072,7 @@ document.addEventListener('keydown', function(e){
       <button class="oil-filter-btn active" data-f="ALL" onclick="oilFilterClick('ALL')">ALL</button>
       <button class="oil-filter-btn" data-f="WEB" onclick="oilFilterClick('WEB')">&#127760; WEB</button>
       <button class="oil-filter-btn" data-f="APP" onclick="oilFilterClick('APP')">&#128241; APP</button>
+      <button class="oil-aud-mode-btn" id="oilAuditBtn" onclick="switchOILMode(_oilMode==='audits'?'tasks':'audits')">&#128269; Audity</button>
       <button class="oil-btn-help" id="oilHelpBtn" onclick="toggleOILHelp()">&#10067; N&#225;pov&#283;da</button>
       <button class="oil-btn-settings" id="oilSettingsBtn" onclick="toggleOILSettings()">&#9881;&#65039; Nastaven&#237;</button>
       <div class="oil-tb-right">
@@ -1292,6 +2168,34 @@ document.addEventListener('keydown', function(e){
       <div id="oilTaskList">
         <div class="oil-empty">Na&#269;t&#283;te OIL.json kliknut&#237;m na <strong>&#128279; Na&#269;&#237;st OIL.json</strong><br>nebo p&#345;idejte prvn&#237; &uacute;kol tla&#269;&#237;tkem <strong>+ P&#345;idat &uacute;kol</strong>.</div>
       </div>
+      <div id="oilAuditPanel" style="display:none;">
+        <div class="oil-empty">&#128269; Na&#269;t&#283;te OIL.json pro zobrazen&#237; audit&#367;.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="ARCH_MAP_DATA.js"></script>
+
+<!-- TECH ARCH — ARCHITECTURE MAP PANEL -->
+<div class="arch-overlay" id="archOverlay" onclick="if(event.target===this)closeTechArch()">
+  <div class="arch-panel">
+    <div class="arch-hdr">
+      <div style="flex:1;">
+        <div class="arch-hdr-title">&#128506; Tech Arch &mdash; Architecture Map</div>
+        <div class="arch-hdr-sub">HOPI AppIQ &middot; Source: ARCH_MAP.md &middot; dynamick&eacute; na&#269;&#237;t&#225;n&#237;</div>
+      </div>
+      <button class="arch-close-btn" onclick="closeTechArch()" title="Zav&#345;&#237;t (Esc)">&#10005;</button>
+    </div>
+    <div class="arch-tabs">
+      <button class="arch-tab active" data-t="PREZ" onclick="archTabClick('PREZ')">&#127916; PREZ</button>
+      <button class="arch-tab" data-t="WEB" onclick="archTabClick('WEB')">&#127760; WEB</button>
+      <button class="arch-tab" data-t="APP" onclick="archTabClick('APP')">&#128241; APP</button>
+      <button class="arch-tab" data-t="MAP" onclick="archTabClick('MAP')">&#128279; Mapa vazeb</button>
+      <button class="arch-tab" data-t="RESP" onclick="archTabClick('RESP')" style="color:#E68A00;">&#128276; Responsivita</button>
+    </div>
+    <div class="arch-body" id="archBody">
+      <div style="text-align:center;padding:50px;color:#888;font-family:'Segoe UI',Arial,sans-serif;font-size:13px;">Klikni na tla&#269;&#237;tko Tech Arch pro na&#269;ten&#237;.</div>
     </div>
   </div>
 </div>
