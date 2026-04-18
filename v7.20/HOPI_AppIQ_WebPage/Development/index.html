@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — Studio Hub (FC-1)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;min-height:100vh;}
+
+/* ── NAV ── */
+.hub-nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  background:rgba(13,17,23,.97);border-bottom:2px solid #007d32;
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;backdrop-filter:blur(10px);
+}
+.hub-nav-left{display:flex;align-items:center;gap:12px;}
+.hub-nav-logo{display:flex;align-items:center;gap:8px;}
+.hub-nav-bar{width:3px;height:32px;background:#007d32;border-radius:2px;}
+.hub-nav-brand{display:flex;flex-direction:column;gap:1px;}
+.hub-nav-hopi{font-size:18px;font-weight:900;color:#fff;letter-spacing:2px;line-height:1;}
+.hub-nav-sub{font-size:11px;color:#484f58;letter-spacing:.3px;}
+.hub-nav-badge{font-size:10px;background:rgba(0,125,50,.2);color:#3fb950;border:1px solid rgba(0,125,50,.4);border-radius:10px;padding:2px 10px;font-weight:700;}
+.hub-nav-right{display:flex;align-items:center;gap:12px;}
+.hub-oil-badge{font-size:11px;font-weight:700;color:#f0883e;background:rgba(240,136,62,.12);border:1px solid rgba(240,136,62,.3);border-radius:12px;padding:3px 12px;display:none;}
+.hub-oil-badge.show{display:inline-block;}
+
+/* ── HERO STRIP ── */
+.hub-hero{padding:80px 28px 28px;max-width:1200px;margin:0 auto;}
+.hub-hero-title{font-size:36px;font-weight:900;color:#e6edf3;margin-bottom:6px;}
+.hub-hero-title span{color:#E8750A;}
+.hub-hero-sub{font-size:14px;color:#8b949e;margin-bottom:6px;}
+.hub-hero-stamp{font-size:11px;color:#484f58;letter-spacing:1px;font-style:italic;}
+
+/* ── SECTION ── */
+.hub-section{max-width:1200px;margin:0 auto;padding:0 28px 40px;}
+.hub-section-hdr{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:#484f58;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #21262d;}
+
+/* ── CENTERS GRID ── */
+.hub-centers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
+.hub-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px 22px;text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:8px;transition:all .2s;position:relative;overflow:hidden;}
+.hub-card:hover{border-color:var(--card-color);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4);}
+.hub-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-color);}
+.hub-card-icon{font-size:26px;line-height:1;margin-bottom:2px;}
+.hub-card-name{font-size:15px;font-weight:800;color:#e6edf3;}
+.hub-card-fc{font-size:10px;color:#484f58;font-weight:600;letter-spacing:.3px;}
+.hub-card-desc{font-size:12px;color:#8b949e;line-height:1.55;flex:1;}
+.hub-card-url{font-size:10px;font-family:Consolas,monospace;margin-top:4px;opacity:.5;}
+.hub-card-chip{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;padding:2px 7px;margin-top:6px;align-self:flex-start;}
+
+/* Card colors */
+.card-admin{--card-color:#c0392b;}
+.card-dev{--card-color:#1565c0;}
+.card-test{--card-color:#6a1b9a;}
+.card-promo{--card-color:#007d32;}
+.card-prez{--card-color:#0097a7;}
+.card-docs{--card-color:#26c6da;}
+.card-app{--card-color:#e67700;}
+
+.chip-active{background:#0d4429;color:#3fb950;border:1px solid #3fb95055;}
+.chip-stub{background:#2d0849;color:#d2a8ff;border:1px solid #d2a8ff55;}
+
+/* ── STATUS PANEL ── */
+.hub-status{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.hub-stat-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;}
+.hub-stat-hdr{font-size:12px;font-weight:700;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.hub-stat-hdr-icon{font-size:16px;}
+.hub-stat-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid #21262d;gap:8px;}
+.hub-stat-row:last-child{border-bottom:none;}
+.hub-stat-lbl{font-size:11px;color:#484f58;white-space:nowrap;}
+.hub-stat-val{font-size:12px;color:#e6edf3;text-align:right;word-break:break-all;}
+.hub-stat-mono{font-family:Consolas,monospace;font-size:11px;color:#79c0ff;}
+.hub-stat-link{font-size:11px;color:#79c0ff;text-decoration:none;}
+.hub-stat-link:hover{text-decoration:underline;}
+.hub-stat-empty{font-size:12px;color:#484f58;padding:8px 0;font-style:italic;}
+
+/* ── OIL MINI ── */
+.hub-oil-panel{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;}
+.hub-oil-hdr{font-size:12px;font-weight:700;color:#e6edf3;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
+.hub-oil-link{font-size:11px;color:#3fb950;text-decoration:none;border:1px solid rgba(0,125,50,.3);border-radius:5px;padding:3px 10px;transition:all .2s;}
+.hub-oil-link:hover{background:rgba(0,125,50,.15);}
+.hub-oil-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #21262d;font-size:12px;}
+.hub-oil-row:last-child{border-bottom:none;}
+.hub-oil-id{font-family:Consolas,monospace;font-size:10px;color:#3fb950;font-weight:700;white-space:nowrap;}
+.hub-oil-prio{display:inline-block;font-size:9px;font-weight:700;border-radius:3px;padding:1px 5px;white-space:nowrap;}
+.pr-HIGH{background:#3d0001;color:#f85149;}
+.pr-MED{background:#3d2800;color:#f0883e;}
+.pr-LOW{background:#0d4429;color:#3fb950;}
+.hub-oil-title{color:#e6edf3;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hub-oil-status{font-size:9px;font-weight:700;border-radius:8px;padding:1px 7px;white-space:nowrap;}
+.st-OPEN{background:#0c2544;color:#79c0ff;}
+.st-IN_PROGRESS{background:#3d1f00;color:#f0883e;}
+.st-REVIEW{background:#2d0849;color:#d2a8ff;}
+.hub-oil-empty{font-size:12px;color:#484f58;padding:8px 0;font-style:italic;}
+.hub-oil-more{font-size:11px;color:#484f58;padding-top:8px;border-top:1px solid #21262d;margin-top:4px;}
+
+/* ── FOOTER ── */
+.hub-footer{max-width:1200px;margin:0 auto;padding:0 28px 40px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.hub-footer-left{font-size:11px;color:#484f58;}
+.hub-footer-links{display:flex;gap:16px;}
+.hub-footer-links a{font-size:11px;color:#484f58;text-decoration:none;transition:color .2s;}
+.hub-footer-links a:hover{color:#3fb950;}
+
+/* ── REFRESH BTN ── */
+.hub-refresh-btn{background:transparent;border:1px solid #30363d;border-radius:5px;padding:4px 10px;font-size:11px;color:#8b949e;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.hub-refresh-btn:hover{border-color:#8b949e;color:#e6edf3;}
+
+@media(max-width:640px){
+  .hub-hero-title{font-size:24px;}
+  .hub-centers{grid-template-columns:1fr 1fr;}
+  .hub-status{grid-template-columns:1fr;}
+}
+
+/* ── LANG SWITCH ── */
+.lang-switch{display:flex;gap:4px;align-items:center;}
+.lang-btn{background:transparent;border:1px solid #30363d;border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;color:#8b949e;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.lang-btn:hover{border-color:#8b949e;color:#e6edf3;}
+.lang-btn.active{border-color:#3fb950;color:#3fb950;background:rgba(0,125,50,.1);}
+</style>
+<script src="../../_i18n.js"></script>
+</head>
+<body>
+
+<nav class="hub-nav">
+  <div class="hub-nav-left">
+    <div class="hub-nav-logo">
+      <div class="hub-nav-bar"></div>
+      <div class="hub-nav-brand">
+        <div class="hub-nav-hopi">HOPI <span style="color:#E8750A;font-weight:400;">App</span><span style="color:#007d32;">IQ</span></div>
+        <div class="hub-nav-sub" data-i18n="hub.title">Studio Hub</div>
+      </div>
+    </div>
+    <div class="hub-nav-badge">FC-1 &middot; DEV</div>
+  </div>
+  <div class="hub-nav-right">
+    <span class="hub-oil-badge" id="hubOilBadge"></span>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="cs" onclick="I18n.setLang('cs')">CZ</button>
+      <button class="lang-btn" data-lang="en" onclick="I18n.setLang('en')">EN</button>
+    </div>
+    <button class="hub-refresh-btn" onclick="loadAll()" data-i18n="common.refresh">&#8635; Obnovit</button>
+  </div>
+</nav>
+
+<div class="hub-hero">
+  <div class="hub-hero-title">&#128202; Studio Hub <span>&#9881;&#65039;</span></div>
+  <div class="hub-hero-sub" data-i18n="hub.subtitle">HOPI AppIQ — Developer workspace · Standalone centra nahrazují overlay panel</div>
+  <div class="hub-hero-stamp" id="hubStamp" data-i18n="hub.stamp.loading">Načítám stav…</div>
+</div>
+
+<div class="hub-section">
+  <div class="hub-section-hdr" data-i18n="hub.section.centers">Studio centra</div>
+  <div class="hub-centers">
+
+    <a href="admin/index.html" class="hub-card card-admin">
+      <div class="hub-card-icon">&#9881;&#65039;</div>
+      <div class="hub-card-name" data-i18n="card.admin.name">Admin Center</div>
+      <div class="hub-card-fc">FC-5</div>
+      <div class="hub-card-desc" data-i18n="card.admin.desc">OIL Backlog — sledování úkolů, editace, stavový flow. Release &amp; Deploy — archivace, GitHub Pages publikace.</div>
+      <div class="hub-card-url">admin/index.html</div>
+      <span class="hub-card-chip chip-active" data-i18n="common.active">ACTIVE</span>
+    </a>
+
+    <a href="dev/index.html" class="hub-card card-dev">
+      <div class="hub-card-icon">&#128506;</div>
+      <div class="hub-card-name" data-i18n="card.dev.name">Dev Center</div>
+      <div class="hub-card-fc">FC-3</div>
+      <div class="hub-card-desc" data-i18n="card.dev.desc">System Map — ARCH_MAP.md viewer s filtrováním dle streamu. Responsivita. Architektura platformy.</div>
+      <div class="hub-card-url">dev/index.html</div>
+      <span class="hub-card-chip chip-active" data-i18n="common.active">ACTIVE</span>
+    </a>
+
+    <a href="test/index.html" class="hub-card card-test">
+      <div class="hub-card-icon">&#9989;</div>
+      <div class="hub-card-name" data-i18n="card.test.name">Test Center</div>
+      <div class="hub-card-fc">FC-4</div>
+      <div class="hub-card-desc" data-i18n="card.test.desc">QA checklisty per verzi, sign-off workflow, log known issues. Napojení na OIL.json.</div>
+      <div class="hub-card-url">test/index.html</div>
+      <span class="hub-card-chip chip-stub" data-i18n="common.stub">STUB</span>
+    </a>
+
+    <a href="promo/index.html" class="hub-card card-promo">
+      <div class="hub-card-icon">&#127760;</div>
+      <div class="hub-card-name" data-i18n="card.promo.name">Promo Web</div>
+      <div class="hub-card-fc">FC-6</div>
+      <div class="hub-card-desc" data-i18n="card.promo.desc">Landing page platformy HOPI AppIQ. Žádné dev nástroje. Hero, filozofie, HOPIQ, brand identity, launch.</div>
+      <div class="hub-card-url">promo/index.html</div>
+      <span class="hub-card-chip chip-active" data-i18n="common.active">ACTIVE</span>
+    </a>
+
+    <a href="docs/index.html" class="hub-card card-docs">
+      <div class="hub-card-icon">&#128218;</div>
+      <div class="hub-card-name" data-i18n="card.docs.name">Documentation Center</div>
+      <div class="hub-card-fc">FC-7</div>
+      <div class="hub-card-desc" data-i18n="card.docs.desc">Tech Spec, Business Spec, Diagramy &#8212; &#382;iv&#225; dokumentace platformy. Generov&#225;no z DOCS_CONFIG.</div>
+      <div class="hub-card-url">docs/index.html</div>
+      <span class="hub-card-chip chip-active" data-i18n="common.active">ACTIVE</span>
+    </a>
+
+    <a href="PORTAL_PRESENTATION.html" class="hub-card card-prez" target="_blank">
+      <div class="hub-card-icon">&#127917;</div>
+      <div class="hub-card-name" data-i18n="card.prez.name">Prezentace</div>
+      <div class="hub-card-fc">PORTAL_PRESENTATION</div>
+      <div class="hub-card-desc" data-i18n="card.prez.desc">Architektonický dokument platformy — bilingvní CS/EN, v6+. Slides pro management a stakeholdery.</div>
+      <div class="hub-card-url">PORTAL_PRESENTATION.html</div>
+      <span class="hub-card-chip chip-active">BEZE ZMĚNY</span>
+    </a>
+
+    <a href="../../HOPI_AppIQ/Release/index.html" class="hub-card card-app" target="_blank">
+      <div class="hub-card-icon">&#128188;</div>
+      <div class="hub-card-name" data-i18n="card.app.name">Finance Portal</div>
+      <div class="hub-card-fc">FC-2 · Group Controlling</div>
+      <div class="hub-card-desc" data-i18n="card.app.desc">HOPI AppIQ | Finance — Fáze 0. Kalendář uzávěrek, tracking, org. struktura, FX, SAP, BNS, Power BI.</div>
+      <div class="hub-card-url">HOPI_AppIQ/Release/index.html</div>
+      <span class="hub-card-chip chip-active">BEZE ZMĚNY</span>
+    </a>
+
+  </div>
+</div>
+
+<div class="hub-section">
+  <div class="hub-section-hdr" data-i18n="hub.section.status">Stav projektu</div>
+  <div class="hub-status">
+
+    <div class="hub-stat-card">
+      <div class="hub-stat-hdr"><span class="hub-stat-hdr-icon">&#128230;</span> <span data-i18n="hub.release.title">Release</span></div>
+      <div id="statusRelease">
+        <div class="hub-stat-empty">Na&#269;&#237;t&#225;m _status.json&hellip;</div>
+      </div>
+    </div>
+
+    <div class="hub-stat-card">
+      <div class="hub-stat-hdr"><span class="hub-stat-hdr-icon">&#128640;</span> <span data-i18n="hub.deploy.title">Deploy — GitHub Pages</span></div>
+      <div id="statusDeploy">
+        <div class="hub-stat-empty">Na&#269;&#237;t&#225;m _status.json&hellip;</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="hub-section">
+  <div class="hub-section-hdr" data-i18n="hub.section.oil">Otevřené úkoly — OIL Backlog</div>
+  <div class="hub-oil-panel">
+    <div class="hub-oil-hdr">
+      <span data-i18n="hub.oil.active">📋 Aktivní úkoly (HIGH + IN PROGRESS)</span>
+      <a href="admin/index.html" class="hub-oil-link" data-i18n="hub.oil.admin">→ Otevřít Admin Center</a>
+    </div>
+    <div id="hubOilList"><div class="hub-oil-empty">Na&#269;&#237;t&#225;m OIL.json&hellip;</div></div>
+  </div>
+</div>
+
+<div class="hub-footer">
+  <div class="hub-footer-left" data-i18n="hub.footer.copy">© 2026 HOPI Holding a.s. — Group Controlling | David Gogela · Powered by Claude AI</div>
+  <div class="hub-footer-links">
+    <a href="promo/index.html">Promo</a>
+    <a href="PORTAL_PRESENTATION.html" target="_blank">Prezentace</a>
+    <a href="PERSONAL_PITCH.html" target="_blank">Personal Pitch</a>
+    <a href="admin/index.html">Admin</a>
+    <a href="dev/index.html">Dev</a>
+  </div>
+</div>
+
+<script>
+function loadAll(){
+  loadStatus();
+  loadOIL();
+}
+
+function loadStatus(){
+  fetch('../../_status.json?t='+Date.now())
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(s){renderStatus(s);})
+    .catch(function(){renderStatus(null);});
+}
+
+function renderStatus(s){
+  if(!s){
+    document.getElementById('statusRelease').innerHTML='<div class="hub-stat-empty">'+esc(I18n.t('hub.status.unavail'))+'</div>';
+    document.getElementById('statusDeploy').innerHTML='<div class="hub-stat-empty">'+esc(I18n.t('hub.status.http'))+'</div>';
+    document.getElementById('hubStamp').textContent=I18n.t('hub.stamp.file');
+    return;
+  }
+  var v=function(x){return x||'\u2014';};
+  document.getElementById('statusRelease').innerHTML=
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.version'))+'</span><span class="hub-stat-val">'+esc(v(s.version))+'</span></div>'+
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.archived'))+'</span><span class="hub-stat-val">'+esc(v(s.archiveAt))+'</span></div>'+
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.web'))+'</span><span class="hub-stat-val hub-stat-mono">'+esc(v(s.archiveWeb))+'</span></div>'+
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.app'))+'</span><span class="hub-stat-val hub-stat-mono">'+esc(v(s.archiveApp))+'</span></div>';
+  document.getElementById('statusDeploy').innerHTML=
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.published'))+'</span><span class="hub-stat-val">'+esc(v(s.deployAt))+'</span></div>'+
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.commit'))+'</span><span class="hub-stat-val hub-stat-mono">'+esc(v(s.deployCommit))+'</span></div>'+
+    '<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.branch'))+'</span><span class="hub-stat-val hub-stat-mono">'+esc(v(s.deployBranch))+'</span></div>'+
+    (s.deployUrl?'<div class="hub-stat-row"><span class="hub-stat-lbl">'+esc(I18n.t('hub.stat.url'))+'</span><a href="'+esc(s.deployUrl)+'" target="_blank" class="hub-stat-link">🔗 '+esc(s.deployUrl)+'</a></div>':'');
+  document.getElementById('hubStamp').textContent=I18n.t('hub.stat.version')+' '+v(s.version)+' \u2022 '+I18n.t('hub.stat.archived').toLowerCase()+': '+v(s.archiveAt)+' \u2022 '+I18n.t('hub.stat.published').toLowerCase()+': '+v(s.deployAt);
+}
+
+function loadOIL(){
+  var cached=null;
+  try{cached=localStorage.getItem('hopi_oil_cache');}catch(e){}
+  if(cached){try{renderOILMini(JSON.parse(cached));}catch(e){}}
+
+  fetch('../../OIL.json?_='+Date.now())
+    .then(function(r){if(!r.ok)throw 0;return r.text();})
+    .then(function(text){
+      var d=JSON.parse(text);
+      try{localStorage.setItem('hopi_oil_cache',text);}catch(e){}
+      renderOILMini(d);
+    })
+    .catch(function(){
+      if(!cached)document.getElementById('hubOilList').innerHTML='<div class="hub-oil-empty">OIL.json nedostupn&#253; (file:// protokol) &mdash; cache: '+(cached?'k dispozici':'pr&#225;zdn&#225;')+'</div>';
+    });
+}
+
+function renderOILMini(d){
+  if(!d||!d.tasks){document.getElementById('hubOilList').innerHTML='<div class="hub-oil-empty">Chyba parsování OIL.json</div>';return;}
+  var open=d.tasks.filter(function(t){return t.status!=='CLOSED';});
+  var badge=document.getElementById('hubOilBadge');
+  if(open.length>0){badge.textContent=open.length+' '+I18n.t('oil.more');badge.classList.add('show');}else{badge.classList.remove('show');}
+
+  // Show HIGH priority + IN_PROGRESS tasks, max 10
+  var featured=d.tasks.filter(function(t){
+    return t.status!=='CLOSED'&&(t.priority==='HIGH'||t.status==='IN_PROGRESS'||t.status==='REVIEW');
+  });
+  var PRIO={HIGH:1,MED:2,LOW:3},STAT={OPEN:1,IN_PROGRESS:2,REVIEW:3,RETURNED:4};
+  featured.sort(function(a,b){
+    var sa=STAT[a.status]||9,sb=STAT[b.status]||9;
+    var pa=PRIO[a.priority]||9,pb=PRIO[b.priority]||9;
+    if(sa!==sb)return sa-sb;if(pa!==pb)return pa-pb;return 0;
+  });
+  var shown=featured.slice(0,10);
+  var OIL_FLOW={'OPEN':'st-OPEN','IN_PROGRESS':'st-IN_PROGRESS','REVIEW':'st-REVIEW','RETURNED':'st-OPEN'};
+  var OIL_LBL={'OPEN':I18n.t('oil.status.open'),'IN_PROGRESS':I18n.t('oil.status.inprogress'),'REVIEW':I18n.t('oil.status.review'),'RETURNED':I18n.t('oil.status.returned')};
+  var html='';
+  shown.forEach(function(t){
+    html+='<div class="hub-oil-row">'+
+      '<span class="hub-oil-id">'+esc(t.id)+'</span>'+
+      '<span class="hub-oil-prio pr-'+t.priority+'">'+t.priority+'</span>'+
+      '<span class="hub-oil-title" title="'+esc(t.description||t.title)+'">'+esc(t.title)+'</span>'+
+      '<span class="hub-oil-status '+(OIL_FLOW[t.status]||'st-OPEN')+'">'+esc(OIL_LBL[t.status]||t.status)+'</span>'+
+      '</div>';
+  });
+  if(featured.length>10)html+='<div class="hub-oil-more">+ '+(featured.length-10)+' '+esc(I18n.t('oil.more'))+' &mdash; <a href="admin/index.html" style="color:#3fb950;text-decoration:none;">'+esc(I18n.t('oil.open_admin'))+'</a></div>';
+  if(!shown.length)html='<div class="hub-oil-empty">'+esc(I18n.t('hub.oil.all_closed'))+'</div>';
+  document.getElementById('hubOilList').innerHTML=html;
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// Re-render dynamic content on lang change (OIL rows use I18n.t inline)
+var _lastOilData=null;
+var _origSetLang=I18n.setLang.bind(I18n);
+I18n.setLang=function(lang){_origSetLang(lang);if(_lastOilData)renderOILMini(_lastOilData);};
+
+var _origRenderOILMini=renderOILMini;
+renderOILMini=function(d){_lastOilData=d;_origRenderOILMini(d);};
+
+I18n.init();
+loadAll();
+</script>
+</body>
+</html>

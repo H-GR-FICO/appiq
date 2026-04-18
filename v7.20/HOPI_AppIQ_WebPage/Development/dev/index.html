@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — Dev Center (FC-3)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── NAV ── */
+.dc-nav{background:#161b22;border-bottom:2px solid #1565c0;padding:0 20px;height:48px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.dc-nav-back{color:#79c0ff;font-size:12px;font-weight:700;text-decoration:none;border:1px solid rgba(21,101,192,.4);border-radius:5px;padding:4px 12px;transition:all .2s;white-space:nowrap;}
+.dc-nav-back:hover{background:rgba(21,101,192,.2);border-color:#79c0ff;}
+.dc-nav-brand{font-size:13px;font-weight:700;color:#e6edf3;}
+.dc-nav-badge{font-size:10px;background:rgba(21,101,192,.25);color:#79c0ff;border:1px solid rgba(21,101,192,.4);border-radius:10px;padding:2px 9px;font-weight:700;white-space:nowrap;}
+.dc-tabs{display:flex;gap:0;background:#161b22;border-bottom:1px solid #30363d;flex-shrink:0;}
+.dc-tab{padding:9px 22px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#8b949e;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Segoe UI',Arial,sans-serif;transition:all .15s;white-space:nowrap;}
+.dc-tab.active{color:#79c0ff;border-bottom-color:#1565c0;}
+.dc-tab:hover:not(.active){color:#e6edf3;background:#21262d;}
+.dc-body{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.dc-tab-pane{flex:1;overflow-y:auto;display:none;flex-direction:column;}
+.dc-tab-pane.active{display:flex;}
+
+/* ── ARCH MAP TAB ── */
+.arch-filter-bar{display:flex;gap:0;border-bottom:1px solid #30363d;background:#21262d;flex-shrink:0;}
+.arch-filter-btn{padding:8px 18px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;letter-spacing:.05em;border-bottom:3px solid transparent;margin-bottom:-1px;font-family:'Segoe UI',Arial,sans-serif;color:#8b949e;transition:all .15s;}
+.arch-filter-btn.active{color:#79c0ff;border-bottom-color:#1565c0;}
+.arch-filter-btn:hover:not(.active){color:#e6edf3;background:rgba(255,255,255,.05);}
+.arch-content{flex:1;overflow-y:auto;padding:16px 20px;background:#0d1117;}
+.arch-sec-hdr{font-size:11px;font-weight:700;color:#79c0ff;letter-spacing:.1em;text-transform:uppercase;padding:4px 0;border-bottom:1px solid #1565c0;margin-bottom:8px;margin-top:20px;}
+.arch-sec-hdr:first-child{margin-top:0;}
+.arch-tbl{width:100%;border-collapse:collapse;font-size:12.5px;color:#e6edf3;margin-bottom:4px;}
+.arch-tbl th{background:#161b22;font-weight:600;padding:6px 8px;text-align:left;font-size:11px;color:#8b949e;border-bottom:1px solid #30363d;white-space:nowrap;}
+.arch-tbl td{padding:6px 8px;border-bottom:1px solid #21262d;vertical-align:top;}
+.arch-tbl tr:hover td{background:#161b22;}
+.arch-code{display:inline-block;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700;font-family:'Courier New',monospace;letter-spacing:.4px;white-space:nowrap;color:#fff;}
+.arch-code.scr{background:#6a1b9a;}
+.arch-code.sld{background:#bf360c;}
+.arch-code.doc{background:#1b5e20;}
+.arch-code.mod{background:#37474f;}
+.arch-code.idx{background:#0d47a1;}
+.arch-code.app{background:#006064;}
+.arch-code.lf{background:#b71c1c;}
+.arch-code.bc{background:#880e4f;}
+.arch-map-pre{background:#010409;color:#7ec8e3;font-family:'Courier New','Lucida Console',monospace;font-size:12px;line-height:1.7;padding:18px 20px;border-radius:8px;overflow-x:auto;white-space:pre;margin:0;}
+.arch-fetch-note{font-size:11px;color:#484f58;font-style:italic;margin-top:12px;padding:8px 12px;background:#161b22;border-radius:6px;border-left:3px solid #30363d;}
+.arch-error{padding:20px;font-size:13px;color:#f85149;background:#21262d;border-radius:8px;border:1px solid rgba(248,81,73,.3);}
+
+/* ── RESP TAB ── */
+.resp-content{flex:1;overflow-y:auto;padding:16px 20px;background:#0d1117;}
+.resp-stream-hdr{font-size:11px;font-weight:700;color:#79c0ff;letter-spacing:.1em;text-transform:uppercase;padding:4px 0;border-bottom:1px solid #1565c0;margin-bottom:8px;margin-top:20px;}
+.resp-stream-hdr:first-child{margin-top:0;}
+.resp-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.resp-tbl th{background:#161b22;font-weight:600;padding:6px 8px;font-size:11px;color:#8b949e;border-bottom:1px solid #30363d;text-align:left;}
+.resp-tbl td{padding:6px 8px;border-bottom:1px solid #21262d;vertical-align:middle;}
+.resp-tbl tr:hover td{background:#161b22;}
+
+/* ── ARCH DIAGRAM TAB (from _arch_studio.html) ── */
+.diagram-content{flex:1;overflow-y:auto;padding:20px 24px;background:#0d1117;}
+.sarc-hdr{background:#161b22;color:#e6edf3;border-radius:10px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border:1px solid #30363d;}
+.sarc-hdr-title{font-size:14px;font-weight:700;}
+.sarc-hdr-sub{font-size:11px;color:#8b949e;margin-top:2px;}
+.sarc-hdr-badge{font-size:11px;background:#3fb950;color:#010409;border-radius:20px;padding:3px 10px;font-weight:700;white-space:nowrap;}
+.sarc-panels{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+.sarc-panel{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px;}
+.sarc-panel.s-before{border-top:3px solid #f85149;}
+.sarc-panel.s-after{border-top:3px solid #3fb950;}
+.sarc-panel-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+.s-before .sarc-panel-lbl{color:#f85149;}
+.s-after .sarc-panel-lbl{color:#3fb950;}
+.sarc-tree{font-size:12px;line-height:1.85;font-family:'Cascadia Code',Consolas,monospace;color:#e6edf3;}
+.sarc-bdg{display:inline-block;font-size:10px;padding:1px 6px;border-radius:4px;margin-left:5px;font-family:'Segoe UI',Arial,sans-serif;font-weight:700;vertical-align:middle;}
+.sb-new{background:#0d4429;color:#3fb950;border:1px solid #3fb950;}
+.sb-move{background:#3d1f00;color:#f0883e;border:1px solid #f0883e;}
+.sb-del{background:#3d0001;color:#f85149;border:1px solid #f85149;}
+.sb-keep{background:#0c2544;color:#79c0ff;border:1px solid #79c0ff;}
+.sb-stub{background:#2d0849;color:#d2a8ff;border:1px solid #d2a8ff;}
+.sarc-sec{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#484f58;margin:18px 0 10px;}
+.sarc-flow-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+.sarc-fc{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 14px;flex:1;min-width:110px;}
+.sarc-fc.f-hub{border-top:3px solid #E8750A;}
+.sarc-fc.f-admin{border-top:3px solid #f85149;}
+.sarc-fc.f-dev{border-top:3px solid #79c0ff;}
+.sarc-fc.f-test{border-top:3px solid #d2a8ff;}
+.sarc-fc.f-promo{border-top:3px solid #3fb950;}
+.sarc-fc.f-prez{border-top:3px solid #56d364;}
+.sarc-fc.f-app{border-top:3px solid #f0883e;}
+.sarc-fc-icon{font-size:16px;margin-bottom:3px;}
+.sarc-fc-name{font-size:11px;font-weight:700;color:#e6edf3;}
+.sarc-fc-sub{font-size:10px;color:#8b949e;}
+.sarc-fc-url{font-size:10px;color:#79c0ff;font-family:Consolas,monospace;margin-top:2px;}
+.sarc-fc-items{font-size:10px;color:#8b949e;margin-top:6px;line-height:1.65;}
+.sarc-fc-items li{list-style:none;}
+.sarc-fc-items li::before{content:"· ";color:#484f58;}
+.sarc-content-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px;}
+.sarc-cm{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 14px;}
+.sarc-cm.f-hub{border-top:3px solid #E8750A;}
+.sarc-cm.f-admin{border-top:3px solid #f85149;}
+.sarc-cm.f-dev{border-top:3px solid #79c0ff;}
+.sarc-cm.f-test{border-top:3px solid #d2a8ff;}
+.sarc-cm.f-promo{border-top:3px solid #3fb950;}
+.sarc-cm.f-deploy{border-top:3px solid #f0883e;}
+.sarc-cm-title{font-size:11px;font-weight:700;color:#e6edf3;margin-bottom:2px;}
+.sarc-cm-url{font-size:10px;color:#79c0ff;font-family:Consolas,monospace;margin-bottom:7px;}
+.sarc-cm-items{font-size:10px;color:#8b949e;line-height:1.7;}
+.sarc-cm-items li{list-style:none;}
+.sarc-cm-items li::before{content:"→ ";color:#484f58;}
+.sarc-cm-from{font-size:10px;color:#f0883e;margin-top:7px;padding-top:7px;border-top:1px solid #30363d;font-style:italic;}
+.sarc-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px;}
+.sarc-step{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 14px;}
+.sarc-step-num{font-size:22px;font-weight:700;color:#f0883e;font-family:Consolas,monospace;margin-bottom:4px;}
+.sarc-step-title{font-size:11px;font-weight:700;color:#e6edf3;margin-bottom:4px;}
+.sarc-step-desc{font-size:10px;color:#8b949e;line-height:1.6;}
+.sarc-ok-bar{background:#0d4429;border:1px solid #3fb950;border-radius:8px;padding:11px 16px;margin-top:16px;font-size:12px;color:#3fb950;display:flex;align-items:center;gap:10px;}
+
+/* ── LANG SWITCH ── */
+.lang-switch{display:flex;gap:4px;align-items:center;margin-left:auto;}
+.lang-btn{background:transparent;border:1px solid #30363d;border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;color:#8b949e;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.lang-btn:hover{border-color:#8b949e;color:#e6edf3;}
+.lang-btn.active{border-color:#1565c0;color:#79c0ff;background:rgba(21,101,192,.1);}
+</style>
+<script src="../../../_i18n.js"></script>
+</head>
+<body>
+
+<nav class="dc-nav">
+  <a class="dc-nav-back" href="../index.html" data-i18n="common.back">← Studio Hub</a>
+  <div class="dc-nav-brand">🗺 <span data-i18n="dev.title">Dev Center</span></div>
+  <div class="dc-nav-badge">FC-3</div>
+  <div class="lang-switch">
+    <button class="lang-btn" data-lang="cs" onclick="I18n.setLang('cs')">CZ</button>
+    <button class="lang-btn" data-lang="en" onclick="I18n.setLang('en')">EN</button>
+  </div>
+</nav>
+
+<div class="dc-tabs">
+  <button class="dc-tab active" data-pane="archmap" onclick="dcTab('archmap')" data-i18n="dev.tab.archmap">🗺 Arch Map</button>
+  <button class="dc-tab" data-pane="resp" onclick="dcTab('resp')" data-i18n="dev.tab.resp">🔔 Responsivita</button>
+  <button class="dc-tab" data-pane="diagram" onclick="dcTab('diagram')" data-i18n="dev.tab.diagram">🏛 Architektura platformy</button>
+</div>
+
+<div class="dc-body">
+
+  <!-- TAB: Arch Map -->
+  <div class="dc-tab-pane active" id="pane-archmap">
+    <div class="arch-filter-bar">
+      <button class="arch-filter-btn active" data-t="PREZ" onclick="archTabClick('PREZ')">&#127916; PREZ</button>
+      <button class="arch-filter-btn" data-t="WEB" onclick="archTabClick('WEB')">&#127760; WEB</button>
+      <button class="arch-filter-btn" data-t="APP" onclick="archTabClick('APP')">&#128241; APP</button>
+      <button class="arch-filter-btn" data-t="MAP" onclick="archTabClick('MAP')">&#128279; Mapa vazeb</button>
+    </div>
+    <div class="arch-content" id="archBody">
+      <div style="padding:40px;text-align:center;color:#484f58;font-size:13px;">&#9200; Na&#269;&#237;t&#225;m ARCH_MAP.md&hellip;</div>
+    </div>
+  </div>
+
+  <!-- TAB: Responsivita -->
+  <div class="dc-tab-pane" id="pane-resp">
+    <div class="resp-content" id="respBody">
+      <div style="padding:40px;text-align:center;color:#484f58;font-size:13px;">&#9200; Na&#269;&#237;t&#225;m RESPONSIVE_DATA.js&hellip;</div>
+    </div>
+  </div>
+
+  <!-- TAB: Architektura platformy -->
+  <div class="dc-tab-pane" id="pane-diagram">
+    <div class="diagram-content">
+
+      <div class="sarc-hdr">
+        <div>
+          <div class="sarc-hdr-title">&#127959; Architektura platformy &mdash; p&#345;echod na Studio Hub</div>
+          <div class="sarc-hdr-sub">Studio overlay &rarr; standalone Studio Hub s centry &middot; Implementace: 01&ndash;04 hotova</div>
+        </div>
+        <div class="sarc-hdr-badge">&#9989; IMPLEMENTOV&#193;NO</div>
+      </div>
+
+      <div class="sarc-sec">P&#345;ed &rarr; po</div>
+      <div class="sarc-panels">
+        <div class="sarc-panel s-before">
+          <div class="sarc-panel-lbl">&#10060; D&#345;&#237;ve &mdash; Studio jako overlay v promo webu</div>
+          <div class="sarc-tree">
+            <b>Development/</b><br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; index.html <span class="sarc-bdg sb-del">promo + dev tools sm&#237;ch&#225;n&#233;</span><br>
+            &nbsp;&nbsp;&#9474;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#484f58;font-size:11px;">&#9492;&#9472; Studio overlay (3 tabs)</span><br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; PORTAL_PRESENTATION.html<br>
+            &nbsp;&nbsp;&#9492;&#9472;&#9472; PERSONAL_PITCH.html &hellip;
+          </div>
+        </div>
+        <div class="sarc-panel s-after">
+          <div class="sarc-panel-lbl">&#9989; Nyn&#237; &mdash; Studio Hub + samostatn&#225; centra</div>
+          <div class="sarc-tree">
+            <b>Development/</b><br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; <span style="color:#E8750A;font-weight:700;">index.html</span> <span class="sarc-bdg sb-new">Hub (FC-1)</span><br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; promo/ <span class="sarc-bdg sb-move">p&#345;esun FC-6</span><br>
+            &nbsp;&nbsp;&#9474;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; index.html<br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; admin/ <span class="sarc-bdg sb-new">FC-5</span><br>
+            &nbsp;&nbsp;&#9474;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; index.html<br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; dev/ <span class="sarc-bdg sb-new">FC-3</span><br>
+            &nbsp;&nbsp;&#9474;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; index.html<br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; test/ <span class="sarc-bdg sb-stub">STUB FC-4</span><br>
+            &nbsp;&nbsp;&#9474;&nbsp;&nbsp;&nbsp;&nbsp;&#9492;&#9472; index.html<br>
+            &nbsp;&nbsp;&#9500;&#9472;&#9472; PORTAL_PRESENTATION.html <span class="sarc-bdg sb-keep">beze zm&#283;ny</span><br>
+            &nbsp;&nbsp;&#9492;&#9472;&#9472; PERSONAL_PITCH.html &hellip; <span class="sarc-bdg sb-keep">beze zm&#283;ny</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sarc-sec">Naviga&#269;n&#237; tok</div>
+      <div class="sarc-flow-row">
+        <div class="sarc-fc f-hub">
+          <div class="sarc-fc-icon">&#128202;</div>
+          <div class="sarc-fc-name">Studio Hub</div>
+          <div class="sarc-fc-sub">FC-1 &middot; hlavn&#237; vstup</div>
+          <div class="sarc-fc-url">index.html</div>
+          <ul class="sarc-fc-items"><li>_status.json dashboard</li><li>OIL badge</li><li>Navigace na centra</li></ul>
+        </div>
+        <div class="sarc-fc f-admin">
+          <div class="sarc-fc-icon">&#9881;&#65039;</div>
+          <div class="sarc-fc-name">Admin Center</div>
+          <div class="sarc-fc-sub">FC-5</div>
+          <div class="sarc-fc-url">admin/</div>
+          <ul class="sarc-fc-items"><li>OIL Backlog</li><li>Release &amp; Deploy</li><li>appiq:// akce</li></ul>
+        </div>
+        <div class="sarc-fc f-dev">
+          <div class="sarc-fc-icon">&#128506;</div>
+          <div class="sarc-fc-name">Dev Center</div>
+          <div class="sarc-fc-sub">FC-3 &middot; tato str&#225;nka</div>
+          <div class="sarc-fc-url">dev/</div>
+          <ul class="sarc-fc-items"><li>System Map</li><li>ARCH_MAP viewer</li><li>Architecture docs</li></ul>
+        </div>
+        <div class="sarc-fc f-test">
+          <div class="sarc-fc-icon">&#9989;</div>
+          <div class="sarc-fc-name">Test Center</div>
+          <div class="sarc-fc-sub">FC-4 &middot; stub</div>
+          <div class="sarc-fc-url">test/</div>
+          <ul class="sarc-fc-items"><li>QA checklisty</li><li>Sign-off workflow</li><li>Known issues</li></ul>
+        </div>
+        <div class="sarc-fc f-promo">
+          <div class="sarc-fc-icon">&#128640;</div>
+          <div class="sarc-fc-name">Promo Web</div>
+          <div class="sarc-fc-sub">FC-6 &middot; p&#345;esun</div>
+          <div class="sarc-fc-url">promo/</div>
+          <ul class="sarc-fc-items"><li>Landing page</li><li>&#381;&#225;dn&#233; dev n&#225;stroje</li><li>Link &rarr; Studio Hub</li></ul>
+        </div>
+        <div class="sarc-fc f-prez">
+          <div class="sarc-fc-icon">&#127917;</div>
+          <div class="sarc-fc-name">Prezentace</div>
+          <div class="sarc-fc-sub">PORTAL_PRESENTATION</div>
+          <div class="sarc-fc-url">PORTAL_PRESENTATION.html</div>
+          <ul class="sarc-fc-items"><li>Beze zm&#283;ny</li><li>Link z Hub i Promo</li></ul>
+        </div>
+        <div class="sarc-fc f-app">
+          <div class="sarc-fc-icon">&#128188;</div>
+          <div class="sarc-fc-name">Finance Portal</div>
+          <div class="sarc-fc-sub">FC-2</div>
+          <div class="sarc-fc-url">app/</div>
+          <ul class="sarc-fc-items"><li>Beze zm&#283;ny</li><li>Link z Hub</li></ul>
+        </div>
+      </div>
+
+      <div class="sarc-ok-bar">
+        <span style="font-size:18px;">&#9989;</span>
+        <span><strong>Implementace dokon&#269;ena</strong> &mdash; Studio Hub (FC-1) + Admin (FC-5) + Dev (FC-3) + Test stub (FC-4) + Promo (FC-6) jsou aktivn&#237;.</span>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /dc-body -->
+
+<script src="../ARCH_MAP_DATA.js"></script>
+<script src="../RESPONSIVE_DATA.js"></script>
+<script>
+var _archCache = null;
+var _archTab   = 'PREZ';
+
+function dcTab(pane) {
+  document.querySelectorAll('.dc-tab').forEach(function(b){ b.classList.toggle('active', b.dataset.pane === pane); });
+  document.querySelectorAll('.dc-tab-pane').forEach(function(p){ p.classList.toggle('active', p.id === 'pane-'+pane); });
+  if (pane === 'archmap') loadArch();
+  if (pane === 'resp')    renderResp();
+}
+
+function archTabClick(tab) {
+  _archTab = tab;
+  document.querySelectorAll('.arch-filter-btn').forEach(function(b){
+    b.classList.toggle('active', b.dataset.t === tab);
+  });
+  _renderArch();
+}
+
+function _archEsc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function _archCodeBadge(code){
+  if(!code||code==='—'||code==='-'||!code.trim()) return '<span style="color:#484f58;">—</span>';
+  var c='arch-code', lc=code.toLowerCase();
+  if(lc.indexOf('scr')===0) c+=' scr';
+  else if(lc.indexOf('sld')===0) c+=' sld';
+  else if(lc.indexOf('doc')===0) c+=' doc';
+  else if(lc.indexOf('mod')===0) c+=' mod';
+  else if(lc.indexOf('idx')===0) c+=' idx';
+  else if(lc.indexOf('app')===0) c+=' app';
+  else if(lc.indexOf('lf')===0)  c+=' lf';
+  else if(lc.indexOf('bc')===0)  c+=' bc';
+  return '<span class="'+c+'">'+_archEsc(code)+'</span>';
+}
+function _archCellHtml(cell, colIdx, isCodeCol){
+  if(colIdx===0 && isCodeCol) return _archCodeBadge(cell);
+  return _archEsc(cell).replace(/`([^`]+)`/g,'<code style="background:#21262d;padding:1px 4px;border-radius:3px;font-size:11px;font-family:Courier New,monospace;color:#79c0ff;">$1</code>');
+}
+function _archParseTables(lines){
+  var tables=[], title='', headers=null, rows=[];
+  function flush(){ if(headers&&rows.length) tables.push({title:title,headers:headers,rows:rows}); headers=null; rows=[]; }
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i];
+    var sm=l.match(/^#{2,4}\s*[▸►]?\s*(.+)/);
+    if(sm&&!l.match(/^## ══/)){ flush(); title=sm[1].trim(); continue; }
+    if(l.startsWith('|')){
+      var cells=l.split('|').slice(1,-1).map(function(c){return c.trim();});
+      if(cells.every(function(c){return /^[-:]+$/.test(c);})) continue;
+      if(!headers){headers=cells;}else{rows.push(cells);}
+    } else if(headers){ flush(); }
+  }
+  flush();
+  return tables;
+}
+function _archRenderTable(tbl){
+  if(!tbl||!tbl.rows.length) return '';
+  var h0=(tbl.headers[0]||'').toLowerCase();
+  var isCode=h0==='kód'||h0==='kod'||h0==='id';
+  var html='<div class="arch-sec-hdr">'+_archEsc(tbl.title)+'</div>';
+  html+='<table class="arch-tbl"><thead><tr>';
+  tbl.headers.forEach(function(h){html+='<th>'+_archEsc(h)+'</th>';});
+  html+='</tr></thead><tbody>';
+  tbl.rows.forEach(function(row){
+    html+='<tr>';
+    row.forEach(function(cell,ci){html+='<td>'+_archCellHtml(cell,ci,isCode)+'</td>';});
+    html+='</tr>';
+  });
+  html+='</tbody></table>';
+  return html;
+}
+function _archExtractCodeBlock(text){
+  var m=text.match(/```[^\n]*\n([\s\S]+?)\n?```/);
+  return m?m[1]:'';
+}
+
+function _renderArch(){
+  var body=document.getElementById('archBody');
+  if(!_archCache){
+    body.innerHTML='<div class="arch-error">&#9888; ARCH_MAP.md se nepoda&#345;ilo na&#269;&#237;st.<br><br>Pravd&#283;podobn&#225; p&#345;&#237;&#269;ina: str&#225;nka je otev&#345;en&#225; p&#345;es <code>file://</code> protokol.<br>Pou&#382;ijte HTTP server nebo GitHub Pages.</div>';
+    return;
+  }
+  var lines=_archCache.split('\n');
+  var sections={PREZ:[],WEB:[],APP:[],MAP:[],FILES:[]};
+  var cur=null;
+  for(var i=0;i<lines.length;i++){
+    var l=lines[i];
+    if(/^## ══ PREZ/.test(l))      cur='PREZ';
+    else if(/^## ══ WEB/.test(l))  cur='WEB';
+    else if(/^## ══ APP/.test(l))  cur='APP';
+    else if(/^## ══ MAPA/.test(l)) cur='MAP';
+    else if(/^## ══ SOUBORY/.test(l)||/^## ══ CO JEŠTĚ/.test(l)) cur='FILES';
+    if(cur) sections[cur].push(l);
+  }
+  var html='';
+  if(_archTab==='MAP'){
+    html='<div class="arch-sec-hdr">'+I18n.t('dev.arch.map.title')+'</div>';
+    var mapBlock=_archExtractCodeBlock(sections.MAP.join('\n'));
+    if(mapBlock) html+='<pre class="arch-map-pre">'+_archEsc(mapBlock)+'</pre>';
+    var filesBlock=_archExtractCodeBlock(sections.FILES.join('\n'));
+    if(filesBlock){
+      html+='<div class="arch-sec-hdr" style="margin-top:20px;">'+I18n.t('dev.arch.files.title')+'</div>';
+      html+='<pre class="arch-map-pre">'+_archEsc(filesBlock)+'</pre>';
+    }
+    html+='<p class="arch-fetch-note">Source: ARCH_MAP.md &mdash; na&#269;ten dynamicky p&#345;es fetch()</p>';
+  } else {
+    var tbls=_archParseTables(sections[_archTab]||[]);
+    if(!tbls.length){
+      html='<div style="padding:24px;color:#484f58;font-size:13px;">&#10006; &#381;&#225;dn&#225; data pro tento stream.</div>';
+    } else {
+      tbls.forEach(function(t){html+=_archRenderTable(t);});
+      html+='<p class="arch-fetch-note">Source: ARCH_MAP.md &mdash; na&#269;ten dynamicky p&#345;es fetch()</p>';
+    }
+  }
+  body.innerHTML=html;
+}
+
+function loadArch(){
+  if(_archCache !== null){ _renderArch(); return; }
+  var body=document.getElementById('archBody');
+  body.innerHTML='<div style="padding:40px;text-align:center;color:#484f58;font-size:13px;">&#9200; Na&#269;&#237;t&#225;m ARCH_MAP.md&hellip;</div>';
+  fetch('../../../ARCH_MAP.md')
+    .then(function(r){ if(!r.ok) throw 0; return r.text(); })
+    .then(function(t){ _archCache = t; _renderArch(); })
+    .catch(function(){
+      _archCache = (typeof ARCH_MAP_DATA !== 'undefined' && ARCH_MAP_DATA) ? ARCH_MAP_DATA : '';
+      _renderArch();
+    });
+}
+
+function renderResp(){
+  var body=document.getElementById('respBody');
+  if(typeof RESPONSIVE_DATA==='undefined'){
+    body.innerHTML='<div class="arch-error" style="margin:20px;">&#9888; RESPONSIVE_DATA.js nebylo nalezeno.</div>';
+    return;
+  }
+  var d=RESPONSIVE_DATA;
+  var SC={'green':'#3fb950','yellow':'#f0883e','red':'#f85149'};
+  var SL={'green':I18n.t('dev.resp.status.ok'),'yellow':I18n.t('dev.resp.status.acceptable'),'red':I18n.t('dev.resp.status.risk')};
+  var html='<div style="padding:16px 20px;font-family:Segoe UI,Arial,sans-serif;">';
+  html+='<div style="padding:6px 0 14px;font-size:11px;color:#484f58;">Verze: <b style="color:#79c0ff;">'+_archEsc(d.version)+'</b> &nbsp;·&nbsp; Aktualizováno: '+_archEsc(d.lastUpdated)+'</div>';
+  d.streams.forEach(function(s){
+    html+='<div class="resp-stream-hdr">'+_archEsc(s.id)+' — '+_archEsc(s.name)+'</div>';
+    html+='<div style="font-size:10px;color:#484f58;font-family:monospace;margin-bottom:4px;">'+_archEsc(s.file)+'</div>';
+    if(s.recommendation) html+='<div style="font-size:11px;color:#79c0ff;background:#0c2544;border-radius:5px;padding:5px 10px;margin-bottom:8px;">&#128204; '+_archEsc(s.recommendation)+'</div>';
+    html+='<table class="resp-tbl"><thead><tr><th>'+I18n.t('dev.resp.col.range')+'</th><th>'+I18n.t('dev.resp.col.format')+'</th><th>'+I18n.t('cap.col.status')+'</th><th>'+I18n.t('dev.resp.col.note')+'</th><th>'+I18n.t('dev.resp.col.oil')+'</th></tr></thead><tbody>';
+    s.breakpoints.forEach(function(bp){
+      var col=SC[bp.status]||'#8b949e';
+      var lbl=SL[bp.status]||bp.status;
+      html+='<tr>';
+      html+='<td style="font-family:monospace;font-size:10px;font-weight:700;color:#79c0ff;">'+_archEsc(bp.range)+'</td>';
+      html+='<td style="font-size:11px;">'+_archEsc(bp.label)+'</td>';
+      html+='<td><span style="display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:'+col+'18;color:'+col+';border:1px solid '+col+'55;">'+lbl+'</span></td>';
+      html+='<td style="font-size:10.5px;color:#8b949e;">'+_archEsc(bp.note)+'</td>';
+      html+='<td style="font-size:11px;">'+(bp.oil?'<span class="arch-code">'+_archEsc(bp.oil)+'</span>':'<span style="color:#484f58;">—</span>')+'</td>';
+      html+='</tr>';
+    });
+    html+='</tbody></table>';
+  });
+  html+='<p class="arch-fetch-note">Source: RESPONSIVE_DATA.js</p>';
+  html+='</div>';
+  body.innerHTML=html;
+}
+
+// Initial load
+I18n.init();
+loadArch();
+</script>
+</body>
+</html>

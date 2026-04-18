@@ -1,0 +1,15 @@
+﻿{
+    "latest":  "v7.20",
+    "updatedAt":  "2026-04-19",
+    "versions":  {
+                     "version":  "v7.20",
+                     "date":  "2026-04-19",
+                     "session":  "v7.20-WebPage_20260419_0148",
+                     "title":  "Auto-archive",
+                     "presentationUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                     "hubUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
+                     "pitchUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                     "docsUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                     "protocolUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                 }
+}
