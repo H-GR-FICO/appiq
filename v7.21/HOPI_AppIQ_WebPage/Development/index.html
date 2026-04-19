@@ -400,7 +400,7 @@ loadAll();
 
 // ── MAINTENANCE TOGGLE (GitHub API) ─────────────────────────────────
 var GH_REPO='H-GR-FICO/appiq', GH_FILE='versions.json';
-function b64dec(s){return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}
+function b64dec(s){return decodeURIComponent(escape(atob(s.replace(/\n/g,'')))).replace(/^\uFEFF/,'');}
 function b64enc(s){return btoa(unescape(encodeURIComponent(s)));}
 
 function loadMaintenanceStatus(){
