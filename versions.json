@@ -39,7 +39,10 @@
         "version":  "v7.21",
         "date":  "2026-04-19",
         "session":  "v7.21-WebPage_20260419_1012",
-        "title":  "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
+        "title":  "HOPIQ chatbot + Version Selector 2.0 + PROMO banner + Welcome dialog",
+        "promoLevel": 4,
+        "promoText": "HOPIQ chatbot je živý — Claude AI teď odpovídá přímo z AppIQ",
+        "promoTextEn": "HOPIQ chatbot is live — Claude AI now responds directly from AppIQ",
         "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
         "changes":  [
