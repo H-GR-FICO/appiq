@@ -615,24 +615,25 @@
   };
 
   // ── Background music ──────────────────────────────────────────────
+  // Vlastní klíč 'appiq_music_vs' — nezávislý na Studio klíči 'appiq_music'
   function startBgMusic(){
     var btn=document.getElementById('music-toggle');
     if(btn) btn.style.display='';
-    try{ if(localStorage.getItem('appiq_music')==='off'){ updateMusicBtn(); return; } }catch(e){}
+    try{ if(localStorage.getItem('appiq_music_vs')==='off'){ updateMusicBtn(); return; } }catch(e){}
     playMp3Loop();
-    try{ localStorage.setItem('appiq_music','on'); }catch(e){}
+    try{ localStorage.setItem('appiq_music_vs','on'); localStorage.setItem('appiq_music','on'); }catch(e){}
     updateMusicBtn();
   }
   function toggleBgMusic(){
     if(_bgAudio&&!_bgAudio.paused){
       stopMp3Sound();
-      try{localStorage.setItem('appiq_music','off');}catch(e){}
+      try{localStorage.setItem('appiq_music_vs','off');}catch(e){}
       // Aktualizuj button okamžitě — fade trvá 600ms, nelze čekat
       var btn=document.getElementById('music-toggle');
       if(btn){btn.textContent='🔇';btn.style.opacity='0.45';btn.title='Zapnout hudbu';}
     } else {
       playMp3Loop();
-      try{localStorage.setItem('appiq_music','on');}catch(e){}
+      try{localStorage.setItem('appiq_music_vs','on'); localStorage.setItem('appiq_music','on'); }catch(e){}
       setTimeout(updateMusicBtn,200);
     }
   }
