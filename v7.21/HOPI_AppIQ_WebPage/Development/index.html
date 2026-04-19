@@ -2,8 +2,8 @@
 <html lang="cs" translate="no">
 <head>
 <meta charset="UTF-8">
-<meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
 <title>HOPI AppIQ — Studio Hub (FC-1)</title>
 <meta property="og:title"       content="HOPI AppIQ — Studio Hub">
 <meta property="og:description" content="AppIQ Studio — Dev, Test, Admin, Docs, Prezentace. by HOPI TECHNOLOGY.">
@@ -33,6 +33,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;mi
 .hub-nav-sub{font-size:11px;color:#484f58;letter-spacing:.3px;}
 .hub-nav-badge{font-size:10px;background:rgba(0,125,50,.2);color:#3fb950;border:1px solid rgba(0,125,50,.4);border-radius:10px;padding:2px 10px;font-weight:700;}
 .hub-nav-right{display:flex;align-items:center;gap:12px;}
+#hub-music-btn{background:transparent;border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:4px 9px;font-size:1rem;cursor:pointer;opacity:.45;transition:opacity .2s;line-height:1;color:#fff;}
 .hub-oil-badge{font-size:11px;font-weight:700;color:#f0883e;background:rgba(240,136,62,.12);border:1px solid rgba(240,136,62,.3);border-radius:12px;padding:3px 12px;display:none;}
 .hub-oil-badge.show{display:inline-block;}
 
@@ -165,6 +166,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;mi
       <button class="lang-btn" data-lang="cs" onclick="I18n.setLang('cs')">CZ</button>
       <button class="lang-btn" data-lang="en" onclick="I18n.setLang('en')">EN</button>
     </div>
+    <button id="hub-music-btn" onclick="hubToggleMusic()" title="Hudba">🔇</button>
     <button class="hub-refresh-btn" onclick="loadAll()" data-i18n="common.refresh">&#8635; Obnovit</button>
   </div>
 </nav>
@@ -462,6 +464,55 @@ function toggleMaintenance(){
 }
 
 setTimeout(loadMaintenanceStatus,400);
+
+// ── Background music (přenáší se z version selectoru) ──
+(function(){
+  var _hubAudio=null, _hubPlaying=false;
+  var SRC='../../_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
+
+  function hubUpdateBtn(){
+    var btn=document.getElementById('hub-music-btn');
+    if(!btn) return;
+    btn.textContent=_hubPlaying?'🔊':'🔇';
+    btn.title=_hubPlaying?'Ztlumit hudbu':'Zapnout hudbu';
+    btn.style.opacity=_hubPlaying?'1':'0.45';
+  }
+
+  function hubStartMusic(){
+    if(!_hubAudio){ _hubAudio=new Audio(SRC); _hubAudio.loop=true; _hubAudio.volume=0; }
+    _hubAudio.currentTime=0;
+    _hubAudio.play().then(function(){
+      _hubPlaying=true;
+      var fi=setInterval(function(){
+        if(_hubAudio.volume<0.65){_hubAudio.volume=Math.min(0.65,_hubAudio.volume+0.05);}
+        else clearInterval(fi);
+      },40);
+      hubUpdateBtn();
+    }).catch(function(){ hubUpdateBtn(); });
+  }
+
+  function hubStopMusic(){
+    if(!_hubAudio) return;
+    var a=_hubAudio; _hubPlaying=false;
+    var fo=setInterval(function(){
+      if(a.volume>0.03){a.volume=Math.max(0,a.volume-0.05);}
+      else{a.pause();clearInterval(fo);}
+    },40);
+    hubUpdateBtn();
+  }
+
+  window.hubToggleMusic=function(){
+    if(_hubPlaying){ hubStopMusic(); try{localStorage.setItem('appiq_music','off');}catch(e){} }
+    else { hubStartMusic(); try{localStorage.setItem('appiq_music','on');}catch(e){} }
+  };
+
+  // Autostart pokud bylo zapnuto na version selectoru
+  document.addEventListener('DOMContentLoaded',function(){
+    hubUpdateBtn();
+    var pref=null; try{pref=localStorage.getItem('appiq_music');}catch(e){}
+    if(pref==='on'){ hubStartMusic(); }
+  });
+})();
 </script>
 <script src="../../../_hopiq.js"></script>
 </body>

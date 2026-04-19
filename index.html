@@ -161,6 +161,7 @@
     .header-sub { font-size:0.75rem; color:var(--muted); margin-top:3px; }
     .header-spacer { flex:1; }
     .header-tag { font-size:0.7rem; font-weight:600; letter-spacing:1px; color:var(--muted); border:1px solid var(--border); padding:3px 10px; border-radius:20px; }
+    #music-toggle { background:transparent; border:1px solid var(--border); border-radius:8px; padding:4px 9px; font-size:1rem; cursor:pointer; opacity:.45; transition:opacity .2s; line-height:1; }
 
     /* ══ STATUS BAR ══════════════════════════════════════════════════ */
     #statusBar { background:rgba(63,185,80,.06); border-bottom:1px solid rgba(63,185,80,.18); padding:7px 32px; display:none; align-items:center; gap:14px; font-size:0.72rem; color:var(--muted); }
@@ -395,6 +396,7 @@
     <button class="lang-btn" data-lang="cs" onclick="switchLang('cs')">CZ</button>
     <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
   </div>
+  <button id="music-toggle" onclick="toggleBgMusic()" title="Zapnout hudbu" style="display:none">🔇</button>
   <div class="header-tag" data-i18n="vs.tag">VYDANÉ VERZE</div>
 </header>
 
@@ -556,17 +558,13 @@
     var _dismissed=false;
     function dismissFull(){
       if(_dismissed) return; _dismissed=true;
-      stopMp3Sound(); // fade out při odchodu z promo
       el.classList.add('collapsing');
-      setTimeout(function(){ if(el.parentNode) el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta); },650);
+      setTimeout(function(){ if(el.parentNode) el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta); startBgMusic(); },650);
     }
     el.addEventListener('click', dismissFull);
 
     // Sparks
     spawnSparks(el, lvl===5?28:20, true);
-
-    // MP3 sound — loop dokud uživatel neodklikne promo
-    playMp3Loop();
 
     // Bez auto-dismiss — uživatel klikne sám
   }
@@ -615,6 +613,29 @@
     if(lvl>=4) playMp3Sound(lvl===5?5500:4000);
     else if(_audioCtx) playSoundForLevel(_audioCtx,lvl);
   };
+
+  // ── Background music ──────────────────────────────────────────────
+  function startBgMusic(){
+    var btn=document.getElementById('music-toggle');
+    if(btn) btn.style.display='';
+    try{ if(localStorage.getItem('appiq_music')==='off'){ updateMusicBtn(); return; } }catch(e){}
+    playMp3Loop();
+    try{ localStorage.setItem('appiq_music','on'); }catch(e){}
+    updateMusicBtn();
+  }
+  function toggleBgMusic(){
+    if(_bgAudio&&!_bgAudio.paused){ stopMp3Sound(); try{localStorage.setItem('appiq_music','off');}catch(e){} }
+    else { playMp3Loop(); try{localStorage.setItem('appiq_music','on');}catch(e){} }
+    setTimeout(updateMusicBtn, 200);
+  }
+  function updateMusicBtn(){
+    var btn=document.getElementById('music-toggle');
+    if(!btn) return;
+    var on=_bgAudio&&!_bgAudio.paused;
+    btn.textContent=on?'🔊':'🔇';
+    btn.title=on?'Ztlumit hudbu':'Zapnout hudbu';
+    btn.style.opacity=on?'1':'0.45';
+  }
 
   // ── MP3 Sound ──────────────────────────────────────────────────────
   function playMp3Loop(){
