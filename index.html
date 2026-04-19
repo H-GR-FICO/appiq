@@ -313,7 +313,6 @@
       .vi-date,.vi-links{display:none;} .wc-lang-btn{min-width:120px;padding:12px 20px;}
       .pf-text{font-size:1.2rem;} .pf-icon{font-size:3.5rem;}
       .header-tag{display:none;}
-      #music-toggle{position:fixed!important;bottom:88px;left:16px;z-index:9002;min-width:44px;min-height:44px;font-size:1.2rem;padding:8px 12px;background:rgba(13,17,23,.85)!important;border-color:rgba(255,255,255,.25)!important;}
     }
   </style>
   <script src="_i18n.js?v=7.21"></script>
@@ -669,10 +668,10 @@
   function stopMp3Sound(){
     if(!_bgAudio) return;
     var audio=_bgAudio;
-    var fo=setInterval(function(){
-      if(audio.volume>0.03){audio.volume=Math.max(0,audio.volume-0.05);}
-      else{audio.pause();audio.loop=false;clearInterval(fo);if(_bgAudio===audio)_bgAudio=null;}
-    },40);
+    _bgAudio=null;
+    audio.pause();
+    audio.loop=false;
+    audio.volume=0;
   }
   function playMp3Sound(duration,track){
     // Použij pre-unlocknutý element pokud existuje (iOS autoplay policy)
