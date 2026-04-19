@@ -765,12 +765,15 @@ body{padding-top:52px;}
   .page,.vision-page,.schema-page,.devdeploy-page{overflow-x:auto;}
   /* HOPIQ FAB — posunout nad scroll-to-top tlačítko (back-top: 32px+44px=76px, gap 12px) */
   #hopiq-fab{bottom:88px!important;right:16px!important;}
-  /* Story screen — justify:center clips top on mobile; flex-start + no scroll */
-  #story-screen{justify-content:flex-start;overflow:hidden;}
-  .story-wrap{margin-top:0;padding-top:20px;padding-bottom:0;}
+  /* Story screen — justify:center clips top on mobile; base CSS overrides require !important */
+  #story-screen{justify-content:flex-start!important;overflow:hidden!important;}
+  .story-wrap{margin-top:0!important;padding:20px 24px 0!important;}
   .st-impact{font-size:28px!important;}
   .st-big,.st-claude{font-size:22px!important;}
   .s-cta-wrap{margin-top:8px!important;}
+  /* Teaser — max-height:860px blok přepisuje side padding na 40px; opravit na 20px */
+  .teaser-card{padding:20px 20px 20px!important;}
+  #teaser-overlay{padding:12px 12px!important;align-items:flex-start!important;padding-top:16px!important;}
 }
 
 /* LANGUAGE DISPLAY — ovládáno výhradně JS, CSS jen jako fallback */
