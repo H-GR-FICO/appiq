@@ -1,0 +1,114 @@
+﻿{
+    "schemaVersion":  "1.0",
+    "status":  "OK",
+    "version":  "v7.21",
+    "session":  "v7.21-WebPage_20260419_1012",
+    "timestamp":  "2026-04-19 10:12",
+    "stats":  {
+                  "totalFiles":  39,
+                  "totalSizeKb":  16128.4,
+                  "byType":  {
+                                 "md":  7,
+                                 "js":  3,
+                                 "html":  9,
+                                 "json":  1,
+                                 "txt":  1,
+                                 "png":  15,
+                                 "mp3":  2,
+                                 "other":  1
+                             },
+                  "previousTotal":  39
+              },
+    "verify":  {
+                   "passed":  18,
+                   "failed":  0,
+                   "checks":  [
+                                  {
+                                      "file":  "PERSONAL_PITCH.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_PRESENTATION.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_ver.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "RESPONSIVE_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "docs/index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/story_personal.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_CONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CHANGELOG.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_ARCHITECTURE.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CLAUDE.md",
+                                      "ok":  true
+                                  }
+                              ]
+               },
+    "diff":  {
+                 "previousSession":  "v7.20-WebPage_20260419_0148",
+                 "added":  [
+
+                           ],
+                 "removed":  [
+
+                             ],
+                 "changed":  [
+                                 "admin/index.html",
+                                 "CLAUDE.md",
+                                 "docs/index.html",
+                                 "CHANGELOG.md",
+                                 "index.html",
+                                 "OIL.json",
+                                 "OIL_CONTEXT.md",
+                                 "PERSONAL_PITCH.html",
+                                 "PORTAL_PRESENTATION.html",
+                                 "VERSION.txt"
+                             ]
+             },
+    "changelog":  "## v7.21 — HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix\n\n\u003e Datum: 2026-04-19 · Session: David Gogela + Claude · AIQ-00083..86\n\n### Přidáno\n\n**HOPIQ chatbot — nativní AI integrace do AppIQ Studio (AIQ-00085, AIQ-00086)**\n- Nový soubor `_hopiq.js` — floating chat widget (vpravo dole) přidaný do všech stránek AppIQ Studio\n- Nový soubor `_hopiq.css` — styly widgetu v AppIQ dark theme (#007d32 brand, tmavé pozadí)\n- Cloudflare Worker proxy `https://hopi-appiq.dgogela.workers.dev` — drží Anthropic API klíč jako secret, řeší CORS\n- Model: `claude-haiku-4-5-20251001` (rychlý, ekonomický, vhodný pro chat)\n- Widget přidán do: Hub (index.html), PORTAL_PRESENTATION.html, PERSONAL_PITCH.html, admin/index.html, docs/index.html\n- Systémový prompt obsahuje kompletní znalost platformy: navigace AppIQ Studio, archivační procedura (DO_ARCHIVE.ps1, ARCHIVE_PROTOCOL.json), deploy procedura (DO_DEPLOY.ps1, GitHub Pages), OIL task tracker (AIQ-NNNNN formát, statusy), Admin Center záložky, Documentation Center (TS/BS/GD sekce), Finance portál moduly, aktuální verze v7.21, strategický záměr (HOPI pilot → spin-off → SaaS)\n- Infrastruktura: Anthropic API account (console.anthropic.com, dgogela@hopiholding.eu), Cloudflare Workers free tier (100k req/den)\n\n**Version Selector 2.0 — GitHub Pages landing page (AIQ-00083)**\n- Hero CTA tlačítko per verze — přenese uživatele na hlavní stránku verze (v7.21 → Studio Hub, v7.12 → Prezentace)\n- Inline přehled změn — bullet body přímo pod verzí (z `changes[]` pole v versions.json)\n- Modal \"Detailní změny\" — kliknutím zobrazí kompletní changelog verze v overlay modalu\n- CS/EN přepínač — integrován přes `_i18n.js` (`I18n.setLang()`), zachovává stav při přerenderování\n- Nové i18n klíče: `vs.btn.open`, `vs.btn.changes`, `vs.changes.title` (CS + EN)\n- `versions.json` rozšířen o pole: `mainUrl`, `mainLabel`, `changes[]`\n\n**_status.js — Admin Center Release záložka (AIQ-00084)**\n- Nový soubor `_status.js` — nastaví `window._STUDIO_STATUS` při načtení stránky jako script tag\n- Funguje na všech třech prostředích: Development (file://), Release (file://), GitHub Pages (HTTPS)\n- `admin/index.html` načítá `_status.js` před `_i18n.js`; `loadStudioStatus()` použije data okamžitě bez čekání na fetch\n- `DO_ARCHIVE.ps1` generuje `_status.js` automaticky po zápisu `_status.json`\n- `DO_DEPLOY.ps1` nový krok [8b] — generuje `$VER_FOLDER/_status.js` PŘED `git add/commit` (dostane se do repo)\n\n### Změněno\n\n- `DO_DEPLOY.ps1` — krok [8b] přidán před git commit; fix PS 5.1 array serialization bug (z v7.20)\n- `DO_ARCHIVE.ps1` — generuje `_status.js` vedle `_status.json`\n- `CLAUDE.md` — přidáno STOP pravidlo (organicky vznikající úkoly) + Crash recovery procedura\n\n### Plánováno (zaregistrováno v OIL, neimplementováno)\n\n- AIQ-00087: Training Centre — 7. Functional Center s AI specialisty\n- AIQ-00088: AI PBI Designer\n- AIQ-00089: AI PBI Analyser\n- AIQ-00090: AI Data Story Teller\n- AIQ-00091: AI Document Reader"
+}
