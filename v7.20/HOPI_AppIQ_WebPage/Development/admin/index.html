@@ -284,6 +284,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;he
 .cap-type-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;}
 .cap-no-data{text-align:center;padding:32px 20px;color:#484f58;font-size:13px;line-height:2;}
 </style>
+<script src="../../../_status.js"></script>
 <script src="../../../_i18n.js"></script>
 </head>
 <body>
@@ -1105,10 +1106,16 @@ document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if(_o
 var _studioStatus=null;
 
 function loadStudioStatus(){
+  // Okamžitě použij _status.js (funguje i na file://)
+  if(window._STUDIO_STATUS&&!_studioStatus){
+    _studioStatus=window._STUDIO_STATUS;
+    renderStudioRelease();
+  }
+  // Fetch pro refresh (funguje na localhost / http)
   fetch('../../../_status.json?t='+Date.now())
     .then(function(r){return r.ok?r.json():null;})
-    .then(function(s){_studioStatus=s;renderStudioRelease();})
-    .catch(function(){_studioStatus=null;renderStudioRelease();});
+    .then(function(s){if(s){_studioStatus=s;renderStudioRelease();}})
+    .catch(function(){/* file:// — použit _status.js fallback */});
 }
 
 function renderStudioRelease(){
