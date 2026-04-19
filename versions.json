@@ -1,7 +1,7 @@
 {
   "latest": "v7.21",
   "updatedAt": "2026-04-19",
-  "maintenance": true,
+  "maintenance": false,
   "versions": [
     {
       "version": "v7.20",
