@@ -52,6 +52,19 @@ nav{background:#161b22;border-bottom:2px solid #7c3aed;padding:0 20px;height:48p
 .chat-send:disabled{background:#30363d;cursor:default;}
 .chat-reset{background:transparent;border:1px solid #30363d;border-radius:8px;padding:0 12px;cursor:pointer;color:#8b949e;font-size:11px;font-weight:700;flex-shrink:0;transition:all .2s;}
 .chat-reset:hover{border-color:#484f58;color:#e6edf3;}
+.sp-toggle{background:transparent;border:1px solid rgba(124,58,237,.3);border-radius:6px;padding:2px 9px;font-size:10px;font-weight:700;color:#c4b5fd;cursor:pointer;margin-left:auto;transition:all .2s;white-space:nowrap;}
+.sp-toggle:hover{background:rgba(124,58,237,.15);}
+.sp-toggle.custom-active{border-color:#f0883e;color:#f0883e;}
+.sp-panel{background:#0d1117;border-bottom:1px solid #21262d;padding:10px 0;flex-shrink:0;display:none;}
+.sp-panel.open{display:block;}
+.sp-textarea{width:100%;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px 14px;font-size:11px;color:#e6edf3;font-family:Consolas,monospace;resize:vertical;outline:none;line-height:1.5;min-height:120px;max-height:260px;}
+.sp-textarea:focus{border-color:rgba(124,58,237,.5);}
+.sp-actions{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.sp-save{background:#7c3aed;border:none;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;transition:background .2s;}
+.sp-save:hover{background:#6d28d9;}
+.sp-reset-btn{background:transparent;border:1px solid #30363d;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:700;color:#8b949e;cursor:pointer;transition:all .2s;}
+.sp-reset-btn:hover{border-color:#484f58;color:#e6edf3;}
+.sp-status{font-size:11px;color:#8b949e;margin-left:4px;}
 
 /* ── KB TAB ── */
 .kb-content{flex:1;overflow-y:auto;padding:20px;}
@@ -116,6 +129,15 @@ nav{background:#161b22;border-bottom:2px solid #7c3aed;padding:0 20px;height:48p
       <div class="chat-hdr">
         <div class="chat-hdr-dot"></div>
         HOPIQ AI · Test konzole · claude-haiku-4-5
+        <button class="sp-toggle" id="sp-toggle-btn" onclick="spToggle()" title="Upravit system prompt">⚙ System Prompt</button>
+      </div>
+      <div class="sp-panel" id="sp-panel">
+        <textarea class="sp-textarea" id="sp-textarea" placeholder="System prompt…"></textarea>
+        <div class="sp-actions">
+          <button class="sp-save" onclick="spSave()">✓ Uložit</button>
+          <button class="sp-reset-btn" onclick="spReset()">↺ Výchozí</button>
+          <span class="sp-status" id="sp-status"></span>
+        </div>
       </div>
       <div class="chat-messages" id="hc-messages">
         <div class="chat-msg system">Ahoj! Jsem HOPIQ, AI asistent platformy AppIQ. Toto je testovací konzole — zprávy se zde nesdílí s widgetem na ostatních stránkách.</div>
@@ -135,37 +157,33 @@ nav{background:#161b22;border-bottom:2px solid #7c3aed;padding:0 20px;height:48p
         <div class="kb-hdr">Zdroje znalostní báze</div>
 
         <div class="kb-status-bar">
-          <div class="kb-status-dot" id="kb-dot"></div>
+          <div class="kb-status-dot active" id="kb-dot"></div>
           <div>
-            <div class="kb-status-text" id="kb-status-text">KV cache není nakonfigurována</div>
-            <div class="kb-status-sub" id="kb-status-sub">AIQ-00134 — Cloudflare Worker + KV scraping (OPEN)</div>
+            <div class="kb-status-text" id="kb-status-text">Znalostní báze aktivní — 12 HOPI webů (system prompt)</div>
+            <div class="kb-status-sub" id="kb-status-sub">Načteno: 2026-04-19 · Aktualizace: říct Claudovi</div>
           </div>
-          <button class="kb-refresh-btn" onclick="kbRefresh()" id="kb-refresh-btn">⟳ Force Refresh</button>
+          <button class="kb-refresh-btn" onclick="kbRefresh()" id="kb-refresh-btn">⟳ Aktualizovat</button>
         </div>
 
         <div class="kb-hdr" style="margin-top:4px;">Plánované URL zdroje</div>
         <div class="kb-url-list" id="kb-url-list">
-          <div class="kb-url-item">
-            <div class="kb-url-icon">🏢</div>
-            <div class="kb-url-info">
-              <div class="kb-url-name">HOPI Holding — hlavní web</div>
-              <div class="kb-url-addr">https://hopiholding.eu</div>
-            </div>
-            <span class="kb-url-badge kb-badge-pending">PENDING</span>
-          </div>
-          <div class="kb-url-item">
-            <div class="kb-url-icon">🔗</div>
-            <div class="kb-url-info">
-              <div class="kb-url-name">Dceřiné společnosti</div>
-              <div class="kb-url-addr">Načteny automaticky z odkazů hopiholding.eu</div>
-            </div>
-            <span class="kb-url-badge kb-badge-pending">PENDING</span>
-          </div>
+          <div class="kb-url-item"><div class="kb-url-icon">🏢</div><div class="kb-url-info"><div class="kb-url-name">HOPI Holding</div><div class="kb-url-addr">https://hopiholding.eu</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🚚</div><div class="kb-url-info"><div class="kb-url-name">HOPI Logistics</div><div class="kb-url-addr">https://hopilogistics.eu/cz-cs/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🌍</div><div class="kb-url-info"><div class="kb-url-name">HOPI Global Solution</div><div class="kb-url-addr">https://hopiglobal.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🐟</div><div class="kb-url-info"><div class="kb-url-name">HOPI CEE Fish HUB</div><div class="kb-url-addr">https://www.hopifishhub.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🥛</div><div class="kb-url-info"><div class="kb-url-name">Hollandia</div><div class="kb-url-addr">https://www.hollandia.cz/cs</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🍲</div><div class="kb-url-info"><div class="kb-url-name">Cibule Bistro</div><div class="kb-url-addr">https://www.cibulebistro.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🫒</div><div class="kb-url-info"><div class="kb-url-name">AD Fine Dine</div><div class="kb-url-addr">https://adfinedine.de/en/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🧊</div><div class="kb-url-info"><div class="kb-url-name">Eat Smart</div><div class="kb-url-addr">https://eatsmart.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">📦</div><div class="kb-url-info"><div class="kb-url-name">HOPI Food Broker</div><div class="kb-url-addr">https://www.hopifoodbroker.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🌿</div><div class="kb-url-info"><div class="kb-url-name">Farma Otročín</div><div class="kb-url-addr">https://farmaotrocin.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🌿</div><div class="kb-url-info"><div class="kb-url-name">Farma Malonty</div><div class="kb-url-addr">https://farmamalonty.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">💼</div><div class="kb-url-info"><div class="kb-url-name">HOPI Jobs</div><div class="kb-url-addr">https://hopijobs.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
         </div>
 
         <div class="kb-note">
-          Znalostní báze bude aktivní po dokončení <strong>AIQ-00134</strong> — Cloudflare Worker KV scraping.<br>
-          Po nasazení bude chatbot automaticky aktualizovat obsah 1× denně a zde uvidíš stav poslední synchronizace.
+          Obsah byl jednorázově načten a vložen přímo do system promptu. Chceš přidat nový web nebo aktualizovat obsah → řekni Claudovi.<br>
+          Editor system promptu: záložka Chatbot → tlačítko <strong>⚙ System Prompt</strong>.
         </div>
       </div>
     </div>
@@ -350,15 +368,62 @@ function hcChatReset() {
   m.innerHTML = '<div class="chat-msg system">Nový rozhovor zahájen.</div>';
 }
 
-// ── KB placeholder ────────────────────────────────────────────────────────────
+// ── System Prompt Editor ──────────────────────────────────────────────────────
+var SP_KEY = 'hopiq_custom_prompt';
+
+function getActivePrompt() {
+  return localStorage.getItem(SP_KEY) || SYSTEM_PROMPT;
+}
+
+function spUpdateIndicator() {
+  var custom = !!localStorage.getItem(SP_KEY);
+  var btn = document.getElementById('sp-toggle-btn');
+  if (btn) {
+    btn.classList.toggle('custom-active', custom);
+    btn.title = custom ? '⚙ Vlastní prompt aktivní — klikni pro editaci' : '⚙ System Prompt — klikni pro editaci';
+    btn.textContent = custom ? '⚙ Vlastní prompt ✓' : '⚙ System Prompt';
+  }
+}
+
+function spToggle() {
+  var panel = document.getElementById('sp-panel');
+  var isOpen = panel.classList.toggle('open');
+  if (isOpen) {
+    var ta = document.getElementById('sp-textarea');
+    ta.value = getActivePrompt();
+    document.getElementById('sp-status').textContent = localStorage.getItem(SP_KEY) ? '● Vlastní prompt aktivní' : '● Výchozí prompt';
+  }
+}
+
+function spSave() {
+  var val = document.getElementById('sp-textarea').value.trim();
+  if (!val) return;
+  localStorage.setItem(SP_KEY, val);
+  document.getElementById('sp-status').textContent = '✓ Uloženo';
+  spUpdateIndicator();
+  setTimeout(function(){ document.getElementById('sp-status').textContent = '● Vlastní prompt aktivní'; }, 1500);
+}
+
+function spReset() {
+  localStorage.removeItem(SP_KEY);
+  document.getElementById('sp-textarea').value = SYSTEM_PROMPT;
+  document.getElementById('sp-status').textContent = '↺ Obnoveno na výchozí';
+  spUpdateIndicator();
+  setTimeout(function(){ document.getElementById('sp-status').textContent = '● Výchozí prompt'; }, 1500);
+}
+
+// ── KB refresh ────────────────────────────────────────────────────────────────
 function kbRefresh() {
   var btn = document.getElementById('kb-refresh-btn');
   btn.textContent = '⟳ Probíhá…'; btn.disabled = true;
   setTimeout(function(){
-    document.getElementById('kb-status-text').textContent = 'KV cache není nakonfigurována — nejprve dokončit AIQ-00134';
-    btn.textContent = '⟳ Force Refresh'; btn.disabled = false;
-  }, 1200);
+    document.getElementById('kb-status-text').textContent = 'Znalostní báze aktivní — 12 HOPI webů (system prompt)';
+    btn.textContent = '⟳ Aktualizovat'; btn.disabled = false;
+  }, 800);
 }
+
+// Init
+spUpdateIndicator();
 </script>
 
 <script src="../../../_hopiq.js"></script>
