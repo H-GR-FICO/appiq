@@ -31,7 +31,9 @@
     .wc-lang-btns { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
     .wc-lang-btn { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 32px; font-size:0.95rem; font-weight:700; color:var(--text); cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:10px; min-width:150px; justify-content:center; }
     .wc-lang-btn:hover { border-color:var(--green); background:rgba(0,125,50,0.12); color:var(--green); transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,125,50,0.2); }
-    .wc-lang-flag { font-size:1.4rem; }
+    .wc-lang-cc { display:inline-block; font-size:0.65rem; font-weight:900; letter-spacing:0.8px; padding:2px 7px; border-radius:4px; vertical-align:middle; }
+    .wc-cc-cs { background:rgba(63,185,80,.15); color:#3fb950; border:1px solid rgba(63,185,80,.3); }
+    .wc-cc-en { background:rgba(0,188,212,.15); color:var(--accent); border:1px solid rgba(0,188,212,.3); }
     .wc-ver-hint { margin-top:32px; font-size:0.68rem; color:rgba(139,148,158,0.5); letter-spacing:1px; }
 
     /* Neural net SVG */
@@ -337,8 +339,8 @@
     <div class="wc-headline">Ready for AI?</div>
     <div class="wc-sub">Vyberte jazyk &nbsp;·&nbsp; Select language</div>
     <div class="wc-lang-btns">
-      <button class="wc-lang-btn" onclick="startApp('cs')"><span class="wc-lang-flag">🇨🇿</span> Česky</button>
-      <button class="wc-lang-btn" onclick="startApp('en')"><span class="wc-lang-flag">🇬🇧</span> English</button>
+      <button class="wc-lang-btn" onclick="startApp('cs')"><span class="wc-lang-cc wc-cc-cs">CZ</span> Česky</button>
+      <button class="wc-lang-btn" onclick="startApp('en')"><span class="wc-lang-cc wc-cc-en">EN</span> English</button>
     </div>
     <div class="wc-ver-hint" id="wcVerHint"></div>
   </div>
