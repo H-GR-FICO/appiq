@@ -161,7 +161,7 @@
     .header-sub { font-size:0.75rem; color:var(--muted); margin-top:3px; }
     .header-spacer { flex:1; }
     .header-tag { font-size:0.7rem; font-weight:600; letter-spacing:1px; color:var(--muted); border:1px solid var(--border); padding:3px 10px; border-radius:20px; }
-    #music-toggle { background:transparent; border:1px solid var(--border); border-radius:8px; padding:4px 9px; font-size:1rem; cursor:pointer; opacity:.45; transition:opacity .2s; line-height:1; }
+    #hub-music-btn { background:transparent; border:1px solid var(--border); border-radius:8px; padding:4px 9px; font-size:1rem; cursor:pointer; opacity:.45; transition:opacity .2s; line-height:1; color:#fff; }
 
     /* ══ STATUS BAR ══════════════════════════════════════════════════ */
     #statusBar { background:rgba(63,185,80,.06); border-bottom:1px solid rgba(63,185,80,.18); padding:7px 32px; display:none; align-items:center; gap:14px; font-size:0.72rem; color:var(--muted); }
@@ -448,6 +448,8 @@
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
+    // Spustit hudbu v user gesture — _hm je z _hopiq.js (stejný systém jako Studio Hub)
+    try{ if(window._hm) _hm.start(); }catch(e){}
     var ov=document.getElementById('welcomeOverlay');
     if(ov) ov.style.display='none';
     if(_versData&&!_versData.error) renderAll(_versData);
