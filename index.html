@@ -84,7 +84,7 @@
     .pf-icon { font-size:5rem; line-height:1; }
     .pf-label { font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; padding:4px 16px; border-radius:20px; }
     .pf-text  { font-size:clamp(1.3rem,3vw,2rem); font-weight:700; color:#fff; max-width:680px; line-height:1.35; }
-    .pf-cta   { font-size:0.9rem; font-weight:700; padding:10px 28px; border-radius:8px; text-decoration:none; margin-top:4px; display:inline-block; }
+    .pf-cta   { font-size:0.9rem; font-weight:700; padding:10px 28px; border-radius:8px; text-decoration:none; margin-top:4px; display:inline-block; border:none; cursor:pointer; appearance:none; -webkit-appearance:none; font-family:inherit; }
     .pf-skip  { position:absolute; bottom:18px; right:22px; font-size:0.65rem; color:rgba(255,255,255,0.25); letter-spacing:0.5px; pointer-events:none; }
 
     /* Level 1 full */
@@ -523,8 +523,7 @@
     spawnSparks(el, lvl===5?28:20, true);
 
     // MP3 sound
-    var gladiator='_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
-    setTimeout(function(){ playMp3Sound(lvl===5?5500:4000, lvl===4?gladiator:null); },300);
+    setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
 
     // Bez auto-dismiss — uživatel klikne sám
   }
