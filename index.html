@@ -36,17 +36,19 @@
       align-items: center;
       gap: 20px;
     }
-    .logo-mark {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem; font-weight: 900; color: #000;
+    .logo-bar {
+      width: 3px; height: 32px;
+      background: #007d32;
+      border-radius: 2px;
       flex-shrink: 0;
     }
-    .logo-text { font-size: 1.25rem; font-weight: 700; letter-spacing: 0.3px; }
-    .logo-text strong { color: var(--accent); }
-    .header-sub { font-size: 0.75rem; color: var(--muted); margin-top: 1px; }
+    .logo-text {
+      font-size: 18px; font-weight: 900;
+      color: #fff; letter-spacing: 2px; line-height: 1;
+    }
+    .logo-text .app  { color: #E8750A; font-weight: 400; }
+    .logo-text .iq   { color: #007d32; }
+    .header-sub { font-size: 0.75rem; color: var(--muted); margin-top: 3px; }
     .header-spacer { flex: 1; }
     .header-tag {
       font-size: 0.7rem; font-weight: 600; letter-spacing: 1px;
@@ -189,9 +191,9 @@
 <body>
 
   <header>
-    <div class="logo-mark">A</div>
+    <div class="logo-bar"></div>
     <div>
-      <div class="logo-text">HOPI <strong>AppIQ</strong></div>
+      <div class="logo-text">HOPI <span class="app">App</span><span class="iq">IQ</span></div>
       <div class="header-sub">AI-powered Enterprise Application Platform</div>
     </div>
     <div class="header-spacer"></div>
