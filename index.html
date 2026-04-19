@@ -178,6 +178,35 @@
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--accent); }
 
+    /* ── Hero button ───────────────────────────── */
+    .btn-hero {
+      background: var(--green); color: #fff;
+      font-size: 0.9rem; font-weight: 700;
+      padding: 10px 26px; border-radius: 6px;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-hero:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── Version summary (inline changes) ──────── */
+    .ver-summary { margin: 16px 0 20px; display: flex; flex-direction: column; gap: 4px; }
+    .ver-summary-item {
+      font-size: 0.78rem; color: var(--muted);
+      padding-left: 14px; position: relative; line-height: 1.55;
+    }
+    .ver-summary-item::before { content: '•'; position: absolute; left: 0; color: var(--accent); }
+
+    /* ── Changes modal ──────────────────────────── */
+    .chg-list { display: flex; flex-direction: column; }
+    .chg-item {
+      padding: 9px 0 9px 18px; position: relative;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px; color: var(--text); line-height: 1.6;
+    }
+    .chg-item:last-child { border-bottom: none; }
+    .chg-item::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+
     /* ── Lang switch ────────────────────────────── */
     .lang-switch { display: flex; gap: 4px; align-items: center; }
     .lang-btn {
@@ -228,6 +257,7 @@
 
   <script>
     var _versData = null;
+    var _changesData = {};
 
     fetch('versions.json?_=' + Date.now())
       .then(function(r) {
@@ -252,6 +282,7 @@
 
     function render(data) {
       var t = function(k, fb) { return I18n.t(k) || fb; };
+      _changesData = {};
       var versions = (data.versions || []).slice();
       versions.sort(function(a, b) { return b.version > a.version ? 1 : -1; });
 
@@ -262,6 +293,8 @@
 
       // ── Latest ──
       if (latest) {
+        if (latest.changes && latest.changes.length) _changesData[latest.version] = latest.changes;
+
         html += '<div class="section-label">' + t('vs.current', 'Aktuální verze') + '</div>';
         html += '<div class="latest-card">';
         html += '<div class="latest-badge">LATEST</div>';
@@ -273,11 +306,27 @@
 
         if (latest.title) html += '<div class="latest-title">' + esc(latest.title) + '</div>';
 
+        // Hero main button
+        if (latest.mainUrl) {
+          html += '<div style="margin:18px 0 10px">';
+          html += '<a href="' + esc(latest.mainUrl) + '" class="btn btn-hero">' + esc(latest.mainLabel || t('vs.btn.open','Otevřít')) + ' →</a>';
+          html += '</div>';
+        }
+
+        // Inline changes summary
+        if (latest.changes && latest.changes.length) {
+          html += '<div class="ver-summary">';
+          latest.changes.forEach(function(c) { html += '<div class="ver-summary-item">' + esc(c) + '</div>'; });
+          html += '</div>';
+        }
+
+        // Secondary buttons row
         html += '<div class="latest-links">';
-        if (latest.presentationUrl) html += '<a href="' + esc(latest.presentationUrl) + '" class="btn btn-primary">'  + t('vs.btn.prez', 'Prezentace') + '</a>';
-        if (latest.hubUrl)          html += '<a href="' + esc(latest.hubUrl)          + '" class="btn btn-ghost">'    + t('vs.btn.hub',  'Studio Hub') + '</a>';
-        if (latest.pitchUrl)        html += '<a href="' + esc(latest.pitchUrl)        + '" class="btn btn-secondary">'+ t('vs.btn.pitch','Personal Pitch') + '</a>';
-        if (latest.docsUrl)         html += '<a href="' + esc(latest.docsUrl)         + '" class="btn btn-secondary">'+ t('vs.btn.docs', 'Docs') + '</a>';
+        if (latest.changes && latest.changes.length)
+          html += '<button class="btn btn-secondary" onclick="openChangesModal(\'' + esc(latest.version) + '\')">' + t('vs.btn.changes','Detailní změny') + '</button>';
+        if (latest.presentationUrl) html += '<a href="' + esc(latest.presentationUrl) + '" class="btn btn-ghost">'    + t('vs.btn.prez','Prezentace')    + '</a>';
+        if (latest.pitchUrl)        html += '<a href="' + esc(latest.pitchUrl)        + '" class="btn btn-secondary">'+ t('vs.btn.pitch','Personal Pitch')+ '</a>';
+        if (latest.docsUrl)         html += '<a href="' + esc(latest.docsUrl)         + '" class="btn btn-secondary">'+ t('vs.btn.docs','Docs')           + '</a>';
         if (latest.protocolUrl)     html += '<button class="btn btn-secondary" onclick="openProtocolModal(\'' + esc(latest.protocolUrl) + '\',\'' + esc(latest.version) + '\')">📋 ' + t('vs.btn.protocol','Protokol') + '</button>';
         html += '</div>';
         html += '</div>'; // .latest-card
@@ -285,19 +334,22 @@
 
       // ── History ──
       if (others.length > 0) {
-        html += '<div class="section-label" style="margin-top:36px;">' + t('vs.archived', 'Archivované verze') + ' (' + others.length + ')</div>';
+        html += '<div class="section-label" style="margin-top:36px;">' + t('vs.archived','Archivované verze') + ' (' + others.length + ')</div>';
         html += '<div class="version-list">';
         for (var i = 0; i < others.length; i++) {
           var v = others[i];
+          if (v.changes && v.changes.length) _changesData[v.version] = v.changes;
           html += '<div class="version-item">';
           html += '<div class="vi-ver">'  + esc(v.version)    + '</div>';
           html += '<div class="vi-date">' + esc(v.date || '') + '</div>';
           html += '<div class="vi-title">'+ esc(v.title || '')+ '</div>';
           html += '<div class="vi-links">';
-          if (v.presentationUrl) html += '<a href="' + esc(v.presentationUrl) + '" class="vi-link">' + t('vs.btn.prez','Prez') + '</a>';
-          if (v.hubUrl)          html += '<a href="' + esc(v.hubUrl)          + '" class="vi-link">' + t('vs.btn.hub', 'Hub')  + '</a>';
+          if (v.mainUrl)         html += '<a href="' + esc(v.mainUrl) + '" class="vi-link" style="font-weight:700;color:var(--green);border-color:var(--green);">' + esc(v.mainLabel || t('vs.btn.open','Otevřít')) + '</a>';
+          if (v.changes && v.changes.length)
+            html += '<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openChangesModal(\'' + esc(v.version) + '\')">' + t('vs.btn.changes','Detailní změny') + '</button>';
+          if (v.presentationUrl) html += '<a href="' + esc(v.presentationUrl) + '" class="vi-link">' + t('vs.btn.prez','Prez')  + '</a>';
           if (v.pitchUrl)        html += '<a href="' + esc(v.pitchUrl)        + '" class="vi-link">' + t('vs.btn.pitch','Pitch')+ '</a>';
-          if (v.docsUrl)         html += '<a href="' + esc(v.docsUrl)         + '" class="vi-link">' + t('vs.btn.docs','Docs') + '</a>';
+          if (v.docsUrl)         html += '<a href="' + esc(v.docsUrl)         + '" class="vi-link">' + t('vs.btn.docs','Docs')  + '</a>';
           if (v.protocolUrl)     html += '<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openProtocolModal(\'' + esc(v.protocolUrl) + '\',\'' + esc(v.version) + '\')">📋</button>';
           html += '</div>';
           html += '</div>';
@@ -314,6 +366,21 @@
       if (data.updatedAt) {
         document.getElementById('footer-ts').textContent = (I18n.t('common.updated') || 'Aktualizováno') + ': ' + data.updatedAt;
       }
+    }
+
+    function openChangesModal(version) {
+      var changes = _changesData[version] || [];
+      document.getElementById('changesTitle').textContent = (I18n.t('vs.changes.title') || 'Změny verze') + ' ' + version;
+      var html = '<div class="chg-list">';
+      changes.forEach(function(c) { html += '<div class="chg-item">' + esc(c) + '</div>'; });
+      if (!changes.length) html += '<div style="color:var(--muted);font-size:13px;">Žádné záznamy.</div>';
+      html += '</div>';
+      document.getElementById('changesBody').innerHTML = html;
+      document.getElementById('changesOverlay').style.display = 'flex';
+    }
+
+    function closeChangesModal() {
+      document.getElementById('changesOverlay').style.display = 'none';
     }
 
     function esc(s) {
@@ -413,6 +480,19 @@
       document.getElementById('gprotBody').innerHTML = html;
     }
   </script>
+
+  <!-- Changes Modal -->
+  <div class="gprot-overlay" id="changesOverlay" style="display:none" onclick="if(event.target===this)closeChangesModal()">
+    <div class="gprot-modal" style="max-width:560px">
+      <div class="gprot-hdr">
+        <div class="gprot-hdr-main">
+          <div class="gprot-hdr-title" id="changesTitle">Změny verze</div>
+        </div>
+        <button class="gprot-close" onclick="closeChangesModal()">&#10005; Zavřít</button>
+      </div>
+      <div class="gprot-body" id="changesBody"></div>
+    </div>
+  </div>
 
   <!-- Protocol Modal -->
   <div class="gprot-overlay" id="gprotOverlay" style="display:none" onclick="if(event.target===this)closeProtocolModal()">

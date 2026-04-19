@@ -311,7 +311,10 @@ window.I18n = (function () {
       'vs.btn.hub':       'Studio Hub',
       'vs.btn.pitch':     'Personal Pitch',
       'vs.btn.docs':      'Docs',
-      'vs.btn.protocol':  'Protokol'
+      'vs.btn.protocol':  'Protokol',
+      'vs.btn.open':      'Otevřít',
+      'vs.btn.changes':   'Detailní změny',
+      'vs.changes.title': 'Změny verze'
     },
 
     // ════════════════════════════════════════════════════════════
@@ -590,7 +593,10 @@ window.I18n = (function () {
       'vs.btn.hub':       'Studio Hub',
       'vs.btn.pitch':     'Personal Pitch',
       'vs.btn.docs':      'Docs',
-      'vs.btn.protocol':  'Protocol'
+      'vs.btn.protocol':  'Protocol',
+      'vs.btn.open':      'Open',
+      'vs.btn.changes':   'Detailed changes',
+      'vs.changes.title': 'Changes in version'
     },
 
     // ════════════════════════════════════════════════════════════
