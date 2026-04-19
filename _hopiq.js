@@ -277,16 +277,17 @@ Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (z
   window._hm={start:_start,stop:_stop,toggle:_toggle};
 
   document.addEventListener('DOMContentLoaded',function(){
-    // Inject floating button pokud stránka nemá vlastní
+    // Inject do nav headeru pokud stránka nemá vlastní hub-music-btn
     if(!document.getElementById('hub-music-btn')&&!document.getElementById('hm-float-btn')){
       var b=document.createElement('button');
       b.id='hm-float-btn'; b.textContent='🔇'; b.title='Zapnout hudbu';
-      b.style.cssText='position:fixed;bottom:72px;right:16px;z-index:9998;'+
-        'background:rgba(10,22,40,.85);border:1px solid rgba(255,255,255,.15);'+
-        'border-radius:8px;padding:6px 10px;font-size:1rem;cursor:pointer;'+
-        'opacity:0.45;transition:opacity .2s;color:#fff;line-height:1;';
+      b.style.cssText='background:transparent;border:1px solid rgba(255,255,255,.15);'+
+        'border-radius:8px;padding:4px 9px;font-size:1rem;cursor:pointer;'+
+        'opacity:0.45;transition:opacity .2s;color:#fff;line-height:1;margin-left:auto;';
       b.onclick=_toggle;
-      document.body.appendChild(b);
+      var nav=document.querySelector('nav');
+      if(nav) nav.appendChild(b);
+      else{ b.style.cssText+='position:fixed;top:8px;right:16px;z-index:9998;'; document.body.appendChild(b); }
     }
     var eb=document.getElementById('hub-music-btn');
     if(eb) eb.onclick=_toggle;
