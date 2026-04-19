@@ -1266,6 +1266,19 @@ body{padding-top:52px;}
   .t-cta-btn{padding:10px 32px;}
   .t-skip{margin-top:6px;}
 }
+/* AIQ-00130 — dd-step mobile: 2-col layout, skrýt side chips */
+@media(max-width:480px){
+  .dd-step{grid-template-columns:40px 1fr;}
+  .dd-side{display:none;}
+  .dd-num{padding:12px 8px;font-size:15px;}
+  .dd-body{padding:10px 14px;}
+  .dd-step-title{font-size:12px;}
+  .dd-step-desc{font-size:10px;}
+  .dd-tags{gap:4px;margin-top:5px;}
+  .dd-tag{font-size:8px;padding:2px 5px;}
+  .dd-flow{gap:0;}
+  .dd-step{margin-bottom:6px;}
+}
 </style>
 <script src="../../_i18n.js"></script>
 </head>
