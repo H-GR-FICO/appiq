@@ -448,6 +448,8 @@
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
+    // Zastavit hudbu pokud auto-startovala z localStorage — spustí se až po dismissu bomby
+    try{ if(window._hm) _hm.stop(false); }catch(e){}
     var ov=document.getElementById('welcomeOverlay');
     if(ov) ov.style.display='none';
     if(_versData&&!_versData.error) renderAll(_versData);
