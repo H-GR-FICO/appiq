@@ -41,8 +41,8 @@
         "session":  "v7.21-WebPage_20260419_1012",
         "title":  "HOPIQ chatbot + Version Selector 2.0 + PROMO banner + Welcome dialog",
         "promoLevel": 4,
-        "promoText": "HOPIQ chatbot je živý — Claude AI teď odpovídá přímo z AppIQ",
-        "promoTextEn": "HOPIQ chatbot is live — Claude AI now responds directly from AppIQ",
+        "promoText": "AI vstoupila do budovy! HOPIQ chatbot je ŽIVÝ — zeptej se na cokoliv.",
+        "promoTextEn": "AI has entered the building! HOPIQ chatbot is ALIVE — ask it anything.",
         "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
         "changes":  [
