@@ -175,6 +175,7 @@ window.I18n = (function () {
       'scr03.h4.desc':      'Interní pilot → spin-off HOPI TechIQ s.r.o. → 6. divize skupiny → komerční SaaS · budujeme IT firmu zevnitř místo akvizice',
       'scr03.h5.title':     'Platforma nové generace — AppIQ',
       'scr03.h5.desc':      'Modulární · AI-native · enterprise-grade · mobile-first · multi-language · strategická partnerství: ARTIN, INTECS, Anthropic',
+      'scr03.presents':     'představuje',
       'scr03.cta':          'Vstoupit do prezentace',
       'scr03.skip':         'přeskočit úvod',
       'scr03.back':         'Zpět na Story',
@@ -464,6 +465,7 @@ window.I18n = (function () {
       'scr03.h4.desc':      'Internal pilot → spin-off HOPI TechIQ s.r.o. → 6th group division → commercial SaaS · building an IT company from within instead of acquisition',
       'scr03.h5.title':     'Next-generation platform — AppIQ',
       'scr03.h5.desc':      'Modular · AI-native · enterprise-grade · mobile-first · multi-language · strategic partnerships: ARTIN, INTECS, Anthropic',
+      'scr03.presents':     'presents',
       'scr03.cta':          'Enter presentation',
       'scr03.skip':         'skip intro',
       'scr03.back':         'Back to Story',
@@ -783,8 +785,8 @@ window.I18n = (function () {
     document.querySelectorAll('.lang-btn[data-lang]').forEach(function (b) {
       b.classList.toggle('active', b.getAttribute('data-lang') === _lang);
     });
-    // 7. <html lang="">
-    document.documentElement.lang = _lang;
+    // 7. <html lang=""> — záměrně neměníme; dynamická změna lang atributu
+    // spouští browser auto-translate (Chrome/Safari) i přes translate="no"
   }
 
   function _resolve(key) {
