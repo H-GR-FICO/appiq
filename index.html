@@ -499,11 +499,11 @@
       '<div class="pf-icon">'+meta.icon+'</div>'+
       '<div class="pf-label">'+esc(label)+'</div>'+
       '<div class="pf-text">'+esc(text)+'</div>'+
-      (mainUrl?'<a href="'+esc(mainUrl)+'" class="pf-cta" onclick="event.stopPropagation()">'+ctaLabel+'</a>':'')+
-      '<div class="pf-skip">'+(isEn?'tap to skip':'kliknutím přeskočit')+'</div>';
+      (mainUrl?'<a href="'+esc(mainUrl)+'" class="pf-cta pf-cta-main" onclick="event.stopPropagation()">'+ctaLabel+'</a>':'')+
+      '<div class="pf-skip">'+(isEn?'click anywhere to skip':'kliknutím kamkoliv přeskočit')+'</div>';
     document.body.appendChild(el);
 
-    // Klik kdekoliv na fullscreen → přeskočit na small banner
+    // Klik kdekoliv na fullscreen → přeskočit na small banner (ne CTA tlačítko)
     var _dismissed=false;
     function dismissFull(){
       if(_dismissed) return; _dismissed=true;
@@ -518,8 +518,7 @@
     // MP3 sound
     setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
 
-    // Auto-collapse after 1.5s
-    setTimeout(dismissFull, 1500);
+    // Bez auto-dismiss — uživatel klikne sám
   }
 
   function renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta){
