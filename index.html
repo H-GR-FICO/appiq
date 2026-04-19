@@ -23,7 +23,7 @@
   <meta name="twitter:title"       content="HOPI AppIQ — by HOPI TECHNOLOGY">
   <meta name="twitter:description" content="AI-powered Enterprise Application Platform. Claude AI živý v AppIQ.">
   <meta name="twitter:image"       content="https://h-gr-fico.github.io/appiq/og-image.png">
-  <link rel="stylesheet" href="_hopiq.css">
+  <link rel="stylesheet" href="_hopiq.css?v=7.21">
   <style>
     :root {
       --bg: #0d1117; --surface: #161b22; --surface2: #1c2128; --border: #30363d;
@@ -295,7 +295,7 @@
       .pf-text{font-size:1.2rem;} .pf-icon{font-size:3.5rem;}
     }
   </style>
-  <script src="_i18n.js"></script>
+  <script src="_i18n.js?v=7.21"></script>
 </head>
 <body>
 
@@ -413,6 +413,13 @@
     })
     .catch(function(e){ _versData={error:e.message}; if(_overlayDone) showError(e.message); });
 
+  // Timeout: pokud versions.json nenačten do 6s po zavření dialogu — zobrazit chybu
+  setTimeout(function(){
+    if(_overlayDone&&!_versData){
+      document.getElementById('content').innerHTML='<div class="error">Nelze načíst versions.json — obnovte stránku (F5).</div>';
+    }
+  },6000);
+
   window.startApp=function(lang){
     _appStarted=true;
     try{ if(window.I18n&&I18n.setLang) I18n.setLang(lang); }catch(e){}
@@ -442,8 +449,8 @@
   }
 
   function renderAll(data){
-    renderStatusBar(data);
-    renderPromoBanner(data);
+    try{ renderStatusBar(data); }catch(e){}
+    try{ renderPromoBanner(data); }catch(e){}
     render(data);
   }
 
@@ -755,6 +762,6 @@
   </div>
 </div>
 
-<script src="_hopiq.js"></script>
+<script src="_hopiq.js?v=7.21"></script>
 </body>
 </html>
