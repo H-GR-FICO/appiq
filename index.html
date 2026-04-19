@@ -178,6 +178,18 @@
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--accent); }
 
+    /* ── Lang switch ────────────────────────────── */
+    .lang-switch { display: flex; gap: 4px; align-items: center; }
+    .lang-btn {
+      background: transparent; border: 1px solid var(--border);
+      border-radius: 4px; padding: 3px 9px;
+      font-size: 11px; font-weight: 700; color: var(--muted);
+      cursor: pointer; font-family: 'Segoe UI', Arial, sans-serif;
+      transition: all .2s;
+    }
+    .lang-btn:hover  { border-color: var(--muted); color: var(--text); }
+    .lang-btn.active { border-color: var(--green); color: var(--green); background: rgba(0,125,50,.1); }
+
     /* ── Responsive ─────────────────────────── */
     @media (max-width: 600px) {
       header { padding: 14px 16px; }
@@ -187,6 +199,7 @@
       .vi-date, .vi-links { display: none; }
     }
   </style>
+  <script src="_i18n.js"></script>
 </head>
 <body>
 
@@ -194,10 +207,14 @@
     <div class="logo-bar"></div>
     <div>
       <div class="logo-text">HOPI <span class="app">App</span><span class="iq">IQ</span></div>
-      <div class="header-sub">AI-powered Enterprise Application Platform</div>
+      <div class="header-sub" data-i18n="vs.subtitle">AI-powered Enterprise Application Platform</div>
     </div>
     <div class="header-spacer"></div>
-    <div class="header-tag">PUBLISHED VERSIONS</div>
+    <div class="lang-switch">
+      <button class="lang-btn" data-lang="cs" onclick="setLang('cs')">CZ</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+    <div class="header-tag" data-i18n="vs.tag">VYDANÉ VERZE</div>
   </header>
 
   <main>
@@ -210,20 +227,32 @@
   </footer>
 
   <script>
+    var _versData = null;
+
     fetch('versions.json?_=' + Date.now())
       .then(function(r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
       })
-      .then(function(data) { render(data); })
+      .then(function(data) {
+        _versData = data;
+        render(data);
+        I18n.init();
+      })
       .catch(function(e) {
         document.getElementById('content').innerHTML =
-          '<div class="error">Nelze načíst versions.json<br><small style="opacity:.6">' + esc(e.message) + '</small></div>';
+          '<div class="error">' + (I18n.t('vs.error') || 'Nelze načíst versions.json') +
+          '<br><small style="opacity:.6">' + esc(e.message) + '</small></div>';
       });
 
+    function setLang(lang) {
+      I18n.setLang(lang);
+      if (_versData) render(_versData);
+    }
+
     function render(data) {
+      var t = function(k, fb) { return I18n.t(k) || fb; };
       var versions = (data.versions || []).slice();
-      // newest first
       versions.sort(function(a, b) { return b.version > a.version ? 1 : -1; });
 
       var latest = versions.find(function(v) { return v.version === data.latest; }) || versions[0];
@@ -233,7 +262,7 @@
 
       // ── Latest ──
       if (latest) {
-        html += '<div class="section-label">Aktuální verze</div>';
+        html += '<div class="section-label">' + t('vs.current', 'Aktuální verze') + '</div>';
         html += '<div class="latest-card">';
         html += '<div class="latest-badge">LATEST</div>';
         html += '<div class="latest-ver">' + esc(latest.version) + '</div>';
@@ -245,31 +274,30 @@
         if (latest.title) html += '<div class="latest-title">' + esc(latest.title) + '</div>';
 
         html += '<div class="latest-links">';
-        if (latest.presentationUrl) html += '<a href="' + esc(latest.presentationUrl) + '" class="btn btn-primary">Prezentace</a>';
-        if (latest.hubUrl)          html += '<a href="' + esc(latest.hubUrl) + '" class="btn btn-ghost">Studio Hub</a>';
-        if (latest.pitchUrl)        html += '<a href="' + esc(latest.pitchUrl) + '" class="btn btn-secondary">Personal Pitch</a>';
-        if (latest.docsUrl)         html += '<a href="' + esc(latest.docsUrl) + '" class="btn btn-secondary">Docs</a>';
-        if (latest.protocolUrl)     html += '<button class="btn btn-secondary" onclick="openProtocolModal(\'' + esc(latest.protocolUrl) + '\',\'' + esc(latest.version) + '\')">📋 Protokol</button>';
+        if (latest.presentationUrl) html += '<a href="' + esc(latest.presentationUrl) + '" class="btn btn-primary">'  + t('vs.btn.prez', 'Prezentace') + '</a>';
+        if (latest.hubUrl)          html += '<a href="' + esc(latest.hubUrl)          + '" class="btn btn-ghost">'    + t('vs.btn.hub',  'Studio Hub') + '</a>';
+        if (latest.pitchUrl)        html += '<a href="' + esc(latest.pitchUrl)        + '" class="btn btn-secondary">'+ t('vs.btn.pitch','Personal Pitch') + '</a>';
+        if (latest.docsUrl)         html += '<a href="' + esc(latest.docsUrl)         + '" class="btn btn-secondary">'+ t('vs.btn.docs', 'Docs') + '</a>';
+        if (latest.protocolUrl)     html += '<button class="btn btn-secondary" onclick="openProtocolModal(\'' + esc(latest.protocolUrl) + '\',\'' + esc(latest.version) + '\')">📋 ' + t('vs.btn.protocol','Protokol') + '</button>';
         html += '</div>';
-
         html += '</div>'; // .latest-card
       }
 
       // ── History ──
       if (others.length > 0) {
-        html += '<div class="section-label" style="margin-top:36px;">Archivované verze (' + others.length + ')</div>';
+        html += '<div class="section-label" style="margin-top:36px;">' + t('vs.archived', 'Archivované verze') + ' (' + others.length + ')</div>';
         html += '<div class="version-list">';
         for (var i = 0; i < others.length; i++) {
           var v = others[i];
           html += '<div class="version-item">';
-          html += '<div class="vi-ver">' + esc(v.version) + '</div>';
+          html += '<div class="vi-ver">'  + esc(v.version)    + '</div>';
           html += '<div class="vi-date">' + esc(v.date || '') + '</div>';
-          html += '<div class="vi-title">' + esc(v.title || '') + '</div>';
+          html += '<div class="vi-title">'+ esc(v.title || '')+ '</div>';
           html += '<div class="vi-links">';
-          if (v.presentationUrl) html += '<a href="' + esc(v.presentationUrl) + '" class="vi-link">Prez</a>';
-          if (v.hubUrl)          html += '<a href="' + esc(v.hubUrl) + '" class="vi-link">Hub</a>';
-          if (v.pitchUrl)        html += '<a href="' + esc(v.pitchUrl) + '" class="vi-link">Pitch</a>';
-          if (v.docsUrl)         html += '<a href="' + esc(v.docsUrl) + '" class="vi-link">Docs</a>';
+          if (v.presentationUrl) html += '<a href="' + esc(v.presentationUrl) + '" class="vi-link">' + t('vs.btn.prez','Prez') + '</a>';
+          if (v.hubUrl)          html += '<a href="' + esc(v.hubUrl)          + '" class="vi-link">' + t('vs.btn.hub', 'Hub')  + '</a>';
+          if (v.pitchUrl)        html += '<a href="' + esc(v.pitchUrl)        + '" class="vi-link">' + t('vs.btn.pitch','Pitch')+ '</a>';
+          if (v.docsUrl)         html += '<a href="' + esc(v.docsUrl)         + '" class="vi-link">' + t('vs.btn.docs','Docs') + '</a>';
           if (v.protocolUrl)     html += '<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openProtocolModal(\'' + esc(v.protocolUrl) + '\',\'' + esc(v.version) + '\')">📋</button>';
           html += '</div>';
           html += '</div>';
@@ -284,7 +312,7 @@
       document.getElementById('content').innerHTML = html;
 
       if (data.updatedAt) {
-        document.getElementById('footer-ts').textContent = 'Aktualizováno: ' + data.updatedAt;
+        document.getElementById('footer-ts').textContent = (I18n.t('common.updated') || 'Aktualizováno') + ': ' + data.updatedAt;
       }
     }
 
