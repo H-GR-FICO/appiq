@@ -39,10 +39,7 @@
         "version":  "v7.21",
         "date":  "2026-04-19",
         "session":  "v7.21-WebPage_20260419_1012",
-        "title":  "HOPIQ chatbot + Version Selector 2.0 + PROMO banner + Welcome dialog",
-        "promoLevel": 4,
-        "promoText": "AI vstoupila do budovy! HOPIQ chatbot je ŽIVÝ — zeptej se na cokoliv.",
-        "promoTextEn": "AI has entered the building! HOPIQ chatbot is ALIVE — ask it anything.",
+        "title":  "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
         "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
         "changes":  [
@@ -55,6 +52,9 @@
                         "Version Selector 2.0 — CS/EN přepínač, plná podpora v7.12 legacy záznamu",
                         "Plán: Training Centre (FC-8) + 4 AI specialisté: PBI Designer, PBI Analyser, Data Story Teller, Document Reader"
                     ],
+        "promoLevel":  4,
+        "promoText":  "Tohle HOPI ještě nevidělo. Claude AI je živý v AppIQ. Teď hned. Zeptej se.",
+        "promoTextEn":  "HOPI has never seen this. Claude AI is live in AppIQ. Right now. Ask it.",
         "presentationUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
         "hubUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
         "pitchUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
