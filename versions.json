@@ -1,66 +1,65 @@
-{
+﻿{
   "latest": "v7.21",
   "updatedAt": "2026-04-19",
-  "maintenance": false,
   "versions": [
     {
-      "version": "v7.20",
-      "date": "2026-04-19",
-      "session": "v7.20-WebPage_20260419_0148",
-      "title": "i18n opravy — prezentace + Personal Pitch",
-      "mainUrl": "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
-      "mainLabel": "Studio Hub",
-      "changes": [
-        "Fix: _i18n.js — lang-cz vs lang-cs třída (prázdná místa v CS módu)",
-        "Fix: _i18n.js — _hasKey() guard v _applyDOM() chrání 252 prezentačních klíčů",
-        "Fix: PERSONAL_PITCH.html — CSS-based přepínač jazyka (body.lang-en + !important)"
-      ],
-      "presentationUrl": "v7.20/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-      "hubUrl": "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
-      "pitchUrl": "v7.20/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-      "docsUrl": "v7.20/HOPI_AppIQ_WebPage/Development/docs/index.html"
+        "version":  "v7.20",
+        "date":  "2026-04-19",
+        "session":  "v7.20-WebPage_20260419_0148",
+        "title":  "i18n opravy — prezentace + Personal Pitch",
+        "mainUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "Fix: _i18n.js — lang-cz vs lang-cs třída (prázdná místa v CS módu)",
+                        "Fix: _i18n.js — _hasKey() guard v _applyDOM() chrání 252 prezentačních klíčů",
+                        "Fix: PERSONAL_PITCH.html — CSS-based přepínač jazyka (body.lang-en + !important)"
+                    ],
+        "presentationUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/docs/index.html"
     },
     {
-      "version": "v7.12",
-      "date": "2026-04-18",
-      "session": "v7.12-WebPage_20260418_0502",
-      "title": "Studio Architecture — snapshot před i18n (legacy)",
-      "mainUrl": "PORTAL_PRESENTATION.html",
-      "mainLabel": "Prezentace",
-      "changes": [
-        "Studio Hub — rozcestník center (Dev, Test, Admin, Promo)",
-        "PORTAL_PRESENTATION.html — kompletní prezentace AppIQ platformy",
-        "PERSONAL_PITCH.html — bilingvní pitch se Story Behind",
-        "Studio Architecture — Dev, Test, Admin Center základ"
-      ],
-      "presentationUrl": "PORTAL_PRESENTATION.html",
-      "pitchUrl": "PERSONAL_PITCH.html"
+        "version":  "v7.12",
+        "date":  "2026-04-18",
+        "session":  "v7.12-WebPage_20260418_0502",
+        "title":  "Studio Architecture — snapshot před i18n (legacy)",
+        "mainUrl":  "PORTAL_PRESENTATION.html",
+        "mainLabel":  "Prezentace",
+        "changes":  [
+                        "Studio Hub — rozcestník center (Dev, Test, Admin, Promo)",
+                        "PORTAL_PRESENTATION.html — kompletní prezentace AppIQ platformy",
+                        "PERSONAL_PITCH.html — bilingvní pitch se Story Behind",
+                        "Studio Architecture — Dev, Test, Admin Center základ"
+                    ],
+        "presentationUrl":  "PORTAL_PRESENTATION.html",
+        "pitchUrl":  "PERSONAL_PITCH.html"
     },
     {
-      "version": "v7.21",
-      "date": "2026-04-19",
-      "session": "v7.21-WebPage_20260419_1012",
-      "title": "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
-      "mainUrl": "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
-      "mainLabel": "Studio Hub",
-      "changes": [
-        "Nový: HOPIQ chatbot — Claude API integrace přes Cloudflare Worker proxy",
-        "Nový: _hopiq.js + _hopiq.css — floating chat widget na všech stránkách AppIQ Studia",
-        "Nový: HOPIQ systémový prompt — kompletní znalost platformy (8 domén: archivace, OIL, centra, chatboti...)",
-        "Nový: _status.js pattern — inline JS fallback, funguje na file://, Release i GitHub Pages",
-        "Fix: Admin Center Release záložka — _status.js fallback místo fetch() pro file:// protokol",
-        "Version Selector 2.0 — hero CTA tlačítko, inline seznam změn, modal Detailní změny",
-        "Version Selector 2.0 — CS/EN přepínač, plná podpora v7.12 legacy záznamu",
-        "Plán: Training Centre (FC-8) + 4 AI specialisté: PBI Designer, PBI Analyser, Data Story Teller, Document Reader"
-      ],
-      "promoLevel": 4,
-      "promoText": "Tohle HOPI ještě nevidělo. Claude AI je živý v AppIQ. Teď hned. Zeptej se.",
-      "promoTextEn": "HOPI has never seen this. Claude AI is live in AppIQ. Right now. Ask it.",
-      "presentationUrl": "v7.21/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-      "hubUrl": "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
-      "pitchUrl": "v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-      "docsUrl": "v7.21/HOPI_AppIQ_WebPage/Development/docs/index.html",
-      "protocolUrl": "v7.21/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+        "version":  "v7.21",
+        "date":  "2026-04-19",
+        "session":  "v7.21-WebPage_20260419_2341",
+        "title":  "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
+        "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "Nový: HOPIQ chatbot — Claude API integrace přes Cloudflare Worker proxy",
+                        "Nový: _hopiq.js + _hopiq.css — floating chat widget na všech stránkách AppIQ Studia",
+                        "Nový: HOPIQ systémový prompt — kompletní znalost platformy (8 domén: archivace, OIL, centra, chatboti...)",
+                        "Nový: _status.js pattern — inline JS fallback, funguje na file://, Release i GitHub Pages",
+                        "Fix: Admin Center Release záložka — _status.js fallback místo fetch() pro file:// protokol",
+                        "Version Selector 2.0 — hero CTA tlačítko, inline seznam změn, modal Detailní změny",
+                        "Version Selector 2.0 — CS/EN přepínač, plná podpora v7.12 legacy záznamu",
+                        "Plán: Training Centre (FC-8) + 4 AI specialisté: PBI Designer, PBI Analyser, Data Story Teller, Document Reader"
+                    ],
+        "promoLevel":  4,
+        "promoText":  "Tohle HOPI ještě nevidělo. Claude AI je živý v AppIQ. Teď hned. Zeptej se.",
+        "promoTextEn":  "HOPI has never seen this. Claude AI is live in AppIQ. Right now. Ask it.",
+        "presentationUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

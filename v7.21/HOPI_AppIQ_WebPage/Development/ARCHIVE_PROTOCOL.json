@@ -2,25 +2,25 @@
     "schemaVersion":  "1.0",
     "status":  "OK",
     "version":  "v7.21",
-    "session":  "v7.21-WebPage_20260419_1012",
-    "timestamp":  "2026-04-19 10:12",
+    "session":  "v7.21-WebPage_20260419_2341",
+    "timestamp":  "2026-04-19 23:41",
     "stats":  {
-                  "totalFiles":  39,
-                  "totalSizeKb":  16128.4,
+                  "totalFiles":  44,
+                  "totalSizeKb":  35454.4,
                   "byType":  {
-                                 "md":  7,
+                                 "json":  3,
+                                 "md":  8,
                                  "js":  3,
-                                 "html":  9,
-                                 "json":  1,
+                                 "html":  10,
                                  "txt":  1,
                                  "png":  15,
-                                 "mp3":  2,
+                                 "mp3":  3,
                                  "other":  1
                              },
-                  "previousTotal":  39
+                  "previousTotal":  40
               },
     "verify":  {
-                   "passed":  18,
+                   "passed":  20,
                    "failed":  0,
                    "checks":  [
                                   {
@@ -76,6 +76,14 @@
                                       "ok":  true
                                   },
                                   {
+                                      "file":  "BOIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BKONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
                                       "file":  "CHANGELOG.md",
                                       "ok":  true
                                   },
@@ -90,16 +98,21 @@
                               ]
                },
     "diff":  {
-                 "previousSession":  "v7.20-WebPage_20260419_0148",
+                 "previousSession":  "v7.21-WebPage_20260419_1012",
                  "added":  [
-
+                               "_audio/Gladiator - Now We Are Free Super Theme Song.mp3",
+                               "BKONTEXT.md",
+                               "BOIL.json",
+                               "hopiq/index.html"
                            ],
                  "removed":  [
 
                              ],
                  "changed":  [
                                  "admin/index.html",
+                                 "BRAND_CONCEPTS.html",
                                  "CLAUDE.md",
+                                 "dev/index.html",
                                  "docs/index.html",
                                  "CHANGELOG.md",
                                  "index.html",
@@ -107,8 +120,9 @@
                                  "OIL_CONTEXT.md",
                                  "PERSONAL_PITCH.html",
                                  "PORTAL_PRESENTATION.html",
-                                 "VERSION.txt"
+                                 "promo/index.html",
+                                 "test/index.html"
                              ]
              },
-    "changelog":  "## v7.21 — HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix\n\n\u003e Datum: 2026-04-19 · Session: David Gogela + Claude · AIQ-00083..86\n\n### Přidáno\n\n**HOPIQ chatbot — nativní AI integrace do AppIQ Studio (AIQ-00085, AIQ-00086)**\n- Nový soubor `_hopiq.js` — floating chat widget (vpravo dole) přidaný do všech stránek AppIQ Studio\n- Nový soubor `_hopiq.css` — styly widgetu v AppIQ dark theme (#007d32 brand, tmavé pozadí)\n- Cloudflare Worker proxy `https://hopi-appiq.dgogela.workers.dev` — drží Anthropic API klíč jako secret, řeší CORS\n- Model: `claude-haiku-4-5-20251001` (rychlý, ekonomický, vhodný pro chat)\n- Widget přidán do: Hub (index.html), PORTAL_PRESENTATION.html, PERSONAL_PITCH.html, admin/index.html, docs/index.html\n- Systémový prompt obsahuje kompletní znalost platformy: navigace AppIQ Studio, archivační procedura (DO_ARCHIVE.ps1, ARCHIVE_PROTOCOL.json), deploy procedura (DO_DEPLOY.ps1, GitHub Pages), OIL task tracker (AIQ-NNNNN formát, statusy), Admin Center záložky, Documentation Center (TS/BS/GD sekce), Finance portál moduly, aktuální verze v7.21, strategický záměr (HOPI pilot → spin-off → SaaS)\n- Infrastruktura: Anthropic API account (console.anthropic.com, dgogela@hopiholding.eu), Cloudflare Workers free tier (100k req/den)\n\n**Version Selector 2.0 — GitHub Pages landing page (AIQ-00083)**\n- Hero CTA tlačítko per verze — přenese uživatele na hlavní stránku verze (v7.21 → Studio Hub, v7.12 → Prezentace)\n- Inline přehled změn — bullet body přímo pod verzí (z `changes[]` pole v versions.json)\n- Modal \"Detailní změny\" — kliknutím zobrazí kompletní changelog verze v overlay modalu\n- CS/EN přepínač — integrován přes `_i18n.js` (`I18n.setLang()`), zachovává stav při přerenderování\n- Nové i18n klíče: `vs.btn.open`, `vs.btn.changes`, `vs.changes.title` (CS + EN)\n- `versions.json` rozšířen o pole: `mainUrl`, `mainLabel`, `changes[]`\n\n**_status.js — Admin Center Release záložka (AIQ-00084)**\n- Nový soubor `_status.js` — nastaví `window._STUDIO_STATUS` při načtení stránky jako script tag\n- Funguje na všech třech prostředích: Development (file://), Release (file://), GitHub Pages (HTTPS)\n- `admin/index.html` načítá `_status.js` před `_i18n.js`; `loadStudioStatus()` použije data okamžitě bez čekání na fetch\n- `DO_ARCHIVE.ps1` generuje `_status.js` automaticky po zápisu `_status.json`\n- `DO_DEPLOY.ps1` nový krok [8b] — generuje `$VER_FOLDER/_status.js` PŘED `git add/commit` (dostane se do repo)\n\n### Změněno\n\n- `DO_DEPLOY.ps1` — krok [8b] přidán před git commit; fix PS 5.1 array serialization bug (z v7.20)\n- `DO_ARCHIVE.ps1` — generuje `_status.js` vedle `_status.json`\n- `CLAUDE.md` — přidáno STOP pravidlo (organicky vznikající úkoly) + Crash recovery procedura\n\n### Plánováno (zaregistrováno v OIL, neimplementováno)\n\n- AIQ-00087: Training Centre — 7. Functional Center s AI specialisty\n- AIQ-00088: AI PBI Designer\n- AIQ-00089: AI PBI Analyser\n- AIQ-00090: AI Data Story Teller\n- AIQ-00091: AI Document Reader"
+    "changelog":  "## v7.21 post-release — Maintenance Mode + Business Strategy + Font Fix\n\n\u003e Datum: 2026-04-19 · Session: David Gogela + Claude · AIQ-00102..00115\n\n### Přidáno\n\n**Maintenance Mode — přístup na platformu (AIQ-00104)**\n- Studio Hub: widget pro zapnutí/vypnutí Maintenance Mode přes GitHub API\n- GitHub Pages root: fullscreen overlay CS/EN při zapnuté údržbě\n- Admin Center: nová záložka Platforma — GitHub PAT token + developer bypass (localStorage)\n- `versions.json`: nové pole `maintenance: false`\n\n**Business Strategy Layer (AIQ-00113)**\n- Nový soubor `BOIL.json` — Business OIL, prefix BIZ-NNNNN, citlivá data, 23 úkolů\n- Nový soubor `BKONTEXT.md` — business kontext, rozhodnutí, hiring roadmap, tech stack s cenami\n- 3 produktové streamy definovány: B2B Pilot (HOPI GROUP), B2C SaaS Home (01.07.2027), B2B SaaS Enterprise (01.01.2028)\n- Nové entity: HOPI TechIQ s.r.o. (planned Q2 2026), HOPI AI Lab (founding)\n\n**AI Agents strategie (AIQ-00106..00112)**\n- Plán 5 AI agentů: Helper, DocWriter, Admin, Tester, Developer\n- Pořadí nasazení, tréninkové plány, Studio UI sekce AI Agents\n\n**OIL schema — userExplanation (AIQ-00105)**\n- Nové pole `userExplanation` přidáno ke všem 114 AIQ úkolům\n\n### Opraveno\n\n**Promo L4 — CTA a vizuál (AIQ-00102)**\n- CTA „Co je nového →\" → dismissFull (ne navigace na Hub)\n- Dark navy/teal cinematic redesign, orbital SVG, scan line efekt\n- Button CSS reset: `border:none; appearance:none; -webkit-appearance:none`\n\n**Finance portal — nefunkční odkaz (AIQ-00103)**\n- Studio Hub: odkaz opraven `../../HOPI_AppIQ/Development/index.html` → `../../app/index.html`\n\n**Prezentace — čitelnost na projektoru (AIQ-00115)**\n- PORTAL_PRESENTATION + PERSONAL_PITCH: base font 14 → 16px\n- h2: 28→32px, h3: 18→22px, h4: 15→18px; content text 12–13 → 15–16px\n- 33 pravidel v PORTAL_PRESENTATION, 19 inline replacements v PERSONAL_PITCH"
 }

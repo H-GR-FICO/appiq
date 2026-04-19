@@ -15,6 +15,48 @@ Formát: `[typ]` — **Přidáno** · **Opraveno** · **Změněno** · **Odstran
 
 ---
 
+## v7.21 post-release — Maintenance Mode + Business Strategy + Font Fix
+
+> Datum: 2026-04-19 · Session: David Gogela + Claude · AIQ-00102..00115
+
+### Přidáno
+
+**Maintenance Mode — přístup na platformu (AIQ-00104)**
+- Studio Hub: widget pro zapnutí/vypnutí Maintenance Mode přes GitHub API
+- GitHub Pages root: fullscreen overlay CS/EN při zapnuté údržbě
+- Admin Center: nová záložka Platforma — GitHub PAT token + developer bypass (localStorage)
+- `versions.json`: nové pole `maintenance: false`
+
+**Business Strategy Layer (AIQ-00113)**
+- Nový soubor `BOIL.json` — Business OIL, prefix BIZ-NNNNN, citlivá data, 23 úkolů
+- Nový soubor `BKONTEXT.md` — business kontext, rozhodnutí, hiring roadmap, tech stack s cenami
+- 3 produktové streamy definovány: B2B Pilot (HOPI GROUP), B2C SaaS Home (01.07.2027), B2B SaaS Enterprise (01.01.2028)
+- Nové entity: HOPI TechIQ s.r.o. (planned Q2 2026), HOPI AI Lab (founding)
+
+**AI Agents strategie (AIQ-00106..00112)**
+- Plán 5 AI agentů: Helper, DocWriter, Admin, Tester, Developer
+- Pořadí nasazení, tréninkové plány, Studio UI sekce AI Agents
+
+**OIL schema — userExplanation (AIQ-00105)**
+- Nové pole `userExplanation` přidáno ke všem 114 AIQ úkolům
+
+### Opraveno
+
+**Promo L4 — CTA a vizuál (AIQ-00102)**
+- CTA „Co je nového →" → dismissFull (ne navigace na Hub)
+- Dark navy/teal cinematic redesign, orbital SVG, scan line efekt
+- Button CSS reset: `border:none; appearance:none; -webkit-appearance:none`
+
+**Finance portal — nefunkční odkaz (AIQ-00103)**
+- Studio Hub: odkaz opraven `../../HOPI_AppIQ/Development/index.html` → `../../app/index.html`
+
+**Prezentace — čitelnost na projektoru (AIQ-00115)**
+- PORTAL_PRESENTATION + PERSONAL_PITCH: base font 14 → 16px
+- h2: 28→32px, h3: 18→22px, h4: 15→18px; content text 12–13 → 15–16px
+- 33 pravidel v PORTAL_PRESENTATION, 19 inline replacements v PERSONAL_PITCH
+
+---
+
 ## v7.21 — HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix
 
 > Datum: 2026-04-19 · Session: David Gogela + Claude · AIQ-00083..86

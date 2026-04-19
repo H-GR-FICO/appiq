@@ -168,6 +168,40 @@ Kdykoli je přidán nebo změněn jakýkoli pojmenovaný objekt v projektu, **ih
 
 ---
 
+## Vizuální kvalita — pravidlo (platí vždy, bez výjimky)
+
+**Vizuál prodává. Musí být 100% správný na všech zařízeních před každým deployem.**
+
+- Každý CSS/layout úkol musí mít `deviceImpact` ověřeno před pushnutím
+- Nové `@media` bloky patří **na konec CSS** (za všechny base styly), jinak base pravidla přepíší mobile overrides
+- Pokud nelze vizuálně ověřit v DevTools před pushnutím → explicitně upozornit Davida a počkat na jeho souhlas
+- Až bude AIQ-00118 (Device Preview) hotov → povinný krok před každým CSS deployem
+
+---
+
+## Deployment bezpečnostní pravidla (platí vždy)
+
+### Kde jsou soubory
+| Místo | Co to je |
+|-------|----------|
+| `OneDrive / CO_PROJECT / HOPI_AppIQ_WebPage/Development/` | Zdrojové soubory — tady vyvíjíme |
+| `C:\repos\appiq\vX.XX\...` | Lokální kopie pro GitHub |
+| `h-gr-fico.github.io/appiq/vX.XX/...` | **Živý web** — každý push jde rovnou sem |
+
+### Pravidlo 1 — Nová funkce = nová verze
+Větší změna (nový slide, nová feature, refactor) → vždy spustit `DO_DEPLOY.ps1` → vznikne nová složka `vX.XX/` → push. Předchozí verze zůstane nedotčená.
+
+### Pravidlo 2 — Hotfix = patch do aktuální verze
+Malá oprava (CSS, text, drobný bug) → opravit přímo v aktuální verzi (např. `v7.21/`) → push. Přijatelné riziko, protože předchozí verze je stále k dispozici.
+
+### Pravidlo 3 — Staré verze NIKDY nesmazat
+Složky `v7.20/`, `v7.19/`... jsou záchranná síť. Pokud nová verze nefunguje, David pošle odkaz na starší verzi za 30 sekund. Mazat pouze pokud David explicitně řekne.
+
+### Pravidlo 4 — Před push většího změny: lokální test
+Před pushnutím nové verze otevřít soubory z `C:\repos\appiq\vX.XX\...` v prohlížeči přes `file://` a ověřit funkčnost.
+
+---
+
 ## Konec session — co udělat
 
 1. Aktualizovat `_SESSION_START/BRIEFING.md` — kde jsme skončili, co je otevřené

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="cs" translate="no">
+<html lang="cs">
 <head>
   <meta charset="UTF-8">
-<meta name="google" content="notranslate">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HOPI AppIQ — by HOPI TECHNOLOGY</title>
   <meta name="description" content="AI-powered Enterprise Application Platform. Claude AI živý v AppIQ. Průlomová platforma budovaná zevnitř HOPI Holding.">
@@ -24,7 +23,7 @@
   <meta name="twitter:title"       content="HOPI AppIQ — by HOPI TECHNOLOGY">
   <meta name="twitter:description" content="AI-powered Enterprise Application Platform. Claude AI živý v AppIQ.">
   <meta name="twitter:image"       content="https://h-gr-fico.github.io/appiq/og-image.png">
-  <link rel="stylesheet" href="_hopiq.css?v=7.21c">
+  <link rel="stylesheet" href="_hopiq.css?v=7.21">
   <style>
     :root {
       --bg: #0d1117; --surface: #161b22; --surface2: #1c2128; --border: #30363d;
@@ -109,7 +108,6 @@
     .pf-l4 .pf-label { background:rgba(0,188,212,.1); color:var(--accent); border:1px solid rgba(0,188,212,.3); letter-spacing:4px; }
     .pf-l4 .pf-cta   { background:rgba(0,188,212,.1); color:var(--accent); border:1px solid rgba(0,188,212,.35); cursor:pointer; font-family:inherit; }
     .pf-l4 .pf-cta:hover { background:rgba(0,188,212,.22); }
-    /* Orbital icon */
     .pf-orb { width:110px; height:110px; margin:0 auto; }
     .pf-orb svg { width:100%; height:100%; overflow:visible; }
     .pf-orb-r1 { animation:orb-spin 3.5s linear infinite; transform-origin:55px 55px; }
@@ -161,7 +159,6 @@
     .header-sub { font-size:0.75rem; color:var(--muted); margin-top:3px; }
     .header-spacer { flex:1; }
     .header-tag { font-size:0.7rem; font-weight:600; letter-spacing:1px; color:var(--muted); border:1px solid var(--border); padding:3px 10px; border-radius:20px; }
-    #hub-music-btn { background:transparent; border:1px solid var(--border); border-radius:8px; padding:4px 9px; font-size:1rem; cursor:pointer; opacity:.45; transition:opacity .2s; line-height:1; color:#fff; }
 
     /* ══ STATUS BAR ══════════════════════════════════════════════════ */
     #statusBar { background:rgba(63,185,80,.06); border-bottom:1px solid rgba(63,185,80,.18); padding:7px 32px; display:none; align-items:center; gap:14px; font-size:0.72rem; color:var(--muted); }
@@ -312,7 +309,6 @@
       main{padding:28px 16px 40px;} .latest-card{padding:20px;} .latest-ver{font-size:1.7rem;}
       .vi-date,.vi-links{display:none;} .wc-lang-btn{min-width:120px;padding:12px 20px;}
       .pf-text{font-size:1.2rem;} .pf-icon{font-size:3.5rem;}
-      .header-tag{display:none;}
     }
   </style>
   <script src="_i18n.js?v=7.21"></script>
@@ -397,7 +393,6 @@
     <button class="lang-btn" data-lang="cs" onclick="switchLang('cs')">CZ</button>
     <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
   </div>
-  <button id="hub-music-btn" onclick="if(window._hm)_hm.toggle()" title="Zapnout hudbu">🔇</button>
   <div class="header-tag" data-i18n="vs.tag">VYDANÉ VERZE</div>
 </header>
 
@@ -422,7 +417,7 @@
 <script>
 (function(){
   'use strict';
-  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null, _promoFullDismissed=false;
+  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null;
 
   // Preload versions.json
   fetch('versions.json?_='+Date.now())
@@ -448,8 +443,6 @@
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
-    // Zastavit hudbu pokud auto-startovala z localStorage — spustí se až po dismissu bomby
-    try{ if(window._hm) _hm.stop(false); }catch(e){}
     var ov=document.getElementById('welcomeOverlay');
     if(ov) ov.style.display='none';
     if(_versData&&!_versData.error) renderAll(_versData);
@@ -475,7 +468,7 @@
       '<div class="maint-logo-by">by HOPI TECHNOLOGY</div>'+
       '<div class="maint-divider"></div>'+
       '<div class="maint-title">ÚDRŽBA SYSTÉMU</div>'+
-      '<div class="maint-msg">Stavte se později. Děkujeme za pochopení.</div>'+
+      '<div class="maint-msg">Stavte se później. Děkujeme za pochopení.</div>'+
       '<div class="maint-team">Vývojový tým platformy AppIQ.</div>'+
       '<div class="maint-sep"></div>'+
       '<div class="maint-en">'+
@@ -535,7 +528,6 @@
   }
 
   function showPromoFullscreen(lvl,text,mainUrl,isEn,meta){
-    if(_promoFullDismissed) return;
     var label=isEn?meta.en:meta.cs;
     var ctaLabel=isEn?'Explore versions ↓':'Prozkoumat verze ↓';
     var el=document.createElement('div');
@@ -554,15 +546,17 @@
     // Klik kdekoliv na fullscreen → přeskočit na small banner (ne CTA tlačítko)
     var _dismissed=false;
     function dismissFull(){
-      if(_dismissed) return; _dismissed=true; _promoFullDismissed=true;
+      if(_dismissed) return; _dismissed=true;
       el.classList.add('collapsing');
-      if(window._hm) _hm.start(); // přímo v user gesture — iOS safe
       setTimeout(function(){ if(el.parentNode) el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta); },650);
     }
     el.addEventListener('click', dismissFull);
 
     // Sparks
     spawnSparks(el, lvl===5?28:20, true);
+
+    // MP3 sound
+    setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
 
     // Bez auto-dismiss — uživatel klikne sám
   }
@@ -577,7 +571,7 @@
       '<span class="promo-badge"><span>'+meta.icon+'</span>'+esc(label)+'</span>'+
       '<span class="promo-text">'+esc(text)+'</span>'+
       (mainUrl?'<a href="'+esc(mainUrl)+'" class="promo-cta">'+ctaLabel+'</a>':'')+
-      '<button class="promo-sound-btn" onclick="replayPromoSound('+lvl+')" title="'+soundTip+'">♪</button>';
+      '<button class="promo-sound-btn" onclick="replayPromoSound('+lvl+')" title="'+soundTip+'">🔊</button>';
     if(lvl===4) spawnSparks(banner,10,false);
   }
 
@@ -612,16 +606,13 @@
     else if(_audioCtx) playSoundForLevel(_audioCtx,lvl);
   };
 
-  // Hudba řízena _hopiq.js → window._hm (stejný systém jako Studio Hub)
-
-  // ── MP3 Sound (one-shot promo zvuky) ──────────────────────────────
+  // ── MP3 Sound ──────────────────────────────────────────────────────
   function playMp3Sound(duration,track){
-    // Použij pre-unlocknutý element pokud existuje (iOS autoplay policy)
+    if(_bgAudio){_bgAudio.pause();_bgAudio=null;}
     var src=track||'_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
-    var audio=(_bgAudio&&_bgAudio.src&&_bgAudio.src.indexOf('rubyzephyr')>=0&&!track)?_bgAudio:new Audio(src);
-    if(audio!==_bgAudio){ if(_bgAudio){_bgAudio.pause();} _bgAudio=audio; }
+    var audio=new Audio(src);
     audio.volume=0;
-    audio.currentTime=0;
+    _bgAudio=audio;
     audio.play().then(function(){
       // Fade in
       var fi=setInterval(function(){
@@ -808,6 +799,6 @@
   </div>
 </div>
 
-<script src="_hopiq.js?v=7.21c"></script>
+<script src="_hopiq.js?v=7.21"></script>
 </body>
 </html>
