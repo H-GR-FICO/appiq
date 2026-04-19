@@ -421,7 +421,7 @@
 <script>
 (function(){
   'use strict';
-  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null, _musicPlaying=false;
+  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null, _musicPlaying=false, _promoFullDismissed=false;
 
   // Preload versions.json
   fetch('versions.json?_='+Date.now())
@@ -539,6 +539,7 @@
   }
 
   function showPromoFullscreen(lvl,text,mainUrl,isEn,meta){
+    if(_promoFullDismissed) return;
     var label=isEn?meta.en:meta.cs;
     var ctaLabel=isEn?'Explore versions ↓':'Prozkoumat verze ↓';
     var el=document.createElement('div');
@@ -557,7 +558,7 @@
     // Klik kdekoliv na fullscreen → přeskočit na small banner (ne CTA tlačítko)
     var _dismissed=false;
     function dismissFull(){
-      if(_dismissed) return; _dismissed=true;
+      if(_dismissed) return; _dismissed=true; _promoFullDismissed=true;
       el.classList.add('collapsing');
       setTimeout(function(){ if(el.parentNode) el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta); startBgMusic(); },650);
     }
