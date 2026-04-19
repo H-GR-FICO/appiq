@@ -246,7 +246,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;mi
       <span class="hub-card-chip chip-active">BEZE ZMĚNY</span>
     </a>
 
-    <a href="../../app/index.html" class="hub-card card-app" target="_blank" onclick="if(typeof hubStopMusic==='function')hubStopMusic();">
+    <a href="../../app/index.html" class="hub-card card-app" target="_blank" onclick="if(window._hm)_hm.stop();">
       <div class="hub-card-icon">&#128188;</div>
       <div class="hub-card-name" data-i18n="card.app.name">Finance Portal</div>
       <div class="hub-card-fc">FC-2 · Group Controlling</div>
@@ -465,61 +465,7 @@ function toggleMaintenance(){
 
 setTimeout(loadMaintenanceStatus,400);
 
-// ── Background music (přenáší se z version selectoru) ──
-(function(){
-  var _hubAudio=null, _hubPlaying=false;
-  var SRC='_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
-
-  function hubUpdateBtn(){
-    var btn=document.getElementById('hub-music-btn');
-    if(!btn) return;
-    btn.textContent=_hubPlaying?'🔊':'🔇';
-    btn.title=_hubPlaying?'Ztlumit hudbu':'Zapnout hudbu';
-    btn.style.opacity=_hubPlaying?'1':'0.45';
-  }
-
-  function hubStartMusic(){
-    if(!_hubAudio){
-      _hubAudio=new Audio(SRC); _hubAudio.loop=true; _hubAudio.volume=0;
-      // Obnov pozici z version selectoru pro plynulý přechod
-      try{
-        var pos=parseFloat(localStorage.getItem('appiq_music_pos'));
-        if(pos>0){_hubAudio.currentTime=pos;}
-        localStorage.removeItem('appiq_music_pos');
-      }catch(e){}
-    }
-    _hubAudio.play().then(function(){
-      _hubPlaying=true;
-      var fi=setInterval(function(){
-        if(_hubAudio.volume<0.65){_hubAudio.volume=Math.min(0.65,_hubAudio.volume+0.05);}
-        else clearInterval(fi);
-      },40);
-      hubUpdateBtn();
-    }).catch(function(){ hubUpdateBtn(); });
-  }
-
-  function hubStopMusic(){
-    if(!_hubAudio) return;
-    var a=_hubAudio; _hubPlaying=false;
-    var fo=setInterval(function(){
-      if(a.volume>0.03){a.volume=Math.max(0,a.volume-0.05);}
-      else{a.pause();clearInterval(fo);}
-    },40);
-    hubUpdateBtn();
-  }
-
-  window.hubToggleMusic=function(){
-    if(_hubPlaying){ hubStopMusic(); try{localStorage.setItem('appiq_music','off');}catch(e){} }
-    else { hubStartMusic(); try{localStorage.setItem('appiq_music','on');}catch(e){} }
-  };
-
-  // Autostart pokud bylo zapnuto na version selectoru
-  document.addEventListener('DOMContentLoaded',function(){
-    hubUpdateBtn();
-    var pref=null; try{pref=localStorage.getItem('appiq_music');}catch(e){}
-    if(pref==='on'){ hubStartMusic(); }
-  });
-})();
+// Hudba řízena _hopiq.js — window._hm
 </script>
 <script src="../../../_hopiq.js"></script>
 </body>

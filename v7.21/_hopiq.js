@@ -211,3 +211,89 @@ Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (z
   }
 
 })();
+
+// ── AppIQ Background Music — perzistentní napříč Studio centry ───────────────
+(function(){
+  var _p = window.location.pathname;
+  // Pouze na Studio stránkách; vynechat prezentace s vlastním audiem
+  if(_p.indexOf('PORTAL_PRESENTATION')>=0 || _p.indexOf('PERSONAL_PITCH')>=0) return;
+  var _devMarker = '/HOPI_AppIQ_WebPage/Development/';
+  var _devIdx = _p.indexOf(_devMarker);
+  if(_devIdx < 0) return;
+
+  // Relativní cesta k _audio/ dle hloubky zanořeni pod Development/
+  var _afterDev = _p.substring(_devIdx + _devMarker.length);
+  var _depth = _afterDev.split('/').length - 1;
+  var _prefix = '';
+  for(var i=0;i<_depth;i++) _prefix += '../';
+  var _src = _prefix + '_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
+
+  var _audio = null, _playing = false;
+
+  function _btn(){ return document.getElementById('hub-music-btn')||document.getElementById('hm-float-btn'); }
+
+  function _updateBtn(){
+    var b=_btn(); if(!b) return;
+    b.textContent=_playing?'🔊':'🔇';
+    b.style.opacity=_playing?'1':'0.45';
+    b.title=_playing?'Ztlumit hudbu':'Zapnout hudbu';
+  }
+
+  function _start(){
+    if(!_audio){
+      _audio=new Audio(_src); _audio.loop=true; _audio.volume=0;
+      try{
+        var pos=parseFloat(localStorage.getItem('appiq_music_pos'));
+        if(pos>0){ _audio.currentTime=pos; }
+        localStorage.removeItem('appiq_music_pos');
+      }catch(e){}
+    }
+    _audio.play().then(function(){
+      _playing=true;
+      var fi=setInterval(function(){
+        if(_audio.volume<0.65){_audio.volume=Math.min(0.65,_audio.volume+0.05);}
+        else clearInterval(fi);
+      },40);
+      _updateBtn();
+    }).catch(function(){ _updateBtn(); });
+  }
+
+  function _stop(savePref){
+    if(!_audio) return;
+    _playing=false; _updateBtn();
+    if(savePref) try{localStorage.setItem('appiq_music','off');}catch(e){}
+    var a=_audio;
+    var fo=setInterval(function(){
+      if(a.volume>0.03){a.volume=Math.max(0,a.volume-0.05);}
+      else{a.pause();clearInterval(fo);}
+    },40);
+  }
+
+  function _toggle(){
+    if(_playing){_stop(true);}
+    else{_start();try{localStorage.setItem('appiq_music','on');}catch(e){}}
+  }
+
+  window._hm={start:_start,stop:_stop,toggle:_toggle};
+
+  document.addEventListener('DOMContentLoaded',function(){
+    // Inject floating button pokud stránka nemá vlastní
+    if(!document.getElementById('hub-music-btn')&&!document.getElementById('hm-float-btn')){
+      var b=document.createElement('button');
+      b.id='hm-float-btn'; b.textContent='🔇'; b.title='Zapnout hudbu';
+      b.style.cssText='position:fixed;bottom:72px;right:16px;z-index:9998;'+
+        'background:rgba(10,22,40,.85);border:1px solid rgba(255,255,255,.15);'+
+        'border-radius:8px;padding:6px 10px;font-size:1rem;cursor:pointer;'+
+        'opacity:0.45;transition:opacity .2s;color:#fff;line-height:1;';
+      b.onclick=_toggle;
+      document.body.appendChild(b);
+    }
+    var eb=document.getElementById('hub-music-btn');
+    if(eb) eb.onclick=_toggle;
+    try{ if(localStorage.getItem('appiq_music')==='on') _start(); }catch(e){}
+  });
+
+  window.addEventListener('beforeunload',function(){
+    if(_audio&&!_audio.paused) try{localStorage.setItem('appiq_music_pos',String(_audio.currentTime));}catch(e){}
+  });
+})();
