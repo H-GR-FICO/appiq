@@ -422,18 +422,15 @@
 
   window.startApp=function(lang){
     _appStarted=true;
+    _overlayDone=true;
     try{ if(window.I18n&&I18n.setLang) I18n.setLang(lang); }catch(e){}
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
-    // Overlay: okamžitě skrýt (display:none), žádná závislost na I18n
     var ov=document.getElementById('welcomeOverlay');
-    if(ov){ ov.style.transition='opacity 0.3s'; ov.style.opacity='0'; setTimeout(function(){ ov.style.display='none'; },310); }
-    setTimeout(function(){
-      _overlayDone=true;
-      if(_versData&&!_versData.error) renderAll(_versData);
-      else if(_versData&&_versData.error) showError(_versData.error);
-    },320);
+    if(ov) ov.style.display='none';
+    if(_versData&&!_versData.error) renderAll(_versData);
+    else if(_versData&&_versData.error) try{ showError(_versData.error); }catch(e){}
   };
 
   window.switchLang=function(lang){
