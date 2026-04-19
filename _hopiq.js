@@ -215,17 +215,12 @@ Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (z
 // ── AppIQ Background Music — perzistentní napříč Studio centry ───────────────
 (function(){
   var _p = window.location.pathname;
-  // Pouze na Studio stránkách; vynechat prezentace s vlastním audiem
+  // Vynechat stránky s vlastním audiem
   if(_p.indexOf('PORTAL_PRESENTATION')>=0 || _p.indexOf('PERSONAL_PITCH')>=0) return;
-  var _devMarker = '/HOPI_AppIQ_WebPage/Development/';
-  var _devIdx = _p.indexOf(_devMarker);
-  if(_devIdx < 0) return;
 
-  // Relativní cesta k _audio/ dle hloubky zanořeni pod Development/
-  var _afterDev = _p.substring(_devIdx + _devMarker.length);
-  var _depth = _afterDev.split('/').length - 1;
-  var _prefix = '';
-  for(var i=0;i<_depth;i++) _prefix += '../';
+  // Relativní cesta k _audio/ — stejná logika jako _hopiq.css (depth-based)
+  var _depth = (_p.match(/\//g)||[]).length - 1;
+  var _prefix = _depth <= 1 ? '' : Array(_depth).join('../');
   var _src = _prefix + '_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
 
   var _audio = null, _playing = false;
