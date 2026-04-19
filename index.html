@@ -719,7 +719,7 @@
     var bt=st.byType||{}; Object.keys(bt).sort().forEach(function(e){h+='<div class="gprot-chip"><span>'+esc(e)+'</span>'+esc(bt[e])+'</div>';});
     h+='</div></div>';
     var vf=d.verify||{}; var ck=vf.checks||[];
-    h+='<div class="gprot-sec"><div class="gprot-sec-hdr">'+(vf.failed===0?'\u2705':'\u26a0\ufe0f')+' Verify ('+esc(vf.passed||0)+'/'+(+(vf.passed||0)++(vf.failed||0))+' OK)</div><div class="gprot-verify">';
+    h+='<div class="gprot-sec"><div class="gprot-sec-hdr">'+(vf.failed===0?'\u2705':'\u26a0\ufe0f')+' Verify ('+esc(vf.passed||0)+'/'+((vf.passed||0)+(vf.failed||0))+' OK)</div><div class="gprot-verify">';
     ck.forEach(function(c){h+='<div class="gprot-vi '+(c.ok?'ok':'fail')+'">'+(c.ok?'\u2713':'\u2717')+' '+esc(c.file)+'</div>';});
     h+='</div></div>';
     var df=d.diff||{}; var ad=df.added||[],rm=df.removed||[],ch=df.changed||[];
