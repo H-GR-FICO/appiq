@@ -523,7 +523,8 @@
     spawnSparks(el, lvl===5?28:20, true);
 
     // MP3 sound
-    setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
+    var gladiator='_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
+    setTimeout(function(){ playMp3Sound(lvl===5?5500:4000, lvl===4?gladiator:null); },300);
 
     // Bez auto-dismiss — uživatel klikne sám
   }
@@ -574,9 +575,10 @@
   };
 
   // ── MP3 Sound ──────────────────────────────────────────────────────
-  function playMp3Sound(duration){
+  function playMp3Sound(duration,track){
     if(_bgAudio){_bgAudio.pause();_bgAudio=null;}
-    var audio=new Audio('_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3');
+    var src=track||'_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
+    var audio=new Audio(src);
     audio.volume=0;
     _bgAudio=audio;
     audio.play().then(function(){
