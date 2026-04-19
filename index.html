@@ -421,7 +421,7 @@
 <script>
 (function(){
   'use strict';
-  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null;
+  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null, _musicPlaying=false;
 
   // Preload versions.json
   fetch('versions.json?_='+Date.now())
@@ -624,15 +624,16 @@
     try{ localStorage.setItem('appiq_music_vs','on'); localStorage.setItem('appiq_music','on'); }catch(e){}
   }
   function toggleBgMusic(){
-    if(_bgAudio&&!_bgAudio.paused){
+    if(_musicPlaying){
+      _musicPlaying=false;
       stopMp3Sound();
       try{localStorage.setItem('appiq_music_vs','off');}catch(e){}
-      var btn=document.getElementById('music-toggle');
-      if(btn){btn.textContent='🔇';btn.style.opacity='0.45';btn.title='Zapnout hudbu';}
     } else {
+      _musicPlaying=true;
       playMp3Loop();
       try{localStorage.setItem('appiq_music_vs','on'); localStorage.setItem('appiq_music','on'); }catch(e){}
     }
+    updateMusicBtn();
   }
   // Před opuštěním stránky ulož pozici skladby pro plynulý přechod na Studio Hub
   window.addEventListener('beforeunload',function(){
@@ -643,10 +644,9 @@
   function updateMusicBtn(){
     var btn=document.getElementById('music-toggle');
     if(!btn) return;
-    var on=_bgAudio&&!_bgAudio.paused;
-    btn.textContent=on?'🔊':'🔇';
-    btn.title=on?'Ztlumit hudbu':'Zapnout hudbu';
-    btn.style.opacity=on?'1':'0.45';
+    btn.textContent=_musicPlaying?'🔊':'🔇';
+    btn.title=_musicPlaying?'Ztlumit hudbu':'Zapnout hudbu';
+    btn.style.opacity=_musicPlaying?'1':'0.45';
   }
 
   // ── MP3 Sound ──────────────────────────────────────────────────────
@@ -656,12 +656,12 @@
     if(audio!==_bgAudio){ if(_bgAudio) _bgAudio.pause(); _bgAudio=audio; }
     audio.loop=true; audio.volume=0; audio.currentTime=0;
     audio.play().then(function(){
-      updateMusicBtn();
+      _musicPlaying=true; updateMusicBtn();
       var fi=setInterval(function(){
         if(audio.volume<0.75){audio.volume=Math.min(0.75,audio.volume+0.05);}
         else clearInterval(fi);
       },40);
-    }).catch(function(){ updateMusicBtn(); if(_audioCtx) playSoundForLevel(_audioCtx,4); });
+    }).catch(function(){ _musicPlaying=false; updateMusicBtn(); if(_audioCtx) playSoundForLevel(_audioCtx,4); });
   }
   function stopMp3Sound(){
     if(!_bgAudio) return;
