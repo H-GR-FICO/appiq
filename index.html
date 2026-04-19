@@ -451,7 +451,7 @@
   function renderAll(data){
     try{ renderStatusBar(data); }catch(e){}
     try{ renderPromoBanner(data); }catch(e){}
-    render(data);
+    try{ render(data); }catch(e){ document.getElementById('content').innerHTML='<div class="error">Chyba: '+String(e)+'</div>'; }
   }
 
   function renderStatusBar(data){
@@ -521,8 +521,8 @@
     // MP3 sound
     setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
 
-    // Auto-collapse after 2.8s
-    setTimeout(dismissFull, 2800);
+    // Auto-collapse after 1.5s
+    setTimeout(dismissFull, 1500);
   }
 
   function renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta){
@@ -615,7 +615,7 @@
 
   // ── Content render ─────────────────────────────────────────────────
   function render(data){
-    var t=function(k,fb){return I18n.t(k)||fb;};
+    var t=function(k,fb){try{return (window.I18n&&I18n.t)?I18n.t(k)||fb:fb;}catch(e){return fb;}};
     _changesData={};
     var versions=(data.versions||[]).slice();
     versions.sort(function(a,b){return b.version>a.version?1:-1;});
