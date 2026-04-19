@@ -99,20 +99,24 @@
     .pf-l3 { background:radial-gradient(ellipse at 50% 35%,#003d15 0%,#0d1117 70%); }
     .pf-l3 .pf-label { background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.4); }
     .pf-l3 .pf-cta   { background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.4); }
-    /* Level 4 full — BOMBA */
-    .pf-l4 { background:radial-gradient(ellipse at 50% 30%,#4a1500 0%,#1a0800 55%,#0d0500 100%); }
-    .pf-l4 .pf-icon  { animation:pf-bounce 0.38s ease-in-out infinite alternate; }
-    .pf-l4 .pf-label { background:rgba(240,136,62,.15); color:#f0883e; border:1px solid rgba(240,136,62,.5); }
-    .pf-l4 .pf-cta   { background:rgba(240,136,62,.2); color:#f0883e; border:1px solid rgba(240,136,62,.5); }
-    .pf-l4 { animation:pf-shake 0.45s ease 0.3s 2; }
-    @keyframes pf-shake {
-      0%,100%{transform:translate(0,0)scaleY(1)}
-      20%{transform:translate(-8px,3px)scaleY(1)}
-      40%{transform:translate(8px,-4px)scaleY(1)}
-      60%{transform:translate(-5px,4px)scaleY(1)}
-      80%{transform:translate(5px,-3px)scaleY(1)}
-    }
-    @keyframes pf-bounce { from{transform:scale(1)rotate(-8deg)} to{transform:scale(1.2)rotate(8deg)} }
+    /* Level 4 full — CINEMATIC */
+    .pf-l4 { background:radial-gradient(ellipse at 50% 35%,#001a30 0%,#000d1a 60%,#000508 100%); overflow:hidden; }
+    .pf-l4::before { content:''; position:absolute; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent 0%,rgba(0,188,212,.7) 50%,transparent 100%);
+      animation:pf-scan 3.5s ease-in-out infinite; top:0; pointer-events:none; }
+    @keyframes pf-scan { 0%{top:0;opacity:0} 8%{opacity:1} 92%{opacity:1} 100%{top:100%;opacity:0} }
+    .pf-l4 .pf-label { background:rgba(0,188,212,.1); color:var(--accent); border:1px solid rgba(0,188,212,.3); letter-spacing:4px; }
+    .pf-l4 .pf-cta   { background:rgba(0,188,212,.1); color:var(--accent); border:1px solid rgba(0,188,212,.35); cursor:pointer; font-family:inherit; }
+    .pf-l4 .pf-cta:hover { background:rgba(0,188,212,.22); }
+    /* Orbital icon */
+    .pf-orb { width:110px; height:110px; margin:0 auto; }
+    .pf-orb svg { width:100%; height:100%; overflow:visible; }
+    .pf-orb-r1 { animation:orb-spin 3.5s linear infinite; transform-origin:55px 55px; }
+    .pf-orb-r2 { animation:orb-spin 6s linear infinite reverse; transform-origin:55px 55px; }
+    .pf-orb-r3 { animation:orb-spin 10s linear infinite; transform-origin:55px 55px; }
+    .pf-orb-dot { animation:orb-pulse 2s ease-in-out infinite; transform-origin:55px 55px; }
+    @keyframes orb-spin { from{stroke-dashoffset:0} to{stroke-dashoffset:-300} }
+    @keyframes orb-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
     /* Level 5 full — SVĚT */
     .pf-l5 { background:radial-gradient(ellipse at 50% 30%,#500000 0%,#200800 55%,#0d0300 100%); }
     .pf-l5 .pf-icon  { animation:pf-quake 0.3s ease-in-out infinite; }
@@ -492,15 +496,18 @@
 
   function showPromoFullscreen(lvl,text,mainUrl,isEn,meta){
     var label=isEn?meta.en:meta.cs;
-    var ctaLabel=isEn?'See what\'s new →':'Co je nového →';
+    var ctaLabel=isEn?'Explore versions ↓':'Prozkoumat verze ↓';
     var el=document.createElement('div');
     el.className='promo-full pf-l'+lvl;
+    var iconHtml= (lvl===4||lvl===5)
+      ? '<div class="pf-orb"><svg viewBox="0 0 110 110"><circle cx="55" cy="55" r="18" fill="none" stroke="#00bcd4" stroke-width="1.5" stroke-dasharray="28 84" class="pf-orb-r1"/><circle cx="55" cy="55" r="34" fill="none" stroke="#00bcd4" stroke-width="1" opacity=".5" stroke-dasharray="53 160" class="pf-orb-r2"/><circle cx="55" cy="55" r="48" fill="none" stroke="#00bcd4" stroke-width=".6" opacity=".25" stroke-dasharray="75 225" class="pf-orb-r3"/><circle cx="55" cy="55" r="5" fill="#00bcd4" class="pf-orb-dot"/></svg></div>'
+      : '<div class="pf-icon">'+meta.icon+'</div>';
     el.innerHTML=
-      '<div class="pf-icon">'+meta.icon+'</div>'+
+      iconHtml+
       '<div class="pf-label">'+esc(label)+'</div>'+
       '<div class="pf-text">'+esc(text)+'</div>'+
-      (mainUrl?'<a href="'+esc(mainUrl)+'" class="pf-cta pf-cta-main" onclick="event.stopPropagation()">'+ctaLabel+'</a>':'')+
-      '<div class="pf-skip">'+(isEn?'click anywhere to skip':'kliknutím kamkoliv přeskočit')+'</div>';
+      '<button class="pf-cta">'+ctaLabel+'</button>'+
+      '<div class="pf-skip">'+(isEn?'click anywhere to continue':'kliknutím kamkoliv pokračovat')+'</div>';
     document.body.appendChild(el);
 
     // Klik kdekoliv na fullscreen → přeskočit na small banner (ne CTA tlačítko)
