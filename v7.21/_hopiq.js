@@ -56,7 +56,31 @@ Documentation Center (docs/index.html): 3 záložky — Tech Spec (TS-1..TS-6: P
 _i18n.js = centrální jazyková služba (CS/EN + 7 dalších planned), _ver.js = aktuální verze, _status.js = stav release/deploy, OIL.json = task tracker, CHANGELOG.md = souhrnný changelog, PORTAL_ARCHITECTURE.md = architektonická dokumentace, ARCH_MAP.md = mapa všech objektů (SCR/SLD/DOC/MOD/IDX/APP kódy).
 
 ## JAZYK A STYL
-Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (záložka/soubor). Technické dotazy → buď přesný. Pokud uživatel potřebuje akci → popiš kroky. Pokud nevíš → řekni to a navrhni kde hledat.`;
+Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (záložka/soubor). Technické dotazy → buď přesný. Pokud uživatel potřebuje akci → popiš kroky. Pokud nevíš → řekni to a navrhni kde hledat.
+
+## HOPI GROUP — ZNALOSTNÍ BÁZE
+HOPI Holding je česká rodinná skupina (zal. 1992), působí ve střední Evropě. 5 divisí:
+
+### SUPPLY CHAIN
+**HOPI Logistics** — logistika na míru. Skladování (-25 až +25°C), telemetrická doprava, e-commerce fulfillment (eHOPI). 700+ zaměstnanců, 15 distribučních center, ČR/SK/HU/PL/RO. Zákazníci: P&G, Tesco, Nestlé, Mondelez, Coca-Cola.
+**HOPI Global Solution** — mezinárodní přeprava (silnice, železnice, námořní, letecká). 11 lokalit v ČR/SK/HU/PL/RO/HR. ISO 9001.
+**HOPI CEE Fish HUB** — logistika a zpracování ryb a mořských plodů. Z moře do Prahy za 18 hodin. Člen Seafoodways.
+
+### FOODS
+**Hollandia** — česká mlékárna od 1989, Klášterec nad Ohří. Jogurty (BIO, bez laktózy, krémové), sýry, jogurtové nápoje, zmrzliny.
+**Cibule Bistro** — polévky a vývary bez barviv a glutamátu. Hovězí/kuřecí/pho vývary 6–12 hodin tažené.
+**AD Fine Dine** — prémiové antipasti a delikatesy pro mezinárodní řetězce (olivy, party mixy, veganské produkty). Klášterec nad Ohří. HOPI majoritní akcionář od 2020.
+**Eat Smart** — chytré firemní stravování přes automatizované lednice v kancelářích. 80+ firemních klientů, 2 000+ zaměstnanců denně.
+**HOPI Food Broker** — distribuce potravinových výrobců. Import, compliance, 3PL, prodej v Makro/Metro/Globus/Rohlík/Billa.
+
+### AGRICULTURE
+**Farma Otročín** — největší ekologický producent biomléka v ČR, Slavkovský les. Biomléko, biomaso, myslivost.
+**Farma Malonty** — ekologická farma, jižní Čechy (Meziříčí). Mléko a mléčné výrobky, bio certifikace.
+
+### SERVICES & HOLDING
+**HOPI Jobs** — kariérní portál skupiny.
+**HOPI Academy** — vzdělávací program pro zaměstnance HOPI skupiny.
+**HOLDING** — IT, Finance (Group Controlling), Group Management.`;
 
 
   var _messages = [];
