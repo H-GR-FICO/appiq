@@ -556,6 +556,7 @@
     var _dismissed=false;
     function dismissFull(){
       if(_dismissed) return; _dismissed=true;
+      stopMp3Sound(); // fade out při odchodu z promo
       el.classList.add('collapsing');
       setTimeout(function(){ if(el.parentNode) el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta); },650);
     }
@@ -564,8 +565,8 @@
     // Sparks
     spawnSparks(el, lvl===5?28:20, true);
 
-    // MP3 sound — bez setTimeout (pre-unlocked v startApp, delay zbytečný)
-    playMp3Sound(lvl===5?5500:4000);
+    // MP3 sound — loop dokud uživatel neodklikne promo
+    playMp3Loop();
 
     // Bez auto-dismiss — uživatel klikne sám
   }
@@ -616,6 +617,26 @@
   };
 
   // ── MP3 Sound ──────────────────────────────────────────────────────
+  function playMp3Loop(){
+    var src='_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
+    var audio=(_bgAudio&&_bgAudio.src&&_bgAudio.src.indexOf('rubyzephyr')>=0)?_bgAudio:new Audio(src);
+    if(audio!==_bgAudio){ if(_bgAudio) _bgAudio.pause(); _bgAudio=audio; }
+    audio.loop=true; audio.volume=0; audio.currentTime=0;
+    audio.play().then(function(){
+      var fi=setInterval(function(){
+        if(audio.volume<0.75){audio.volume=Math.min(0.75,audio.volume+0.05);}
+        else clearInterval(fi);
+      },40);
+    }).catch(function(){ if(_audioCtx) playSoundForLevel(_audioCtx,4); });
+  }
+  function stopMp3Sound(){
+    if(!_bgAudio) return;
+    var audio=_bgAudio;
+    var fo=setInterval(function(){
+      if(audio.volume>0.03){audio.volume=Math.max(0,audio.volume-0.05);}
+      else{audio.pause();audio.loop=false;clearInterval(fo);if(_bgAudio===audio)_bgAudio=null;}
+    },40);
+  }
   function playMp3Sound(duration,track){
     // Použij pre-unlocknutý element pokud existuje (iOS autoplay policy)
     var src=track||'_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
