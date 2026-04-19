@@ -1349,10 +1349,23 @@ function savePAT(){
   var val=document.getElementById('patInput').value.trim();
   var st=document.getElementById('patStatus');
   if(!val){st.className='plat-status plat-status-err';st.textContent='Token nesmí být prázdný.';return;}
-  localStorage.setItem('appiq_gh_pat',val);
-  document.getElementById('patInput').value='';
-  st.className='plat-status plat-status-ok';
-  st.innerHTML='&#10003; Token uložen. Z bezpečnostních důvodů ho nezobrazuji.';
+  st.className='plat-status'; st.textContent='Ověřuji token…';
+  fetch('https://api.github.com/user',{headers:{'Authorization':'token '+val,'Accept':'application/vnd.github.v3+json'}})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,status:r.status,data:d};});})
+    .then(function(res){
+      if(res.ok){
+        localStorage.setItem('appiq_gh_pat',val);
+        document.getElementById('patInput').value='';
+        st.className='plat-status plat-status-ok';
+        st.innerHTML='&#10003; Token platný — uložen jako <strong>'+res.data.login+'</strong>.';
+      } else {
+        st.className='plat-status plat-status-err';
+        st.textContent='Chyba '+res.status+': '+(res.data.message||'Neplatný token')+'. Token NEBYL uložen.';
+      }
+    }).catch(function(e){
+      st.className='plat-status plat-status-err';
+      st.textContent='Síťová chyba: '+e.message;
+    });
 }
 
 function clearPAT(){
