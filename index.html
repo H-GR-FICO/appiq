@@ -624,10 +624,24 @@
     updateMusicBtn();
   }
   function toggleBgMusic(){
-    if(_bgAudio&&!_bgAudio.paused){ stopMp3Sound(); try{localStorage.setItem('appiq_music','off');}catch(e){} }
-    else { playMp3Loop(); try{localStorage.setItem('appiq_music','on');}catch(e){} }
-    setTimeout(updateMusicBtn, 200);
+    if(_bgAudio&&!_bgAudio.paused){
+      stopMp3Sound();
+      try{localStorage.setItem('appiq_music','off');}catch(e){}
+      // Aktualizuj button okamžitě — fade trvá 600ms, nelze čekat
+      var btn=document.getElementById('music-toggle');
+      if(btn){btn.textContent='🔇';btn.style.opacity='0.45';btn.title='Zapnout hudbu';}
+    } else {
+      playMp3Loop();
+      try{localStorage.setItem('appiq_music','on');}catch(e){}
+      setTimeout(updateMusicBtn,200);
+    }
   }
+  // Před opuštěním stránky ulož pozici skladby pro plynulý přechod na Studio Hub
+  window.addEventListener('beforeunload',function(){
+    if(_bgAudio&&!_bgAudio.paused){
+      try{localStorage.setItem('appiq_music_pos',String(_bgAudio.currentTime));}catch(e){}
+    }
+  });
   function updateMusicBtn(){
     var btn=document.getElementById('music-toggle');
     if(!btn) return;

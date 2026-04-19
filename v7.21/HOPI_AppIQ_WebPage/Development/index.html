@@ -479,8 +479,15 @@ setTimeout(loadMaintenanceStatus,400);
   }
 
   function hubStartMusic(){
-    if(!_hubAudio){ _hubAudio=new Audio(SRC); _hubAudio.loop=true; _hubAudio.volume=0; }
-    _hubAudio.currentTime=0;
+    if(!_hubAudio){
+      _hubAudio=new Audio(SRC); _hubAudio.loop=true; _hubAudio.volume=0;
+      // Obnov pozici z version selectoru pro plynulý přechod
+      try{
+        var pos=parseFloat(localStorage.getItem('appiq_music_pos'));
+        if(pos>0){_hubAudio.currentTime=pos;}
+        localStorage.removeItem('appiq_music_pos');
+      }catch(e){}
+    }
     _hubAudio.play().then(function(){
       _hubPlaying=true;
       var fi=setInterval(function(){
