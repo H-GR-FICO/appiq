@@ -359,8 +359,8 @@
     <div class="wc-headline">Ready for AI?</div>
     <div class="wc-sub">Vyberte jazyk &nbsp;·&nbsp; Select language</div>
     <div class="wc-lang-btns">
-      <button class="wc-lang-btn" onclick="startApp('cs')"><span class="wc-lang-cc wc-cc-cs">CZ</span> Česky</button>
-      <button class="wc-lang-btn" onclick="startApp('en')"><span class="wc-lang-cc wc-cc-en">EN</span> English</button>
+      <button class="wc-lang-btn" onclick="document.getElementById('welcomeOverlay').style.display='none';if(window.startApp)window.startApp('cs')"><span class="wc-lang-cc wc-cc-cs">CZ</span> Česky</button>
+      <button class="wc-lang-btn" onclick="document.getElementById('welcomeOverlay').style.display='none';if(window.startApp)window.startApp('en')"><span class="wc-lang-cc wc-cc-en">EN</span> English</button>
     </div>
     <div class="wc-ver-hint" id="wcVerHint"></div>
   </div>
