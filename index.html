@@ -379,28 +379,32 @@
 <script>
 (function(){
   'use strict';
-  var _versData=null, _changesData={}, _appStarted=false, _audioCtx=null, _bgAudio=null;
+  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null;
 
   // Preload versions.json
   fetch('versions.json?_='+Date.now())
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(d){
       _versData=d;
-      if(d.latest) document.getElementById('wcVerHint').textContent=d.latest;
-      if(_appStarted) renderAll(d);
+      if(d.latest){var h=document.getElementById('wcVerHint');if(h)h.textContent=d.latest;}
+      if(_overlayDone) renderAll(d);
     })
-    .catch(function(e){ _versData={error:e.message}; if(_appStarted) showError(e.message); });
+    .catch(function(e){ _versData={error:e.message}; if(_overlayDone) showError(e.message); });
 
   window.startApp=function(lang){
     _appStarted=true;
     I18n.setLang(lang); updateLangBtns(lang);
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
-    if(_audioCtx) soundWelcome(_audioCtx);
+    if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
     var ov=document.getElementById('welcomeOverlay');
     ov.classList.add('hiding');
-    setTimeout(function(){ov.style.display='none';},500);
-    if(_versData&&!_versData.error) renderAll(_versData);
-    else if(_versData&&_versData.error) showError(_versData.error);
+    setTimeout(function(){
+      ov.style.display='none';
+      _overlayDone=true;
+      if(_versData&&!_versData.error) renderAll(_versData);
+      else if(_versData&&_versData.error) showError(_versData.error);
+      // pokud _versData je null, fetch handler zavolá renderAll až doběhne
+    },500);
   };
 
   window.switchLang=function(lang){
@@ -419,7 +423,6 @@
     renderStatusBar(data);
     renderPromoBanner(data);
     render(data);
-    I18n.applyDOM(document.body);
   }
 
   function renderStatusBar(data){
