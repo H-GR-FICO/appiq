@@ -129,6 +129,19 @@
     }
     @keyframes pf-glow-red { 0%,100%{box-shadow:0 0 6px rgba(248,81,73,.4)} 50%{box-shadow:0 0 20px rgba(248,81,73,.9),0 0 40px rgba(248,81,73,.4)} }
 
+    /* Maintenance overlay */
+    #maintenanceOverlay{position:fixed;inset:0;z-index:9999;background:#0d1117;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
+    .maint-logo-name{font-size:2rem;font-weight:900;letter-spacing:-0.5px;color:#e6edf3;}
+    .maint-logo-by{font-size:10px;font-weight:600;letter-spacing:3px;color:#484f58;text-transform:uppercase;margin-top:6px;}
+    .maint-divider{width:40px;height:2px;background:#007d32;margin:28px auto;border-radius:1px;}
+    .maint-title{font-size:1.25rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#e6edf3;margin-bottom:8px;}
+    .maint-msg{font-size:0.95rem;color:#8b949e;margin-bottom:6px;}
+    .maint-team{font-size:0.8rem;color:#484f58;}
+    .maint-sep{width:30px;height:1px;background:#30363d;margin:24px auto;}
+    .maint-en .maint-title{color:#8b949e;font-size:1.05rem;}
+    .maint-en .maint-msg{color:#484f58;}
+    .maint-en .maint-team{color:#30363d;}
+
     /* Sparks */
     .spark {
       position: absolute; width: 5px; height: 5px; border-radius: 50%;
@@ -449,7 +462,28 @@
     document.getElementById('content').innerHTML='<div class="error">'+(I18n.t('vs.error')||'Nelze načíst versions.json')+'<br><small style="opacity:.6">'+esc(msg)+'</small></div>';
   }
 
+  function showMaintenanceOverlay(){
+    var ov=document.createElement('div'); ov.id='maintenanceOverlay';
+    ov.innerHTML=
+      '<div class="maint-logo-name">HOPI <span style="color:#E8750A">App</span><span style="color:#007d32">IQ</span></div>'+
+      '<div class="maint-logo-by">by HOPI TECHNOLOGY</div>'+
+      '<div class="maint-divider"></div>'+
+      '<div class="maint-title">ÚDRŽBA SYSTÉMU</div>'+
+      '<div class="maint-msg">Stavte se později. Děkujeme za pochopení.</div>'+
+      '<div class="maint-team">Vývojový tým platformy AppIQ.</div>'+
+      '<div class="maint-sep"></div>'+
+      '<div class="maint-en">'+
+        '<div class="maint-title">SYSTEM MAINTENANCE</div>'+
+        '<div class="maint-msg">Please come back later. Thank you for your understanding.</div>'+
+        '<div class="maint-team">AppIQ Platform Development Team.</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+  }
+
   function renderAll(data){
+    if(data.maintenance && !localStorage.getItem('appiq_dev_bypass')){
+      showMaintenanceOverlay(); return;
+    }
     try{ renderStatusBar(data); }catch(e){}
     try{ renderPromoBanner(data); }catch(e){}
     try{ render(data); }catch(e){ document.getElementById('content').innerHTML='<div class="error">Chyba: '+String(e)+'</div>'; }

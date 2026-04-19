@@ -1,6 +1,7 @@
 ﻿{
   "latest": "v7.21",
   "updatedAt": "2026-04-19",
+  "maintenance": false,
   "versions": [
     {
         "version":  "v7.20",

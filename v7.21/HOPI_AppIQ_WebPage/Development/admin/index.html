@@ -85,6 +85,23 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;he
 .oil-settings-section{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#e6edf3;}
 .oil-settings-section h4{color:#f0883e;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:10px 0 6px;}
 .oil-settings-section h4:first-child{margin-top:0;}
+/* ── PLATFORM TAB ── */
+.plat-section{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:18px 20px;margin-bottom:16px;}
+.plat-section-title{font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:6px;}
+.plat-section-desc{font-size:12px;color:#8b949e;margin-bottom:14px;line-height:1.6;}
+.plat-form-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+.plat-input{flex:1;min-width:220px;background:#21262d;border:1px solid #30363d;border-radius:4px;padding:7px 12px;font-size:13px;color:#e6edf3;font-family:'Segoe UI',Arial,sans-serif;}
+.plat-btn{border:none;border-radius:4px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:background .15s;white-space:nowrap;}
+.plat-btn-save{background:#007d32;color:#fff;}.plat-btn-save:hover{background:#005a22;}
+.plat-btn-clear{background:#21262d;color:#8b949e;border:1px solid #30363d;}.plat-btn-clear:hover{background:#30363d;color:#e6edf3;}
+.plat-status{font-size:12px;margin-bottom:10px;min-height:18px;}
+.plat-status-ok{color:#3fb950;}.plat-status-err{color:#f85149;}
+.plat-help{font-size:11px;color:#484f58;line-height:1.7;}
+.plat-help code{background:#21262d;border-radius:3px;padding:1px 5px;font-family:Consolas,monospace;color:#79c0ff;font-size:10px;}
+.plat-bypass-row{display:flex;align-items:center;gap:12px;}
+.plat-bypass-badge{font-size:11px;font-weight:800;padding:3px 12px;border-radius:12px;letter-spacing:1px;}
+.bypass-off{background:#21262d;color:#484f58;border:1px solid #30363d;}
+.bypass-on{background:#0c2544;color:#79c0ff;border:1px solid rgba(121,192,255,.3);}
 .oil-set-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
 .oil-set-row label{cursor:pointer;font-size:13px;color:#e6edf3;}
 .oil-set-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#007d32;}
@@ -304,6 +321,7 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;he
   <button class="ac-tab" data-pane="release" onclick="acTab('release')" data-i18n="admin.tab.release">📦 Release &amp; Deploy</button>
   <button class="ac-tab" data-pane="lang" onclick="acTab('lang')" data-i18n="admin.tab.lang">🌐 Jazyky</button>
   <button class="ac-tab" data-pane="cap" onclick="acTab('cap')" data-i18n="admin.tab.capacity">📊 Kapacita</button>
+  <button class="ac-tab" data-pane="platform" onclick="acTab('platform')">🔐 Platforma</button>
 </div>
 
 <div class="ac-body">
@@ -470,6 +488,37 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;he
     </div>
   </div><!-- /pane-cap -->
 
+  <!-- TAB: Platforma -->
+  <div class="ac-pane" id="pane-platform">
+    <div class="oil-body" style="padding:20px 20px 40px;">
+
+      <div class="plat-section">
+        <div class="plat-section-title">&#128273; GitHub API Token</div>
+        <div class="plat-section-desc">Personal Access Token umožňuje Studio Hub přepínat Maintenance Mode přímo z prohlížeče bez terminálu. Token je uložen jen v tomto prohlížeči (localStorage).</div>
+        <div class="plat-form-row">
+          <input type="password" id="patInput" class="plat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+          <button class="plat-btn plat-btn-save" onclick="savePAT()">Uložit token</button>
+          <button class="plat-btn plat-btn-clear" onclick="clearPAT()">Smazat</button>
+        </div>
+        <div class="plat-status" id="patStatus"></div>
+        <div class="plat-help">
+          Jak získat token: <strong style="color:#e6edf3">GitHub.com</strong> → Settings → Developer settings →
+          Personal access tokens → <em>Tokens (classic)</em> → New token → scope: <code>repo</code> → Generate → zkopíruj sem.
+        </div>
+      </div>
+
+      <div class="plat-section">
+        <div class="plat-section-title">&#128083; Vývojářský přístup</div>
+        <div class="plat-section-desc">Tento prohlížeč obejde Maintenance overlay i když je zapnutý — ty vidíš normální stránku. Testuj pohled návštěvníka v anonymním okně <strong style="color:#e6edf3">Ctrl+Shift+N</strong>.</div>
+        <div class="plat-bypass-row">
+          <span class="plat-bypass-badge bypass-off" id="bypassBadge">OFF</span>
+          <button class="plat-btn plat-btn-save" id="bypassBtn" onclick="toggleBypass()">Aktivovat</button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /pane-platform -->
+
 </div><!-- /ac-body -->
 
 <!-- Archive Protocol Modal -->
@@ -497,6 +546,7 @@ function acTab(pane) {
   if (pane === 'release') loadStudioStatus();
   if (pane === 'lang') renderLangTab();
   if (pane === 'cap') renderCapTab();
+  if (pane === 'platform') initPlatformTab();
 }
 
 // ── CAPACITY TAB ──
@@ -1285,6 +1335,48 @@ function showToast(msg,isErr){
 // Load status on page load
 I18n.init();
 loadStudioStatus();
+
+// ── PLATFORM TAB ────────────────────────────────────────────────────
+function initPlatformTab(){
+  var saved=localStorage.getItem('appiq_gh_pat');
+  var st=document.getElementById('patStatus');
+  if(st) { st.className='plat-status '+(saved?'plat-status-ok':''); st.textContent=saved?'&#10003; Token je uložen v tomto prohlížeči.':''; }
+  renderBypassUI();
+}
+
+function savePAT(){
+  var val=document.getElementById('patInput').value.trim();
+  var st=document.getElementById('patStatus');
+  if(!val){st.className='plat-status plat-status-err';st.textContent='Token nesmí být prázdný.';return;}
+  localStorage.setItem('appiq_gh_pat',val);
+  document.getElementById('patInput').value='';
+  st.className='plat-status plat-status-ok';
+  st.innerHTML='&#10003; Token uložen. Z bezpečnostních důvodů ho nezobrazuji.';
+}
+
+function clearPAT(){
+  localStorage.removeItem('appiq_gh_pat');
+  document.getElementById('patInput').value='';
+  var st=document.getElementById('patStatus');
+  st.className='plat-status'; st.textContent='Token byl smazán.';
+}
+
+function toggleBypass(){
+  if(localStorage.getItem('appiq_dev_bypass')){
+    localStorage.removeItem('appiq_dev_bypass');
+  } else {
+    localStorage.setItem('appiq_dev_bypass','1');
+  }
+  renderBypassUI();
+}
+
+function renderBypassUI(){
+  var active=!!localStorage.getItem('appiq_dev_bypass');
+  var badge=document.getElementById('bypassBadge');
+  var btn=document.getElementById('bypassBtn');
+  if(badge){badge.className='plat-bypass-badge '+(active?'bypass-on':'bypass-off');badge.textContent=active?'ON — AKTIVNÍ':'OFF';}
+  if(btn){btn.textContent=active?'Deaktivovat':'Aktivovat';btn.className='plat-btn '+(active?'plat-btn-clear':'plat-btn-save');}
+}
 </script>
 <script src="../../../../_hopiq.js"></script>
 </body>

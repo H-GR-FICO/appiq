@@ -61,6 +61,22 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;mi
 .chip-active{background:#0d4429;color:#3fb950;border:1px solid #3fb95055;}
 .chip-stub{background:#2d0849;color:#d2a8ff;border:1px solid #d2a8ff55;}
 
+/* ── MAINTENANCE WIDGET ── */
+.maint-widget{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.maint-widget-label{font-size:14px;font-weight:700;color:#e6edf3;}
+.maint-badge{font-size:11px;font-weight:800;padding:3px 12px;border-radius:12px;letter-spacing:1px;}
+.maint-badge-off{background:#0d4429;color:#3fb950;border:1px solid rgba(63,185,80,.3);}
+.maint-badge-on{background:#3d0001;color:#f85149;border:1px solid rgba(248,81,73,.3);animation:maint-pulse 1.5s ease-in-out infinite;}
+@keyframes maint-pulse{0%,100%{opacity:1}50%{opacity:.65}}
+.maint-toggle-off{background:#b91c1c;color:#fff;border:none;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}
+.maint-toggle-off:hover{background:#991b1b;}
+.maint-toggle-on{background:#007d32;color:#fff;border:none;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .15s;}
+.maint-toggle-on:hover{background:#005a22;}
+.maint-toggle-dis{background:#21262d;color:#484f58;border:1px solid #30363d;border-radius:6px;padding:8px 20px;font-size:13px;font-weight:700;cursor:default;font-family:inherit;}
+.maint-note{font-size:11px;color:#484f58;width:100%;line-height:1.6;}
+.maint-note-warn{color:#f0883e;}
+.maint-note-ok{color:#3fb950;}
+
 /* ── STATUS PANEL ── */
 .hub-status{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .hub-stat-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;}
@@ -147,6 +163,17 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;mi
   <div class="hub-hero-title">&#128202; Studio Hub <span>&#9881;&#65039;</span></div>
   <div class="hub-hero-sub" data-i18n="hub.subtitle">HOPI AppIQ — Developer workspace · Standalone centra nahrazují overlay panel</div>
   <div class="hub-hero-stamp" id="hubStamp" data-i18n="hub.stamp.loading">Načítám stav…</div>
+</div>
+
+<div class="hub-section">
+  <div class="hub-section-hdr">&#128274; Přístup na platformu</div>
+  <div class="maint-widget" id="maintWidget">
+    <span class="maint-widget-label">Maintenance Mode</span>
+    <span class="maint-badge maint-badge-off" id="maintBadge">Načítám…</span>
+    <div style="flex:1;"></div>
+    <button class="maint-toggle-dis" id="maintToggleBtn" onclick="toggleMaintenance()" disabled>Načítám…</button>
+    <div class="maint-note" id="maintNote"></div>
+  </div>
 </div>
 
 <div class="hub-section">
@@ -358,6 +385,73 @@ renderOILMini=function(d){_lastOilData=d;_origRenderOILMini(d);};
 
 I18n.init();
 loadAll();
+
+// ── MAINTENANCE TOGGLE (GitHub API) ─────────────────────────────────
+var GH_REPO='H-GR-FICO/appiq', GH_FILE='versions.json';
+function b64dec(s){return decodeURIComponent(escape(atob(s.replace(/\n/g,''))));}
+function b64enc(s){return btoa(unescape(encodeURIComponent(s)));}
+
+function loadMaintenanceStatus(){
+  var badge=document.getElementById('maintBadge');
+  var btn=document.getElementById('maintToggleBtn');
+  var note=document.getElementById('maintNote');
+  var token=localStorage.getItem('appiq_gh_pat');
+  if(!token){
+    badge.className='maint-badge maint-badge-off'; badge.textContent='Bez tokenu';
+    btn.className='maint-toggle-dis'; btn.textContent='Nastav token v Admin Center → Platforma'; btn.disabled=true;
+    note.innerHTML='<span class="maint-note-warn">&#9888; GitHub token není nastaven. Admin Center → záložka Platforma.</span>';
+    return;
+  }
+  badge.textContent='Načítám…';
+  fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE,{
+    headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}
+  }).then(function(r){return r.json();}).then(function(d){
+    var content=JSON.parse(b64dec(d.content));
+    var on=!!content.maintenance;
+    badge.className='maint-badge '+(on?'maint-badge-on':'maint-badge-off');
+    badge.textContent=on?'ON — ZAPNUTO':'OFF — vypnuto';
+    btn.className=on?'maint-toggle-on':'maint-toggle-off';
+    btn.textContent=on?'🔓 Vypnout maintenance':'🔒 Zapnout maintenance';
+    btn.disabled=false;
+    note.className='maint-note'+(on?' maint-note-warn':'');
+    note.textContent=on?'⚠ Návštěvníci vidí ÚDRŽBA SYSTÉMU. Rebuild GitHub Pages ~1 min.':'Stránka je veřejně přístupná. Rebuild po přepnutí ~1 min.';
+  }).catch(function(e){
+    badge.textContent='Chyba'; note.textContent='Nelze načíst stav: '+e.message;
+  });
+}
+
+function toggleMaintenance(){
+  var token=localStorage.getItem('appiq_gh_pat');
+  if(!token){alert('Nastav GitHub token v Admin Center → záložka Platforma.');return;}
+  var btn=document.getElementById('maintToggleBtn');
+  var note=document.getElementById('maintNote');
+  btn.disabled=true; btn.textContent='Přepínám…';
+  fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE,{
+    headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}
+  }).then(function(r){return r.json();}).then(function(fd){
+    var content=JSON.parse(b64dec(fd.content));
+    content.maintenance=!content.maintenance;
+    var msg=content.maintenance?'Maintenance mode ON [AppIQ Studio]':'Maintenance mode OFF [AppIQ Studio]';
+    return fetch('https://api.github.com/repos/'+GH_REPO+'/contents/'+GH_FILE,{
+      method:'PUT',
+      headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'},
+      body:JSON.stringify({message:msg,content:b64enc(JSON.stringify(content,null,2)),sha:fd.sha})
+    });
+  }).then(function(r){return r.json();}).then(function(res){
+    if(res.content){
+      note.innerHTML='<span class="maint-note-ok">&#10003; Hotovo — GitHub Pages rebuild ~1 min.</span>';
+      setTimeout(loadMaintenanceStatus,1200);
+    } else {
+      note.textContent='Chyba API: '+(res.message||JSON.stringify(res));
+      btn.disabled=false; loadMaintenanceStatus();
+    }
+  }).catch(function(e){
+    note.textContent='Síťová chyba: '+e.message;
+    btn.disabled=false; loadMaintenanceStatus();
+  });
+}
+
+setTimeout(loadMaintenanceStatus,400);
 </script>
 <script src="../../../_hopiq.js"></script>
 </body>
