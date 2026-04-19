@@ -448,8 +448,6 @@
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
-    // Spustit hudbu v user gesture — _hm je z _hopiq.js (stejný systém jako Studio Hub)
-    try{ if(window._hm) _hm.start(); }catch(e){}
     var ov=document.getElementById('welcomeOverlay');
     if(ov) ov.style.display='none';
     if(_versData&&!_versData.error) renderAll(_versData);
