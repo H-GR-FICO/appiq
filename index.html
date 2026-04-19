@@ -422,7 +422,7 @@
 <script>
 (function(){
   'use strict';
-  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null, _musicPlaying=false, _promoFullDismissed=false;
+  var _versData=null, _changesData={}, _appStarted=false, _overlayDone=false, _audioCtx=null, _bgAudio=null, _musicEl=null, _promoFullDismissed=false;
 
   // Preload versions.json
   fetch('versions.json?_='+Date.now())
@@ -448,12 +448,12 @@
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
-    // Pre-unlock HTML5 audio během user gesture (iOS/Android autoplay policy)
+    // Pre-unlock music element během user gesture (iOS/Android autoplay policy)
     try{
-      var _unlock=new Audio('_audio/Gladiator - Now We Are Free Super Theme Song.mp3');
-      _unlock.volume=0;
-      var p=_unlock.play();
-      if(p&&p.then) p.then(function(){ _unlock.pause(); _unlock.currentTime=0; _bgAudio=_unlock; }).catch(function(){});
+      _musicEl=new Audio('_audio/Gladiator - Now We Are Free Super Theme Song.mp3');
+      _musicEl.loop=true; _musicEl.volume=0;
+      var _up=_musicEl.play();
+      if(_up&&_up.then) _up.then(function(){_musicEl.pause();_musicEl.currentTime=0;}).catch(function(){});
     }catch(e){}
     var ov=document.getElementById('welcomeOverlay');
     if(ov) ov.style.display='none';
@@ -617,62 +617,49 @@
   };
 
   // ── Background music ──────────────────────────────────────────────
-  // Vlastní klíč 'appiq_music_vs' — nezávislý na Studio klíči 'appiq_music'
+  // _musicEl = dedikovaný element pro smyčku; _bgAudio = jen pro promo one-shot zvuky
+  // toggleBgMusic() čte _musicEl.paused jako jediný zdroj pravdy — žádné async race conditions
   function startBgMusic(){
     var btn=document.getElementById('music-toggle');
     if(btn) btn.style.display='';
-    try{ if(localStorage.getItem('appiq_music_vs')==='off'){ updateMusicBtn(); return; } }catch(e){}
-    playMp3Loop();
+    try{ if(localStorage.getItem('appiq_music_vs')==='off'){ updateMusicBtn(); return; }}catch(e){}
+    if(!_musicEl){
+      _musicEl=new Audio('_audio/Gladiator - Now We Are Free Super Theme Song.mp3');
+      _musicEl.loop=true;
+    }
+    _musicEl.currentTime=0;
+    _musicEl.volume=0.7;
+    var p=_musicEl.play();
+    if(p&&p.then) p.then(function(){updateMusicBtn();}).catch(function(){updateMusicBtn();});
+    else updateMusicBtn();
     try{ localStorage.setItem('appiq_music_vs','on'); localStorage.setItem('appiq_music','on'); }catch(e){}
   }
   function toggleBgMusic(){
-    if(_musicPlaying){
-      _musicPlaying=false;
-      stopMp3Sound();
-      try{localStorage.setItem('appiq_music_vs','off');}catch(e){}
+    if(_musicEl && !_musicEl.paused){
+      _musicEl.pause();
+      _musicEl.currentTime=0;
+      try{ localStorage.setItem('appiq_music_vs','off'); }catch(e){}
+      updateMusicBtn();
     } else {
-      _musicPlaying=true;
-      playMp3Loop();
-      try{localStorage.setItem('appiq_music_vs','on'); localStorage.setItem('appiq_music','on'); }catch(e){}
+      startBgMusic();
     }
-    updateMusicBtn();
   }
   // Před opuštěním stránky ulož pozici skladby pro plynulý přechod na Studio Hub
   window.addEventListener('beforeunload',function(){
-    if(_bgAudio&&!_bgAudio.paused){
-      try{localStorage.setItem('appiq_music_pos',String(_bgAudio.currentTime));}catch(e){}
+    if(_musicEl&&!_musicEl.paused){
+      try{localStorage.setItem('appiq_music_pos',String(_musicEl.currentTime));}catch(e){}
     }
   });
   function updateMusicBtn(){
     var btn=document.getElementById('music-toggle');
     if(!btn) return;
-    btn.textContent=_musicPlaying?'🔊':'🔇';
-    btn.title=_musicPlaying?'Ztlumit hudbu':'Zapnout hudbu';
-    btn.style.opacity=_musicPlaying?'1':'0.45';
+    var on=(_musicEl&&!_musicEl.paused);
+    btn.textContent=on?'🔊':'🔇';
+    btn.title=on?'Ztlumit hudbu':'Zapnout hudbu';
+    btn.style.opacity=on?'1':'0.45';
   }
 
-  // ── MP3 Sound ──────────────────────────────────────────────────────
-  function playMp3Loop(){
-    var src='_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
-    var audio=(_bgAudio&&_bgAudio.src&&_bgAudio.src.indexOf('Gladiator')>=0)?_bgAudio:new Audio(src);
-    if(audio!==_bgAudio){ if(_bgAudio) _bgAudio.pause(); _bgAudio=audio; }
-    audio.loop=true; audio.volume=0; audio.currentTime=0;
-    audio.play().then(function(){
-      _musicPlaying=true; updateMusicBtn();
-      var fi=setInterval(function(){
-        if(audio.volume<0.75){audio.volume=Math.min(0.75,audio.volume+0.05);}
-        else clearInterval(fi);
-      },40);
-    }).catch(function(){ _musicPlaying=false; updateMusicBtn(); if(_audioCtx) playSoundForLevel(_audioCtx,4); });
-  }
-  function stopMp3Sound(){
-    if(!_bgAudio) return;
-    var audio=_bgAudio;
-    _bgAudio=null;
-    audio.pause();
-    audio.loop=false;
-    audio.volume=0;
-  }
+  // ── MP3 Sound (one-shot promo zvuky) ──────────────────────────────
   function playMp3Sound(duration,track){
     // Použij pre-unlocknutý element pokud existuje (iOS autoplay policy)
     var src=track||'_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
