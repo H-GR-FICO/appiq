@@ -260,13 +260,11 @@ Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (z
 
   function _stop(savePref){
     if(!_audio) return;
-    _playing=false; _updateBtn();
+    _playing=false;
+    _audio.pause();
+    _audio.volume=0;
     if(savePref) try{localStorage.setItem('appiq_music','off');}catch(e){}
-    var a=_audio;
-    var fo=setInterval(function(){
-      if(a.volume>0.03){a.volume=Math.max(0,a.volume-0.05);}
-      else{a.pause();clearInterval(fo);}
-    },40);
+    _updateBtn();
   }
 
   function _toggle(){
