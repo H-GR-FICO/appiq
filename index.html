@@ -445,6 +445,13 @@
     try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
+    // Pre-unlock HTML5 audio během user gesture (iOS/Android autoplay policy)
+    try{
+      var _unlock=new Audio('_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3');
+      _unlock.volume=0;
+      var p=_unlock.play();
+      if(p&&p.then) p.then(function(){ _unlock.pause(); _unlock.currentTime=0; _bgAudio=_unlock; }).catch(function(){});
+    }catch(e){}
     var ov=document.getElementById('welcomeOverlay');
     if(ov) ov.style.display='none';
     if(_versData&&!_versData.error) renderAll(_versData);
@@ -557,8 +564,8 @@
     // Sparks
     spawnSparks(el, lvl===5?28:20, true);
 
-    // MP3 sound
-    setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
+    // MP3 sound — bez setTimeout (pre-unlocked v startApp, delay zbytečný)
+    playMp3Sound(lvl===5?5500:4000);
 
     // Bez auto-dismiss — uživatel klikne sám
   }
@@ -610,11 +617,12 @@
 
   // ── MP3 Sound ──────────────────────────────────────────────────────
   function playMp3Sound(duration,track){
-    if(_bgAudio){_bgAudio.pause();_bgAudio=null;}
+    // Použij pre-unlocknutý element pokud existuje (iOS autoplay policy)
     var src=track||'_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
-    var audio=new Audio(src);
+    var audio=(_bgAudio&&_bgAudio.src&&_bgAudio.src.indexOf('rubyzephyr')>=0&&!track)?_bgAudio:new Audio(src);
+    if(audio!==_bgAudio){ if(_bgAudio){_bgAudio.pause();} _bgAudio=audio; }
     audio.volume=0;
-    _bgAudio=audio;
+    audio.currentTime=0;
     audio.play().then(function(){
       // Fade in
       var fi=setInterval(function(){
