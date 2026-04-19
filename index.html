@@ -66,6 +66,7 @@
     .pf-label { font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; padding:4px 16px; border-radius:20px; }
     .pf-text  { font-size:clamp(1.3rem,3vw,2rem); font-weight:700; color:#fff; max-width:680px; line-height:1.35; }
     .pf-cta   { font-size:0.9rem; font-weight:700; padding:10px 28px; border-radius:8px; text-decoration:none; margin-top:4px; display:inline-block; }
+    .pf-skip  { position:absolute; bottom:18px; right:22px; font-size:0.65rem; color:rgba(255,255,255,0.25); letter-spacing:0.5px; pointer-events:none; }
 
     /* Level 1 full */
     .pf-l1 { background:#0d1117; }
@@ -395,18 +396,18 @@
 
   window.startApp=function(lang){
     _appStarted=true;
-    I18n.setLang(lang); updateLangBtns(lang);
+    try{ if(window.I18n&&I18n.setLang) I18n.setLang(lang); }catch(e){}
+    try{ updateLangBtns(lang); }catch(e){}
     try{ _audioCtx=new(window.AudioContext||window.webkitAudioContext)(); }catch(e){}
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
+    // Overlay: okamžitě skrýt (display:none), žádná závislost na I18n
     var ov=document.getElementById('welcomeOverlay');
-    ov.classList.add('hiding');
+    if(ov){ ov.style.transition='opacity 0.3s'; ov.style.opacity='0'; setTimeout(function(){ ov.style.display='none'; },310); }
     setTimeout(function(){
-      ov.style.display='none';
       _overlayDone=true;
       if(_versData&&!_versData.error) renderAll(_versData);
       else if(_versData&&_versData.error) showError(_versData.error);
-      // pokud _versData je null, fetch handler zavolá renderAll až doběhne
-    },500);
+    },320);
   };
 
   window.switchLang=function(lang){
@@ -475,23 +476,27 @@
       '<div class="pf-icon">'+meta.icon+'</div>'+
       '<div class="pf-label">'+esc(label)+'</div>'+
       '<div class="pf-text">'+esc(text)+'</div>'+
-      (mainUrl?'<a href="'+esc(mainUrl)+'" class="pf-cta">'+ctaLabel+'</a>':'');
+      (mainUrl?'<a href="'+esc(mainUrl)+'" class="pf-cta" onclick="event.stopPropagation()">'+ctaLabel+'</a>':'')+
+      '<div class="pf-skip">'+(isEn?'tap to skip':'kliknutím přeskočit')+'</div>';
     document.body.appendChild(el);
+
+    // Klik kdekoliv na fullscreen → přeskočit na small banner
+    var _dismissed=false;
+    function dismissFull(){
+      if(_dismissed) return; _dismissed=true;
+      el.classList.add('collapsing');
+      setTimeout(function(){ if(el.parentNode) el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta); },650);
+    }
+    el.addEventListener('click', dismissFull);
 
     // Sparks
     spawnSparks(el, lvl===5?28:20, true);
 
-    // MP3 sound (start slightly after fullscreen appears)
+    // MP3 sound
     setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
 
-    // Collapse after 2.8s
-    setTimeout(function(){
-      el.classList.add('collapsing');
-      setTimeout(function(){
-        el.remove();
-        renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta);
-      },700);
-    },2800);
+    // Auto-collapse after 2.8s
+    setTimeout(dismissFull, 2800);
   }
 
   function renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta){
