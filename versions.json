@@ -11,6 +11,14 @@
       "hubUrl": "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
       "pitchUrl": "v7.20/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
       "docsUrl": "v7.20/HOPI_AppIQ_WebPage/Development/docs/index.html"
+    },
+    {
+      "version": "v7.12",
+      "date": "2026-04-18",
+      "session": "v7.12-WebPage_20260418_0502",
+      "title": "Studio Architecture \u2014 snapshot p\u0159ed i18n (legacy)",
+      "presentationUrl": "PORTAL_PRESENTATION.html",
+      "pitchUrl": "PERSONAL_PITCH.html"
     }
   ]
 }
