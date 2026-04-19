@@ -449,7 +449,7 @@
     if(_audioCtx){ try{ soundWelcome(_audioCtx); }catch(e){} }
     // Pre-unlock HTML5 audio během user gesture (iOS/Android autoplay policy)
     try{
-      var _unlock=new Audio('_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3');
+      var _unlock=new Audio('_audio/Gladiator - Now We Are Free Super Theme Song.mp3');
       _unlock.volume=0;
       var p=_unlock.play();
       if(p&&p.then) p.then(function(){ _unlock.pause(); _unlock.currentTime=0; _bgAudio=_unlock; }).catch(function(){});
@@ -639,8 +639,8 @@
 
   // ── MP3 Sound ──────────────────────────────────────────────────────
   function playMp3Loop(){
-    var src='_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
-    var audio=(_bgAudio&&_bgAudio.src&&_bgAudio.src.indexOf('rubyzephyr')>=0)?_bgAudio:new Audio(src);
+    var src='_audio/Gladiator - Now We Are Free Super Theme Song.mp3';
+    var audio=(_bgAudio&&_bgAudio.src&&_bgAudio.src.indexOf('Gladiator')>=0)?_bgAudio:new Audio(src);
     if(audio!==_bgAudio){ if(_bgAudio) _bgAudio.pause(); _bgAudio=audio; }
     audio.loop=true; audio.volume=0; audio.currentTime=0;
     audio.play().then(function(){
