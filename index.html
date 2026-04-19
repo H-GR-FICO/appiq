@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HOPI AppIQ — Published Versions</title>
+  <link rel="stylesheet" href="_hopiq.css">
   <style>
     :root {
       --bg: #0d1117;
@@ -55,6 +56,29 @@
       color: var(--muted); border: 1px solid var(--border);
       padding: 3px 10px; border-radius: 20px;
     }
+
+    /* ── Status bar ─────────────────────────── */
+    #statusBar {
+      background: rgba(63,185,80,0.06);
+      border-bottom: 1px solid rgba(63,185,80,0.18);
+      padding: 7px 32px;
+      display: none;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+    #statusBar.visible { display: flex; }
+    .sb-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+      box-shadow: 0 0 6px rgba(63,185,80,0.6);
+    }
+    .sb-live { font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; color: var(--green); }
+    .sb-ver  { font-weight: 700; color: var(--text); }
+    .sb-sep  { color: var(--border); }
+    .sb-spacer { flex: 1; }
+    .sb-commit { font-family: Consolas, monospace; font-size: 0.68rem; color: var(--muted); }
 
     /* ── Main ───────────────────────────────── */
     main { flex: 1; max-width: 880px; margin: 0 auto; width: 100%; padding: 44px 24px 60px; }
@@ -124,6 +148,40 @@
       transition: color 0.15s, border-color 0.15s;
     }
     .vi-link:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ── Release notes feed ─────────────────── */
+    .rn-feed { display: flex; flex-direction: column; gap: 0; }
+    .rn-entry {
+      border-left: 2px solid var(--border);
+      padding: 0 0 32px 22px;
+      margin-left: 6px;
+      position: relative;
+    }
+    .rn-entry:last-child { padding-bottom: 0; border-left-color: transparent; }
+    .rn-entry::before {
+      content: '';
+      position: absolute; left: -5px; top: 4px;
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); border: 2px solid var(--bg);
+    }
+    .rn-entry.rn-latest::before { background: var(--green); box-shadow: 0 0 8px rgba(63,185,80,0.5); }
+    .rn-hdr { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .rn-ver  { font-size: 0.88rem; font-weight: 700; color: var(--accent); }
+    .rn-entry.rn-latest .rn-ver { color: var(--green); }
+    .rn-date  { font-size: 0.7rem; color: var(--muted); }
+    .rn-title { font-size: 0.78rem; color: var(--muted); }
+    .rn-latest-pill {
+      font-size: 0.6rem; font-weight: 700; letter-spacing: .8px;
+      background: rgba(63,185,80,0.12); border: 1px solid rgba(63,185,80,0.3);
+      color: var(--green); padding: 1px 8px; border-radius: 20px;
+    }
+    .rn-changes { display: flex; flex-direction: column; gap: 5px; }
+    .rn-change {
+      font-size: 0.78rem; color: var(--text);
+      padding-left: 14px; position: relative; line-height: 1.55;
+    }
+    .rn-change::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-weight: 700; }
+    .rn-no-changes { font-size: 0.75rem; color: var(--muted); font-style: italic; }
 
     /* ── States ─────────────────────────────── */
     .loading {
@@ -222,6 +280,7 @@
     /* ── Responsive ─────────────────────────── */
     @media (max-width: 600px) {
       header { padding: 14px 16px; }
+      #statusBar { padding: 6px 16px; gap: 8px; }
       main   { padding: 28px 16px 40px; }
       .latest-card { padding: 20px; }
       .latest-ver  { font-size: 1.7rem; }
@@ -246,6 +305,19 @@
     <div class="header-tag" data-i18n="vs.tag">VYDANÉ VERZE</div>
   </header>
 
+  <!-- Status Bar -->
+  <div id="statusBar">
+    <div class="sb-dot"></div>
+    <span class="sb-live">LIVE</span>
+    <span class="sb-ver" id="sbVer"></span>
+    <span class="sb-sep">·</span>
+    <span id="sbDate"></span>
+    <span class="sb-sep">·</span>
+    <span id="sbSession"></span>
+    <div class="sb-spacer"></div>
+    <span class="sb-commit" id="sbCommit"></span>
+  </div>
+
   <main>
     <div id="content"><div class="loading">Načítám přehled verzí</div></div>
   </main>
@@ -266,6 +338,7 @@
       })
       .then(function(data) {
         _versData = data;
+        renderStatusBar(data);
         render(data);
         I18n.init();
       })
@@ -278,6 +351,21 @@
     function setLang(lang) {
       I18n.setLang(lang);
       if (_versData) render(_versData);
+    }
+
+    function renderStatusBar(data) {
+      var versions = data.versions || [];
+      var latest = versions.find(function(v) { return v.version === data.latest; }) || versions[0];
+      if (!latest) return;
+      document.getElementById('sbVer').textContent     = latest.version;
+      document.getElementById('sbDate').textContent    = latest.date || '';
+      document.getElementById('sbSession').textContent = latest.session || '';
+      // Try to get commit from _STUDIO_STATUS if available
+      var status = window._STUDIO_STATUS;
+      if (status && status.deployCommit) {
+        document.getElementById('sbCommit').textContent = 'commit ' + status.deployCommit;
+      }
+      document.getElementById('statusBar').classList.add('visible');
     }
 
     function render(data) {
@@ -327,7 +415,7 @@
         if (latest.presentationUrl) html += '<a href="' + esc(latest.presentationUrl) + '" class="btn btn-ghost">'    + t('vs.btn.prez','Prezentace')    + '</a>';
         if (latest.pitchUrl)        html += '<a href="' + esc(latest.pitchUrl)        + '" class="btn btn-secondary">'+ t('vs.btn.pitch','Personal Pitch')+ '</a>';
         if (latest.docsUrl)         html += '<a href="' + esc(latest.docsUrl)         + '" class="btn btn-secondary">'+ t('vs.btn.docs','Docs')           + '</a>';
-        if (latest.protocolUrl)     html += '<button class="btn btn-secondary" onclick="openProtocolModal(\'' + esc(latest.protocolUrl) + '\',\'' + esc(latest.version) + '\')">📋 ' + t('vs.btn.protocol','Protokol') + '</button>';
+        if (latest.protocolUrl)     html += '<button class="btn btn-secondary" onclick="openProtocolModal(\'' + esc(latest.protocolUrl) + '\',\'' + esc(latest.version) + '\')">&#128203; ' + t('vs.btn.protocol','Protokol') + '</button>';
         html += '</div>';
         html += '</div>'; // .latest-card
       }
@@ -350,12 +438,38 @@
           if (v.presentationUrl) html += '<a href="' + esc(v.presentationUrl) + '" class="vi-link">' + t('vs.btn.prez','Prez')  + '</a>';
           if (v.pitchUrl)        html += '<a href="' + esc(v.pitchUrl)        + '" class="vi-link">' + t('vs.btn.pitch','Pitch')+ '</a>';
           if (v.docsUrl)         html += '<a href="' + esc(v.docsUrl)         + '" class="vi-link">' + t('vs.btn.docs','Docs')  + '</a>';
-          if (v.protocolUrl)     html += '<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openProtocolModal(\'' + esc(v.protocolUrl) + '\',\'' + esc(v.version) + '\')">📋</button>';
+          if (v.protocolUrl)     html += '<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openProtocolModal(\'' + esc(v.protocolUrl) + '\',\'' + esc(v.version) + '\')">&#128203;</button>';
           html += '</div>';
           html += '</div>';
         }
         html += '</div>';
       }
+
+      // ── Release notes feed ──
+      html += '<div class="section-label" style="margin-top:48px;">' + t('vs.relnotes', 'Release Notes') + '</div>';
+      html += '<div class="rn-feed">';
+      for (var j = 0; j < versions.length; j++) {
+        var rv = versions[j];
+        var isLatest = (rv.version === (data.latest || (versions[0] && versions[0].version)));
+        html += '<div class="rn-entry' + (isLatest ? ' rn-latest' : '') + '">';
+        html += '<div class="rn-hdr">';
+        html += '<span class="rn-ver">' + esc(rv.version) + '</span>';
+        if (isLatest) html += '<span class="rn-latest-pill">LATEST</span>';
+        if (rv.date)  html += '<span class="rn-date">' + esc(rv.date) + '</span>';
+        if (rv.title) html += '<span class="rn-title">— ' + esc(rv.title) + '</span>';
+        html += '</div>';
+        if (rv.changes && rv.changes.length) {
+          html += '<div class="rn-changes">';
+          rv.changes.forEach(function(c) {
+            html += '<div class="rn-change">' + esc(c) + '</div>';
+          });
+          html += '</div>';
+        } else {
+          html += '<div class="rn-no-changes">Bez detailního záznamu změn.</div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
 
       if (versions.length === 0) {
         html = '<div class="error">Žádné verze nalezeny v versions.json</div>';
@@ -420,7 +534,6 @@
       var html = '';
       var st = d.stats || {};
 
-      // Statistiky
       html += '<div class="gprot-sec"><div class="gprot-sec-hdr">\ud83d\udcca Statistiky</div><div class="gprot-chips">';
       html += '<div class="gprot-chip"><span>Soubor\u016f</span>' + esc(st.totalFiles || 0) + '</div>';
       html += '<div class="gprot-chip"><span>Velikost</span>' + (st.totalSizeKb || 0) + ' kB</div>';
@@ -431,7 +544,6 @@
       });
       html += '</div></div>';
 
-      // Verify
       var vf = d.verify || {}; var checks = vf.checks || [];
       html += '<div class="gprot-sec"><div class="gprot-sec-hdr">' +
               (vf.failed === 0 ? '\u2705' : '\u26a0\ufe0f') +
@@ -442,7 +554,6 @@
       });
       html += '</div></div>';
 
-      // Diff
       var df = d.diff || {};
       var added = df.added || [], removed = df.removed || [], changed = df.changed || [];
       html += '<div class="gprot-sec"><div class="gprot-sec-hdr">\ud83d\udd04 Diff' +
@@ -471,7 +582,6 @@
       }
       html += '</div>';
 
-      // Changelog
       if (d.changelog) {
         html += '<div class="gprot-sec"><div class="gprot-sec-hdr">\ud83d\udcdd Zm\u011bny v t\u00e9to verzi</div>';
         html += '<pre class="gprot-cl">' + esc(d.changelog) + '</pre></div>';
@@ -508,5 +618,7 @@
       <div class="gprot-body" id="gprotBody"><div class="gprot-nodata">Načítám…</div></div>
     </div>
   </div>
+
+  <script src="_hopiq.js"></script>
 </body>
 </html>
