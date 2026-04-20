@@ -28,6 +28,9 @@
 }
 html{scroll-behavior:smooth;background:var(--bg);}
 body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;overflow-x:hidden;}
+body:not(.lang-en) .lang-en{display:none!important;}
+body.lang-en .lang-cz{display:none!important;}
+body.lang-en .lang-en{display:inline!important;}
 
 /* ═══ PASSWORD OVERLAY ════════════════════════════════════════════════ */
 #pw-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#060812 0%,#0E1020 55%,#080810 100%);display:flex;align-items:center;justify-content:center;}
@@ -72,6 +75,8 @@ nav{
 .nav-tag{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text-muted);border:1px solid var(--border);border-radius:4px;padding:3px 8px;}
 #ceo-music-btn{background:none;border:1px solid rgba(255,255,255,.15);border-radius:6px;color:rgba(255,255,255,.5);font-size:12px;padding:5px 10px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;}
 #ceo-music-btn.playing{background:rgba(232,117,10,.18);border-color:rgba(232,117,10,.5);color:#E8750A;}
+.btn-lang{background:none;border:1px solid rgba(255,255,255,.15);border-radius:4px;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s;}
+.btn-lang.active{background:rgba(232,117,10,.2);border-color:rgba(232,117,10,.5);color:#E8750A;}
 body{padding-top:52px;}
 
 /* ═══ HERO ════════════════════════════════════════════════════════════ */
@@ -239,16 +244,16 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
       <div style="font-size:9px;font-weight:700;color:rgba(232,117,10,.65);letter-spacing:1.5px;margin-top:6px;text-transform:uppercase;">HOPI AppIQ</div>
     </div>
     <div id="pw-title">Business Vision</div>
-    <div id="pw-subtitle">HOPI TECHNOLOGY · důvěrný dokument</div>
+    <div id="pw-subtitle"><span class="lang-cz">HOPI TECHNOLOGY · důvěrný dokument</span><span class="lang-en" style="display:none;">HOPI TECHNOLOGY · confidential document</span></div>
     <hr id="pw-divider">
-    <div id="pw-label">Přístupové heslo:</div>
+    <div id="pw-label"><span class="lang-cz">Přístupové heslo:</span><span class="lang-en" style="display:none;">Access password:</span></div>
     <div id="pw-input-wrap">
       <input id="pw-input" type="password" placeholder="Zadejte heslo…" autocomplete="off" spellcheck="false">
       <button id="pw-toggle" onclick="togglePwShow()" title="Zobrazit/skrýt heslo">👁</button>
     </div>
-    <button id="pw-btn" onclick="checkPw()">Otevřít dokument →</button>
+    <button id="pw-btn" onclick="checkPw()"><span class="lang-cz">Otevřít dokument →</span><span class="lang-en" style="display:none;">Open document →</span></button>
     <div id="pw-error"></div>
-    <div id="pw-footer">Tento dokument je určen výhradně jeho příjemci.</div>
+    <div id="pw-footer"><span class="lang-cz">Tento dokument je určen výhradně jeho příjemci.</span><span class="lang-en" style="display:none;">This document is intended exclusively for its recipient.</span></div>
   </div>
 </div>
 
@@ -274,11 +279,13 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
     <div class="nav-badge">CEO Brief · AIQ-00146</div>
   </div>
   <div class="nav-right">
+    <button class="btn-lang active" id="btn-cz" onclick="setLang('cz')">CS</button>
+    <button class="btn-lang" id="btn-en" onclick="setLang('en')">EN</button>
     <button id="ceo-music-btn" onclick="ceoMusicToggle()" title="Spustit hudbu">
       <span id="ceo-music-icon">🎵</span>
-      <span id="ceo-music-label" style="font-size:10px;font-weight:700;letter-spacing:.5px;">Hudba</span>
+      <span id="ceo-music-label" style="font-size:10px;font-weight:700;letter-spacing:.5px;"><span class="lang-cz">Hudba</span><span class="lang-en" style="display:none;">Music</span></span>
     </button>
-    <div class="nav-tag">Důvěrný dokument</div>
+    <div class="nav-tag"><span class="lang-cz">Důvěrný dokument</span><span class="lang-en" style="display:none;">Confidential Document</span></div>
   </div>
 </nav>
 
@@ -290,7 +297,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
      HERO
      ══════════════════════════════════════════════════════════════════════ -->
 <div class="hero">
-  <div class="hero-eyebrow">★ Vize · Záměr · Platforma</div>
+  <div class="hero-eyebrow"><span class="lang-cz">★ Vize · Záměr · Platforma</span><span class="lang-en" style="display:none;">★ Vision · Intent · Platform</span></div>
 
   <div class="hero-logo" style="margin-bottom:28px;">
     <svg width="72" height="72" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -317,62 +324,62 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
     <strong>No limits — unless we set them."</strong>
   </div>
 
-  <div class="hero-by">Záměr Davida Gogely · HOPI Holding · 2026</div>
+  <div class="hero-by"><span class="lang-cz">Záměr Davida Gogely · HOPI Holding · 2026</span><span class="lang-en" style="display:none;">David Gogela's Vision · HOPI Holding · 2026</span></div>
 
   <div class="hero-divider"></div>
 
   <div class="hero-stats">
     <div class="stat">
       <div class="stat-n">7</div>
-      <div class="stat-l">týdnů vývoje</div>
+      <div class="stat-l"><span class="lang-cz">týdnů vývoje</span><span class="lang-en" style="display:none;">weeks of development</span></div>
     </div>
     <div class="stat">
       <div class="stat-n">144+</div>
-      <div class="stat-l">splněných úkolů</div>
+      <div class="stat-l"><span class="lang-cz">splněných úkolů</span><span class="lang-en" style="display:none;">completed tasks</span></div>
     </div>
     <div class="stat">
       <div class="stat-n">~$900</div>
-      <div class="stat-l">investice (API)</div>
+      <div class="stat-l"><span class="lang-cz">investice (API)</span><span class="lang-en" style="display:none;">investment (API)</span></div>
     </div>
     <div class="stat">
       <div class="stat-n">1+AI</div>
-      <div class="stat-l">developer tým</div>
+      <div class="stat-l"><span class="lang-cz">developer tým</span><span class="lang-en" style="display:none;">developer team</span></div>
     </div>
   </div>
 
   <!-- EVIDENCE TABLE -->
   <div style="margin-top:36px;max-width:680px;width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;overflow:hidden;">
     <div style="padding:10px 20px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;gap:8px;">
-      <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(232,117,10,.7);">Auditovatelná data · OIL.json + git log</span>
+      <span style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(232,117,10,.7);"><span class="lang-cz">Auditovatelná data · OIL.json + git log</span><span class="lang-en" style="display:none;">Auditable data · OIL.json + git log</span></span>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
       <div style="padding:14px 18px;border-right:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);">
         <div style="font-size:22px;font-weight:900;color:#E8750A;line-height:1;">7 týdnů</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;">03/2026 → dnes</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;"><span class="lang-cz">03/2026 → dnes</span><span class="lang-en" style="display:none;">03/2026 → today</span></div>
       </div>
       <div style="padding:14px 18px;border-right:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);">
         <div style="font-size:22px;font-weight:900;color:#E8750A;line-height:1;">17 800+</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;">řádků kódu</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;"><span class="lang-cz">řádků kódu</span><span class="lang-en" style="display:none;">lines of code</span></div>
       </div>
       <div style="padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.06);">
         <div style="font-size:22px;font-weight:900;color:#E8750A;line-height:1;">~$900</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;">investice Claude API</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;"><span class="lang-cz">investice Claude API</span><span class="lang-en" style="display:none;">Claude API investment</span></div>
       </div>
       <div style="padding:14px 18px;border-right:1px solid rgba(255,255,255,.06);">
         <div style="font-size:22px;font-weight:900;color:rgba(29,185,84,.9);line-height:1;">144+</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;">splněných úkolů (OIL)</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;"><span class="lang-cz">splněných úkolů (OIL)</span><span class="lang-en" style="display:none;">completed tasks (OIL)</span></div>
       </div>
       <div style="padding:14px 18px;border-right:1px solid rgba(255,255,255,.06);">
         <div style="font-size:22px;font-weight:900;color:rgba(29,185,84,.9);line-height:1;">91</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;">git commits (posl. 5 dní)</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;"><span class="lang-cz">git commits (posl. 5 dní)</span><span class="lang-en" style="display:none;">git commits (last 5 days)</span></div>
       </div>
       <div style="padding:14px 18px;">
         <div style="font-size:22px;font-weight:900;color:rgba(29,185,84,.9);line-height:1;">39h+</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;">logovaný čas (posl. 4 dny)</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;letter-spacing:.5px;"><span class="lang-cz">logovaný čas (posl. 4 dny)</span><span class="lang-en" style="display:none;">logged hours (last 4 days)</span></div>
       </div>
     </div>
     <div style="padding:10px 20px;border-top:1px solid rgba(255,255,255,.04);font-size:10px;color:rgba(255,255,255,.2);font-style:italic;text-align:center;">
-      Cena jednoho dne externího konzultanta = enterprise platforma za 7 týdnů. Každé číslo je auditovatelné.
+      <span class="lang-cz">Cena jednoho dne externího konzultanta = enterprise platforma za 7 týdnů. Každé číslo je auditovatelné.</span><span class="lang-en" style="display:none;">Cost of one day of external consulting = enterprise platform in 7 weeks. Every number is auditable.</span>
     </div>
   </div>
 
@@ -385,20 +392,22 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
      SECTION 1 — CO JSME POSTAVILI
      ══════════════════════════════════════════════════════════════════════ -->
 <section class="fade-in" id="s1">
-  <div class="s-eyebrow">Část 1 — Product Development</div>
-  <div class="s-title">Co bylo postaveno</div>
-  <div class="s-sub">Od nuly na enterprise platformu za 9 měsíců. Jeden developer + AI partner. Živé nasazení v HOPI Group dnes.</div>
+  <div class="s-eyebrow"><span class="lang-cz">Část 1 — Product Development</span><span class="lang-en" style="display:none;">Part 1 — Product Development</span></div>
+  <div class="s-title"><span class="lang-cz">Co bylo postaveno</span><span class="lang-en" style="display:none;">What We Built</span></div>
+  <div class="s-sub"><span class="lang-cz">Od nuly na enterprise platformu za 9 měsíců. Jeden developer + AI partner. Živé nasazení v HOPI Group dnes.</span><span class="lang-en" style="display:none;">From zero to enterprise platform in 7 weeks. One developer + AI partner. Live deployment in HOPI Group today.</span></div>
 
   <div class="cards cards-3" style="margin-bottom:14px;">
 
     <div class="card or fade-in">
       <div class="card-icon">🤖</div>
       <div class="card-tag" style="color:var(--or);">AI Agent — HOPIQ</div>
-      <div class="card-title">Vlastní AI centrum</div>
+      <div class="card-title"><span class="lang-cz">Vlastní AI centrum</span><span class="lang-en" style="display:none;">Native AI center</span></div>
       <div class="card-body">
-        Integrovaný AI chatbot s dedikovaným centrem. Kontextová nápověda, přímé odpovědi, 24/7 dostupnost.
+        <span class="lang-cz">Integrovaný AI chatbot s dedikovaným centrem. Kontextová nápověda, přímé odpovědi, 24/7 dostupnost.
         <strong>AI není feature — je základní vrstva každé aplikace.</strong>
-        Klíčový diferenciátor oproti veškeré konkurenci.
+        Klíčový diferenciátor oproti veškeré konkurenci.</span><span class="lang-en" style="display:none;">Integrated AI chatbot with a dedicated center. Contextual help, direct answers, 24/7 availability.
+        <strong>AI is not a feature — it is the base layer of every application.</strong>
+        Key differentiator against all competition.</span>
       </div>
       <span class="card-badge">LIVE · v7.21</span>
     </div>
@@ -406,10 +415,11 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
     <div class="card gr fade-in">
       <div class="card-icon">🏗️</div>
       <div class="card-tag" style="color:var(--green);">AppIQ Studio</div>
-      <div class="card-title">Vývojové prostředí AI platforem</div>
+      <div class="card-title"><span class="lang-cz">Vývojové prostředí AI platforem</span><span class="lang-en" style="display:none;">AI Platform Dev Environment</span></div>
       <div class="card-body">
-        Hub + DevCenter + TestCenter + AdminCenter — plnohodnotné vývojové prostředí.
-        <strong>Toto je Fáze 1 produktu</strong> — každý uživatel může vytvářet vlastní AI aplikace bez kódování. Základ HOME i ENTERPRISE větve.
+        <span class="lang-cz">Hub + DevCenter + TestCenter + AdminCenter — plnohodnotné vývojové prostředí.
+        <strong>Toto je Fáze 1 produktu</strong> — každý uživatel může vytvářet vlastní AI aplikace bez kódování. Základ HOME i ENTERPRISE větve.</span><span class="lang-en" style="display:none;">Hub + DevCenter + TestCenter + AdminCenter — a full-featured development environment.
+        <strong>This is Phase 1 of the product</strong> — every user can create their own AI applications without coding. Foundation for both HOME and ENTERPRISE branches.</span>
       </div>
       <span class="card-badge" style="background:var(--green-dim);color:var(--green);border-color:var(--green-border);">LIVE · Studio Hub</span>
     </div>
@@ -417,11 +427,13 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
     <div class="card bl fade-in">
       <div class="card-icon">📊</div>
       <div class="card-tag" style="color:var(--blue);">Finance Portal</div>
-      <div class="card-title">HOPI Group — živé nasazení</div>
+      <div class="card-title"><span class="lang-cz">HOPI Group — živé nasazení</span><span class="lang-en" style="display:none;">HOPI Group — Live Deployment</span></div>
       <div class="card-body">
-        Group Controlling portal v produkci: FX kalkulátor, SAP navigace, BNS integrace, Calendar, Tracking.
+        <span class="lang-cz">Group Controlling portal v produkci: FX kalkulátor, SAP navigace, BNS integrace, Calendar, Tracking.
         <strong>Reálný uživatel. Reální data. Reálné procesy.</strong>
-        HOPI Group = první referenční zákazník ENTERPRISE větve.
+        HOPI Group = první referenční zákazník ENTERPRISE větve.</span><span class="lang-en" style="display:none;">Group Controlling portal in production: FX calculator, SAP navigation, BNS integration, Calendar, Tracking.
+        <strong>Real user. Real data. Real processes.</strong>
+        HOPI Group = first reference customer of the ENTERPRISE branch.</span>
       </div>
       <span class="card-badge" style="background:var(--blue-dim);color:var(--blue);border-color:var(--blue-border);">PRODUKCE</span>
     </div>
@@ -432,21 +444,23 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 
     <div class="card pu">
       <div class="card-icon">⚡</div>
-      <div class="card-tag" style="color:var(--purple);">Rychlost vývoje</div>
-      <div class="card-title">Proof of concept: 1 developer + AI = tým</div>
+      <div class="card-tag" style="color:var(--purple);"><span class="lang-cz">Rychlost vývoje</span><span class="lang-en" style="display:none;">Speed of Execution</span></div>
+      <div class="card-title"><span class="lang-cz">Proof of concept: 1 developer + AI = tým</span><span class="lang-en" style="display:none;">Proof of concept: 1 developer + AI = team</span></div>
       <div class="card-body">
-        144+ splněných úkolů za 7 týdnů. 17 800+ řádků kódu. ~$900 investice do Claude API.
-        <strong>S týmem: 5–10× rychleji.</strong> To je argument pro investory i leadership.
+        <span class="lang-cz">144+ splněných úkolů za 7 týdnů. 17 800+ řádků kódu. ~$900 investice do Claude API.
+        <strong>S týmem: 5–10× rychleji.</strong> To je argument pro investory i leadership.</span><span class="lang-en" style="display:none;">144+ completed tasks in 7 weeks. 17,800+ lines of code. ~$900 invested in Claude API.
+        <strong>With a team: 5–10× faster.</strong> That's the argument for investors and leadership.</span>
       </div>
     </div>
 
     <div class="card fade-in" style="background:linear-gradient(135deg,rgba(232,117,10,.07),rgba(29,185,84,.05));border-color:rgba(232,117,10,.2);">
       <div class="card-icon">🌐</div>
-      <div class="card-tag" style="color:rgba(200,180,100,.9);">Infrastruktura</div>
-      <div class="card-title">Produkční deployment pipeline</div>
+      <div class="card-tag" style="color:rgba(200,180,100,.9);"><span class="lang-cz">Infrastruktura</span><span class="lang-en" style="display:none;">Infrastructure</span></div>
+      <div class="card-title"><span class="lang-cz">Produkční deployment pipeline</span><span class="lang-en" style="display:none;">Production deployment pipeline</span></div>
       <div class="card-body">
-        OIL task metodika (AIQ-NNNNN), multi-version GitHub Pages CI/CD, automated archive, version selector.
-        <strong>Infrastruktura připravená na startup tým</strong> — kdykoli nastoupí CTO a devs, systém čeká.
+        <span class="lang-cz">OIL task metodika (AIQ-NNNNN), multi-version GitHub Pages CI/CD, automated archive, version selector.
+        <strong>Infrastruktura připravená na startup tým</strong> — kdykoli nastoupí CTO a devs, systém čeká.</span><span class="lang-en" style="display:none;">OIL task methodology (AIQ-NNNNN), multi-version GitHub Pages CI/CD, automated archive, version selector.
+        <strong>Infrastructure ready for a startup team</strong> — whenever the CTO and devs join, the system is waiting.</span>
       </div>
     </div>
 
@@ -459,9 +473,9 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
      SECTION 2 — PLATFORMA
      ══════════════════════════════════════════════════════════════════════ -->
 <section class="fade-in" id="s2">
-  <div class="s-eyebrow">Část 2 — Platforma</div>
-  <div class="s-title">HOPI AppIQ — dual-branch AI platforma</div>
-  <div class="s-sub">Jedna platforma. Dvě větve. Každá větev — dvě fáze. Pro každého.</div>
+  <div class="s-eyebrow"><span class="lang-cz">Část 2 — Platforma</span><span class="lang-en" style="display:none;">Part 2 — Platform</span></div>
+  <div class="s-title"><span class="lang-cz">HOPI AppIQ — dual-branch AI platforma</span><span class="lang-en" style="display:none;">HOPI AppIQ — Dual-Branch AI Platform</span></div>
+  <div class="s-sub"><span class="lang-cz">Jedna platforma. Dvě větve. Každá větev — dvě fáze. Pro každého.</span><span class="lang-en" style="display:none;">One platform. Two branches. Each branch — two phases. For everyone.</span></div>
 
   <div class="arch fade-in">
 
@@ -471,31 +485,31 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
         <div class="arch-branch-icon">🏠</div>
         <div>
           <div class="arch-branch-name" style="color:var(--green);">AppIQ HOME</div>
-          <div class="arch-branch-label" style="color:rgba(29,185,84,.6);">B2C · Primární komerční priorita</div>
+          <div class="arch-branch-label" style="color:rgba(29,185,84,.6);"><span class="lang-cz">B2C · Primární komerční priorita</span><span class="lang-en" style="display:none;">B2C · Primary Commercial Priority</span></div>
         </div>
       </div>
 
       <div class="arch-phase">
-        <div class="arch-phase-title" style="color:var(--green);">Fáze 1 · Dev Environment</div>
-        <div class="arch-phase-body">Každý člověk si vytvoří vlastní AI aplikaci pro svou domácnost — bez kódování, s pomocí AI průvodce.</div>
+        <div class="arch-phase-title" style="color:var(--green);"><span class="lang-cz">Fáze 1 · Dev Environment</span><span class="lang-en" style="display:none;">Phase 1 · Dev Environment</span></div>
+        <div class="arch-phase-body"><span class="lang-cz">Každý člověk si vytvoří vlastní AI aplikaci pro svou domácnost — bez kódování, s pomocí AI průvodce.</span><span class="lang-en" style="display:none;">Every person builds their own AI application for their household — no coding, with an AI guide.</span></div>
       </div>
       <div class="arch-phase">
-        <div class="arch-phase-title" style="color:var(--green);">Fáze 2 · Přednastavené šablony</div>
-        <div class="arch-phase-body">Okamžité nasazení pro konkrétní oblast domácího života. Plug &amp; play.</div>
+        <div class="arch-phase-title" style="color:var(--green);"><span class="lang-cz">Fáze 2 · Přednastavené šablony</span><span class="lang-en" style="display:none;">Phase 2 · Pre-built Templates</span></div>
+        <div class="arch-phase-body"><span class="lang-cz">Okamžité nasazení pro konkrétní oblast domácího života. Plug &amp; play.</span><span class="lang-en" style="display:none;">Instant deployment for a specific area of home life. Plug &amp; play.</span></div>
       </div>
 
       <div class="arch-verticals">
-        <div class="arch-vert-title">Oblasti / vertikály</div>
+        <div class="arch-vert-title"><span class="lang-cz">Oblasti / vertikály</span><span class="lang-en" style="display:none;">Verticals</span></div>
         <div class="arch-vert-list">
-          <span class="vert-pill">💰 Domácí finance</span>
-          <span class="vert-pill highlight">❤️ Zdravotní péče</span>
-          <span class="vert-pill">📚 Vzdělávání</span>
+          <span class="vert-pill"><span class="lang-cz">💰 Domácí finance</span><span class="lang-en" style="display:none;">💰 Personal Finance</span></span>
+          <span class="vert-pill highlight"><span class="lang-cz">❤️ Zdravotní péče</span><span class="lang-en" style="display:none;">❤️ Healthcare</span></span>
+          <span class="vert-pill"><span class="lang-cz">📚 Vzdělávání</span><span class="lang-en" style="display:none;">📚 Education</span></span>
           <span class="vert-pill">💪 Fitness &amp; lifestyle</span>
-          <span class="vert-pill">🥗 Stravování</span>
+          <span class="vert-pill"><span class="lang-cz">🥗 Stravování</span><span class="lang-en" style="display:none;">🥗 Nutrition</span></span>
         </div>
       </div>
 
-      <div class="arch-scale">📈 Scale: Jednotlivci → Rodiny</div>
+      <div class="arch-scale"><span class="lang-cz">📈 Scale: Jednotlivci → Rodiny</span><span class="lang-en" style="display:none;">📈 Scale: Individuals → Families</span></div>
       <div class="arch-launch" style="color:var(--green);">🚀 Launch: <strong>1. 1. 2027</strong></div>
     </div>
 
@@ -505,34 +519,34 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
         <div class="arch-branch-icon">🏢</div>
         <div>
           <div class="arch-branch-name" style="color:var(--blue);">AppIQ ENTERPRISE</div>
-          <div class="arch-branch-label" style="color:rgba(59,130,246,.6);">B2B · Firemní segment</div>
+          <div class="arch-branch-label" style="color:rgba(59,130,246,.6);"><span class="lang-cz">B2B · Firemní segment</span><span class="lang-en" style="display:none;">B2B · Business Segment</span></div>
         </div>
       </div>
 
       <div class="arch-phase">
-        <div class="arch-phase-title" style="color:var(--blue);">Fáze 1 · Dev Environment</div>
-        <div class="arch-phase-body">Každá firma si postaví vlastní AI aplikace pro své procesy — bez závislosti na externím IT.</div>
+        <div class="arch-phase-title" style="color:var(--blue);"><span class="lang-cz">Fáze 1 · Dev Environment</span><span class="lang-en" style="display:none;">Phase 1 · Dev Environment</span></div>
+        <div class="arch-phase-body"><span class="lang-cz">Každá firma si postaví vlastní AI aplikace pro své procesy — bez závislosti na externím IT.</span><span class="lang-en" style="display:none;">Every company builds its own AI applications for its processes — without dependence on external IT.</span></div>
       </div>
       <div class="arch-phase">
-        <div class="arch-phase-title" style="color:var(--blue);">Fáze 2 · Přednastavené šablony</div>
-        <div class="arch-phase-body">Odvětvové šablony pro konkrétní business: logistika, výroba, zdravotnictví, realitní trh...</div>
+        <div class="arch-phase-title" style="color:var(--blue);"><span class="lang-cz">Fáze 2 · Přednastavené šablony</span><span class="lang-en" style="display:none;">Phase 2 · Pre-built Templates</span></div>
+        <div class="arch-phase-body"><span class="lang-cz">Odvětvové šablony pro konkrétní business: logistika, výroba, zdravotnictví, realitní trh...</span><span class="lang-en" style="display:none;">Industry templates for specific business: logistics, manufacturing, healthcare, real estate market...</span></div>
       </div>
 
       <div class="arch-verticals">
-        <div class="arch-vert-title">Odvětví a scale</div>
+        <div class="arch-vert-title"><span class="lang-cz">Odvětví a scale</span><span class="lang-en" style="display:none;">Verticals</span></div>
         <div class="arch-vert-list">
-          <span class="vert-pill">🚛 Logistika</span>
-          <span class="vert-pill">🌾 Zemědělství</span>
-          <span class="vert-pill">🏭 Výroba</span>
-          <span class="vert-pill">🏗️ Reality</span>
-          <span class="vert-pill">⚡ Energetika</span>
-          <span class="vert-pill highlight">🏥 Zdravotnictví ★</span>
-          <span class="vert-pill">🏛️ Veřejný sektor</span>
-          <span class="vert-pill">+ další</span>
+          <span class="vert-pill"><span class="lang-cz">🚛 Logistika</span><span class="lang-en" style="display:none;">🚛 Logistics</span></span>
+          <span class="vert-pill"><span class="lang-cz">🌾 Zemědělství</span><span class="lang-en" style="display:none;">🌾 Agriculture</span></span>
+          <span class="vert-pill"><span class="lang-cz">🏭 Výroba</span><span class="lang-en" style="display:none;">🏭 Manufacturing</span></span>
+          <span class="vert-pill"><span class="lang-cz">🏗️ Reality</span><span class="lang-en" style="display:none;">🏗️ Real Estate</span></span>
+          <span class="vert-pill"><span class="lang-cz">⚡ Energetika</span><span class="lang-en" style="display:none;">⚡ Energy</span></span>
+          <span class="vert-pill highlight"><span class="lang-cz">🏥 Zdravotnictví ★</span><span class="lang-en" style="display:none;">🏥 Healthcare ★</span></span>
+          <span class="vert-pill"><span class="lang-cz">🏛️ Veřejný sektor</span><span class="lang-en" style="display:none;">🏛️ Public Sector</span></span>
+          <span class="vert-pill"><span class="lang-cz">+ další</span><span class="lang-en" style="display:none;">+ more</span></span>
         </div>
       </div>
 
-      <div class="arch-scale">📈 Scale: Živnostníci → SME → Korporace</div>
+      <div class="arch-scale"><span class="lang-cz">📈 Scale: Živnostníci → SME → Korporace</span><span class="lang-en" style="display:none;">📈 Scale: Freelancers → SME → Corporations</span></div>
       <div class="arch-launch" style="color:var(--blue);">🚀 Launch: <strong>1. 1. 2028</strong></div>
     </div>
 
@@ -540,9 +554,11 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 
   <!-- Zdravotnictví highlight -->
   <div class="quote fade-in" style="margin-top:24px;">
-    <strong>★ Zdravotnictví — mega vertikála pro obě větve:</strong>
+    <span class="lang-cz"><strong>★ Zdravotnictví — mega vertikála pro obě větve:</strong>
     Fragmentované systémy, nekompatibilní data, obrovské veřejné i soukromé budgety — a motivace uživatelů absolutní. Zdraví je #1 priorita každého.
-    HOME: osobní zdravotní záznamy, prevence, wellness. ENTERPRISE: nemocnice, ambulance, pojišťovny, státní správa.
+    HOME: osobní zdravotní záznamy, prevence, wellness. ENTERPRISE: nemocnice, ambulance, pojišťovny, státní správa.</span><span class="lang-en" style="display:none;"><strong>★ Healthcare — mega vertical for both branches:</strong>
+    Fragmented systems, incompatible data, enormous public and private budgets — and users' motivation is absolute. Health is everyone's #1 priority.
+    HOME: personal health records, prevention, wellness. ENTERPRISE: hospitals, clinics, insurance companies, public administration.</span>
   </div>
 </section>
 
@@ -552,69 +568,72 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
      SECTION 3 — BUSINESS NARRATIVE
      ══════════════════════════════════════════════════════════════════════ -->
 <section class="fade-in" id="s3">
-  <div class="s-eyebrow">Část 3 — Business Development</div>
-  <div class="s-title">Nový příběh</div>
-  <div class="s-sub">Tři klíčové změny v tom, jak přemýšlíme o projektu.</div>
+  <div class="s-eyebrow"><span class="lang-cz">Část 3 — Business Development</span><span class="lang-en" style="display:none;">Part 3 — Business Development</span></div>
+  <div class="s-title"><span class="lang-cz">Nový příběh</span><span class="lang-en" style="display:none;">The New Narrative</span></div>
+  <div class="s-sub"><span class="lang-cz">Tři klíčové změny v tom, jak přemýšlíme o projektu.</span><span class="lang-en" style="display:none;">Three key shifts in how we think about the project.</span></div>
 
   <!-- FLIP 1 -->
   <div style="margin-bottom:28px;" class="fade-in">
-    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;">Flip #1 — Prioritizace</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;"><span class="lang-cz">Flip #1 — Prioritizace</span><span class="lang-en" style="display:none;">Flip #1 — Prioritization</span></div>
     <table class="flip-table">
       <thead>
-        <tr><th>Co</th><th class="old">Starý pohled</th><th class="new">Nový pohled</th></tr>
+        <tr><th><span class="lang-cz">Co</span><span class="lang-en" style="display:none;">What</span></th><th class="old"><span class="lang-cz">Starý pohled</span><span class="lang-en" style="display:none;">Old View</span></th><th class="new"><span class="lang-cz">Nový pohled</span><span class="lang-en" style="display:none;">New View</span></th></tr>
       </thead>
       <tbody>
-        <tr><td class="label">Priorita #1</td><td class="old">HOPI interní nasazení</td><td class="new">AppIQ HOME — masový B2C trh</td></tr>
-        <tr><td class="label">HOPI role</td><td class="old">Cílový zákazník</td><td class="new">Laboratoř + referenční zákazník</td></tr>
-        <tr><td class="label">Cash zdroj</td><td class="old">HOPI budget</td><td class="new">HOME subscriptions od dne 1</td></tr>
-        <tr><td class="label">Tržní záběr</td><td class="old">~500 HOPI zaměstnanců</td><td class="new" style="color:var(--green);">Miliony domácností v CEE →</td></tr>
+        <tr><td class="label"><span class="lang-cz">Priorita #1</span><span class="lang-en" style="display:none;">Priority #1</span></td><td class="old"><span class="lang-cz">HOPI interní nasazení</span><span class="lang-en" style="display:none;">HOPI internal deployment</span></td><td class="new"><span class="lang-cz">AppIQ HOME — masový B2C trh</span><span class="lang-en" style="display:none;">AppIQ HOME — mass B2C market</span></td></tr>
+        <tr><td class="label"><span class="lang-cz">HOPI role</span><span class="lang-en" style="display:none;">HOPI role</span></td><td class="old"><span class="lang-cz">Cílový zákazník</span><span class="lang-en" style="display:none;">Target customer</span></td><td class="new"><span class="lang-cz">Laboratoř + referenční zákazník</span><span class="lang-en" style="display:none;">Lab + reference customer</span></td></tr>
+        <tr><td class="label"><span class="lang-cz">Cash zdroj</span><span class="lang-en" style="display:none;">Cash source</span></td><td class="old"><span class="lang-cz">HOPI budget</span><span class="lang-en" style="display:none;">HOPI budget</span></td><td class="new"><span class="lang-cz">HOME subscriptions od dne 1</span><span class="lang-en" style="display:none;">HOME subscriptions from day 1</span></td></tr>
+        <tr><td class="label"><span class="lang-cz">Tržní záběr</span><span class="lang-en" style="display:none;">Market reach</span></td><td class="old"><span class="lang-cz">~500 HOPI zaměstnanců</span><span class="lang-en" style="display:none;">~500 HOPI employees</span></td><td class="new" style="color:var(--green);"><span class="lang-cz">Miliony domácností v CEE →</span><span class="lang-en" style="display:none;">Millions of households in CEE →</span></td></tr>
       </tbody>
     </table>
   </div>
 
   <!-- FLIP 2 -->
   <div style="margin-bottom:28px;" class="fade-in">
-    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;">Flip #2 — Cash od dne 1</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;"><span class="lang-cz">Flip #2 — Cash od dne 1</span><span class="lang-en" style="display:none;">Flip #2 — Cash from Day 1</span></div>
     <div class="numbers">
       <div class="number-item">
         <div class="number-val">100</div>
         <div class="number-arrow">→</div>
-        <div class="number-sub">HOME uživatelů<br>= €500/měs.<br>hradí Claude API</div>
+        <div class="number-sub"><span class="lang-cz">HOME uživatelů<br>= €500/měs.<br>hradí Claude API</span><span class="lang-en" style="display:none;">HOME users<br>= €500/mo.<br>covers Claude API</span></div>
       </div>
       <div class="number-item">
         <div class="number-val">500</div>
         <div class="number-arrow">→</div>
-        <div class="number-sub">HOME uživatelů<br>= €2 500/měs.<br>hradí infrastrukturu</div>
+        <div class="number-sub"><span class="lang-cz">HOME uživatelů<br>= €2 500/měs.<br>hradí infrastrukturu</span><span class="lang-en" style="display:none;">HOME users<br>= €2,500/mo.<br>covers infrastructure</span></div>
       </div>
       <div class="number-item">
         <div class="number-val">2 000</div>
         <div class="number-arrow">→</div>
-        <div class="number-sub">HOME uživatelů<br>= €10 000/měs.<br>hradí junior devs</div>
+        <div class="number-sub"><span class="lang-cz">HOME uživatelů<br>= €10 000/měs.<br>hradí junior devs</span><span class="lang-en" style="display:none;">HOME users<br>= €10,000/mo.<br>covers junior devs</span></div>
       </div>
       <div class="number-item">
         <div class="number-val">10 000</div>
         <div class="number-arrow">→</div>
-        <div class="number-sub">HOME uživatelů<br>= €50 000/měs.<br>plnohodnotný startup</div>
+        <div class="number-sub"><span class="lang-cz">HOME uživatelů<br>= €50 000/měs.<br>plnohodnotný startup</span><span class="lang-en" style="display:none;">HOME users<br>= €50,000/mo.<br>full-scale startup</span></div>
       </div>
     </div>
     <div style="font-size:12px;color:var(--text-muted);margin-top:12px;text-align:center;font-style:italic;">
-      Každý platící HOME uživatel = důkaz product-market fit + financování vývoje + argument pro investory.
+      <span class="lang-cz">Každý platící HOME uživatel = důkaz product-market fit + financování vývoje + argument pro investory.</span><span class="lang-en" style="display:none;">Every paying HOME user = proof of product-market fit + development funding + argument for investors.</span>
     </div>
   </div>
 
   <!-- FLIP 3 — PARTNEŘI -->
   <div class="fade-in">
-    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;">Flip #3 — Strategičtí partneři</div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--or);margin-bottom:12px;"><span class="lang-cz">Flip #3 — Strategičtí partneři</span><span class="lang-en" style="display:none;">Flip #3 — Strategic Partners</span></div>
     <div class="partners">
       <div class="card or">
         <div class="card-icon">🔬</div>
-        <div class="card-tag" style="color:var(--or);">Priorita #1 · Globální</div>
+        <div class="card-tag" style="color:var(--or);"><span class="lang-cz">Priorita #1 · Globální</span><span class="lang-en" style="display:none;">Priority #1 · Global</span></div>
         <div class="card-title">Anthropic</div>
         <div class="card-body">
-          HOPI AI Lab = CEE implementační laboratoř Anthropicu.
+          <span class="lang-cz">HOPI AI Lab = CEE implementační laboratoř Anthropicu.
           <strong>Pro Anthropic:</strong> enterprise deployment v CEE, regionální přítomnost bez vlastního týmu.
           <strong>Pro HOPI:</strong> zvýhodněný API, early access, brand, možná akelerace.
-          <br><em style="font-size:11px;opacity:.6;margin-top:6px;display:block;">Okno otevřené teď — agresivní enterprise expanze mimo US.</em>
+          <br><em style="font-size:11px;opacity:.6;margin-top:6px;display:block;">Okno otevřené teď — agresivní enterprise expanze mimo US.</em></span><span class="lang-en" style="display:none;">HOPI AI Lab = CEE implementation laboratory for Anthropic.
+          <strong>For Anthropic:</strong> enterprise deployment in CEE, regional presence without their own team.
+          <strong>For HOPI:</strong> discounted API, early access, brand, potential acceleration.
+          <br><em style="font-size:11px;opacity:.6;margin-top:6px;display:block;">Window open now — aggressive enterprise expansion outside the US.</em></span>
         </div>
       </div>
       <div class="card bl">
@@ -622,17 +641,19 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
         <div class="card-tag" style="color:var(--blue);">CZ tech partner</div>
         <div class="card-title">ARTIN</div>
         <div class="card-body">
-          Česká softwarová společnost. Potenciální co-development partner nebo distribuční kanál pro AppIQ ENTERPRISE v CZ trhu.
-          <strong>ARTIN má zákazníky — my máme AI platformu.</strong>
+          <span class="lang-cz">Česká softwarová společnost. Potenciální co-development partner nebo distribuční kanál pro AppIQ ENTERPRISE v CZ trhu.
+          <strong>ARTIN má zákazníky — my máme AI platformu.</strong></span><span class="lang-en" style="display:none;">Czech software company. Potential co-development partner or distribution channel for AppIQ ENTERPRISE in the CZ market.
+          <strong>ARTIN has customers — we have the AI platform.</strong></span>
         </div>
       </div>
       <div class="card pu">
         <div class="card-icon">🔗</div>
-        <div class="card-tag" style="color:var(--purple);">CZ integrační partner</div>
+        <div class="card-tag" style="color:var(--purple);"><span class="lang-cz">CZ integrační partner</span><span class="lang-en" style="display:none;">CZ integration partner</span></div>
         <div class="card-title">INTECS</div>
         <div class="card-body">
-          Potenciální partner pro SAP/ERP integrace. AppIQ ENTERPRISE potřebuje hluboká systémová napojení.
-          <strong>Bridge partner pro enterprise zákazníky</strong> v CZ regionu.
+          <span class="lang-cz">Potenciální partner pro SAP/ERP integrace. AppIQ ENTERPRISE potřebuje hluboká systémová napojení.
+          <strong>Bridge partner pro enterprise zákazníky</strong> v CZ regionu.</span><span class="lang-en" style="display:none;">Potential partner for SAP/ERP integrations. AppIQ ENTERPRISE needs deep system connectors.
+          <strong>Bridge partner for enterprise customers</strong> in the CZ region.</span>
         </div>
       </div>
     </div>
@@ -645,63 +666,66 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
      SECTION 4 — INVESTMENT CASE
      ══════════════════════════════════════════════════════════════════════ -->
 <section class="fade-in" id="s4">
-  <div class="s-eyebrow">Část 4 — Investment Case</div>
-  <div class="s-title">Proč investovat teď</div>
+  <div class="s-eyebrow"><span class="lang-cz">Část 4 — Investment Case</span><span class="lang-en" style="display:none;">Part 4 — Investment Case</span></div>
+  <div class="s-title"><span class="lang-cz">Proč investovat teď</span><span class="lang-en" style="display:none;">Why Invest Now</span></div>
 
   <div class="quote">
-    <strong>"Investice HOPI do AI Lab není náklad.</strong> Je to spolufinancování spin-off firmy, jejímž prvním zákazníkem je HOPI sám — a produktu, který HOPI ušetří desítky milionů na budoucí IT akvizici."
+    <span class="lang-cz"><strong>"Investice HOPI do AI Lab není náklad.</strong> Je to spolufinancování spin-off firmy, jejímž prvním zákazníkem je HOPI sám — a produktu, který HOPI ušetří desítky milionů na budoucí IT akvizici."</span><span class="lang-en" style="display:none;"><strong>"HOPI's investment in AI Lab is not a cost.</strong> It is co-financing of a spin-off company whose first customer is HOPI itself — and a product that will save HOPI tens of millions on a future IT acquisition."</span>
   </div>
 
   <div class="cards cards-3 fade-in" style="margin-bottom:28px;">
     <div class="card rd">
       <div class="card-icon">💸</div>
-      <div class="card-tag" style="color:var(--red);">Alternativa A</div>
-      <div class="card-title">Akvizice hotové platformy</div>
+      <div class="card-tag" style="color:var(--red);"><span class="lang-cz">Alternativa A</span><span class="lang-en" style="display:none;">Option A</span></div>
+      <div class="card-title"><span class="lang-cz">Akvizice hotové platformy</span><span class="lang-en" style="display:none;">Acquire a ready platform</span></div>
       <div class="card-body">
-        Koupit existující AI platformu na trhu.
-        <strong style="color:var(--red);">Cena: €2–10M</strong> + roky customizace + vendor lock-in + žádné vlastní IP.
+        <span class="lang-cz">Koupit existující AI platformu na trhu.
+        <strong style="color:var(--red);">Cena: €2–10M</strong> + roky customizace + vendor lock-in + žádné vlastní IP.</span><span class="lang-en" style="display:none;">Buy an existing AI platform on the market.
+        <strong style="color:var(--red);">Price: €2–10M</strong> + years of customization + vendor lock-in + no own IP.</span>
       </div>
     </div>
     <div class="card rd">
       <div class="card-icon">🏗️</div>
-      <div class="card-tag" style="color:var(--red);">Alternativa B</div>
-      <div class="card-title">Externě zadat vývoj</div>
+      <div class="card-tag" style="color:var(--red);"><span class="lang-cz">Alternativa B</span><span class="lang-en" style="display:none;">Option B</span></div>
+      <div class="card-title"><span class="lang-cz">Externě zadat vývoj</span><span class="lang-en" style="display:none;">Outsource development</span></div>
       <div class="card-body">
-        Zadat stejný rozsah externím dodavatelům.
-        <strong style="color:var(--red);">Cena: €500K–2M/rok</strong> + závislost na dodavateli + žádný interní know-how.
+        <span class="lang-cz">Zadat stejný rozsah externím dodavatelům.
+        <strong style="color:var(--red);">Cena: €500K–2M/rok</strong> + závislost na dodavateli + žádný interní know-how.</span><span class="lang-en" style="display:none;">Outsource the same scope to external vendors.
+        <strong style="color:var(--red);">Price: €500K–2M/year</strong> + vendor dependence + no internal know-how.</span>
       </div>
     </div>
     <div class="card gr">
       <div class="card-icon">✅</div>
-      <div class="card-tag" style="color:var(--green);">Naše cesta</div>
+      <div class="card-tag" style="color:var(--green);"><span class="lang-cz">Naše cesta</span><span class="lang-en" style="display:none;">Our Way</span></div>
       <div class="card-title">HOPI AI Lab + HOPI TechIQ</div>
       <div class="card-body">
-        David + Claude + AI Lab infrastruktura.
-        <strong style="color:var(--green);">Cena: ~CZK 1M/rok</strong>. Výsledek: enterprise platforma, IP ve vlastnictví HOPI, komerční startup, 6. divize.
+        <span class="lang-cz">David + Claude + AI Lab infrastruktura.
+        <strong style="color:var(--green);">Cena: ~CZK 1M/rok</strong>. Výsledek: enterprise platforma, IP ve vlastnictví HOPI, komerční startup, 6. divize.</span><span class="lang-en" style="display:none;">David + Claude + AI Lab infrastructure.
+        <strong style="color:var(--green);">Price: ~CZK 1M/year</strong>. Result: enterprise platform, IP owned by HOPI, commercial startup, 6th division.</span>
       </div>
     </div>
   </div>
 
   <!-- CTA BOX -->
   <div class="cta-section fade-in">
-    <div class="cta-title">Co potřebujeme</div>
-    <div class="cta-sub">Tři kroky k tomu, aby se záměr stal realitou.</div>
+    <div class="cta-title"><span class="lang-cz">Co potřebujeme</span><span class="lang-en" style="display:none;">What We Need</span></div>
+    <div class="cta-sub"><span class="lang-cz">Tři kroky k tomu, aby se záměr stal realitou.</span><span class="lang-en" style="display:none;">Three steps to turn the vision into reality.</span></div>
     <div class="cta-items">
       <div class="cta-item">
-        <strong>Mandát</strong>
-        Formální HOPI AI Lab — interní tým s jasným cílem
+        <strong><span class="lang-cz">Mandát</span><span class="lang-en" style="display:none;">Mandate</span></strong>
+        <span class="lang-cz">Formální HOPI AI Lab — interní tým s jasným cílem</span><span class="lang-en" style="display:none;">Formal HOPI AI Lab — internal team with a clear goal</span>
       </div>
       <div class="cta-item">
         <strong>Budget</strong>
-        CZK ~1M/rok — API, infrastruktura, první nábory
+        <span class="lang-cz">CZK ~1M/rok — API, infrastruktura, první nábory</span><span class="lang-en" style="display:none;">CZK ~1M/year — API, infrastructure, first hires</span>
       </div>
       <div class="cta-item">
-        <strong>Entita</strong>
-        HOPI TechIQ s.r.o. — Q2 2026 — právní základ spin-off
+        <strong><span class="lang-cz">Entita</span><span class="lang-en" style="display:none;">Entity</span></strong>
+        <span class="lang-cz">HOPI TechIQ s.r.o. — Q2 2026 — právní základ spin-off</span><span class="lang-en" style="display:none;">HOPI TechIQ s.r.o. — Q2 2026 — legal foundation for spin-off</span>
       </div>
     </div>
     <div style="font-size:20px;font-weight:900;color:var(--or);margin-bottom:8px;">
-      Budujeme 6. divizi HOPI. Zevnitř.
+      <span class="lang-cz">Budujeme 6. divizi HOPI. Zevnitř.</span><span class="lang-en" style="display:none;">Building HOPI's 6th division. From within.</span>
     </div>
     <div style="font-size:13px;color:var(--text-muted);font-style:italic;">
       "Built for the universe. Starting with you. No limits — unless we set them."
@@ -720,12 +744,20 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 
 <!-- ═══ FOOTER ═══════════════════════════════════════════════════════════ -->
 <footer>
-  HOPI Technology · AppIQ Platform · © 2026 · Záměr Davida Gogely · Důvěrný dokument
+  <span class="lang-cz">HOPI Technology · AppIQ Platform · © 2026 · Záměr Davida Gogely · Důvěrný dokument</span><span class="lang-en" style="display:none;">HOPI Technology · AppIQ Platform · © 2026 · David Gogela's Vision · Confidential</span>
 </footer>
 </div><!-- /doc-content -->
 
 <!-- ═══ JS ════════════════════════════════════════════════════════════════ -->
 <script>
+/* ── LANG ── */
+function setLang(lang){
+  var isEn=(lang==='en');
+  document.body.classList.toggle('lang-en',isEn);
+  document.getElementById('btn-cz').classList.toggle('active',!isEn);
+  document.getElementById('btn-en').classList.toggle('active',isEn);
+}
+
 /* ── PASSWORD ── */
 var _PW = 'HOPI2026';
 function checkPw(){
@@ -796,7 +828,7 @@ document.addEventListener('DOMContentLoaded',function(){
     var lbl=document.getElementById('ceo-music-label');
     var ico=document.getElementById('ceo-music-icon');
     if(btn)btn.classList[on?'add':'remove']('playing');
-    if(lbl)lbl.textContent=on?'Ztlumit':'Hudba';
+    if(lbl){var isEn=document.body.classList.contains('lang-en');lbl.innerHTML=on?('<span class="lang-cz">Ztlumit</span><span class="lang-en" style="display:'+(isEn?'inline':'none')+';">Mute</span>'):('<span class="lang-cz">Hudba</span><span class="lang-en" style="display:'+(isEn?'inline':'none')+';">Music</span>');}
     if(ico)ico.textContent=on?'🔊':'🎵';
   }
   function startMusic(fast){
