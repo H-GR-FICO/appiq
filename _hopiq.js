@@ -284,8 +284,8 @@ Odpovídej stručně. Konkrétní otázky o navigaci → uveď přesnou cestu (z
     }
     var eb=document.getElementById('hub-music-btn');
     if(eb) eb.onclick=_toggle;
-    // Root stránka (version selector, depth<=1) — auto-start zakázán; spouští se pouze bombou
-    if(_depth > 1){ try{ if(localStorage.getItem('appiq_music')==='on') _start(); }catch(e){} }
+    // selector.html (depth=1) — auto-start povolen; root index.html (welcome+bomb) zůstává tichý
+    if(_p.indexOf('selector.html')>=0 || _depth > 1){ try{ if(localStorage.getItem('appiq_music')==='on') _start(); }catch(e){} }
   });
 
   window.addEventListener('beforeunload',function(){

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOPI AppIQ — Verze / Versions</title>
+  <meta name="description" content="AI-powered Enterprise Application Platform. Přehled verzí / Version selector.">
+  <meta property="og:type"        content="website">
+  <meta property="og:url"         content="https://h-gr-fico.github.io/appiq/selector.html">
+  <meta property="og:title"       content="HOPI AppIQ — by HOPI TECHNOLOGY">
+  <meta property="og:description" content="AI-powered Enterprise Application Platform. Claude AI živý v AppIQ.">
+  <meta property="og:image"       content="https://h-gr-fico.github.io/appiq/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name"   content="HOPI AppIQ by HOPI TECHNOLOGY">
+  <link rel="stylesheet" href="_hopiq.css?v=7.21">
+  <style>
+    :root {
+      --bg: #0d1117; --surface: #161b22; --surface2: #1c2128; --border: #30363d;
+      --accent: #00bcd4; --accent2: #26c6da; --text: #e6edf3; --muted: #8b949e;
+      --green: #3fb950; --badge-bg: rgba(0,188,212,0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ══ PROMO FULLSCREEN ════════════════════════════════════════════ */
+    .promo-full {
+      position: fixed; inset: 0; z-index: 7000;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 22px; text-align: center; padding: 40px 24px;
+      overflow: hidden; transform-origin: top center;
+    }
+    .promo-full.collapsing { animation: pf-collapse 0.65s cubic-bezier(0.55,0,1,0.45) forwards; }
+    @keyframes pf-collapse {
+      0%  { transform:scaleY(1); opacity:1; }
+      45% { transform:scaleY(0.06) scaleX(1.03); opacity:0.85; }
+      80% { transform:scaleY(0.01); opacity:0.2; }
+      100%{ transform:scaleY(0); opacity:0; }
+    }
+    .pf-icon { font-size:5rem; line-height:1; }
+    .pf-label { font-size:0.75rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; padding:4px 16px; border-radius:20px; }
+    .pf-text  { font-size:clamp(1.3rem,3vw,2rem); font-weight:700; color:#fff; max-width:680px; line-height:1.35; }
+    .pf-cta   { font-size:0.9rem; font-weight:700; padding:10px 28px; border-radius:8px; text-decoration:none; margin-top:4px; display:inline-block; border:none; cursor:pointer; appearance:none; -webkit-appearance:none; font-family:inherit; }
+    .pf-skip  { position:absolute; bottom:18px; right:22px; font-size:0.65rem; color:rgba(255,255,255,0.25); letter-spacing:0.5px; pointer-events:none; }
+    .pf-l1 { background:#0d1117; }
+    .pf-l1 .pf-label { background:#21262d; color:#8b949e; border:1px solid #30363d; }
+    .pf-l1 .pf-cta   { background:#21262d; color:#8b949e; border:1px solid #30363d; }
+    .pf-l2 { background:radial-gradient(ellipse at 50% 35%,#003850 0%,#0d1117 70%); }
+    .pf-l2 .pf-label { background:rgba(0,188,212,.15); color:var(--accent); border:1px solid rgba(0,188,212,.4); }
+    .pf-l2 .pf-cta   { background:rgba(0,188,212,.15); color:var(--accent); border:1px solid rgba(0,188,212,.4); }
+    .pf-l3 { background:radial-gradient(ellipse at 50% 35%,#003d15 0%,#0d1117 70%); }
+    .pf-l3 .pf-label { background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.4); }
+    .pf-l3 .pf-cta   { background:rgba(63,185,80,.15); color:var(--green); border:1px solid rgba(63,185,80,.4); }
+    .pf-l4 { background:radial-gradient(ellipse at 50% 35%,#001a30 0%,#000d1a 60%,#000508 100%); overflow:hidden; }
+    .pf-l4::before { content:''; position:absolute; left:0; right:0; height:1px;
+      background:linear-gradient(90deg,transparent 0%,rgba(0,188,212,.7) 50%,transparent 100%);
+      animation:pf-scan 3.5s ease-in-out infinite; top:0; pointer-events:none; }
+    @keyframes pf-scan { 0%{top:0;opacity:0} 8%{opacity:1} 92%{opacity:1} 100%{top:100%;opacity:0} }
+    .pf-l4 .pf-label { background:rgba(0,188,212,.1); color:var(--accent); border:1px solid rgba(0,188,212,.3); letter-spacing:4px; }
+    .pf-l4 .pf-cta   { background:rgba(0,188,212,.1); color:var(--accent); border:1px solid rgba(0,188,212,.35); cursor:pointer; font-family:inherit; }
+    .pf-l4 .pf-cta:hover { background:rgba(0,188,212,.22); }
+    .pf-orb { width:110px; height:110px; margin:0 auto; }
+    .pf-orb svg { width:100%; height:100%; overflow:visible; }
+    .pf-orb-r1 { animation:orb-spin 3.5s linear infinite; transform-origin:55px 55px; }
+    .pf-orb-r2 { animation:orb-spin 6s linear infinite reverse; transform-origin:55px 55px; }
+    .pf-orb-r3 { animation:orb-spin 10s linear infinite; transform-origin:55px 55px; }
+    .pf-orb-dot { animation:orb-pulse 2s ease-in-out infinite; transform-origin:55px 55px; }
+    @keyframes orb-spin { from{stroke-dashoffset:0} to{stroke-dashoffset:-300} }
+    @keyframes orb-pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    /* Maintenance overlay */
+    #maintenanceOverlay{position:fixed;inset:0;z-index:9999;background:#0d1117;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px;}
+    .maint-logo-name{font-size:2rem;font-weight:900;letter-spacing:-0.5px;color:#e6edf3;}
+    .maint-logo-by{font-size:10px;font-weight:600;letter-spacing:3px;color:#484f58;text-transform:uppercase;margin-top:6px;}
+    .maint-divider{width:40px;height:2px;background:#007d32;margin:28px auto;border-radius:1px;}
+    .maint-title{font-size:1.25rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#e6edf3;margin-bottom:8px;}
+    .maint-msg{font-size:0.95rem;color:#8b949e;margin-bottom:6px;}
+    .maint-team{font-size:0.8rem;color:#484f58;}
+    .maint-sep{width:30px;height:1px;background:#30363d;margin:24px auto;}
+    .maint-en .maint-title{color:#8b949e;font-size:1.05rem;}
+    .maint-en .maint-msg{color:#484f58;}
+    .maint-en .maint-team{color:#30363d;}
+
+    /* Sparks */
+    .spark { position:absolute; width:5px; height:5px; border-radius:50%; pointer-events:none; animation:spark-fly 0.9s ease-out forwards; opacity:0; }
+    @keyframes spark-fly { 0%{transform:translate(0,0)scale(1);opacity:1} 100%{transform:var(--sdx,translate(40px,-50px))scale(0);opacity:0} }
+
+    /* ══ HEADER ══════════════════════════════════════════════════════ */
+    header { background:var(--surface); border-bottom:1px solid var(--border); padding:18px 32px; display:flex; align-items:center; gap:20px; }
+    .logo-bar { width:3px; height:32px; background:#007d32; border-radius:2px; flex-shrink:0; }
+    .logo-text { font-size:18px; font-weight:900; color:#fff; letter-spacing:2px; line-height:1; }
+    .logo-text .app{color:#E8750A;font-weight:400} .logo-text .iq{color:#007d32}
+    .header-sub { font-size:0.75rem; color:var(--muted); margin-top:3px; }
+    .header-spacer { flex:1; }
+    .header-tag { font-size:0.7rem; font-weight:600; letter-spacing:1px; color:var(--muted); border:1px solid var(--border); padding:3px 10px; border-radius:20px; }
+
+    /* ══ STATUS BAR ══════════════════════════════════════════════════ */
+    #statusBar { background:rgba(63,185,80,.06); border-bottom:1px solid rgba(63,185,80,.18); padding:7px 32px; display:none; align-items:center; gap:14px; font-size:0.72rem; color:var(--muted); }
+    #statusBar.visible { display:flex; }
+    .sb-dot { width:7px; height:7px; border-radius:50%; background:var(--green); flex-shrink:0; box-shadow:0 0 6px rgba(63,185,80,.6); }
+    .sb-live { font-size:0.65rem; font-weight:700; letter-spacing:1px; color:var(--green); }
+    .sb-ver  { font-weight:700; color:var(--text); }
+    .sb-sep  { color:var(--border); }
+    .sb-spacer { flex:1; }
+    .sb-commit { font-family:Consolas,monospace; font-size:0.68rem; }
+
+    /* ══ PROMO BANNER (small) ════════════════════════════════════════ */
+    #promoBanner { display:none; padding:14px 32px; position:relative; overflow:hidden; }
+    #promoBanner.visible { display:block; animation:banner-appear 0.5s ease forwards; }
+    @keyframes banner-appear { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+    .promo-inner { max-width:880px; margin:0 auto; display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .promo-badge { display:inline-flex; align-items:center; gap:6px; font-size:0.68rem; font-weight:800; letter-spacing:1.2px; padding:4px 12px; border-radius:20px; white-space:nowrap; flex-shrink:0; text-transform:uppercase; }
+    .promo-text  { font-size:0.88rem; font-weight:600; flex:1; line-height:1.4; }
+    .promo-cta   { font-size:0.75rem; font-weight:700; padding:5px 14px; border-radius:5px; cursor:pointer; border:none; text-decoration:none; display:inline-flex; align-items:center; gap:4px; flex-shrink:0; transition:opacity .15s; }
+    .promo-cta:hover { opacity:.8; }
+    .promo-sound-btn { background:transparent; border:none; cursor:pointer; font-size:1rem; padding:2px 4px; opacity:.5; transition:opacity .15s; flex-shrink:0; }
+    .promo-sound-btn:hover { opacity:1; }
+    .promo-l1 { background:rgba(48,54,61,.5); border-bottom:1px solid #30363d; }
+    .promo-l1 .promo-badge{background:#21262d;color:#8b949e;border:1px solid #30363d;}
+    .promo-l1 .promo-text{color:var(--muted);} .promo-l1 .promo-cta{background:#21262d;color:var(--muted);border:1px solid #30363d;}
+    .promo-l2 { background:rgba(0,66,104,.25); border-bottom:1px solid rgba(0,188,212,.25); }
+    .promo-l2 .promo-badge{background:rgba(0,188,212,.12);color:var(--accent);border:1px solid rgba(0,188,212,.35);animation:pulse-b 2.5s ease-in-out infinite;}
+    .promo-l2 .promo-text{color:var(--text);} .promo-l2 .promo-cta{background:rgba(0,188,212,.15);color:var(--accent);border:1px solid rgba(0,188,212,.4);}
+    @keyframes pulse-b{0%,100%{box-shadow:0 0 0 0 rgba(0,188,212,0)}50%{box-shadow:0 0 0 5px rgba(0,188,212,.12)}}
+    .promo-l3 { background:rgba(0,60,20,.3); border-bottom:1px solid rgba(63,185,80,.3); }
+    .promo-l3 .promo-badge{background:rgba(63,185,80,.12);color:var(--green);border:1px solid rgba(63,185,80,.4);animation:glow-g 2s ease-in-out infinite;}
+    .promo-l3 .promo-text{color:var(--text);} .promo-l3 .promo-cta{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.4);}
+    @keyframes glow-g{0%,100%{box-shadow:0 0 4px rgba(63,185,80,.3)}50%{box-shadow:0 0 12px rgba(63,185,80,.6)}}
+    .promo-l4 { background:linear-gradient(135deg,rgba(60,20,0,.6) 0%,rgba(30,10,0,.4) 100%); border-bottom:2px solid rgba(240,136,62,.5); }
+    .promo-l4 .promo-badge{background:rgba(240,136,62,.15);color:#f0883e;border:1px solid rgba(240,136,62,.5);}
+    .promo-l4 .promo-text{color:#f0d9c0;font-size:0.92rem;} .promo-l4 .promo-cta{background:rgba(240,136,62,.2);color:#f0883e;border:1px solid rgba(240,136,62,.5);}
+    .promo-l5 { background:linear-gradient(135deg,rgba(60,0,0,.7) 0%,rgba(50,30,0,.6) 50%,rgba(60,0,0,.7) 100%); border-bottom:2px solid rgba(248,81,73,.6); }
+    .promo-l5 .promo-badge{background:rgba(248,81,73,.15);color:#f85149;border:1px solid rgba(248,81,73,.5);animation:glow-r 1.5s ease-in-out infinite;}
+    .promo-l5 .promo-text{color:#ffd0cd;font-size:0.92rem;font-weight:700;} .promo-l5 .promo-cta{background:rgba(248,81,73,.2);color:#f85149;border:1px solid rgba(248,81,73,.5);}
+    @keyframes glow-r{0%,100%{box-shadow:0 0 6px rgba(248,81,73,.4)}50%{box-shadow:0 0 18px rgba(248,81,73,.8),0 0 30px rgba(248,81,73,.3)}}
+
+    /* ══ MAIN ════════════════════════════════════════════════════════ */
+    main { flex:1; max-width:880px; margin:0 auto; width:100%; padding:44px 24px 60px; }
+    .section-label { font-size:0.65rem; font-weight:700; color:var(--muted); letter-spacing:1.8px; text-transform:uppercase; margin-bottom:14px; }
+    .latest-card { background:var(--surface); border:1px solid var(--accent); border-radius:12px; padding:28px 32px; margin-bottom:44px; position:relative; overflow:hidden; }
+    .latest-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg,var(--accent) 0%,var(--accent2) 60%,transparent 100%); }
+    .latest-badge { display:inline-block; background:var(--badge-bg); border:1px solid var(--accent); color:var(--accent); font-size:0.62rem; font-weight:700; letter-spacing:1.2px; padding:2px 10px; border-radius:20px; margin-bottom:14px; }
+    .latest-ver{font-size:2.2rem;font-weight:800;color:var(--accent);line-height:1.1;}
+    .latest-meta{font-size:0.8rem;color:var(--muted);margin:6px 0 14px;}
+    .latest-title{font-size:1rem;color:var(--text);line-height:1.6;margin-bottom:26px;}
+    .latest-links{display:flex;flex-wrap:wrap;gap:10px;}
+    .btn{display:inline-block;padding:9px 22px;border-radius:6px;font-size:0.84rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;transition:opacity .15s,transform .1s;}
+    .btn:hover{opacity:.85;transform:translateY(-1px);}
+    .btn-ghost{background:transparent;border:1px solid var(--accent);color:var(--accent);}
+    .btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--text);}
+    .btn-hero{background:var(--green);color:#fff;font-size:0.9rem;font-weight:700;padding:10px 26px;border-radius:6px;text-decoration:none;border:none;cursor:pointer;transition:opacity .15s,transform .1s;display:inline-flex;align-items:center;gap:6px;}
+    .btn-hero:hover{opacity:.88;transform:translateY(-1px);}
+    .version-list{display:flex;flex-direction:column;gap:6px;}
+    .version-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 20px;display:flex;align-items:center;gap:14px;transition:border-color .15s,background .15s;}
+    .version-item:hover{border-color:var(--accent);background:rgba(0,188,212,.04);}
+    .vi-ver{font-size:0.9rem;font-weight:700;color:var(--accent);min-width:58px;}
+    .vi-date{font-size:0.72rem;color:var(--muted);min-width:88px;}
+    .vi-title{font-size:0.82rem;color:var(--text);flex:1;line-height:1.4;}
+    .vi-links{display:flex;gap:6px;flex-shrink:0;}
+    .vi-link{font-size:0.72rem;color:var(--muted);text-decoration:none;padding:3px 9px;border:1px solid var(--border);border-radius:4px;transition:color .15s,border-color .15s;}
+    .vi-link:hover{color:var(--accent);border-color:var(--accent);}
+    .ver-summary{margin:16px 0 20px;display:flex;flex-direction:column;gap:4px;}
+    .ver-summary-item{font-size:0.78rem;color:var(--muted);padding-left:14px;position:relative;line-height:1.55;}
+    .ver-summary-item::before{content:'•';position:absolute;left:0;color:var(--accent);}
+    .rn-feed{display:flex;flex-direction:column;gap:0;}
+    .rn-entry{border-left:2px solid var(--border);padding:0 0 32px 22px;margin-left:6px;position:relative;}
+    .rn-entry:last-child{padding-bottom:0;border-left-color:transparent;}
+    .rn-entry::before{content:'';position:absolute;left:-5px;top:4px;width:8px;height:8px;border-radius:50%;background:var(--accent);border:2px solid var(--bg);}
+    .rn-entry.rn-latest::before{background:var(--green);box-shadow:0 0 8px rgba(63,185,80,.5);}
+    .rn-hdr{display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+    .rn-ver{font-size:0.88rem;font-weight:700;color:var(--accent);}
+    .rn-entry.rn-latest .rn-ver{color:var(--green);}
+    .rn-date{font-size:0.7rem;color:var(--muted);}
+    .rn-title{font-size:0.78rem;color:var(--muted);}
+    .rn-latest-pill{font-size:0.6rem;font-weight:700;letter-spacing:.8px;background:rgba(63,185,80,.12);border:1px solid rgba(63,185,80,.3);color:var(--green);padding:1px 8px;border-radius:20px;}
+    .rn-changes{display:flex;flex-direction:column;gap:5px;}
+    .rn-change{font-size:0.78rem;color:var(--text);padding-left:14px;position:relative;line-height:1.55;}
+    .rn-change::before{content:'—';position:absolute;left:0;color:var(--accent);font-weight:700;}
+    .rn-no-changes{font-size:0.75rem;color:var(--muted);font-style:italic;}
+    .chg-list{display:flex;flex-direction:column;}
+    .chg-item{padding:9px 0 9px 18px;position:relative;border-bottom:1px solid var(--border);font-size:13px;color:var(--text);line-height:1.6;}
+    .chg-item:last-child{border-bottom:none;}
+    .chg-item::before{content:'—';position:absolute;left:0;color:var(--accent);font-weight:700;}
+    .gprot-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;}
+    .gprot-modal{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:700px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+    .gprot-hdr{padding:18px 22px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+    .gprot-hdr-main{flex:1;}.gprot-hdr-title{font-size:13px;font-weight:700;color:var(--text);}
+    .gprot-hdr-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+    .gprot-badge{display:inline-block;border-radius:6px;padding:3px 11px;font-size:11px;font-weight:700;flex-shrink:0;}
+    .gprot-badge-ok{background:#0d4429;color:#3fb950;border:1px solid #238636;}
+    .gprot-badge-warn{background:#3d2800;color:#f0883e;border:1px solid #e67700;}
+    .gprot-badge-err{background:#3d0001;color:#f85149;border:1px solid #c62828;}
+    .gprot-close{background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 12px;font-size:12px;color:var(--muted);cursor:pointer;}
+    .gprot-close:hover{background:var(--surface2);color:var(--text);}
+    .gprot-body{flex:1;overflow-y:auto;padding:18px 22px;display:flex;flex-direction:column;gap:14px;}
+    .gprot-sec{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:13px 15px;}
+    .gprot-sec-hdr{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:9px;}
+    .gprot-chips{display:flex;flex-wrap:wrap;gap:7px;}
+    .gprot-chip{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 10px;font-size:12px;color:var(--text);}
+    .gprot-chip span{color:var(--muted);font-size:10px;margin-right:3px;}
+    .gprot-verify{display:flex;flex-direction:column;gap:4px;}
+    .gprot-vi{display:flex;align-items:center;gap:7px;font-size:11px;font-family:Consolas,monospace;}
+    .gprot-vi.ok{color:#3fb950}.gprot-vi.fail{color:#f85149}
+    .gprot-diff-lbl{font-size:11px;font-weight:700;margin-bottom:4px;}
+    .gprot-diff-lbl.add{color:#3fb950}.gprot-diff-lbl.rem{color:#f85149}.gprot-diff-lbl.chg{color:#f0883e}
+    .gprot-pills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;}
+    .gprot-pill{font-size:11px;font-family:Consolas,monospace;border-radius:4px;padding:2px 7px;white-space:nowrap;}
+    .gprot-pill-a{background:#0d4429;color:#3fb950}.gprot-pill-r{background:#3d0001;color:#f85149}
+    .gprot-pill-c{background:#3d2800;color:#f0883e}.gprot-pill-m{background:#21262d;color:var(--muted)}
+    .gprot-cl{font-size:11px;font-family:Consolas,monospace;color:#c9d1d9;line-height:1.6;white-space:pre-wrap;max-height:180px;overflow-y:auto;}
+    .gprot-nodata{color:var(--muted);font-size:13px;text-align:center;padding:40px 0;}
+    .lang-switch{display:flex;gap:4px;align-items:center;}
+    .lang-btn{background:transparent;border:1px solid var(--border);border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+    .lang-btn:hover{border-color:var(--muted);color:var(--text);}
+    .lang-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,125,50,.1);}
+    .loading{color:var(--muted);font-size:0.9rem;text-align:center;padding:80px 0;}
+    .loading::after{content:'';display:block;width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:16px auto 0;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .error{color:#f85149;font-size:0.85rem;text-align:center;padding:60px 0;}
+    footer{text-align:center;padding:28px;color:var(--muted);font-size:0.72rem;border-top:1px solid var(--border);}
+    footer a{color:var(--muted);text-decoration:none;} footer a:hover{color:var(--accent);}
+    @media(max-width:600px){
+      header{padding:14px 16px;} #statusBar,#promoBanner{padding:8px 16px;}
+      main{padding:28px 16px 40px;} .latest-card{padding:20px;} .latest-ver{font-size:1.7rem;}
+      .vi-date,.vi-links{display:none;}
+      .pf-text{font-size:1.2rem;} .pf-icon{font-size:3.5rem;}
+    }
+  </style>
+  <script src="_i18n.js?v=7.21"></script>
+</head>
+<body>
+
+<header>
+  <div class="logo-bar"></div>
+  <div>
+    <div class="logo-text">HOPI <span class="app">App</span><span class="iq">IQ</span></div>
+    <div class="header-sub" data-i18n="vs.subtitle">AI-powered Enterprise Application Platform</div>
+  </div>
+  <div class="header-spacer"></div>
+  <div class="lang-switch">
+    <button class="lang-btn" data-lang="cs" onclick="switchLang('cs')">CZ</button>
+    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+  </div>
+  <div class="header-tag" data-i18n="vs.tag">VYDANÉ VERZE</div>
+</header>
+
+<div id="statusBar">
+  <div class="sb-dot"></div><span class="sb-live">LIVE</span>
+  <span class="sb-ver" id="sbVer"></span><span class="sb-sep">·</span>
+  <span id="sbDate"></span><span class="sb-sep">·</span><span id="sbSession"></span>
+  <div class="sb-spacer"></div><span class="sb-commit" id="sbCommit"></span>
+</div>
+
+<div id="promoBanner"><div class="promo-inner" id="promoInner"></div></div>
+
+<main>
+  <div id="content"><div class="loading">Načítám přehled verzí</div></div>
+</main>
+
+<footer>
+  HOPI AppIQ Studio &nbsp;·&nbsp; <span id="footer-ts"></span>
+  &nbsp;·&nbsp; <a href="https://github.com/h-gr-fico/appiq" target="_blank">GitHub</a>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var _versData=null, _changesData={}, _domReady=false, _initLang='cs', _audioCtx=null, _bgAudio=null;
+
+  // Preload versions.json
+  fetch('versions.json?_='+Date.now())
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(d){
+      _versData=d;
+      if(_domReady) renderAll(d);
+    })
+    .catch(function(e){ _versData={error:e.message}; if(_domReady) showError(e.message); });
+
+  setTimeout(function(){
+    if(_domReady&&!_versData){
+      document.getElementById('content').innerHTML='<div class="error">Nelze načíst versions.json — obnovte stránku (F5).</div>';
+    }
+  },6000);
+
+  // Init from URL params (passed from index.html after bomb)
+  document.addEventListener('DOMContentLoaded', function(){
+    var params=new URLSearchParams(window.location.search);
+    var lang=params.get('lang')||'cs';
+    var music=params.get('music')==='1';
+    _initLang=lang;
+
+    // Clean URL bar
+    if(window.history&&window.history.replaceState) window.history.replaceState({},'',window.location.pathname);
+
+    // Set language
+    try{if(window.I18n&&I18n.setLang)I18n.setLang(lang);}catch(e){}
+    updateLangBtns(lang);
+
+    // Music: set localStorage so _hopiq.js auto-start picks it up
+    if(music){
+      try{localStorage.setItem('appiq_music','on');}catch(e){}
+    }
+
+    _domReady=true;
+    if(_versData&&!_versData.error) renderAll(_versData);
+    else if(_versData&&_versData.error) showError(_versData.error);
+  });
+
+  window.switchLang=function(lang){
+    _initLang=lang;
+    try{I18n.setLang(lang);}catch(e){}
+    updateLangBtns(lang);
+    if(_versData&&!_versData.error) renderAll(_versData);
+  };
+
+  function updateLangBtns(lang){
+    document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-lang')===lang);});
+  }
+  function showError(msg){
+    document.getElementById('content').innerHTML='<div class="error">'+(I18n.t('vs.error')||'Nelze načíst versions.json')+'<br><small style="opacity:.6">'+esc(msg)+'</small></div>';
+  }
+
+  function showMaintenanceOverlay(){
+    var ov=document.createElement('div'); ov.id='maintenanceOverlay';
+    ov.innerHTML=
+      '<div class="maint-logo-name">HOPI <span style="color:#E8750A">App</span><span style="color:#007d32">IQ</span></div>'+
+      '<div class="maint-logo-by">by HOPI TECHNOLOGY</div>'+
+      '<div class="maint-divider"></div>'+
+      '<div class="maint-title">ÚDRŽBA SYSTÉMU</div>'+
+      '<div class="maint-msg">Stavte se później. Děkujeme za pochopení.</div>'+
+      '<div class="maint-team">Vývojový tým platformy AppIQ.</div>'+
+      '<div class="maint-sep"></div>'+
+      '<div class="maint-en">'+
+        '<div class="maint-title">SYSTEM MAINTENANCE</div>'+
+        '<div class="maint-msg">Please come back later. Thank you for your understanding.</div>'+
+        '<div class="maint-team">AppIQ Platform Development Team.</div>'+
+      '</div>';
+    document.body.appendChild(ov);
+  }
+
+  function renderAll(data){
+    if(data.maintenance&&!localStorage.getItem('appiq_dev_bypass')){
+      showMaintenanceOverlay(); return;
+    }
+    try{renderStatusBar(data);}catch(e){}
+    try{renderPromoBanner(data);}catch(e){}
+    try{render(data);}catch(e){document.getElementById('content').innerHTML='<div class="error">Chyba: '+String(e)+'</div>';}
+  }
+
+  function renderStatusBar(data){
+    var v=(data.versions||[]).find(function(v){return v.version===data.latest;})||(data.versions||[])[0];
+    if(!v) return;
+    document.getElementById('sbVer').textContent=v.version;
+    document.getElementById('sbDate').textContent=v.date||'';
+    document.getElementById('sbSession').textContent=v.session||'';
+    var s=window._STUDIO_STATUS;
+    if(s&&s.deployCommit) document.getElementById('sbCommit').textContent='commit '+s.deployCommit;
+    document.getElementById('statusBar').classList.add('visible');
+  }
+
+  var LEVEL_META=[null,
+    {cs:'Tweak',          en:'Tweak',         icon:'🔧',cls:'promo-l1'},
+    {cs:'Update',         en:'Update',         icon:'⚡',cls:'promo-l2'},
+    {cs:'Feature',        en:'Feature',        icon:'🚀',cls:'promo-l3'},
+    {cs:'Bomba vybuchla', en:'Bomb dropped',   icon:'💥',cls:'promo-l4'},
+    {cs:'Svět se zatřásl',en:'World shook',    icon:'🌍',cls:'promo-l5'}
+  ];
+
+  function renderPromoBanner(data){
+    var versions=data.versions||[];
+    var latest=versions.find(function(v){return v.version===data.latest;})||versions[0];
+    if(!latest||!latest.promoLevel) return;
+    var lvl=parseInt(latest.promoLevel,10)||1;
+    if(lvl<1||lvl>5) return;
+    var isEn=I18n.getLang&&I18n.getLang()==='en';
+    var meta=LEVEL_META[lvl];
+    var text=isEn?(latest.promoTextEn||latest.promoText||''):(latest.promoText||latest.promoTextEn||'');
+    var mainUrl=latest.mainUrl||latest.hubUrl||'';
+
+    // L5 (bomb) was already shown in index.html — show small banner only here
+    // L4 still gets fullscreen treatment on selector
+    if(lvl===4){
+      showPromoFullscreen(lvl,text,mainUrl,isEn,meta);
+    } else {
+      renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta);
+      if(lvl<4) setTimeout(function(){if(_audioCtx)playSoundForLevel(_audioCtx,lvl);},400);
+    }
+  }
+
+  function showPromoFullscreen(lvl,text,mainUrl,isEn,meta){
+    var label=isEn?meta.en:meta.cs;
+    var ctaLabel=isEn?'Explore versions \u2193':'Prozkoumat verze \u2193';
+    var el=document.createElement('div');
+    el.className='promo-full pf-l'+lvl;
+    var iconHtml='<div class="pf-orb"><svg viewBox="0 0 110 110"><circle cx="55" cy="55" r="18" fill="none" stroke="#00bcd4" stroke-width="1.5" stroke-dasharray="28 84" class="pf-orb-r1"/><circle cx="55" cy="55" r="34" fill="none" stroke="#00bcd4" stroke-width="1" opacity=".5" stroke-dasharray="53 160" class="pf-orb-r2"/><circle cx="55" cy="55" r="48" fill="none" stroke="#00bcd4" stroke-width=".6" opacity=".25" stroke-dasharray="75 225" class="pf-orb-r3"/><circle cx="55" cy="55" r="5" fill="#00bcd4" class="pf-orb-dot"/></svg></div>';
+    el.innerHTML=
+      iconHtml+
+      '<div class="pf-label">'+esc(label)+'</div>'+
+      '<div class="pf-text">'+esc(text)+'</div>'+
+      '<button class="pf-cta">'+ctaLabel+'</button>'+
+      '<div class="pf-skip">'+(isEn?'click anywhere to continue':'kliknut\u00edm kamkoliv pokra\u010dovat')+'</div>';
+    document.body.appendChild(el);
+    var _dismissed=false;
+    function dismissFull(){
+      if(_dismissed) return; _dismissed=true;
+      el.classList.add('collapsing');
+      setTimeout(function(){if(el.parentNode)el.remove(); renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta);},650);
+    }
+    el.addEventListener('click',dismissFull);
+    spawnSparks(el,20,true);
+    setTimeout(function(){playMp3Sound(4000);},300);
+  }
+
+  function renderPromoBannerSmall(lvl,text,mainUrl,isEn,meta){
+    var label=isEn?meta.en:meta.cs;
+    var ctaLabel=isEn?'See what\'s new \u2192':'Co je nov\u00e9ho \u2192';
+    var soundTip=isEn?'Replay sound':'P\u0159ehr\u00e1t zvuk';
+    var banner=document.getElementById('promoBanner');
+    banner.className=meta.cls+' visible';
+    document.getElementById('promoInner').innerHTML=
+      '<span class="promo-badge"><span>'+meta.icon+'</span>'+esc(label)+'</span>'+
+      '<span class="promo-text">'+esc(text)+'</span>'+
+      (mainUrl?'<a href="'+esc(mainUrl)+'" class="promo-cta">'+ctaLabel+'</a>':'')+
+      '<button class="promo-sound-btn" onclick="replayPromoSound('+lvl+')" title="'+soundTip+'">🔊</button>';
+    if(lvl===4) spawnSparks(banner,10,false);
+  }
+
+  function spawnSparks(container,count,big){
+    var colors=big?['#f0883e','#ffaa55','#ff6600','#ffcc44']:['#f0883e','#ffaa55'];
+    for(var i=0;i<count;i++){
+      (function(idx){
+        setTimeout(function(){
+          var s=document.createElement('span'); s.className='spark';
+          var sz=big?(4+Math.random()*6):(3+Math.random()*3);
+          s.style.width=s.style.height=sz+'px';
+          s.style.background=colors[Math.floor(Math.random()*colors.length)];
+          var cx=big?(window.innerWidth/2+((Math.random()-.5)*80)):(60+Math.random()*180);
+          var cy=big?(window.innerHeight/2+((Math.random()-.5)*60)):(8+Math.random()*28);
+          s.style.left=cx+'px'; s.style.top=cy+'px';
+          var dx=(Math.random()-.5)*(big?300:60);
+          var dy=big?-(80+Math.random()*200):-(20+Math.random()*50);
+          s.style.setProperty('--sdx','translate('+dx+'px,'+dy+'px)');
+          s.style.animationDelay=(Math.random()*.4)+'s';
+          s.style.animationDuration=(.6+Math.random()*.5)+'s';
+          container.appendChild(s);
+          setTimeout(function(){s.remove();},1500);
+        },idx*45);
+      })(i);
+    }
+  }
+
+  window.replayPromoSound=function(lvl){
+    if(!_audioCtx){try{_audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}
+    if(lvl>=4) playMp3Sound(lvl===5?5500:4000);
+    else if(_audioCtx) playSoundForLevel(_audioCtx,lvl);
+  };
+
+  function playMp3Sound(duration,track){
+    if(_bgAudio){_bgAudio.pause();_bgAudio=null;}
+    var src=track||'_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3';
+    var audio=new Audio(src); audio.volume=0; _bgAudio=audio;
+    audio.play().then(function(){
+      var fi=setInterval(function(){if(audio.volume<0.75){audio.volume=Math.min(0.75,audio.volume+0.06);}else clearInterval(fi);},40);
+      setTimeout(function(){
+        var fo=setInterval(function(){if(audio.volume>0.03){audio.volume=Math.max(0,audio.volume-0.04);}else{audio.pause();clearInterval(fo);_bgAudio=null;}},50);
+      },duration);
+    }).catch(function(){if(_audioCtx)playSoundForLevel(_audioCtx,4);});
+  }
+
+  function tone(c,f,st,dur,type,vol){
+    var o=c.createOscillator(),g=c.createGain();
+    o.connect(g);g.connect(c.destination);
+    o.type=type||'sine'; o.frequency.setValueAtTime(f,c.currentTime+st);
+    g.gain.setValueAtTime(0,c.currentTime+st);
+    g.gain.linearRampToValueAtTime(vol||0.25,c.currentTime+st+0.01);
+    g.gain.linearRampToValueAtTime(0,c.currentTime+st+dur);
+    o.start(c.currentTime+st); o.stop(c.currentTime+st+dur+0.05);
+  }
+  function soundL1(c){tone(c,880,0,.35,'sine',.15);}
+  function soundL2(c){tone(c,660,0,.25,'sine',.2);tone(c,880,.22,.35,'sine',.2);}
+  function soundL3(c){[[523.25,0],[659.25,.14],[783.99,.28],[1046.5,.42]].forEach(function(n,i){tone(c,n[0],n[1],i===3?.65:.38,'sine',i===3?.15:.22);});}
+  function playSoundForLevel(c,lvl){[null,soundL1,soundL2,soundL3][lvl]&&[null,soundL1,soundL2,soundL3][lvl](c);}
+
+  function render(data){
+    var t=function(k,fb){try{return(window.I18n&&I18n.t)?I18n.t(k)||fb:fb;}catch(e){return fb;}};
+    _changesData={};
+    var versions=(data.versions||[]).slice();
+    versions.sort(function(a,b){return b.version>a.version?1:-1;});
+    var latest=versions.find(function(v){return v.version===data.latest;})||versions[0];
+    var others=versions.filter(function(v){return v!==latest;});
+    var html='';
+
+    if(latest){
+      if(latest.changes&&latest.changes.length) _changesData[latest.version]=latest.changes;
+      html+='<div class="section-label">'+t('vs.current','Aktuální verze')+'</div>';
+      html+='<div class="latest-card"><div class="latest-badge">LATEST</div>';
+      html+='<div class="latest-ver">'+esc(latest.version)+'</div>';
+      var m=latest.date||'';
+      if(latest.session) m+=(m?'  ·  ':'')+esc(latest.session);
+      if(m) html+='<div class="latest-meta">'+m+'</div>';
+      if(latest.title) html+='<div class="latest-title">'+esc(latest.title)+'</div>';
+      if(latest.mainUrl) html+='<div style="margin:18px 0 10px"><a href="'+esc(latest.mainUrl)+'" class="btn btn-hero">'+esc(latest.mainLabel||t('vs.btn.open','Otevřít'))+' →</a></div>';
+      if(latest.changes&&latest.changes.length){
+        html+='<div class="ver-summary">';
+        latest.changes.forEach(function(c){html+='<div class="ver-summary-item">'+esc(c)+'</div>';});
+        html+='</div>';
+      }
+      html+='<div class="latest-links">';
+      if(latest.changes&&latest.changes.length) html+='<button class="btn btn-secondary" onclick="openChangesModal(\''+esc(latest.version)+'\')">'+t('vs.btn.changes','Detailní změny')+'</button>';
+      if(latest.presentationUrl) html+='<a href="'+esc(latest.presentationUrl)+'" class="btn btn-ghost">'+t('vs.btn.prez','Prezentace')+'</a>';
+      if(latest.pitchUrl) html+='<a href="'+esc(latest.pitchUrl)+'" class="btn btn-secondary">'+t('vs.btn.pitch','Personal Pitch')+'</a>';
+      if(latest.docsUrl) html+='<a href="'+esc(latest.docsUrl)+'" class="btn btn-secondary">'+t('vs.btn.docs','Docs')+'</a>';
+      if(latest.protocolUrl) html+='<button class="btn btn-secondary" onclick="openProtocolModal(\''+esc(latest.protocolUrl)+'\',\''+esc(latest.version)+'\')">&#128203; '+t('vs.btn.protocol','Protokol')+'</button>';
+      html+='</div></div>';
+    }
+
+    if(others.length){
+      html+='<div class="section-label" style="margin-top:36px">'+t('vs.archived','Archivované verze')+' ('+others.length+')</div><div class="version-list">';
+      others.forEach(function(v){
+        if(v.changes&&v.changes.length) _changesData[v.version]=v.changes;
+        html+='<div class="version-item"><div class="vi-ver">'+esc(v.version)+'</div><div class="vi-date">'+esc(v.date||'')+'</div><div class="vi-title">'+esc(v.title||'')+'</div><div class="vi-links">';
+        if(v.mainUrl) html+='<a href="'+esc(v.mainUrl)+'" class="vi-link" style="font-weight:700;color:var(--green);border-color:var(--green);">'+esc(v.mainLabel||t('vs.btn.open','Otevřít'))+'</a>';
+        if(v.changes&&v.changes.length) html+='<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openChangesModal(\''+esc(v.version)+'\')">'+t('vs.btn.changes','Detailní změny')+'</button>';
+        if(v.presentationUrl) html+='<a href="'+esc(v.presentationUrl)+'" class="vi-link">'+t('vs.btn.prez','Prez')+'</a>';
+        if(v.pitchUrl) html+='<a href="'+esc(v.pitchUrl)+'" class="vi-link">'+t('vs.btn.pitch','Pitch')+'</a>';
+        if(v.docsUrl) html+='<a href="'+esc(v.docsUrl)+'" class="vi-link">'+t('vs.btn.docs','Docs')+'</a>';
+        if(v.protocolUrl) html+='<button class="vi-link" style="cursor:pointer;background:transparent;" onclick="openProtocolModal(\''+esc(v.protocolUrl)+'\',\''+esc(v.version)+'\')">&#128203;</button>';
+        html+='</div></div>';
+      });
+      html+='</div>';
+    }
+
+    html+='<div class="section-label" style="margin-top:48px">'+t('vs.relnotes','Release Notes')+'</div><div class="rn-feed">';
+    versions.forEach(function(rv){
+      var isl=rv.version===(data.latest||(versions[0]&&versions[0].version));
+      html+='<div class="rn-entry'+(isl?' rn-latest':'')+'">';
+      html+='<div class="rn-hdr"><span class="rn-ver">'+esc(rv.version)+'</span>';
+      if(isl) html+='<span class="rn-latest-pill">LATEST</span>';
+      if(rv.date) html+='<span class="rn-date">'+esc(rv.date)+'</span>';
+      if(rv.title) html+='<span class="rn-title">— '+esc(rv.title)+'</span>';
+      html+='</div>';
+      if(rv.changes&&rv.changes.length){
+        html+='<div class="rn-changes">';
+        rv.changes.forEach(function(c){html+='<div class="rn-change">'+esc(c)+'</div>';});
+        html+='</div>';
+      } else { html+='<div class="rn-no-changes">Bez detailního záznamu změn.</div>'; }
+      html+='</div>';
+    });
+    html+='</div>';
+
+    if(!versions.length) html='<div class="error">Žádné verze nalezeny.</div>';
+    document.getElementById('content').innerHTML=html;
+    if(data.updatedAt) document.getElementById('footer-ts').textContent=(I18n.t('common.updated')||'Aktualizováno')+': '+data.updatedAt;
+  }
+
+  window.openChangesModal=function(ver){
+    var ch=_changesData[ver]||[];
+    document.getElementById('changesTitle').textContent=(I18n.t('vs.changes.title')||'Změny verze')+' '+ver;
+    var h='<div class="chg-list">';
+    ch.forEach(function(c){h+='<div class="chg-item">'+esc(c)+'</div>';});
+    if(!ch.length) h+='<div style="color:var(--muted);font-size:13px">Žádné záznamy.</div>';
+    h+='</div>';
+    document.getElementById('changesBody').innerHTML=h;
+    document.getElementById('changesOverlay').style.display='flex';
+  };
+  window.closeChangesModal=function(){document.getElementById('changesOverlay').style.display='none';};
+  window.openProtocolModal=function(url,ver){
+    var ov=document.getElementById('gprotOverlay'); ov.style.display='flex';
+    document.getElementById('gprotTitle').textContent='Protokol archivace '+(ver||'');
+    document.getElementById('gprotSub').textContent='';
+    document.getElementById('gprotBadge').textContent=''; document.getElementById('gprotBadge').className='gprot-badge';
+    document.getElementById('gprotBody').innerHTML='<div class="gprot-nodata">Na\u010d\u00edt\u00e1m\u2026</div>';
+    fetch(url+'?_='+Date.now()).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(renderProtocolModal)
+    .catch(function(e){document.getElementById('gprotBody').innerHTML='<div class="gprot-nodata">\u26a0\ufe0f '+esc(e.message)+'</div>';});
+  };
+  window.closeProtocolModal=function(){document.getElementById('gprotOverlay').style.display='none';};
+
+  function renderProtocolModal(d){
+    var s=d.status||'?'; var badge=document.getElementById('gprotBadge');
+    badge.textContent=s==='OK'?'\u2705 OK':s==='WARN'?'\u26a0\ufe0f WARN':'\u274c CHYBA';
+    badge.className='gprot-badge '+(s==='OK'?'gprot-badge-ok':s==='WARN'?'gprot-badge-warn':'gprot-badge-err');
+    document.getElementById('gprotTitle').textContent='Protokol archivace '+(d.version||'');
+    document.getElementById('gprotSub').textContent=(d.session||'')+(d.timestamp?'  ·  '+d.timestamp:'');
+    var h=''; var st=d.stats||{};
+    h+='<div class="gprot-sec"><div class="gprot-sec-hdr">\ud83d\udcca Statistiky</div><div class="gprot-chips">';
+    h+='<div class="gprot-chip"><span>Soubor\u016f</span>'+esc(st.totalFiles||0)+'</div>';
+    h+='<div class="gprot-chip"><span>Velikost</span>'+(st.totalSizeKb||0)+' kB</div>';
+    var bt=st.byType||{}; Object.keys(bt).sort().forEach(function(e){h+='<div class="gprot-chip"><span>'+esc(e)+'</span>'+esc(bt[e])+'</div>';});
+    h+='</div></div>';
+    var vf=d.verify||{}; var ck=vf.checks||[];
+    h+='<div class="gprot-sec"><div class="gprot-sec-hdr">'+(vf.failed===0?'\u2705':'\u26a0\ufe0f')+' Verify ('+esc(vf.passed||0)+'/'+((vf.passed||0)+(vf.failed||0))+' OK)</div><div class="gprot-verify">';
+    ck.forEach(function(c){h+='<div class="gprot-vi '+(c.ok?'ok':'fail')+'">'+(c.ok?'\u2713':'\u2717')+' '+esc(c.file)+'</div>';});
+    h+='</div></div>';
+    var df=d.diff||{}; var ad=df.added||[],rm=df.removed||[],ch=df.changed||[];
+    h+='<div class="gprot-sec"><div class="gprot-sec-hdr">\ud83d\udd04 Diff'+(df.previousSession?' oproti '+esc(df.previousSession):'')+' </div>';
+    if(!ad.length&&!rm.length&&!ch.length){h+='<div style="font-size:12px;color:var(--muted)">Beze zm\u011bn</div>';}
+    else{
+      if(ad.length){h+='<div class="gprot-diff-lbl add">+ '+ad.length+' p\u0159id\u00e1no</div><div class="gprot-pills">'; ad.slice(0,12).forEach(function(f){h+='<span class="gprot-pill gprot-pill-a">'+esc(f)+'</span>';}); if(ad.length>12)h+='<span class="gprot-pill gprot-pill-m">+'+(ad.length-12)+' dal\u0161\u00edch</span>'; h+='</div>';}
+      if(rm.length){h+='<div class="gprot-diff-lbl rem">\u2212 '+rm.length+' odstran\u011bno</div><div class="gprot-pills">'; rm.slice(0,12).forEach(function(f){h+='<span class="gprot-pill gprot-pill-r">'+esc(f)+'</span>';}); if(rm.length>12)h+='<span class="gprot-pill gprot-pill-m">+'+(rm.length-12)+' dal\u0161\u00edch</span>'; h+='</div>';}
+      if(ch.length){h+='<div class="gprot-diff-lbl chg">\u007e '+ch.length+' zm\u011bn\u011bno</div><div class="gprot-pills">'; ch.slice(0,12).forEach(function(f){h+='<span class="gprot-pill gprot-pill-c">'+esc(f)+'</span>';}); if(ch.length>12)h+='<span class="gprot-pill gprot-pill-m">+'+(ch.length-12)+' dal\u0161\u00edch</span>'; h+='</div>';}
+    }
+    h+='</div>';
+    if(d.changelog){h+='<div class="gprot-sec"><div class="gprot-sec-hdr">\ud83d\udcdd Zm\u011bny</div><pre class="gprot-cl">'+esc(d.changelog)+'</pre></div>';}
+    document.getElementById('gprotBody').innerHTML=h;
+  }
+
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+})();
+</script>
+
+<!-- Changes Modal -->
+<div class="gprot-overlay" id="changesOverlay" style="display:none" onclick="if(event.target===this)closeChangesModal()">
+  <div class="gprot-modal" style="max-width:560px">
+    <div class="gprot-hdr"><div class="gprot-hdr-main"><div class="gprot-hdr-title" id="changesTitle">Změny verze</div></div><button class="gprot-close" onclick="closeChangesModal()">&#10005; Zavřít</button></div>
+    <div class="gprot-body" id="changesBody"></div>
+  </div>
+</div>
+
+<!-- Protocol Modal -->
+<div class="gprot-overlay" id="gprotOverlay" style="display:none" onclick="if(event.target===this)closeProtocolModal()">
+  <div class="gprot-modal">
+    <div class="gprot-hdr">
+      <div class="gprot-hdr-main"><div class="gprot-hdr-title" id="gprotTitle">Protokol archivace</div><div class="gprot-hdr-sub" id="gprotSub"></div></div>
+      <span class="gprot-badge" id="gprotBadge"></span>
+      <button class="gprot-close" onclick="closeProtocolModal()">&#10005; Zavřít</button>
+    </div>
+    <div class="gprot-body" id="gprotBody"><div class="gprot-nodata">Načítám…</div></div>
+  </div>
+</div>
+
+<script src="_hopiq.js?v=7.21"></script>
+</body>
+</html>
