@@ -558,6 +558,9 @@
     // MP3 sound
     setTimeout(function(){ playMp3Sound(lvl===5?5500:4000); },300);
 
+    // Gladiator — spustit při bombě (L5)
+    if(lvl===5){ setTimeout(function(){ if(window._hm){ window._hm.start(); try{localStorage.setItem('appiq_music','on');}catch(e){}} },500); }
+
     // Bez auto-dismiss — uživatel klikne sám
   }
 

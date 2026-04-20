@@ -3802,14 +3802,26 @@
       "userExplanation": "Otestujeme že Coordination Center správně zobrazuje oba soubory s čitelným formátováním."
     },
     {
+      "id": "AIQ-00154",
+      "title": "Version selector — hudba spustit po kliknutí na bombu (Gladiator od bomb screenu)",
+      "description": "Upravit music logiku: (1) _hopiq.js — root stránka (depth<=1) neprovádí auto-start z localStorage při page loadu. (2) index.html — bomb click (L5 promo) volá _hm.start() + nastaví appiq_music=on. Hudba hraje od bomby přes version selector do Hubu. Welcome overlay zůstává tichý.",
+      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "domain": "Studio", "module": "Hub", "component": "index.html + _hopiq.js",
+      "taskType": "fix", "effort": "XS", "estimatedTime": 20, "actualTime": null,
+      "assignee": "Claude", "createdAt": "2026-04-20 12:00", "createdBy": "David Gogela",
+      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "userExplanation": "Hudba se spouštěla na první stránce automaticky. Správně má začít až po kliknutí na bombu."
+    },
+    {
       "id": "AIQ-00153",
       "title": "CEO_BRIEF.html — update partner karty Artin + Intecs (přesný text z webů + pilot note)",
       "description": "Opravit nepřesné popisy partnerů Artin a Intecs v Flip #3 sekci CEO_BRIEF.html. Artin: 25+ let, 200+ lidí CZ/SK/NL, custom AI, cloud, BI, compliance. Intecs: 18+ let, 300+ klientů, Power BI/DWH specialista, Microsoft Gold partner, 8 Awards. Oba: přidat tag 'pilot', zmínit probíhající pilot AI v PBI reportingu, disclaimer pod blokem partnerů. Bilingvní CS/EN.",
-      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "stream": "WEB", "priority": "HIGH", "status": "CLOSED",
       "domain": "Platform", "module": "Presentation", "component": "CEO_BRIEF.html",
-      "taskType": "content", "effort": "XS", "estimatedTime": 20, "actualTime": null,
+      "taskType": "content", "effort": "XS", "estimatedTime": 20, "actualTime": 18,
       "assignee": "Claude", "createdAt": "2026-04-20 11:30", "createdBy": "David Gogela",
-      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "completedBy": "Claude", "completedAt": "2026-04-20 11:48", "durationDays": 0,
+      "comment": null, "note": "Texty ověřeny z artin.eu + intecs.cz. Tagy updated na 'pilot'. Disclaimer přidán pod blok. Commit 34a3e6b.",
       "userExplanation": "Texty o partnerech nebyly přesné — opravit dle skutečnosti z webů + přidat kontext probíhajícího pilotu."
     },
     {
