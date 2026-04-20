@@ -3802,14 +3802,26 @@
       "userExplanation": "Otestujeme že Coordination Center správně zobrazuje oba soubory s čitelným formátováním."
     },
     {
+      "id": "AIQ-00153",
+      "title": "CEO_BRIEF.html — update partner karty Artin + Intecs (přesný text z webů + pilot note)",
+      "description": "Opravit nepřesné popisy partnerů Artin a Intecs v Flip #3 sekci CEO_BRIEF.html. Artin: 25+ let, 200+ lidí CZ/SK/NL, custom AI, cloud, BI, compliance. Intecs: 18+ let, 300+ klientů, Power BI/DWH specialista, Microsoft Gold partner, 8 Awards. Oba: přidat tag 'pilot', zmínit probíhající pilot AI v PBI reportingu, disclaimer pod blokem partnerů. Bilingvní CS/EN.",
+      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "domain": "Platform", "module": "Presentation", "component": "CEO_BRIEF.html",
+      "taskType": "content", "effort": "XS", "estimatedTime": 20, "actualTime": null,
+      "assignee": "Claude", "createdAt": "2026-04-20 11:30", "createdBy": "David Gogela",
+      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "userExplanation": "Texty o partnerech nebyly přesné — opravit dle skutečnosti z webů + přidat kontext probíhajícího pilotu."
+    },
+    {
       "id": "AIQ-00152",
       "title": "CEO_BRIEF.html — fix: hudba nehraje po odemčení (checkPw nevolá ceoMusicStart)",
       "description": "Bug: checkPw() v CEO_BRIEF.html po odemčení nespustí hudbu. Root příčina: chybí volání window.ceoMusicStart() v checkPw() — na rozdíl od PERSONAL_PITCH kde checkPw() volá ppMusicStart(). Zároveň IIFE neexponuje ceoMusicStart. Fix: (1) přidat window.ceoMusicStart do IIFE, (2) přidat volání ceoMusicStart v checkPw().",
-      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "stream": "WEB", "priority": "HIGH", "status": "CLOSED",
       "domain": "Platform", "module": "Presentation", "component": "CEO_BRIEF.html",
-      "taskType": "fix", "effort": "XS", "estimatedTime": 10, "actualTime": null,
+      "taskType": "fix", "effort": "XS", "estimatedTime": 10, "actualTime": 8,
       "assignee": "Claude", "createdAt": "2026-04-20 11:00", "createdBy": "David Gogela",
-      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "completedBy": "Claude", "completedAt": "2026-04-20 11:08", "durationDays": 0,
+      "comment": null, "note": "Přidán window.ceoMusicStart do IIFE + volání v checkPw(). Commit 597eaa8.",
       "userExplanation": "Na CEO_BRIEF nehraje hudba po zadání hesla."
     },
     {
