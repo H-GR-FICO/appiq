@@ -3802,14 +3802,26 @@
       "userExplanation": "Otestujeme že Coordination Center správně zobrazuje oba soubory s čitelným formátováním."
     },
     {
+      "id": "AIQ-00155",
+      "title": "CEO_BRIEF.html — nový slide MIND-SET REVOLUTION (pod s2 dual brand)",
+      "description": "Přidat novou sekci s2b 'MIND-SET REVOLUTION — Předpoklady projektu' mezi s2 (dual brand) a s3 (business narrative). 8 bodů: 0-Totální změna filozofie, 1-David vyváže ze stávajícího pracovního poměru, 2-Autonomie v sestavení týmu, 3-IT=partner/subdodávka K/O jen majitel firmy, 4-Dedikovaný rozpočet, 5-Aktivní krytí Majitele a CEO HOPI Skupiny, 6-IP od dne 1 patří HOPI TechIQ, 7-Přístup k reálným datům HOPI. Bilingvní CS/EN. Schváleno Davidem.",
+      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "domain": "Platform", "module": "Presentation", "component": "CEO_BRIEF.html",
+      "taskType": "development", "effort": "S", "estimatedTime": 45, "actualTime": null,
+      "assignee": "Claude", "createdAt": "2026-04-20 13:00", "createdBy": "David Gogela",
+      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "userExplanation": "Slide o předpokladech projektu — mindset, lidé, IT nezávislost, sponzorství, IP. Pod dual brand slidem."
+    },
+    {
       "id": "AIQ-00154",
       "title": "Version selector — hudba spustit po kliknutí na bombu (Gladiator od bomb screenu)",
       "description": "Upravit music logiku: (1) _hopiq.js — root stránka (depth<=1) neprovádí auto-start z localStorage při page loadu. (2) index.html — bomb click (L5 promo) volá _hm.start() + nastaví appiq_music=on. Hudba hraje od bomby přes version selector do Hubu. Welcome overlay zůstává tichý.",
-      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "stream": "WEB", "priority": "HIGH", "status": "CLOSED",
       "domain": "Studio", "module": "Hub", "component": "index.html + _hopiq.js",
-      "taskType": "fix", "effort": "XS", "estimatedTime": 20, "actualTime": null,
+      "taskType": "fix", "effort": "XS", "estimatedTime": 20, "actualTime": 15,
       "assignee": "Claude", "createdAt": "2026-04-20 12:00", "createdBy": "David Gogela",
-      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "completedBy": "Claude", "completedAt": "2026-04-20 12:15", "durationDays": 0,
+      "comment": null, "note": "_hopiq.js: auto-start zakázán na depth<=1. index.html: L5 bomb → _hm.start() + localStorage. Commit 8923634.",
       "userExplanation": "Hudba se spouštěla na první stránce automaticky. Správně má začít až po kliknutí na bombu."
     },
     {
