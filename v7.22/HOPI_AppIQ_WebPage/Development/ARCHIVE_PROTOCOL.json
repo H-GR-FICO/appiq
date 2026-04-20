@@ -1,0 +1,120 @@
+﻿{
+    "schemaVersion":  "1.0",
+    "status":  "OK",
+    "version":  "v7.22",
+    "session":  "v7.22-WebPage_20260420_1227",
+    "timestamp":  "2026-04-20 12:27",
+    "stats":  {
+                  "totalFiles":  46,
+                  "totalSizeKb":  35595.8,
+                  "byType":  {
+                                 "json":  3,
+                                 "md":  8,
+                                 "js":  3,
+                                 "html":  12,
+                                 "txt":  1,
+                                 "png":  15,
+                                 "mp3":  3,
+                                 "other":  1
+                             },
+                  "previousTotal":  44
+              },
+    "verify":  {
+                   "passed":  20,
+                   "failed":  0,
+                   "checks":  [
+                                  {
+                                      "file":  "PERSONAL_PITCH.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_PRESENTATION.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_ver.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "RESPONSIVE_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "docs/index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/story_personal.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_CONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BOIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BKONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CHANGELOG.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_ARCHITECTURE.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CLAUDE.md",
+                                      "ok":  true
+                                  }
+                              ]
+               },
+    "diff":  {
+                 "previousSession":  "v7.21-WebPage_20260419_2341",
+                 "added":  [
+                               "CEO_BRIEF.html",
+                               "og-image-ceo.html"
+                           ],
+                 "removed":  [
+
+                             ],
+                 "changed":  [
+                                 "ARCH_MAP.md",
+                                 "BKONTEXT.md",
+                                 "BOIL.json",
+                                 "CHANGELOG.md",
+                                 "OIL.json",
+                                 "OIL_CONTEXT.md",
+                                 "PERSONAL_PITCH.html"
+                             ]
+             },
+    "changelog":  "## v7.22 — CEO Brief, MIND-SET REVOLUTION, page split + music\n\n\u003e Datum: 2026-04-20 · Session: David Gogela + Claude · AIQ-00151..00157\n\n### Přidáno\n\n**CEO Brief — MIND-SET REVOLUTION slide (AIQ-00155)**\n- Nová sekce s2b mezi dual brand a business narrative\n- 8 předpokladů projektu: 0–3 kritické (K/O), 4–7 podmínky úspěchu\n- Bilingvní CS/EN, 2-sloupcový layout (oranžové + modré karty)\n- K/O rozhodování pouze majitel firmy (bod 3), aktivní krytí Majitele a CEO HOPI Skupiny (bod 5)\n\n**Version selector split — index.html + selector.html (AIQ-00156)**\n- `index.html`: welcome overlay + bomba pouze — žádný music button\n- `selector.html`: výběr verzí, hudba, music button v nav (nová stránka)\n- Bomba → redirect `selector.html?lang=cs\u0026music=1` → Gladiator spustí se na version selectoru\n\n**CEO Brief — Business Accelerator sekce (AIQ-00150)**\n- Section 0: 3 karty — Výsledky, Záměr, Metoda\n- Kanonický citát Davida Gogely\n\n### Opraveno\n\n**CEO Brief — hudba po odemčení heslem (AIQ-00152)**\n- `checkPw()` volá `window.ceoMusicStart()` po odkrytí obsahu\n- Pattern zrcadlí PERSONAL_PITCH ppMusicStart\n\n**CEO Brief — partner karty Artin + Intecs (AIQ-00153)**\n- Přesný text dle aktuálních webových stránek firem\n- Artin: 25+ let, 200+ tým CZ/SK/NL, AI/cloud/BI\n- Intecs: 18+ let, 300+ klientů, Power BI/DWH, Microsoft Gold\n- Poznámka: probíhá pilot AI v tvorbě PBI reportů\n\n**Gladiator — spouštění při bombě (AIQ-00154)**\n- Bomba (L5) spouští Gladiator přes `_hm.start()`, ale až po přechodu na selector.html\n- selector.html čte `?music=1` a nastaví `appiq_music=\u0027on\u0027` pro _hopiq.js auto-start\n\n### Změněno\n\n**PERSONAL_PITCH — odkaz na CEO Brief (AIQ-00151)**\n- Strategický docs nav přidán dovnitř `#doc-content` (auto-skryt před heslem)\n- Link: CEO Brief — Business Vision → (otevírá se v nové záložce)"
+}

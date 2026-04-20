@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="cs" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
+<title>Záměr Davida Gogely · HOPI TECHNOLOGY</title>
+<meta property="og:title"       content="Záměr Davida Gogely · HOPI TECHNOLOGY">
+<meta property="og:description" content="Osobní pitch — AppIQ vize, story a obchodní plán. by HOPI TECHNOLOGY.">
+<meta property="og:image"       content="https://h-gr-fico.github.io/appiq/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url"         content="https://h-gr-fico.github.io/appiq/v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html">
+<meta property="og:type"        content="website">
+<meta name="twitter:card"       content="summary_large_image">
+<meta name="twitter:image"      content="https://h-gr-fico.github.io/appiq/og-image.png">
+<style>
+:root{
+  --orange:#E8750A;--dark:#1A1A2E;--grey:#4A4A6A;--border:#E0E0EC;
+  --green:#1A7A4A;--blue:#1A4A8A;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;background:#04061A;}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#fff;background:#04061A;font-size:16px;line-height:1.6;}
+
+/* ══ PASSWORD OVERLAY ══════════════════════════════════════════════ */
+#pw-overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:linear-gradient(160deg,#060812 0%,#0E1020 55%,#080810 100%);
+  display:flex;align-items:center;justify-content:center;
+}
+#pw-box{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;padding:40px 48px;text-align:center;max-width:400px;width:90%;
+}
+#pw-logo-mark{margin-bottom:20px;}
+#pw-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+#pw-subtitle{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
+#pw-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:0 0 20px;}
+#pw-label{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:10px;text-align:left;letter-spacing:.3px;}
+#pw-input-wrap{position:relative;margin-bottom:12px;}
+#pw-input{
+  width:100%;padding:10px 40px 10px 14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;color:#fff;font-size:14px;outline:none;
+  transition:border .2s;font-family:'Segoe UI',Arial,sans-serif;
+}
+#pw-input:focus{border-color:rgba(232,117,10,.6);}
+#pw-input.error{border-color:rgba(255,80,80,.7);animation:pw-shake .4s ease;}
+#pw-toggle{
+  position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;color:rgba(255,255,255,.35);
+  font-size:15px;line-height:1;padding:4px;
+}
+#pw-btn{
+  width:100%;padding:11px;background:var(--orange);color:#fff;
+  border:none;border-radius:8px;font-size:14px;font-weight:700;
+  cursor:pointer;transition:background .2s;letter-spacing:.5px;
+}
+#pw-btn:hover{background:#d06008;}
+#pw-error{color:rgba(255,100,100,.85);font-size:12px;margin-top:8px;min-height:18px;}
+#pw-footer{
+  margin-top:20px;font-size:10px;color:rgba(255,255,255,.18);
+  letter-spacing:.8px;text-transform:uppercase;
+  border-top:1px solid rgba(255,255,255,.06);padding-top:14px;
+}
+#pp-music-btn.playing{background:rgba(232,117,10,.18);border-color:rgba(232,117,10,.5);color:#E8750A;}
+@keyframes pw-shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+@keyframes pw-fade-out{to{opacity:0;pointer-events:none;}}
+.pw-fade-out{animation:pw-fade-out .5s ease forwards;}
+
+/* ══ LANGUAGE SYSTEM ════════════════════════════════════════════════ */
+/* default = CS; body.lang-en = EN mode */
+body:not(.lang-en) .lang-en{display:none!important;}
+body.lang-en .lang-cz{display:none!important;}
+body.lang-en .lang-en{display:inline!important;}
+
+/* ══ GLOBAL NAV ════════════════════════════════════════════════════ */
+#g-header{
+  position:fixed;top:0;left:0;right:0;z-index:100;height:52px;
+  background:rgba(4,6,26,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:space-between;padding:0 28px;
+}
+.gh-left{display:flex;align-items:center;gap:12px;}
+.gh-left svg{height:30px;}
+.gh-doc-label{font-size:11px;font-weight:700;color:rgba(232,117,10,.8);letter-spacing:1.5px;text-transform:uppercase;}
+.gh-right{display:flex;align-items:center;gap:8px;}
+.btn-lang{background:none;border:1px solid rgba(255,255,255,.15);border-radius:4px;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;padding:4px 10px;cursor:pointer;letter-spacing:1px;transition:all .15s;}
+.btn-lang.active{background:rgba(232,117,10,.2);border-color:rgba(232,117,10,.5);color:#E8750A;}
+.btn-back{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:rgba(255,255,255,.55);font-size:11px;padding:5px 12px;cursor:pointer;text-decoration:none;transition:all .15s;}
+.btn-back:hover{background:rgba(255,255,255,.1);color:#fff;}
+body{padding-top:52px;}
+
+/* ══ BIZ-SCALE PAGE ════════════════════════════════════════════════ */
+.biz-scale-page{
+  background:linear-gradient(160deg,#080818 0%,#121228 45%,#0A2010 100%);
+  color:#fff;min-height:100vh;padding:56px 80px 48px;
+  display:flex;flex-direction:column;
+}
+.biz-scale-page::after{
+  content:"HOPI TECHNOLOGY · \00A9 2026 · Záměr Davida Gogely";
+}
+body.lang-en .biz-scale-page::after{
+  content:"HOPI TECHNOLOGY · \00A9 2026 · David Gogela's Vision";
+  display:block;margin-top:auto;padding-top:16px;text-align:right;
+  font-size:9px;letter-spacing:1.6px;text-transform:uppercase;
+  color:rgba(232,117,10,0.3);font-family:'Segoe UI',Arial,sans-serif;font-weight:600;
+}
+.bsp-eyebrow{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--orange);margin-bottom:6px;}
+.bsp-title{font-size:38px;font-weight:900;line-height:1.1;margin-bottom:6px;}
+.oil-badge{display:inline-block;padding:2px 8px;background:rgba(232,117,10,.18);border:1px solid rgba(232,117,10,.35);border-radius:4px;font-size:9px;font-weight:700;color:#E8750A;letter-spacing:.5px;margin-left:10px;user-select:all;cursor:pointer;}
+
+/* ══ COVER ══════════════════════════════════════════════════════════ */
+.pp-cover{
+  background:linear-gradient(135deg,#060810 0%,#0E0E20 50%,#0A160A 100%);
+  min-height:100vh;padding:80px;display:flex;flex-direction:column;justify-content:center;
+}
+
+/* ══ PLACEHOLDER ════════════════════════════════════════════════════ */
+.pp-placeholder{
+  background:linear-gradient(160deg,#080818 0%,#0E0E1E 100%);
+  min-height:40vh;padding:60px 80px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  opacity:.4;border-bottom:1px solid rgba(255,255,255,.04);
+}
+
+/* ══ BSL — Business Scale Layer (AIQ-00043) ═════════════════════════
+   Responsive-first CSS components for new biz-scale slides.
+   Use instead of inline styles for layout that needs breakpoints.
+   ═══════════════════════════════════════════════════════════════════ */
+/* Layout */
+.bsl-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+.bsl-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.bsl-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.bsl-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.bsl-motto-row{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center;}
+/* Card content — base (1080p–1366px) */
+.bsl-ci{font-size:18px;margin-bottom:6px;}
+.bsl-cl{font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:7px;}
+.bsl-cb{font-size:11px;line-height:1.6;}
+.bsl-sl{font-size:8px;font-weight:700;margin-bottom:3px;text-transform:uppercase;letter-spacing:.8px;}
+.bsl-sb{font-size:10px;line-height:1.55;}
+.bsl-motto-label{font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.bsl-motto-text{font-size:22px;font-weight:900;font-style:italic;letter-spacing:.5px;}
+
+/* ══ RESPONSIVE ═════════════════════════════════════════════════════ */
+
+/* ─── 3200px+ — David's 3440×1440 ultrawide ─────────────────── */
+@media(min-width:3200px){
+  .biz-scale-page,.pp-cover{padding-left:220px;padding-right:220px;}
+  .bsp-eyebrow{font-size:14px;letter-spacing:6px;}
+  .bsp-title{font-size:clamp(60px,2.8vw,88px);}
+  .bsl-grid-5,.bsl-grid-3{gap:18px;}
+  .bsl-ci{font-size:32px;margin-bottom:10px;}
+  .bsl-cl{font-size:13px;margin-bottom:9px;}
+  .bsl-cb{font-size:15px;}
+  .bsl-sl{font-size:13px;margin-bottom:5px;}
+  .bsl-sb{font-size:14px;}
+  .bsl-motto-label{font-size:13px;margin-bottom:8px;}
+  .bsl-motto-text{font-size:38px;}
+  .bsl-motto-row{gap:20px;}
+  #g-header{height:64px;}
+  body{padding-top:64px;}
+}
+
+/* ─── 1920px+ — Full HD ──────────────────────────────────────── */
+@media(min-width:1920px){
+  .biz-scale-page,.pp-cover{padding-left:140px;padding-right:140px;}
+  .bsp-eyebrow{font-size:12px;letter-spacing:5px;}
+  .bsp-title{font-size:clamp(38px,2.5vw,60px);}
+  .bsl-grid-5,.bsl-grid-3{gap:12px;}
+  .bsl-ci{font-size:24px;margin-bottom:8px;}
+  .bsl-cl{font-size:10px;margin-bottom:8px;}
+  .bsl-cb{font-size:12px;}
+  .bsl-sl{font-size:10px;margin-bottom:4px;}
+  .bsl-sb{font-size:11px;}
+  .bsl-motto-label{font-size:10px;margin-bottom:7px;}
+  .bsl-motto-text{font-size:28px;}
+  .bsl-motto-row{gap:16px;}
+}
+
+/* ─── ≤1366px ────────────────────────────────────────────────── */
+@media(max-width:1366px){
+  .bsl-grid-5{grid-template-columns:repeat(3,1fr);}
+  .bsl-grid-4{grid-template-columns:repeat(2,1fr);}
+}
+/* ─── ≤1024px ────────────────────────────────────────────────── */
+@media(max-width:1024px){
+  .biz-scale-page,.pp-cover{padding:56px 40px 48px;}
+  .bsp-title{font-size:30px;}
+}
+/* ─── ≤900px ─────────────────────────────────────────────────── */
+@media(max-width:900px){
+  .bsl-grid-5{grid-template-columns:repeat(2,1fr);}
+  .bsl-grid-4{grid-template-columns:1fr;}
+  .bsl-grid-3{grid-template-columns:1fr;}
+  .bsl-motto-row{grid-template-columns:1fr;}
+  #g-header{padding:0 16px;}
+  .gh-doc-label{display:none;}
+}
+/* ─── ≤768px ─────────────────────────────────────────────────── */
+@media(max-width:768px){
+  .biz-scale-page,.pp-cover{padding:56px 20px 48px;}
+  .pp-cover{padding-top:72px;}
+  .bsp-title{font-size:24px;}
+  #pw-box{padding:32px 24px;}
+}
+/* ─── ≤600px — mobil ─────────────────────────────────────────── */
+@media(max-width:600px){
+  .bsl-grid-5{grid-template-columns:1fr;}
+  .bsl-grid-2{grid-template-columns:1fr;}
+  .bsl-motto-row{grid-template-columns:1fr;}
+  .biz-scale-page{padding:62px 16px 32px!important;min-height:auto!important;overflow-x:hidden;}
+  .pp-cover{padding:72px 16px 32px!important;min-height:auto!important;}
+  .pp-placeholder{padding:24px 16px!important;}
+  .bsl-grid-3,.bsl-grid-4{grid-template-columns:1fr!important;}
+  .biz-scale-page [style*="grid-template-columns"]{grid-template-columns:1fr!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ PASSWORD OVERLAY ════════════════════════════════════════════ -->
+<div id="pw-overlay">
+  <div id="pw-box">
+    <div id="pw-logo-mark">
+      <svg width="56" height="56" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="52" height="52" rx="10" fill="#0D0D1A"/>
+        <polygon points="26,6 46,26 26,46 6,26" fill="url(#iq-pw)" opacity=".9"/>
+        <text x="26" y="31" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-weight="900" font-size="12" letter-spacing="-0.5">IQ</text>
+        <defs><linearGradient id="iq-pw" x1="6" y1="6" x2="46" y2="46" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8750A"/><stop offset="100%" stop-color="#1A6040"/></linearGradient></defs>
+      </svg>
+      <div style="font-size:9px;font-weight:700;color:rgba(232,117,10,.65);letter-spacing:1.5px;margin-top:6px;text-transform:uppercase;">HOPI AppIQ</div>
+    </div>
+    <div id="pw-title"><span class="lang-cz">Záměr Davida Gogely</span><span class="lang-en" style="display:none;">David Gogela's Vision</span></div>
+    <div id="pw-subtitle"><span class="lang-cz">HOPI TECHNOLOGY · důvěrný dokument</span><span class="lang-en" style="display:none;">HOPI TECHNOLOGY · confidential document</span></div>
+    <hr id="pw-divider">
+    <div id="pw-label"><span class="lang-cz">Přístupové heslo:</span><span class="lang-en" style="display:none;">Access password:</span></div>
+    <div id="pw-input-wrap">
+      <input id="pw-input" type="password" placeholder="Zadejte heslo…" autocomplete="off" spellcheck="false">
+      <button id="pw-toggle" onclick="togglePwShow()" title="Zobrazit/skrýt heslo">👁</button>
+    </div>
+    <button id="pw-btn" onclick="checkPw()"><span class="lang-cz">Otevřít dokument →</span><span class="lang-en" style="display:none;">Open document →</span></button>
+    <div id="pw-error"></div>
+    <div id="pw-footer"><span class="lang-cz">Tento dokument je určen výhradně jeho příjemci.</span><span class="lang-en" style="display:none;">This document is intended exclusively for its recipient.</span></div>
+  </div>
+</div>
+
+<!-- ══ GLOBAL NAV ══════════════════════════════════════════════════ -->
+<div id="g-header">
+  <div class="gh-left">
+    <svg viewBox="0 0 80 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <text x="0" y="22" font-family="'Segoe UI',Arial,sans-serif" font-weight="900" font-size="18" fill="#E8750A">HOPI</text>
+      <text x="44" y="22" font-family="'Segoe UI',Arial,sans-serif" font-weight="400" font-size="14" fill="rgba(255,255,255,.45)">AppIQ</text>
+    </svg>
+    <div class="gh-doc-label">Záměr Davida Gogely</div>
+  </div>
+  <div class="gh-right">
+    <button id="pp-music-btn" onclick="ppMusicToggle()" title="Spustit hudbu" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:6px;color:rgba(255,255,255,.5);font-size:12px;padding:5px 10px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;">
+      <span id="pp-music-icon">🎵</span>
+      <span id="pp-music-label" style="font-size:10px;font-weight:700;letter-spacing:.5px;">Hudba</span>
+    </button>
+    <button class="btn-lang active" id="btn-cz" onclick="setLang('cz')">CS</button>
+    <button class="btn-lang" id="btn-en" onclick="setLang('en')">EN</button>
+    <a href="PORTAL_PRESENTATION.html#s-proposal" class="btn-back">← Prezentace AppIQ</a>
+  </div>
+</div>
+
+<!-- ══ DOCUMENT CONTENT (skryto do odemčení) ════════════════════ -->
+<div id="doc-content" style="display:none">
+
+  <!-- ══ COVER ══════════════════════════════════════════════════════ -->
+  <div class="pp-cover">
+    <div style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(232,117,10,.8);margin-bottom:16px;font-weight:700;"><span class="lang-cz">★ Záměr · Důvěrný dokument</span><span class="lang-en" style="display:none;">★ Intent · Confidential</span></div>
+    <div style="font-size:clamp(26px,4vw,52px);font-weight:900;line-height:1.1;margin-bottom:14px;">
+      <span class="lang-cz">Proč HOPI TECHNOLOGY —<br>
+      <span style="color:rgba(255,255,255,.45);font-weight:400;font-size:.62em;">a proč zrovna David Gogela</span></span>
+      <span class="lang-en" style="display:none;">Why HOPI TECHNOLOGY —<br>
+      <span style="color:rgba(255,255,255,.45);font-weight:400;font-size:.62em;">and why David Gogela</span></span>
+    </div>
+    <div style="font-size:16px;color:rgba(255,255,255,.4);margin-bottom:40px;max-width:600px;line-height:1.75;">
+      <span class="lang-cz">Osobní záměr a mandát k vybudování nové technologické divize skupiny HOPI. Dokument je rozčleněn do tří částí: Produkt &amp; příležitost · Lídr &amp; Vlastnictví · Spolupráce a podmínky.</span>
+      <span class="lang-en" style="display:none;">Personal intent and mandate to build a new technology division of HOPI Group. The document is divided into three parts: Product &amp; Opportunity · Leader &amp; Ownership · Cooperation &amp; Terms.</span>
+    </div>
+
+    <!-- 3 PARTS -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:680px;margin-bottom:48px;">
+      <div style="border:1px solid rgba(80,200,130,.35);border-radius:10px;padding:18px 16px;background:rgba(80,200,130,.06);">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#60D080;margin-bottom:8px;">Část I</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:6px;">
+          <span class="lang-cz">Produkt &amp; příležitost</span><span class="lang-en" style="display:none;">Product &amp; Opportunity</span>
+        </div>
+        <div style="font-size:11px;color:#60D080;font-weight:600;">
+          ✓ <span class="lang-cz">Oblast 1 · Oblast 2</span><span class="lang-en" style="display:none;">Area 1 · Area 2</span>
+        </div>
+      </div>
+      <div style="border:1px solid rgba(80,200,130,.35);border-radius:10px;padding:18px 16px;background:rgba(80,200,130,.06);">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#60D080;margin-bottom:8px;">Část II</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:6px;"><span class="lang-cz">Lídr &amp; Vlastnictví</span><span class="lang-en" style="display:none;">Leader &amp; Ownership</span></div>
+        <div style="font-size:11px;color:#60D080;font-weight:600;">
+          ✓ <span class="lang-cz">Oblast 1 · Oblast 2 · Oblast 3</span><span class="lang-en" style="display:none;">Area 1 · Area 2 · Area 3</span>
+        </div>
+      </div>
+      <div style="border:1px solid rgba(80,200,130,.35);border-radius:10px;padding:18px 16px;background:rgba(80,200,130,.06);">
+        <div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#60D080;margin-bottom:8px;">Část III</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:6px;">
+          <span class="lang-cz">Spolupráce &amp; podmínky</span><span class="lang-en" style="display:none;">Cooperation &amp; Terms</span>
+        </div>
+        <div style="font-size:11px;color:#60D080;font-weight:600;">
+          ✓ <span class="lang-cz">Oblast 1 · Oblast 2</span><span class="lang-en" style="display:none;">Area 1 · Area 2</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:11px;color:rgba(255,255,255,.18);letter-spacing:.5px;">
+      David Gogela · Head of Group Controlling · HOPI Holding · 2026
+    </div>
+  </div>
+
+  <!-- ══ ČÁST II — OBLAST 2: PROČ ZROVNA DAVID? ═════════════════════ -->
+  <div class="biz-scale-page" id="s-david">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část II — Lídr &amp; Vlastnictví · Oblast 2 · Proč zrovna David Gogela?</span>
+      <span class="lang-en" style="display:none;">Part II — Leader &amp; Ownership · Area 2 · Why David Gogela?</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+
+    <!-- TITLE + NAME ROW -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+      <div>
+        <div class="bsp-title">
+          <span class="lang-cz">Proč zrovna David?</span>
+          <span class="lang-en" style="display:none;">Why David?</span>
+        </div>
+        <div style="font-size:15px;color:rgba(255,255,255,.45);margin-top:4px;font-weight:500;letter-spacing:.3px;">
+          David Gogela · Head of Group Controlling · HOPI Holding
+        </div>
+      </div>
+      <div style="flex-shrink:0;margin-left:16px;margin-top:2px;text-align:center;">
+        <svg width="48" height="48" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="52" height="52" rx="10" fill="#0D0D1A"/>
+          <polygon points="26,6 46,26 26,46 6,26" fill="url(#iq-sl)" opacity=".9"/>
+          <text x="26" y="31" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-weight="900" font-size="12" letter-spacing="-0.5">IQ</text>
+          <defs><linearGradient id="iq-sl" x1="6" y1="6" x2="46" y2="46" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8750A"/><stop offset="100%" stop-color="#1A6040"/></linearGradient></defs>
+        </svg>
+        <div style="font-size:7px;font-weight:700;color:rgba(232,117,10,.65);letter-spacing:.5px;margin-top:3px;">AppIQ</div>
+      </div>
+    </div>
+
+    <!-- OPENING QUOTE -->
+    <div style="background:linear-gradient(90deg,rgba(232,117,10,.14),rgba(232,117,10,.03));border-left:4px solid rgba(232,117,10,.65);border-radius:0 8px 8px 0;padding:12px 18px;margin-bottom:12px;">
+      <div style="font-size:15px;color:rgba(255,255,255,.88);line-height:1.75;font-style:italic;">
+        <span class="lang-cz">"Tuto platformu jsem nepostavil jako technolog. Postavil jsem ji jako člověk, který ji potřeboval — a pak přišlo AI. Teď je čas z toho udělat byznys."</span>
+        <span class="lang-en" style="display:none;">"I didn't build this platform as a technologist. I built it as someone who needed it — and then AI arrived. Now it's time to turn it into a business."</span>
+      </div>
+      <div style="margin-top:7px;font-size:10px;color:rgba(232,117,10,.7);font-weight:700;letter-spacing:.5px;">David Gogela · Head of Group Controlling · HOPI Holding</div>
+    </div>
+
+    <!-- 5 PILLARS -->
+    <div class="bsl-grid-5" style="margin-bottom:12px;">
+
+      <!-- ① INSIDER S VÝSLEDKY -->
+      <div style="background:rgba(232,117,10,.1);border:1px solid rgba(232,117,10,.28);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">🏗️</div>
+        <div class="bsl-cl" style="color:#E8750A;">
+          <span class="lang-cz">① Insider s výsledky</span>
+          <span class="lang-en" style="display:none;">① Insider with Results</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Celou dobu buduji controlling infrastrukturu v HOPI — od papíru v šanonech po úplnou digitalizaci. ERP, datové sklady, BNS, Power BI. Řídím finanční a controllingové procedury pro skupinu 30 firem. <strong style="color:rgba(255,255,255,.95);">8 controllerů přímo, 15 maticově.</strong></span>
+          <span class="lang-en" style="display:none;">I've been building controlling infrastructure in HOPI the whole time — from paper binders to full digitalization. ERP, data warehouses, BNS, Power BI. Managing financial and controlling procedures for a group of 30 companies. <strong style="color:rgba(255,255,255,.95);">8 controllers directly, 15 in matrix.</strong></span>
+        </div>
+      </div>
+
+      <!-- ② BOLEST FORMUJE VIZI -->
+      <div style="background:rgba(80,130,200,.08);border:1px solid rgba(100,160,255,.22);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">🔧</div>
+        <div class="bsl-cl" style="color:rgba(130,180,255,.9);">
+          <span class="lang-cz">② Bolest formuje vizi</span>
+          <span class="lang-en" style="display:none;">② Pain Shapes Vision</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Roky jsme trpěli roztříštěností architektury a IT bez dostatečných zdrojů — kapacit, know-how, financí. <strong style="color:rgba(255,255,255,.95);">Vždy jsme si museli pomoci sami.</strong></span>
+          <span class="lang-en" style="display:none;">For years we suffered from fragmented architecture and IT without sufficient resources — capacity, know-how, capital. <strong style="color:rgba(255,255,255,.95);">We always had to figure it out ourselves.</strong></span>
+        </div>
+      </div>
+
+      <!-- ③ HISTORICKÁ PŘÍLEŽITOST -->
+      <div style="background:rgba(80,200,130,.08);border:1px solid rgba(80,200,130,.22);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">🤖</div>
+        <div class="bsl-cl" style="color:#60D080;">
+          <span class="lang-cz">③ Historická příležitost</span>
+          <span class="lang-en" style="display:none;">③ Historic Opportunity</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Pak přišlo AI. A já jsem viděl, co ostatní ještě nevidí. Claude se stal triggerem — osvobodil mě od závislosti na IT. <strong style="color:rgba(255,255,255,.95);">Nástup AI je historická příležitost, která se opakuje jednou za generaci.</strong></span>
+          <span class="lang-en" style="display:none;">Then AI came. And I saw what others haven't seen yet. Claude became the trigger — freeing me from IT dependency. <strong style="color:rgba(255,255,255,.95);">The rise of AI is a once-in-a-generation opportunity.</strong></span>
+        </div>
+      </div>
+
+      <!-- ④ DUAL KOMPETENCE -->
+      <div style="background:rgba(180,100,255,.08);border:1px solid rgba(180,100,255,.22);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">🧠</div>
+        <div class="bsl-cl" style="color:rgba(200,140,255,.9);">
+          <span class="lang-cz">④ Dual kompetence</span>
+          <span class="lang-en" style="display:none;">④ Dual Competence</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Rozumím businessu i technologii. Mluvím jazykem číslic i kódu. <strong style="color:rgba(255,255,255,.95);">AppIQ Phase 0 jsem postavil sám — bez IT týmu.</strong> Jediný v HOPI, kdo toto propojení má.</span>
+          <span class="lang-en" style="display:none;">I understand both business and technology. I speak the language of numbers and code. <strong style="color:rgba(255,255,255,.95);">I built AppIQ Phase 0 alone — without an IT team.</strong> The only person in HOPI with this combination.</span>
+        </div>
+      </div>
+
+      <!-- ⑤ PODNIKATELSKÝ GEN -->
+      <div style="background:rgba(255,210,60,.07);border:1px solid rgba(255,210,60,.2);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">💰</div>
+        <div class="bsl-cl" style="color:rgba(255,220,100,.9);">
+          <span class="lang-cz">⑤ Podnikatelský gen</span>
+          <span class="lang-en" style="display:none;">⑤ Entrepreneurial DNA</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Od mládí přemýšlím, do čeho investovat. Investuji na finančních trzích. Rozumím podnikatelskému riziku a ekonomice businessu. <strong style="color:rgba(255,255,255,.95);">Nejdražší kapitál jsou vlastní peníze. Cash is the king.</strong></span>
+          <span class="lang-en" style="display:none;">Since youth I've been thinking about where to invest. I invest in financial markets. I understand business risk and economics. <strong style="color:rgba(255,255,255,.95);">Your own capital is the most expensive. Cash is the king.</strong></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOTTO + 3 SIGNALS -->
+    <div class="bsl-motto-row">
+      <div style="background:linear-gradient(135deg,rgba(232,117,10,.2),rgba(232,117,10,.05));border:2px solid rgba(232,117,10,.5);border-radius:8px;padding:12px 24px;text-align:center;min-width:185px;">
+        <div class="bsl-motto-label" style="color:rgba(232,117,10,.7);">
+          <span class="lang-cz">životní motto</span>
+          <span class="lang-en" style="display:none;">life motto</span>
+        </div>
+        <div class="bsl-motto-text">"Never give up."</div>
+      </div>
+      <div class="bsl-grid-3">
+        <div style="border-left:3px solid rgba(232,117,10,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:#E8750A;">
+            <span class="lang-cz">Prokázaný výsledek</span><span class="lang-en" style="display:none;">Proven Result</span>
+          </div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);">
+            <span class="lang-cz">Finance Phase 0 — v provozu, reální uživatelé, reálná data skupiny</span>
+            <span class="lang-en" style="display:none;">Finance Phase 0 — live, real users, real group data</span>
+          </div>
+        </div>
+        <div style="border-left:3px solid rgba(80,200,130,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:#60D080;">
+            <span class="lang-cz">Osobní závazek</span><span class="lang-en" style="display:none;">Personal Commitment</span>
+          </div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);">
+            <span class="lang-cz">Vstupuji jako investor — vlastní prostředky vedle prostředků skupiny</span>
+            <span class="lang-en" style="display:none;">Entering as investor — own funds alongside group resources</span>
+          </div>
+        </div>
+        <div style="border-left:3px solid rgba(180,120,255,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:rgba(200,150,255,.9);">
+            <span class="lang-cz">Unikátní pozice</span><span class="lang-en" style="display:none;">Unique Position</span>
+          </div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);">
+            <span class="lang-cz">Insider znalost HOPI + AI kompetence + podnikatelský mindset = 0 → 1</span>
+            <span class="lang-en" style="display:none;">HOPI insider knowledge + AI competence + entrepreneurial mindset = 0 → 1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ČÁST II — OBLAST 1: KDO JSEM · TIMELINE ══════════════════ -->
+  <div class="biz-scale-page" id="s-david-timeline">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část II — Lídr &amp; Vlastnictví · Oblast 1 · Kdo jsem · 20 let s HOPI</span>
+      <span class="lang-en" style="display:none;">Part II — Leader &amp; Ownership · Area 1 · Who I Am · 20 Years with HOPI</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+    <div class="bsp-title">
+      <span class="lang-cz">20 let. Jeden vztah. Jedna vize.</span>
+      <span class="lang-en" style="display:none;">20 Years. One Relationship. One Vision.</span>
+    </div>
+    <div style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:14px;">David Gogela · Head of Group Controlling · HOPI Holding</div>
+
+    <!-- TIMELINE -->
+    <div style="position:relative;margin-bottom:14px;">
+      <!-- spojovací linka -->
+      <div style="position:absolute;top:22px;left:0;right:0;height:2px;background:linear-gradient(90deg,rgba(232,117,10,.15),rgba(232,117,10,.5),rgba(80,200,130,.5),rgba(80,200,130,.2));border-radius:2px;"></div>
+
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;position:relative;">
+
+        <!-- VŠE -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:16px;">🎓</div>
+          <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.5px;margin-bottom:3px;">VŠE Praha</div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.4);">
+            <span class="lang-cz">University of Economics</span>
+            <span class="lang-en" style="display:none;">University of Economics</span>
+          </div>
+        </div>
+
+        <!-- TOYODA -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(100,160,255,.08);border:2px solid rgba(100,160,255,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:16px;">🏭</div>
+          <div style="font-size:8px;font-weight:700;color:rgba(130,180,255,.8);letter-spacing:.5px;margin-bottom:3px;">TOYODA Gosei</div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.4);">
+            <span class="lang-cz">Quality Engineer · IMS · ISO · výrobní procesy</span>
+            <span class="lang-en" style="display:none;">Quality Engineer · IMS · ISO · manufacturing</span>
+          </div>
+        </div>
+
+        <!-- 2007 -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(232,117,10,.15);border:2px solid rgba(232,117,10,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:900;color:#E8750A;">07</div>
+          <div style="font-size:8px;font-weight:700;color:#E8750A;letter-spacing:.5px;margin-bottom:3px;">
+            <span class="lang-cz">HOPI — start</span>
+            <span class="lang-en" style="display:none;">HOPI — start</span>
+          </div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+            <span class="lang-cz">Junior Financial Controller · CZ + HU</span>
+            <span class="lang-en" style="display:none;">Junior Financial Controller · CZ + HU</span>
+          </div>
+        </div>
+
+        <!-- 2011 -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(232,117,10,.18);border:2px solid rgba(232,117,10,.45);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:900;color:#E8750A;">11</div>
+          <div style="font-size:8px;font-weight:700;color:#E8750A;letter-spacing:.5px;margin-bottom:3px;">
+            <span class="lang-cz">Rozšíření</span>
+            <span class="lang-en" style="display:none;">Expansion</span>
+          </div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+            <span class="lang-cz">CZ + HU + SK · skupina roste</span>
+            <span class="lang-en" style="display:none;">CZ + HU + SK · group growing</span>
+          </div>
+        </div>
+
+        <!-- 2014 -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(232,117,10,.22);border:2px solid rgba(232,117,10,.55);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:900;color:#E8750A;">14</div>
+          <div style="font-size:8px;font-weight:700;color:#E8750A;letter-spacing:.5px;margin-bottom:3px;">HOPI Holding</div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+            <span class="lang-cz">Vznik holdingu · 30 firem · komplexní role</span>
+            <span class="lang-en" style="display:none;">Holding founded · 30 companies · complex role</span>
+          </div>
+        </div>
+
+        <!-- DNES -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:rgba(80,200,130,.12);border:2px solid rgba(80,200,130,.4);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:16px;">📊</div>
+          <div style="font-size:8px;font-weight:700;color:#60D080;letter-spacing:.5px;margin-bottom:3px;">
+            <span class="lang-cz">Dnes</span>
+            <span class="lang-en" style="display:none;">Today</span>
+          </div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+            <span class="lang-cz">Head of Group Controlling · 8 direct + 15 matrix · Logistics · Foods · Farms · Real Estate · Energy…</span>
+            <span class="lang-en" style="display:none;">Head of Group Controlling · 8 direct + 15 matrix · Logistics · Foods · Farms · Real Estate · Energy…</span>
+          </div>
+        </div>
+
+        <!-- 2027 + NEXT -->
+        <div style="text-align:center;">
+          <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,rgba(232,117,10,.3),rgba(80,200,130,.2));border:2px solid rgba(232,117,10,.7);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:13px;font-weight:900;color:#E8750A;">27</div>
+          <div style="font-size:8px;font-weight:700;color:#E8750A;letter-spacing:.5px;margin-bottom:3px;">
+            <span class="lang-cz">2027 · 20 let</span>
+            <span class="lang-en" style="display:none;">2027 · 20 years</span>
+          </div>
+          <div class="bsl-cb" style="color:rgba(255,255,255,.65);">
+            <span class="lang-cz"><strong style="color:#60D080;">HOPI TECHNOLOGY</strong> · AppIQ · nová kapitola</span>
+            <span class="lang-en" style="display:none;"><strong style="color:#60D080;">HOPI TECHNOLOGY</strong> · AppIQ · new chapter</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DOMAIN COVERAGE -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px;">
+        <span class="lang-cz">Oblasti, které dnes řídím</span>
+        <span class="lang-en" style="display:none;">Areas I currently manage</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Core Logistics</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Global Solution</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Foods Production</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Farms</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Real Estate</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">Energetics</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);color:#E8750A;">IT &amp; Management</span>
+        <span style="padding:3px 10px;border-radius:12px;font-size:9px;font-weight:700;background:rgba(80,200,130,.12);border:1px solid rgba(80,200,130,.35);color:#60D080;">+ HOPI TECHNOLOGY ↗</span>
+      </div>
+    </div>
+
+    <!-- CLOSING QUOTE -->
+    <div style="background:linear-gradient(90deg,rgba(232,117,10,.14),rgba(232,117,10,.03));border-left:4px solid rgba(232,117,10,.65);border-radius:0 8px 8px 0;padding:14px 20px;margin-top:auto;">
+      <div style="font-size:16px;color:rgba(255,255,255,.9);line-height:1.75;font-style:italic;">
+        <span class="lang-cz">"V roce 2027 to bude 20 let. Je čas ten vztah povýšit — a děkuji za tu příležitost s Vámi být. Budu šťastný za další obrovskou životní výzvu."</span>
+        <span class="lang-en" style="display:none;">"In 2027 it will be 20 years. It's time to elevate this relationship — and I'm grateful for the privilege of being with you. I'll be happy to take on the next great challenge of my life."</span>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:rgba(232,117,10,.7);font-weight:700;letter-spacing:.5px;">David Gogela · 2026</div>
+    </div>
+  </div>
+
+  <!-- ══ ČÁST II — OBLAST 3: PO SCHVÁLENÍ · ROADMAPA ════════════════ -->
+  <div class="biz-scale-page" id="s-david-roadmap">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část II — Lídr &amp; Vlastnictví · Oblast 3 · Po schválení · 5 kroků k rozjezdu</span>
+      <span class="lang-en" style="display:none;">Part II — Leader &amp; Ownership · Area 3 · After Approval · 5 Steps to Launch</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+    <div class="bsp-title">
+      <span class="lang-cz">Co se stane po Vašem souhlasu</span>
+      <span class="lang-en" style="display:none;">What Happens After Your Approval</span>
+    </div>
+    <div style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:16px;">
+      <span class="lang-cz">Konkrétní kroky · interní cesta · žádné spekulace</span>
+      <span class="lang-en" style="display:none;">Concrete steps · internal path · no speculation</span>
+    </div>
+
+    <!-- 5 KROKŮ -->
+    <div class="bsl-grid-5" style="margin-bottom:14px;">
+
+      <div style="background:rgba(232,117,10,.1);border:1px solid rgba(232,117,10,.3);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">📊</div>
+        <div class="bsl-cl" style="color:#E8750A;">
+          <span class="lang-cz">① Business plán</span>
+          <span class="lang-en" style="display:none;">① Business Plan</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Rozvinout plán na <strong style="color:rgba(255,255,255,.95);">1, 3 a 5 let</strong> — cíle, milníky, výnosy, náklady, KPIs. Základ pro všechna další rozhodnutí.</span>
+          <span class="lang-en" style="display:none;">Develop plan for <strong style="color:rgba(255,255,255,.95);">1, 3 and 5 years</strong> — goals, milestones, revenue, costs, KPIs. Foundation for all subsequent decisions.</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(80,130,200,.08);border:1px solid rgba(100,160,255,.22);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">💰</div>
+        <div class="bsl-cl" style="color:rgba(130,180,255,.9);">
+          <span class="lang-cz">② Prostředky a budget</span>
+          <span class="lang-en" style="display:none;">② Resources &amp; Budget</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Definovat potřebné zdroje a <strong style="color:rgba(255,255,255,.95);">schválit budget</strong> — lidé, infrastruktura, Claude AI, právní a finanční rámec HOPI TechIQ s.r.o.</span>
+          <span class="lang-en" style="display:none;">Define required resources and <strong style="color:rgba(255,255,255,.95);">approve budget</strong> — people, infrastructure, Claude AI, legal and financial framework of HOPI TechIQ s.r.o.</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(80,200,130,.08);border:1px solid rgba(80,200,130,.22);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">👥</div>
+        <div class="bsl-cl" style="color:#60D080;">
+          <span class="lang-cz">③ Základní tým</span>
+          <span class="lang-en" style="display:none;">③ Core Team</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Sestavit <strong style="color:rgba(255,255,255,.95);">minimální životaschopný tým</strong> — technický lead, product owner, první vývojáři. Škálovat podle roadmapy.</span>
+          <span class="lang-en" style="display:none;">Build the <strong style="color:rgba(255,255,255,.95);">minimum viable team</strong> — technical lead, product owner, first developers. Scale per roadmap.</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(180,100,255,.08);border:1px solid rgba(180,100,255,.22);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">🤝</div>
+        <div class="bsl-cl" style="color:rgba(200,140,255,.9);">
+          <span class="lang-cz">④ Strategičtí partneři</span>
+          <span class="lang-en" style="display:none;">④ Strategic Partners</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Oslovit a formalizovat <strong style="color:rgba(255,255,255,.95);">ARTIN · INTECS · Anthropic</strong> — aktivní piloty jsou již v chodu. Uzavřít partnerské smlouvy.</span>
+          <span class="lang-en" style="display:none;">Reach out and formalize <strong style="color:rgba(255,255,255,.95);">ARTIN · INTECS · Anthropic</strong> — active pilots already running. Conclude partnership agreements.</span>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,210,60,.07);border:1px solid rgba(255,210,60,.2);border-radius:8px;padding:10px 11px;">
+        <div class="bsl-ci">🔍</div>
+        <div class="bsl-cl" style="color:rgba(255,220,100,.9);">
+          <span class="lang-cz">⑤ Trh a validace</span>
+          <span class="lang-en" style="display:none;">⑤ Market &amp; Validation</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Zmapovat konkurenci, prověřit záměr na trhu. <strong style="color:rgba(255,255,255,.95);">Potvrdit product-market fit</strong> před komerčním launche</span>
+          <span class="lang-en" style="display:none;">Map competition, validate intent in the market. <strong style="color:rgba(255,255,255,.95);">Confirm product-market fit</strong> before commercial launch.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- KLÍČOVÁ TEZE + SIGNÁLY -->
+    <div class="bsl-motto-row">
+      <div style="background:linear-gradient(135deg,rgba(80,200,130,.18),rgba(80,200,130,.05));border:2px solid rgba(80,200,130,.45);border-radius:8px;padding:14px 22px;text-align:center;min-width:220px;">
+        <div class="bsl-motto-label" style="color:rgba(80,200,130,.7);">
+          <span class="lang-cz">klíčová teze</span>
+          <span class="lang-en" style="display:none;">key thesis</span>
+        </div>
+        <div class="bsl-motto-text" style="color:#fff;font-size:18px;">
+          <span class="lang-cz">"Interní cesta<br>je jediná reálná."</span>
+          <span class="lang-en" style="display:none;">"The internal path<br>is the only real one."</span>
+        </div>
+      </div>
+      <div class="bsl-grid-3">
+        <div style="border-left:3px solid rgba(232,117,10,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:#E8750A;"><span class="lang-cz">Žádný cold start</span><span class="lang-en" style="display:none;">No cold start</span></div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);"><span class="lang-cz">Produkt existuje, uživatelé existují, data existují — startujeme z pozice síly</span><span class="lang-en" style="display:none;">Product exists, users exist, data exists — starting from a position of strength</span></div>
+        </div>
+        <div style="border-left:3px solid rgba(80,200,130,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:#60D080;"><span class="lang-cz">HOPI jako kotva</span><span class="lang-en" style="display:none;">HOPI as anchor</span></div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);"><span class="lang-cz">Skupina je první zákazník, první investor, první referencia — nikdo jiný toto nemá</span><span class="lang-en" style="display:none;">The group is the first customer, first investor, first reference — nobody else has this</span></div>
+        </div>
+        <div style="border-left:3px solid rgba(180,120,255,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:rgba(200,150,255,.9);"><span class="lang-cz">Minimální riziko</span><span class="lang-en" style="display:none;">Minimal risk</span></div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);"><span class="lang-cz">Každý krok ověřen uvnitř HOPI před komerčním krokem ven — žádné slepé sázky</span><span class="lang-en" style="display:none;">Every step validated inside HOPI before going commercial — no blind bets</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ČÁST I — PRODUKT & PŘÍLEŽITOST ════════════════════════════ -->
+  <div class="biz-scale-page" id="s-cast1">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část I — Produkt &amp; příležitost · Proč AppIQ · Proč teď · Proč HOPI</span>
+      <span class="lang-en" style="display:none;">Part I — Product &amp; Opportunity · Why AppIQ · Why Now · Why HOPI</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+    <div class="bsp-title">
+      <span class="lang-cz">AI nezná hranic</span>
+      <span class="lang-en" style="display:none;">AI Knows No Limits</span>
+    </div>
+    <div style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:12px;">
+      <span class="lang-cz">Za 20 let se tomu nikdo nebude divit. Dnes to využijí jen odvážní.</span>
+      <span class="lang-en" style="display:none;">In 20 years nobody will be surprised. Today only the bold will benefit.</span>
+    </div>
+
+    <!-- OPENING STATEMENT -->
+    <div style="background:linear-gradient(90deg,rgba(232,117,10,.13),rgba(232,117,10,.03));border-left:4px solid rgba(232,117,10,.6);border-radius:0 8px 8px 0;padding:12px 18px;margin-bottom:12px;">
+      <div style="font-size:12px;color:rgba(255,255,255,.88);line-height:1.8;font-style:italic;">
+        <span class="lang-cz">"Propojuje zdánlivě nepropojitelné. Integruje technologie, automatizuje, přináší novou úroveň informace a kvalitu do poznání businessové reality — i soukromého života. Společný jmenovatel je AI, které odemyká skryté komnaty efektivity a nové kvalitativní úrovně. <strong style="color:#E8750A;font-style:normal;">Je to pro všechny. Tato technologie nezná hranic.</strong>"</span>
+        <span class="lang-en" style="display:none;">"It connects the seemingly unconnectable. Integrates technologies, automates, brings a new level of information and quality to understanding business reality — and private life. The common denominator is AI, which unlocks hidden rooms of efficiency and new qualitative levels. <strong style="color:#E8750A;font-style:normal;">It's for everyone. This technology knows no limits.</strong>"</span>
+      </div>
+    </div>
+
+    <!-- 4 KARTY -->
+    <div class="bsl-grid-4" style="margin-bottom:12px;">
+
+      <!-- CO JE APPIQ -->
+      <div style="background:rgba(232,117,10,.1);border:1px solid rgba(232,117,10,.28);border-radius:8px;padding:11px 12px;">
+        <div class="bsl-ci">💡</div>
+        <div class="bsl-cl" style="color:#E8750A;">
+          <span class="lang-cz">Co je AppIQ</span>
+          <span class="lang-en" style="display:none;">What is AppIQ</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">AI platforma která propojuje fyzické procesy, data a finance v jeden živý obraz. Integrace fyzických procesů, datových stop, které si sebou tyto procesy nesou, a jejich finančního odrazu poskytuje ucelený obrázek efektivity celého systému. <strong style="color:rgba(255,255,255,.95);">Controlling jako mozek celé skupiny</strong> — ne reporty jednou za měsíc, ale živá realita v reálném čase.</span>
+          <span class="lang-en" style="display:none;">AI platform connecting physical processes, data and finance into one living picture. The integration of physical processes, the data trails they carry, and their financial reflection provides a complete picture of the efficiency of the entire system. <strong style="color:rgba(255,255,255,.95);">Controlling as the brain of the entire group</strong> — not monthly reports, but living reality in real time.</span>
+        </div>
+      </div>
+
+      <!-- PROČ TEĎ -->
+      <div style="background:rgba(220,60,60,.09);border:1px solid rgba(220,90,90,.22);border-radius:8px;padding:11px 12px;">
+        <div class="bsl-ci">⚡</div>
+        <div class="bsl-cl" style="color:rgba(255,120,120,.9);">
+          <span class="lang-cz">Proč teď — momentum</span>
+          <span class="lang-en" style="display:none;">Why now — momentum</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz"><strong style="color:rgba(255,255,255,.95);">Závislost na IT bude přežitek.</strong> IT nebude zajímavé — AI musí jít do reálných procesů. Teď je momentum. Ztrátu v know-how a adaptaci <strong style="color:rgba(255,150,150,.9);">nikdy nedoženeme</strong> — je to příliš rychlé.</span>
+          <span class="lang-en" style="display:none;"><strong style="color:rgba(255,255,255,.95);">IT dependency will become obsolete.</strong> IT won't be interesting — AI must enter real processes. Now is the momentum. A loss in know-how and adaptation <strong style="color:rgba(255,150,150,.9);">we will never catch up</strong> — it's too fast.</span>
+        </div>
+      </div>
+
+      <!-- OCHRANNÝ PŘÍKOP -->
+      <div style="background:rgba(80,200,130,.08);border:1px solid rgba(80,200,130,.22);border-radius:8px;padding:11px 12px;">
+        <div class="bsl-ci">🏰</div>
+        <div class="bsl-cl" style="color:#60D080;">
+          <span class="lang-cz">Ochranný příkop</span>
+          <span class="lang-en" style="display:none;">Moat</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">HOPI má <strong style="color:rgba(255,255,255,.95);">6 zcela odlišných oblastí</strong> — ideální testovací laboratoř pro adaptaci robustního jádra. HOPI ještě není mamut. Controlling propojuje fyzické procesy, data i finance — <strong style="color:rgba(255,255,255,.95);">kdo tomu rozumí celku, je kus dál než zbytek.</strong></span>
+          <span class="lang-en" style="display:none;">HOPI has <strong style="color:rgba(255,255,255,.95);">6 completely different business areas</strong> — ideal testing lab for core adaptation. HOPI isn't a mammoth yet. Controlling connects physical processes, data and finance — <strong style="color:rgba(255,255,255,.95);">whoever understands the whole is ahead of the rest.</strong></span>
+        </div>
+      </div>
+
+      <!-- TRH -->
+      <div style="background:rgba(180,100,255,.08);border:1px solid rgba(180,100,255,.22);border-radius:8px;padding:11px 12px;">
+        <div class="bsl-ci">🌍</div>
+        <div class="bsl-cl" style="color:rgba(200,140,255,.9);">
+          <span class="lang-cz">Trh — globální příležitost</span>
+          <span class="lang-en" style="display:none;">Market — global opportunity</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz"><strong style="color:rgba(255,255,255,.95);">FBN — Family Business Network</strong> = trvalá osobní a businessová partnerství. Nejen CZ a SK — příležitost celosvětově. <strong style="color:rgba(200,140,255,.9);">B2B: 100+ firem.</strong> <strong style="color:rgba(200,140,255,.9);">B2C: stovky milionů lidí.</strong></span>
+          <span class="lang-en" style="display:none;"><strong style="color:rgba(255,255,255,.95);">FBN — Family Business Network</strong> = lasting personal and business partnerships. Not just CZ and SK — opportunity worldwide. <strong style="color:rgba(200,140,255,.9);">B2B: 100+ companies.</strong> <strong style="color:rgba(200,140,255,.9);">B2C: hundreds of millions of people.</strong></span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- DVĚ MOTTA → EXPONENCIÁLNÍ SYNERGIE -->
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;">
+      <div style="background:rgba(232,117,10,.08);border:1px solid rgba(232,117,10,.22);border-radius:8px;padding:12px 16px;text-align:center;">
+        <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(232,117,10,.6);margin-bottom:6px;">
+          <span class="lang-cz">motto I</span><span class="lang-en" style="display:none;">motto I</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);font-style:italic;line-height:1.4;">
+          <span class="lang-cz">"Kdo chvíli stál,<br>stojí opodál."</span>
+          <span class="lang-en" style="display:none;">"Stand still for a moment —<br>and you're left behind."</span>
+        </div>
+      </div>
+
+      <div style="text-align:center;padding:0 8px;">
+        <div style="font-size:20px;color:rgba(232,117,10,.5);">+</div>
+        <div style="font-size:8px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:4px;">=</div>
+      </div>
+
+      <div style="background:rgba(80,200,130,.08);border:1px solid rgba(80,200,130,.22);border-radius:8px;padding:12px 16px;text-align:center;">
+        <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(80,200,130,.6);margin-bottom:6px;">
+          <span class="lang-cz">motto II</span><span class="lang-en" style="display:none;">motto II</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.85);font-style:italic;line-height:1.4;">
+          <span class="lang-cz">"Přežijí jen ti,<br>kdo se adaptují."</span>
+          <span class="lang-en" style="display:none;">"Only those who adapt<br>will survive."</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:10px;padding:8px;background:linear-gradient(90deg,rgba(232,117,10,.05),rgba(232,117,10,.15),rgba(232,117,10,.05));border-radius:6px;">
+      <div style="font-size:11px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:#E8750A;">
+        <span class="lang-cz">= Exponenciální synergie</span>
+        <span class="lang-en" style="display:none;">= Exponential Synergy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ČÁST I — OBLAST 2: FINANČNÍ LOGIKA · ROI · ROCE · VALUACE ══ -->
+  <div class="biz-scale-page" id="s-cast1b">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část I — Oblast 2 · Finanční logika · ROI · ROCE · Valuace</span>
+      <span class="lang-en" style="display:none;">Part I — Area 2 · Financial Logic · ROI · ROCE · Valuation</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+    <div class="bsp-title">
+      <span class="lang-cz">Hodnota — teď i v budoucnosti</span>
+      <span class="lang-en" style="display:none;">Value — Now &amp; in the Future</span>
+    </div>
+    <div style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:14px;">
+      <span class="lang-cz">Dvě perspektivy · Návratnost kapitálu · Tržní hodnota produktu</span>
+      <span class="lang-en" style="display:none;">Two perspectives · Return on capital · Market value of the product</span>
+    </div>
+
+    <!-- DVĚ PERSPEKTIVY — 2 columns -->
+    <div class="bsl-grid-2" style="margin-bottom:14px;gap:14px;">
+
+      <!-- PERSPEKTIVA A — EBITDA / ROI / ROCE -->
+      <div style="background:rgba(80,200,130,.05);border:1px solid rgba(80,200,130,.2);border-radius:10px;padding:14px;">
+        <div style="font-size:8px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#60D080;margin-bottom:10px;">
+          <span class="lang-cz">Perspektiva A — Návratnost kapitálu</span>
+          <span class="lang-en" style="display:none;">Perspective A — Return on Capital</span>
+        </div>
+
+        <!-- ROI -->
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:3px;">ROI — Return on Investment</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;">
+            <span class="lang-cz">5 divizí × ~500 ušetřených h/rok × průměrná sazba = <strong style="color:#60D080;">~6M CZK/rok</strong> v úsporách</span>
+            <span class="lang-en" style="display:none;">5 divisions × ~500 saved h/year × average rate = <strong style="color:#60D080;">~6M CZK/year</strong> in savings</span>
+          </div>
+        </div>
+
+        <!-- ROCE -->
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:3px;">ROCE — Return on Capital Employed</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;">
+            <span class="lang-cz">Vložený kapitál M0–M36: <strong style="color:#60D080;">~€800K</strong>. Výnos: interní úspory + budoucí SaaS revenue. Kapitál pracuje od první implementace.</span>
+            <span class="lang-en" style="display:none;">Capital employed M0–M36: <strong style="color:#60D080;">~€800K</strong>. Return: internal savings + future SaaS revenue. Capital works from first deployment.</span>
+          </div>
+        </div>
+
+        <!-- EBITDA -->
+        <div>
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:3px;">EBITDA dopad</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;">
+            <span class="lang-cz">AppIQ jako tech divize generuje vlastní EBITDA → zvyšuje EBITDA skupiny → zvyšuje valuaci celého HOPI.</span>
+            <span class="lang-en" style="display:none;">AppIQ as a tech division generates its own EBITDA → increases group EBITDA → increases the overall HOPI valuation.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERSPEKTIVA B — Tržní hodnota -->
+      <div style="background:rgba(232,117,10,.05);border:1px solid rgba(232,117,10,.2);border-radius:10px;padding:14px;">
+        <div style="font-size:8px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#E8750A;margin-bottom:10px;">
+          <span class="lang-cz">Perspektiva B — Tržní hodnota produktu</span>
+          <span class="lang-en" style="display:none;">Perspective B — Market Value of the Product</span>
+        </div>
+
+        <!-- Dnes -->
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:3px;">
+            <span class="lang-cz">Dnes — pre-seed</span>
+            <span class="lang-en" style="display:none;">Today — pre-seed</span>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;">
+            <span class="lang-cz">PoC existuje, architektura navržena, Finance Phase 0 funguje → <strong style="color:#E8750A;">€200K–500K</strong> (konzervativní early-stage SaaS valuace)</span>
+            <span class="lang-en" style="display:none;">PoC exists, architecture designed, Finance Phase 0 works → <strong style="color:#E8750A;">€200K–500K</strong> (conservative early-stage SaaS valuation)</span>
+          </div>
+        </div>
+
+        <!-- M36 konzervativní -->
+        <div style="margin-bottom:10px;">
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:3px;">
+            <span class="lang-cz">M36+ — konzervativní scénář</span>
+            <span class="lang-en" style="display:none;">M36+ — conservative scenario</span>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;">
+            <span class="lang-cz">50 zákazníků × €2K/měs. ARR = €1,2M ARR × 10× multiple = <strong style="color:#E8750A;">€12M valuace</strong></span>
+            <span class="lang-en" style="display:none;">50 customers × €2K/mo ARR = €1.2M ARR × 10× multiple = <strong style="color:#E8750A;">€12M valuation</strong></span>
+          </div>
+        </div>
+
+        <!-- M36 agresivní -->
+        <div>
+          <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,.85);margin-bottom:3px;">
+            <span class="lang-cz">M36+ — agresivní scénář</span>
+            <span class="lang-en" style="display:none;">M36+ — aggressive scenario</span>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,.55);line-height:1.6;">
+            <span class="lang-cz">200 zákazníků × €3K/měs. = €7,2M ARR × 12× multiple = <strong style="color:#E8750A;">€86M valuace</strong></span>
+            <span class="lang-en" style="display:none;">200 customers × €3K/mo = €7.2M ARR × 12× multiple = <strong style="color:#E8750A;">€86M valuation</strong></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VALUACE TIMELINE — vizuální přehled -->
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px 16px;margin-bottom:14px;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px;">
+        <span class="lang-cz">Valuace — přehled růstu</span>
+        <span class="lang-en" style="display:none;">Valuation — growth overview</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <div style="text-align:center;flex:1;min-width:80px;">
+          <div style="font-size:16px;font-weight:900;color:rgba(255,255,255,.5);">€200K–500K</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:2px;"><span class="lang-cz">Dnes · Pre-seed</span><span class="lang-en" style="display:none;">Today · Pre-seed</span></div>
+        </div>
+        <div style="font-size:18px;color:rgba(232,117,10,.5);flex:0;">→</div>
+        <div style="text-align:center;flex:1;min-width:80px;">
+          <div style="font-size:16px;font-weight:900;color:#E8750A;">€12M</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:2px;"><span class="lang-cz">M36 · Konzervativní</span><span class="lang-en" style="display:none;">M36 · Conservative</span></div>
+        </div>
+        <div style="font-size:18px;color:rgba(232,117,10,.5);flex:0;">→</div>
+        <div style="text-align:center;flex:1;min-width:80px;">
+          <div style="font-size:16px;font-weight:900;color:#60D080;">€86M</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.3);margin-top:2px;"><span class="lang-cz">M36+ · Agresivní</span><span class="lang-en" style="display:none;">M36+ · Aggressive</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KEY MESSAGE -->
+    <div style="background:linear-gradient(90deg,rgba(232,117,10,.14),rgba(232,117,10,.03));border-left:4px solid rgba(232,117,10,.65);border-radius:0 8px 8px 0;padding:14px 20px;margin-top:auto;">
+      <div style="font-size:16px;color:rgba(255,255,255,.9);line-height:1.75;font-style:italic;">
+        <span class="lang-cz">"Vstoupit teď = vstoupit za pre-seed cenu, realizovat za growth valuaci."</span>
+        <span class="lang-en" style="display:none;">"Entering now = entering at pre-seed price, realising at growth valuation."</span>
+      </div>
+      <div style="margin-top:6px;font-size:10px;color:rgba(232,117,10,.7);font-weight:700;letter-spacing:.5px;">
+        <span class="lang-cz">Okno se otevírá jednou.</span>
+        <span class="lang-en" style="display:none;">The window opens once.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ČÁST III — SPOLUPRÁCE & PODMÍNKY ════════════════════════════ -->
+  <div class="biz-scale-page" id="s-cast3">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část III — Spolupráce &amp; podmínky · Role · Participace · Příští krok</span>
+      <span class="lang-en" style="display:none;">Part III — Cooperation &amp; Terms · Role · Participation · Next Step</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+    <div class="bsp-title">
+      <span class="lang-cz">Co přináším — co žádám</span>
+      <span class="lang-en" style="display:none;">What I Bring — What I Ask</span>
+    </div>
+    <div style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:12px;">
+      <span class="lang-cz">Konkrétní nabídka · Tři scénáře · Jedno rozhodnutí</span>
+      <span class="lang-en" style="display:none;">Concrete offer · Three scenarios · One decision</span>
+    </div>
+
+    <!-- 3 KARTY -->
+    <div class="bsl-grid-3" style="margin-bottom:12px;">
+
+      <!-- ROLE -->
+      <div style="background:rgba(232,117,10,.1);border:1px solid rgba(232,117,10,.28);border-radius:8px;padding:12px 14px;">
+        <div class="bsl-ci">🎯</div>
+        <div class="bsl-cl" style="color:#E8750A;">
+          <span class="lang-cz">① Role &amp; pozice</span>
+          <span class="lang-en" style="display:none;">① Role &amp; Position</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz"><strong style="color:rgba(255,255,255,.95);">Business Owner · Ředitel · Šéf vývoje i financí.</strong> Vše v jedné osobě — záměrně. Zkušenost z Group Controllingu propojuje finanční logiku s produktovým myšlením. Nikdo jiný v HOPI toto propojení nemá.</span>
+          <span class="lang-en" style="display:none;"><strong style="color:rgba(255,255,255,.95);">Business Owner · Director · Head of Development &amp; Finance.</strong> All in one person — intentionally. Group Controlling experience connects financial logic with product thinking. Nobody else in HOPI has this combination.</span>
+        </div>
+      </div>
+
+      <!-- PARTICIPACE -->
+      <div style="background:rgba(80,130,200,.08);border:1px solid rgba(100,160,255,.22);border-radius:8px;padding:12px 14px;">
+        <div class="bsl-ci">💼</div>
+        <div class="bsl-cl" style="color:rgba(130,180,255,.9);">
+          <span class="lang-cz">② Participace</span>
+          <span class="lang-en" style="display:none;">② Participation</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz">Dnes zaměstnanec — přináším <strong style="color:rgba(255,255,255,.95);">produkt, business záměr, strategii a rozložení podnikatelského rizika</strong> celé skupiny. Alternativně: vstup jako investor s <strong style="color:rgba(255,255,255,.95);">1–2 mil. CZK</strong> — pakliže majitelé otevřou možnost partnerství.</span>
+          <span class="lang-en" style="display:none;">Today an employee — I bring <strong style="color:rgba(255,255,255,.95);">product, business intent, strategy and distribution of entrepreneurial risk</strong> for the entire group. Alternatively: entry as investor with <strong style="color:rgba(255,255,255,.95);">1–2M CZK</strong> — if the owners open the possibility of partnership.</span>
+        </div>
+      </div>
+
+      <!-- ASK -->
+      <div style="background:rgba(80,200,130,.08);border:1px solid rgba(80,200,130,.22);border-radius:8px;padding:12px 14px;">
+        <div class="bsl-ci">🚪</div>
+        <div class="bsl-cl" style="color:#60D080;">
+          <span class="lang-cz">③ Co žádám od GŘ</span>
+          <span class="lang-en" style="display:none;">③ What I Ask from CEO</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.78);">
+          <span class="lang-cz"><strong style="color:rgba(255,255,255,.95);">Otevřít dveře k diskusi s majiteli.</strong> Probrat tři scénáře níže a zvolit cestu. Rozhodnutí co nejdříve — AI okno příležitosti se nezastavuje.</span>
+          <span class="lang-en" style="display:none;"><strong style="color:rgba(255,255,255,.95);">Open the door to a discussion with the owners.</strong> Review the three scenarios below and choose a path. Decision as soon as possible — the AI window of opportunity does not stop.</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 3 SCÉNÁŘE -->
+    <div style="margin-bottom:14px;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px;">
+        <span class="lang-cz">Tři scénáře · od nejmenšího k největšímu závazku</span>
+        <span class="lang-en" style="display:none;">Three scenarios · from smallest to greatest commitment</span>
+      </div>
+      <div class="bsl-grid-3">
+        <div style="border-left:3px solid rgba(232,117,10,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:#E8750A;"><span class="lang-cz">Scénář A — Interní</span><span class="lang-en" style="display:none;">Scenario A — Internal</span></div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);"><span class="lang-cz">Budget + interní tým. AppIQ jako nástroj skupiny, žádná samostatná entita.</span><span class="lang-en" style="display:none;">Budget + internal team. AppIQ as a group tool, no separate entity.</span></div>
+        </div>
+        <div style="border-left:3px solid rgba(80,200,130,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:#60D080;"><span class="lang-cz">Scénář B — Interní + Produkt</span><span class="lang-en" style="display:none;">Scenario B — Internal + Product</span></div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);"><span class="lang-cz">Budget + entita HOPI TechIQ s.r.o. + identifikace prvních zákazníků mimo skupinu.</span><span class="lang-en" style="display:none;">Budget + HOPI TechIQ s.r.o. entity + identification of first customers outside the group.</span></div>
+        </div>
+        <div style="border-left:3px solid rgba(180,120,255,.6);padding-left:10px;">
+          <div class="bsl-sl" style="color:rgba(200,150,255,.9);"><span class="lang-cz">Scénář C — Plný záměr</span><span class="lang-en" style="display:none;">Scenario C — Full Intent</span></div>
+          <div class="bsl-sb" style="color:rgba(255,255,255,.6);"><span class="lang-cz">Entita + David jako partner/spoluvlastník + SaaS platforma pro FBN trh.</span><span class="lang-en" style="display:none;">Entity + David as partner/co-owner + SaaS platform for the FBN market.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLOSING — vlak -->
+    <div style="background:linear-gradient(90deg,rgba(232,117,10,.14),rgba(232,117,10,.03));border-left:4px solid rgba(232,117,10,.65);border-radius:0 8px 8px 0;padding:14px 20px;margin-top:auto;">
+      <div style="font-size:16px;color:rgba(255,255,255,.9);line-height:1.75;font-style:italic;">
+        <span class="lang-cz">"AI rychlík nezpomaluje — pouze zrychluje. Pokoušíme se naskočit. Potřebujeme se udržet ve vagóně — a v pravý čas převzít řízení v lokomotivě."</span>
+        <span class="lang-en" style="display:none;">"The AI express does not slow down — it only accelerates. We are trying to board. We need to stay in the carriage — and at the right moment, take control of the locomotive."</span>
+      </div>
+      <div style="margin-top:8px;font-size:10px;color:rgba(232,117,10,.7);font-weight:700;letter-spacing:.5px;">David Gogela · 2026</div>
+    </div>
+  </div>
+
+  <!-- ══ ČÁST III — OBLAST 2: HODNOTA VKLADU DAVIDA ════════════════ -->
+  <div class="biz-scale-page" id="s-cast3b">
+    <div class="bsp-eyebrow">
+      <span class="lang-cz">Část III — Oblast 2 · Hodnota vlastního vkladu · Sweat equity · IP · Závazek</span>
+      <span class="lang-en" style="display:none;">Part III — Area 2 · Value of personal contribution · Sweat equity · IP · Commitment</span>
+      <span class="oil-badge">AIQ-00044</span>
+    </div>
+    <div class="bsp-title">
+      <span class="lang-cz">Nevstupuji s prázdnýma rukama</span>
+      <span class="lang-en" style="display:none;">I Am Not Entering Empty-Handed</span>
+    </div>
+    <div style="font-size:15px;color:rgba(255,255,255,.4);margin-bottom:14px;">
+      <span class="lang-cz">Hotový produkt · Know-how · Osobní závazek · Odložená odměna</span>
+      <span class="lang-en" style="display:none;">Finished product · Know-how · Personal commitment · Deferred compensation</span>
+    </div>
+
+    <!-- 3 KARTY — sweat equity / IP / závazek -->
+    <div class="bsl-grid-3" style="margin-bottom:14px;">
+
+      <!-- SWEAT EQUITY -->
+      <div style="background:rgba(80,200,130,.05);border:1px solid rgba(80,200,130,.2);border-radius:10px;padding:14px;">
+        <div class="bsl-ci" style="color:#60D080;font-size:20px;margin-bottom:6px;">⏱</div>
+        <div class="bsl-cl" style="color:#60D080;">
+          <span class="lang-cz">Sweat Equity</span>
+          <span class="lang-en" style="display:none;">Sweat Equity</span>
+        </div>
+        <div style="font-size:22px;font-weight:900;color:#60D080;margin:6px 0;">€30K–60K</div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+          <span class="lang-cz">200–400h práce na PoC × tržní sazba senior architekta €150/h. Čas již investován — výsledek existuje.</span>
+          <span class="lang-en" style="display:none;">200–400h of PoC work × senior architect market rate €150/h. Time already invested — result exists.</span>
+        </div>
+      </div>
+
+      <!-- IP HODNOTA -->
+      <div style="background:rgba(232,117,10,.05);border:1px solid rgba(232,117,10,.2);border-radius:10px;padding:14px;">
+        <div class="bsl-ci" style="color:#E8750A;font-size:20px;margin-bottom:6px;">💡</div>
+        <div class="bsl-cl" style="color:#E8750A;">
+          <span class="lang-cz">IP Hodnota</span>
+          <span class="lang-en" style="display:none;">IP Value</span>
+        </div>
+        <div style="font-size:22px;font-weight:900;color:#E8750A;margin:6px 0;">€100K–200K</div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+          <span class="lang-cz">Kód, architektura, know-how. Co by stálo externě? Konkurence by zaplatila za repliku minimálně tuto částku.</span>
+          <span class="lang-en" style="display:none;">Code, architecture, know-how. What would it cost externally? A competitor would pay at least this to replicate it.</span>
+        </div>
+      </div>
+
+      <!-- OSOBNÍ ZÁVAZEK -->
+      <div style="background:rgba(180,120,255,.05);border:1px solid rgba(180,120,255,.2);border-radius:10px;padding:14px;">
+        <div class="bsl-ci" style="color:rgba(200,150,255,.9);font-size:20px;margin-bottom:6px;">🤝</div>
+        <div class="bsl-cl" style="color:rgba(200,150,255,.9);">
+          <span class="lang-cz">Osobní závazek</span>
+          <span class="lang-en" style="display:none;">Personal Commitment</span>
+        </div>
+        <div style="font-size:14px;font-weight:900;color:rgba(200,150,255,.9);margin:6px 0;">
+          <span class="lang-cz">Odložená odměna</span>
+          <span class="lang-en" style="display:none;">Deferred Compensation</span>
+        </div>
+        <div class="bsl-cb" style="color:rgba(255,255,255,.55);">
+          <span class="lang-cz">David přijímá nižší odměnu po dobu projektu. Rozdíl mezi tržní mzdou a skutečnou = kontinuální vklad do projektu.</span>
+          <span class="lang-en" style="display:none;">David accepts lower compensation during the project. The gap between market salary and actual pay = a continuous contribution to the project.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAVID vs. HOPI — srovnávací tabulka -->
+    <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:14px 16px;margin-bottom:14px;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px;">
+        <span class="lang-cz">Co vkládá každá strana</span>
+        <span class="lang-en" style="display:none;">What each side contributes</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <!-- David -->
+        <div>
+          <div style="font-size:10px;font-weight:900;letter-spacing:1px;color:#60D080;margin-bottom:8px;text-transform:uppercase;">David Gogela</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(80,200,130,.07);border-radius:4px;border-left:2px solid rgba(80,200,130,.4);">
+              <span class="lang-cz">Hotový PoC · fungující Phase 0</span><span class="lang-en" style="display:none;">Finished PoC · working Phase 0</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(80,200,130,.07);border-radius:4px;border-left:2px solid rgba(80,200,130,.4);">
+              <span class="lang-cz">Architektura · kód · AI know-how</span><span class="lang-en" style="display:none;">Architecture · code · AI know-how</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(80,200,130,.07);border-radius:4px;border-left:2px solid rgba(80,200,130,.4);">
+              <span class="lang-cz">Insider znalost HOPI procesů</span><span class="lang-en" style="display:none;">Insider knowledge of HOPI processes</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(80,200,130,.07);border-radius:4px;border-left:2px solid rgba(80,200,130,.4);">
+              <span class="lang-cz">Vize · business strategie · leadership</span><span class="lang-en" style="display:none;">Vision · business strategy · leadership</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(80,200,130,.07);border-radius:4px;border-left:2px solid rgba(80,200,130,.4);">
+              <span class="lang-cz">1–2M CZK osobní investice (scénář C)</span><span class="lang-en" style="display:none;">1–2M CZK personal investment (scenario C)</span>
+            </div>
+          </div>
+        </div>
+        <!-- HOPI -->
+        <div>
+          <div style="font-size:10px;font-weight:900;letter-spacing:1px;color:#E8750A;margin-bottom:8px;text-transform:uppercase;">HOPI Holding</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(232,117,10,.07);border-radius:4px;border-left:2px solid rgba(232,117,10,.4);">
+              <span class="lang-cz">Brand · distribuce · důvěra</span><span class="lang-en" style="display:none;">Brand · distribution · trust</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(232,117,10,.07);border-radius:4px;border-left:2px solid rgba(232,117,10,.4);">
+              <span class="lang-cz">Interní zákazníci (5 divizí)</span><span class="lang-en" style="display:none;">Internal customers (5 divisions)</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(232,117,10,.07);border-radius:4px;border-left:2px solid rgba(232,117,10,.4);">
+              <span class="lang-cz">Rozpočet M0–M6 · infrastruktura</span><span class="lang-en" style="display:none;">Budget M0–M6 · infrastructure</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(232,117,10,.07);border-radius:4px;border-left:2px solid rgba(232,117,10,.4);">
+              <span class="lang-cz">Strategická podpora vedení skupiny</span><span class="lang-en" style="display:none;">Strategic support from group leadership</span>
+            </div>
+            <div style="font-size:10px;color:rgba(255,255,255,.65);padding:4px 8px;background:rgba(232,117,10,.07);border-radius:4px;border-left:2px solid rgba(232,117,10,.4);">
+              <span class="lang-cz">Investorský podíl · strategický partner</span><span class="lang-en" style="display:none;">Investor stake · strategic partner</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CLOSING -->
+    <div style="background:linear-gradient(90deg,rgba(80,200,130,.14),rgba(80,200,130,.03));border-left:4px solid rgba(80,200,130,.65);border-radius:0 8px 8px 0;padding:14px 20px;margin-top:auto;">
+      <div style="font-size:16px;color:rgba(255,255,255,.9);line-height:1.75;font-style:italic;">
+        <span class="lang-cz">"David nevstupuje jako uchazeč o místo — vstupuje jako zakladatel s hotovým produktem, know-how a osobním závazkem k výsledku."</span>
+        <span class="lang-en" style="display:none;">"David is not entering as a job applicant — he is entering as a founder with a finished product, know-how and a personal commitment to results."</span>
+      </div>
+    </div>
+  </div>
+
+<!-- STRATEGIC DOCS NAV — AIQ-00151 — uvnitř #doc-content → skrytý před heslem, viditelný po odemčení -->
+<div style="padding:24px 32px 32px;border-top:1px solid rgba(255,255,255,.07);">
+  <div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:14px;">
+    <span class="lang-cz">Strategické dokumenty</span><span class="lang-en" style="display:none;">Strategic Documents</span>
+  </div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;">
+    <a href="CEO_BRIEF.html" target="_blank" style="display:inline-flex;align-items:center;gap:10px;background:rgba(232,117,10,.10);border:1px solid rgba(232,117,10,.35);border-radius:8px;padding:12px 20px;color:#E8750A;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:.5px;">
+      <svg width="16" height="16" viewBox="0 0 52 52" fill="none"><polygon points="26,4 48,26 26,48 4,26" fill="#E8750A" opacity=".85"/><text x="26" y="31" text-anchor="middle" fill="white" font-family="Arial" font-weight="900" font-size="11">IQ</text></svg>
+      <span class="lang-cz">CEO Brief — Business Vision →</span><span class="lang-en" style="display:none;">CEO Brief — Business Vision →</span>
+    </a>
+  </div>
+</div>
+
+</div><!-- /#doc-content -->
+
+<script>
+/* ══ PASSWORD — změňte heslo zde ══ */
+var _PW = 'HOPI2026';
+
+function checkPw(){
+  var inp = document.getElementById('pw-input');
+  if(inp.value === _PW){
+    var ov = document.getElementById('pw-overlay');
+    ov.classList.add('pw-fade-out');
+    setTimeout(function(){ ov.style.display='none'; }, 500);
+    document.getElementById('doc-content').style.display = 'block';
+    if(window.ppMusicStart) window.ppMusicStart();
+  } else {
+    inp.classList.add('error');
+    var isCz = document.getElementById('btn-cz').classList.contains('active');
+    document.getElementById('pw-error').textContent = isCz ? 'Nesprávné heslo. Zkuste znovu.' : 'Incorrect password. Please try again.';
+    setTimeout(function(){
+      inp.classList.remove('error');
+      inp.value = '';
+      document.getElementById('pw-error').textContent = '';
+      inp.focus();
+    }, 2000);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  var inp = document.getElementById('pw-input');
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') checkPw(); });
+  inp.focus();
+  /* ── Správné pořadí sekcí: I/1 → I/2 → II/1 → II/2 → II/3 → III/1 → III/2 ── */
+  var dc = document.getElementById('doc-content');
+  var cast1  = document.getElementById('s-cast1');
+  var cast1b = document.getElementById('s-cast1b');
+  var sdavid = document.getElementById('s-david');
+  var stl    = document.getElementById('s-david-timeline');
+  if(cast1 && sdavid && stl){
+    dc.insertBefore(cast1, sdavid);   /* s-cast1  (I/1) před s-david */
+    if(cast1b) dc.insertBefore(cast1b, sdavid); /* s-cast1b (I/2) před s-david */
+    dc.insertBefore(stl, sdavid);     /* s-david-timeline (II/1) před s-david */
+  }
+});
+
+function togglePwShow(){
+  var inp = document.getElementById('pw-input');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+/* ══ AMBIENT MUSIC — story_personal.m4a (AIQ-00044) ══════════════════════════
+   Při návratu na PORTAL_PRESENTATION.html se obnoví původní hudba automaticky
+   z localStorage ('hopi_music_on') — existující mechanismus prezentace.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  var _audio=null, _playing=false, _shouldPlay=false, _fadeId=null, _starting=false;
+
+  function audio(){
+    if(!_audio){
+      _audio=new Audio('_audio/story_personal.mp3');
+      _audio.loop=true; _audio.preload='auto'; _audio.volume=0;
+    }
+    return _audio;
+  }
+
+  function fadeTo(vol,ms,cb){
+    if(_fadeId){clearInterval(_fadeId);_fadeId=null;}
+    var a=audio(),n=Math.max(1,Math.round(ms/40)),i=0,v0=a.volume;
+    _fadeId=setInterval(function(){
+      i++; a.volume=Math.min(1,Math.max(0,v0+(vol-v0)*(i/n)));
+      if(i>=n){clearInterval(_fadeId);_fadeId=null;a.volume=vol;if(cb)cb();}
+    },40);
+  }
+
+  function uiSet(on){
+    var btn=document.getElementById('pp-music-btn');
+    var lbl=document.getElementById('pp-music-label');
+    var ico=document.getElementById('pp-music-icon');
+    if(btn)btn.classList[on?'add':'remove']('playing');
+    if(lbl)lbl.textContent=on?'Ztlumit':'Hudba';
+    if(ico)ico.textContent=on?'🔊':'🎵';
+  }
+
+  function startMusic(fast){
+    if(_playing||_starting)return;
+    _starting=true;
+    var a=audio(); a.volume=0; a.muted=true;
+    var pr=a.play();
+    if(pr&&pr.then){
+      pr.then(function(){
+        _starting=false; a.muted=false;
+        _playing=true; _shouldPlay=true; uiSet(true);
+        try{localStorage.setItem('pp_music_on','1');}catch(e){}
+        fadeTo(0.72,fast?400:900);
+      },function(){
+        _starting=false; a.muted=false; _playing=false; uiSet(false);
+      });
+    } else {
+      _starting=false; a.muted=false; a.volume=0;
+      _playing=true; _shouldPlay=true; uiSet(true);
+      try{localStorage.setItem('pp_music_on','1');}catch(e){}
+      fadeTo(0.72,fast?400:900);
+    }
+  }
+
+  function stopMusic(){
+    _shouldPlay=false;
+    if(!_playing)return;
+    _playing=false; uiSet(false);
+    try{localStorage.setItem('pp_music_on','0');}catch(e){}
+    fadeTo(0,1000,function(){if(_audio)_audio.pause();});
+  }
+
+  window.ppMusicToggle=function(){
+    if(_playing)stopMusic(); else{_shouldPlay=true;startMusic(true);}
+  };
+  window.ppMusicStart=function(){ if(!_playing){_shouldPlay=true;startMusic(false);} };
+
+  // Obnovit stav z minulé návštěvy
+  var _wasOn=false; try{_wasOn=localStorage.getItem('pp_music_on')==='1';}catch(e){}
+  if(_wasOn){_shouldPlay=true; startMusic(false);}
+
+  // První klik kdekoliv (pokud shouldPlay a zatím nespuštěno)
+  document.addEventListener('click',function(e){
+    var btn=document.getElementById('pp-music-btn');
+    if(btn&&(e.target===btn||btn.contains(e.target)))return;
+    if(_shouldPlay&&!_playing&&!_starting)startMusic(false);
+  });
+})();
+
+/* ══ LANGUAGE TOGGLE ══ */
+function setLang(lang){
+  var isCz = (lang === 'cz' || lang === 'cs');
+  document.body.classList.toggle('lang-en', !isCz);
+  document.getElementById('btn-cz').classList.toggle('active', isCz);
+  document.getElementById('btn-en').classList.toggle('active', !isCz);
+  document.getElementById('pw-input').placeholder = isCz ? 'Zadejte heslo\u2026' : 'Enter password\u2026';
+}
+</script>
+<script src="../../_hopiq.js"></script>
+</body>
+</html>

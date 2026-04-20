@@ -1,5 +1,5 @@
 ﻿{
-  "latest": "v7.21",
+  "latest": "v7.22",
   "updatedAt": "2026-04-20",
   "versions": [
     {
@@ -60,6 +60,30 @@
         "pitchUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.22",
+        "date":  "2026-04-20",
+        "session":  "v7.22-WebPage_20260420_1227",
+        "title":  "CEO Brief, MIND-SET REVOLUTION, page split + music",
+        "mainUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "Nový: CEO Brief — slide MIND-SET REVOLUTION (8 předpokladů projektu, K/O body)",
+                        "Nový: selector.html — oddělená stránka výběru verzí (music button jen zde)",
+                        "Fix: index.html = welcome+bomba pouze — žádný music button na prvních obrazovkách",
+                        "Fix: Gladiator spouštění — bomba (L5) → redirect selector.html?music=1 → auto-start",
+                        "Fix: CEO Brief — hudba se spustí po odemčení heslem",
+                        "Obsah: CEO Brief — partner karty Artin + Intecs (přesný text + pilot AI v PBI)"
+                    ],
+        "promoLevel":  5,
+        "promoText":  "Svět se zatřásl. CEO Brief, MIND-SET REVOLUTION a živá bomba jsou tady.",
+        "promoTextEn":  "The world shook. CEO Brief, MIND-SET REVOLUTION and the live bomb are here.",
+        "presentationUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

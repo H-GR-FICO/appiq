@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="cs" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — Brand Concepts</title>
+<style>
+:root{--g:#007d32;--gl:#00b040;--gd:#004d1f;--dark:#0D0D1E;--dark2:#13132a;--border:rgba(255,255,255,.08);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--dark);color:#fff;min-height:100vh;}
+a{color:inherit;}
+
+/* NAV */
+.bc-nav{position:sticky;top:0;z-index:100;height:52px;background:rgba(13,13,30,.97);backdrop-filter:blur(12px);border-bottom:2px solid var(--g);display:flex;align-items:center;padding:0 36px;gap:14px;}
+.bc-back{padding:4px 12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.7);border-radius:6px;font-size:11px;font-weight:700;text-decoration:none;transition:all .2s;letter-spacing:.4px;}
+.bc-back:hover{background:rgba(0,125,50,.2);color:#fff;border-color:rgba(0,125,50,.5);}
+.bc-nav-title{font-size:14px;font-weight:800;color:#fff;}
+.bc-nav-sub{font-size:11px;color:rgba(255,255,255,.38);}
+
+/* HEADER */
+.bc-head{padding:60px 48px 44px;background:linear-gradient(155deg,#0a1a0a 0%,#0D0D1E 55%);}
+.bc-head-tag{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--g);margin-bottom:14px;font-weight:700;}
+.bc-head h1{font-size:38px;font-weight:900;line-height:1.1;margin-bottom:10px;}
+.bc-head h1 span{color:var(--g);}
+.bc-head p{font-size:14px;color:rgba(255,255,255,.5);max-width:620px;line-height:1.75;}
+
+/* DIVIDER */
+hr{border:none;border-top:1px solid var(--border);}
+
+/* SECTION */
+.bc-sec{padding:48px 48px 36px;}
+.bc-sec-tag{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--g);font-weight:700;margin-bottom:6px;}
+.bc-sec-title{font-size:24px;font-weight:900;margin-bottom:5px;}
+.bc-sec-sub{font-size:13px;color:rgba(255,255,255,.42);margin-bottom:28px;line-height:1.6;}
+
+/* GRIDS */
+.grid-logo{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.grid-pik{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:18px;}
+
+/* CARD */
+.card{background:#111128;border:1px solid var(--border);border-radius:12px;padding:28px 24px 22px;position:relative;transition:all .22s;overflow:hidden;}
+.card:hover{border-color:rgba(0,125,50,.35);background:#14142e;transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.5);}
+.card.rec{border-color:rgba(0,160,60,.45);}
+.card.rec::before{content:'★  DOPORUČENO';position:absolute;top:0;right:16px;background:var(--g);color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:0 0 8px 8px;}
+
+/* PREVIEW AREAS */
+.prev{display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.025);border-radius:8px;padding:22px 16px;margin-bottom:18px;min-height:90px;}
+.prev-tall{min-height:130px;}
+.prev-pik{flex-direction:column;gap:12px;padding:24px 12px;}
+
+/* CARD TEXT */
+.c-id{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--g);font-weight:700;margin-bottom:5px;}
+.c-name{font-size:13px;font-weight:800;color:#fff;margin-bottom:5px;}
+.c-desc{font-size:11px;color:rgba(255,255,255,.48);line-height:1.65;}
+.c-use{display:inline-block;margin-top:9px;font-size:9px;color:rgba(255,255,255,.3);border:1px solid rgba(255,255,255,.09);border-radius:4px;padding:2px 7px;letter-spacing:.5px;}
+.pik-hint{font-size:9px;color:rgba(255,255,255,.28);text-align:center;letter-spacing:.5px;}
+
+/* COMBINED BOX */
+.combined{margin:0 48px 48px;padding:32px 36px;background:linear-gradient(135deg,rgba(0,125,50,.07),rgba(0,0,0,.25));border:1px solid rgba(0,125,50,.2);border-radius:14px;}
+.comb-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--g);font-weight:700;margin-bottom:14px;}
+.comb-row{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-bottom:14px;}
+.comb-note{font-size:11px;color:rgba(255,255,255,.4);line-height:1.7;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;margin-top:2px;}
+
+/* CARD — FINAL SELECTION */
+.card.final{border-color:rgba(232,117,10,.5);}
+.card.final::before{content:'✓  FINÁLNÍ VÝBĚR';position:absolute;top:0;right:16px;background:#E8750A;color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:0 0 8px 8px;}
+/* CARD — WINNER (LF3 combined) */
+.card.winner{border-color:rgba(255,185,0,.55);background:#141208;}
+.card.winner::before{content:'★  FINÁLNÍ KOMBINACE';position:absolute;top:0;right:16px;background:linear-gradient(135deg,#E8750A,#ffb830);color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:0 0 8px 8px;}
+.card.winner:hover{border-color:rgba(255,185,0,.75);background:#1a1608;}
+
+/* FOOTER */
+footer{padding:28px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.f-copy{font-size:10px;color:rgba(255,255,255,.25);}
+.f-cta{font-size:12px;color:rgba(255,255,255,.55);}
+.f-cta strong{color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="bc-nav">
+  <a class="bc-back" href="../../HOPI_AppIQ_WebPage/index.html">&#8592; HOPI AppIQ</a>
+  <span class="bc-nav-title">Brand Concepts</span>
+  <span class="bc-nav-sub">Vizuální návrhy identity platformy · <span id="bc-ver-nav">v1.0</span> · 2026-04-16</span>
+</nav>
+
+<!-- HEADER -->
+<div class="bc-head">
+  <div class="bc-head-tag">HOPI AppIQ — Brand Identity</div>
+  <h1>Návrhy vizuální <span>identity</span> platformy</h1>
+  <p>Níže jsou navrženy 4 varianty logotypu a 6 variant piktogramu. Prohlédněte si koncepty a napište čísla volby (např. "L3 + B1") — následně doplníme výsledné logo do prezentace, promo stránky, navrhneme favicon a šablony.</p>
+</div>
+
+<hr>
+
+<!-- ═══ FINÁLNÍ VÝBĚR ═══ -->
+<div class="bc-sec">
+  <div class="bc-sec-tag">Finální výběr · 2026-04-17</div>
+  <div class="bc-sec-title">Odsouhlasená loga — finální verze</div>
+  <div class="bc-sec-sub">Loga odsouhlasená pro nasazení. HOPI TECHNOLOGY (stacked, oranžové TECHNOLOGY pod HOPI) a HOPI AppIQ (App oranžová + IQ zelená, bez separátoru, jeden textový prvek).</div>
+
+  <div class="grid-logo">
+
+    <!-- LF1 — HOPI TECHNOLOGY -->
+    <div class="card final">
+      <div class="c-id">LF1 — HOPI TECHNOLOGY</div>
+      <div class="prev prev-tall">
+        <svg viewBox="0 0 660 318" height="90" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;max-width:100%;">
+          <rect width="30.1059" height="318" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
+        </svg>
+      </div>
+      <div class="c-name">HOPI TECHNOLOGY — Stacked</div>
+      <div class="c-desc">HOPI brand path + "TECHNOLOGY" oranžové pod HOPI, vycentrované (text-anchor middle). Identita nové 6. divize skupiny a HOPI TechIQ s.r.o. Odsouhlaseno 2026-04-17.</div>
+      <span class="c-use">intro screen · divize header · HOPI TechIQ s.r.o. brand</span>
+    </div>
+
+    <!-- LF2 — HOPI AppIQ -->
+    <div class="card final">
+      <div class="c-id">LF2 — HOPI AppIQ</div>
+      <div class="prev">
+        <svg viewBox="0 0 1260 240.6796" height="58" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;max-width:100%;">
+          <rect width="30.1059" height="240.6796" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+        </svg>
+      </div>
+      <div class="c-name">HOPI AppIQ — App oranžová + IQ zelená</div>
+      <div class="c-desc">"App" oranžová (#E8750A, weight 300) + "IQ" zelená (#007d32, weight 900) jako jediný text s tspan — bez mezery, bez svislého separátoru. Finální verze odsouhlasena 2026-04-17.</div>
+      <span class="c-use">intro screen · cover strana · nav header · promo web</span>
+    </div>
+
+    <!-- LF3 — HOPI AppIQ · by · HOPI TECHNOLOGY -->
+    <div class="card winner" style="grid-column:1/-1;">
+      <div class="c-id">LF3 — HOPI AppIQ · by · HOPI TECHNOLOGY</div>
+      <div class="prev" style="min-height:80px;padding:20px 12px;">
+        <svg viewBox="0 0 2000 318" height="52" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;">
+          <!-- AppIQ LF2 — green bar LEFT -->
+          <rect width="30.1059" height="318" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+          <!-- "by" connector -->
+          <text x="1300" y="148" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Segoe UI',Arial,sans-serif" font-size="58" font-style="italic">by</text>
+          <!-- HOPI TECHNOLOGY — green bar RIGHT, translated to x=1340 -->
+          <g transform="translate(1340,0)">
+            <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+            <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
+            <rect x="629.8941" width="30.1059" height="318" fill="#007d32"/>
+          </g>
+        </svg>
+      </div>
+      <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:220px;">
+          <div class="c-name">Kombinované logo — "logo se uzavírá"</div>
+          <div class="c-desc">LF2 (HOPI AppIQ) + "by" + LF1 (HOPI TECHNOLOGY) v jednom SVG. Zelená čára LF2 je vlevo, zelená čára LF1 je vpravo — logo se uzavírá na obou stranách. Jediný vizuální celek propojující platformu a divizi. Finální kombinace odsouhlasena 2026-04-17.</div>
+          <span class="c-use">header · brand showcase · klíčové materiály · cover</span>
+        </div>
+        <div style="flex-shrink:0;font-size:10px;color:rgba(255,255,255,.35);line-height:1.8;border-left:1px solid rgba(255,185,0,.15);padding-left:16px;">
+          <div style="color:rgba(255,185,0,.7);font-weight:700;letter-spacing:1px;margin-bottom:6px;">STAVEBNÍ BLOKY</div>
+          <div>LF1 · HOPI TECHNOLOGY <span style="color:rgba(0,125,50,.8);">+</span></div>
+          <div>LF2 · HOPI AppIQ <span style="color:rgba(0,125,50,.8);">=</span></div>
+          <div style="color:rgba(255,185,0,.55);font-weight:700;">LF3 · FINÁLNÍ KOMBINACE</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══ LOGOTYPY ═══ -->
+<div class="bc-sec">
+  <div class="bc-sec-tag">Část A</div>
+  <div class="bc-sec-title">Logotypy — horizontální lockup</div>
+  <div class="bc-sec-sub">Hlavní logo platformy pro nav header, titulní stranu dokumentu a prezentace. Všechny varianty používají autentické HOPI vektorové paths.</div>
+
+  <div class="grid-logo">
+
+    <!-- L1 -->
+    <div class="card">
+      <div class="c-id">L1 — Horizontal Výchozí</div>
+      <div class="prev">
+        <svg viewBox="0 0 1450 240.6796" height="38" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <rect width="30.1059" height="240.6796" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <rect x="648" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/>
+          <text x="672" y="194" fill="rgba(255,255,255,.72)" font-family="'Segoe UI',Arial,sans-serif" font-size="192" font-weight="300">App</text>
+          <text x="1118" y="196" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text>
+        </svg>
+      </div>
+      <div class="c-name">Horizontal — Výchozí (aktuálně nasazeno)</div>
+      <div class="c-desc">HOPI brand vektory + svislá linka + "App" tlumená šedá + "IQ" zelená. Jemný kontrast, moderní a čistý. Aktuálně použito v nav headeru a cover stránce.</div>
+      <span class="c-use">nav header · cover strana · promo web</span>
+    </div>
+
+    <!-- L2 -->
+    <div class="card">
+      <div class="c-id">L2 — Bold AppIQ</div>
+      <div class="prev">
+        <svg viewBox="0 0 1450 240.6796" height="38" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <rect width="30.1059" height="240.6796" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <rect x="640" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/>
+          <text x="666" y="200" fill="#fff" font-family="'Segoe UI',Arial,sans-serif" font-size="168" font-weight="700">App</text>
+          <text x="1080" y="202" fill="#00cc55" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text>
+        </svg>
+      </div>
+      <div class="c-name">Horizontal — Bold AppIQ</div>
+      <div class="c-desc">"App" plná bílá tučná + "IQ" světlá zelená (#00cc55). Rovnoměrnější vizuální váha HOPI a AppIQ — assertivnější dojem, silnější brand recall AppIQ.</div>
+      <span class="c-use">nav header · cover strana · print</span>
+    </div>
+
+    <!-- L3 RECOMMENDED -->
+    <div class="card rec">
+      <div class="c-id">L3 — Stacked Badge</div>
+      <div class="prev prev-tall">
+        <svg viewBox="0 0 640 370" height="74" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <rect width="30.1059" height="370" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <rect x="50" y="218" width="568" height="1.5" fill="rgba(255,255,255,.1)"/>
+          <text x="88" y="318" fill="rgba(255,255,255,.62)" font-family="'Segoe UI',Arial,sans-serif" font-size="88" font-weight="300">App</text>
+          <text x="336" y="320" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="100" font-weight="900">IQ</text>
+        </svg>
+      </div>
+      <div class="c-name">Stacked Badge</div>
+      <div class="c-desc">HOPI brand path nad "AppIQ" — dva řádky v badge formátu. Kompaktní šířka, silná výška. Jedinečné a snadno zapamatovatelné. Ideální pro titulní strany a viditelné umístění.</div>
+      <span class="c-use">cover strana · titulní badge · print · SharePoint icon</span>
+    </div>
+
+    <!-- L4 -->
+    <div class="card">
+      <div class="c-id">L4 — IQ Mark + Text</div>
+      <div class="prev">
+        <svg viewBox="0 0 860 240" height="50" xmlns="http://www.w3.org/2000/svg" style="display:block">
+          <defs><linearGradient id="lgl4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00a03a"/><stop offset="100%" stop-color="#004d1f"/></linearGradient></defs>
+          <rect width="240" height="240" rx="18" fill="url(#lgl4)"/>
+          <rect x="7" y="7" width="226" height="226" rx="13" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2"/>
+          <text x="120" y="165" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="116" font-weight="900">IQ</text>
+          <rect x="256" y="38" width="2" height="164" fill="rgba(255,255,255,.1)"/>
+          <text x="272" y="136" fill="#fff" font-family="'Segoe UI',Arial,sans-serif" font-size="86" font-weight="900" letter-spacing="5">HOPI</text>
+          <text x="274" y="196" fill="rgba(255,255,255,.52)" font-family="'Segoe UI',Arial,sans-serif" font-size="52" font-weight="300">App</text>
+          <text x="464" y="198" fill="#00cc55" font-family="'Segoe UI',Arial,sans-serif" font-size="56" font-weight="900">IQ</text>
+        </svg>
+      </div>
+      <div class="c-name">IQ Mark + Text</div>
+      <div class="c-desc">Zelený IQ čtverec jako standalone "app icon" + HOPI AppIQ text vpravo. Modulární systém — IQ mark lze použít samostatně jako favicon/badge, text vedle pro header.</div>
+      <span class="c-use">web header · favicon + wordmark combo · Teams app tile</span>
+    </div>
+
+  </div>
+</div>
+
+<hr>
+
+<!-- ═══ PIKTOGRAMY ═══ -->
+<div class="bc-sec">
+  <div class="bc-sec-tag">Část B</div>
+  <div class="bc-sec-title">Piktogramy — icon / favicon formát</div>
+  <div class="bc-sec-sub">Standalone symbol platformy. Použití: favicon (16–512px), Teams badge, SharePoint site icon, nadpis prezentace, vodoznak.</div>
+
+  <div class="grid-pik">
+
+    <!-- B1 RECOMMENDED -->
+    <div class="card rec">
+      <div class="c-id">B1 — Hexagon IQ</div>
+      <div class="prev prev-pik">
+        <svg viewBox="0 0 120 120" width="96" height="96">
+          <defs><linearGradient id="gb1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b040"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs>
+          <polygon points="60,7 108,33.5 108,86.5 60,113 12,86.5 12,33.5" fill="url(#gb1)"/>
+          <polygon points="60,15 100,37.5 100,82.5 60,105 20,82.5 20,37.5" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+          <text x="60" y="73" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="40" font-weight="900" letter-spacing="-2">IQ</text>
+        </svg>
+        <div class="pik-hint">Skvělý v 16 × 16 i 512 × 512</div>
+      </div>
+      <div class="c-name">Hexagon IQ</div>
+      <div class="c-desc">Hexagon = tech/enterprise standard (viz AWS, SAP, Microsoft). Čistý, okamžitě čitelný v jakémkoli rozlišení. Nejlepší volba pro favicon.</div>
+    </div>
+
+    <!-- B2 -->
+    <div class="card">
+      <div class="c-id">B2 — App Grid</div>
+      <div class="prev prev-pik">
+        <svg viewBox="0 0 120 120" width="96" height="96">
+          <rect x="8"  y="8"  width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="45" y="8"  width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="82" y="8"  width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="8"  y="45" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="45" y="45" width="30" height="30" rx="5" fill="#007d32"/>
+          <text x="60" y="66" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="900">IQ</text>
+          <rect x="82" y="45" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="8"  y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="45" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+          <rect x="82" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+        </svg>
+        <div class="pik-hint">Launcher · Teams tile · tiles view</div>
+      </div>
+      <div class="c-name">App Grid Launcher</div>
+      <div class="c-desc">Mřížka appek s IQ uprostřed — odkazuje přímo na "aplikační platformu". Vhodné jako Teams/M365 launcher ikona.</div>
+    </div>
+
+    <!-- B3 -->
+    <div class="card">
+      <div class="c-id">B3 — Neural Orbit</div>
+      <div class="prev prev-pik">
+        <svg viewBox="0 0 120 120" width="96" height="96">
+          <line x1="60" y1="13" x2="60" y2="37" stroke="#007d32" stroke-width="1.5" opacity=".6"/>
+          <line x1="107" y1="37" x2="79" y2="50" stroke="#007d32" stroke-width="1.5" opacity=".5"/>
+          <line x1="94"  y1="99" x2="73" y2="73" stroke="#007d32" stroke-width="1.5" opacity=".55"/>
+          <line x1="26"  y1="99" x2="47" y2="73" stroke="#007d32" stroke-width="1.5" opacity=".55"/>
+          <line x1="13"  y1="37" x2="41" y2="50" stroke="#007d32" stroke-width="1.5" opacity=".5"/>
+          <circle cx="60"  cy="13" r="7"  fill="#007d32" opacity=".75"/>
+          <circle cx="107" cy="37" r="5.5" fill="#007d32" opacity=".55"/>
+          <circle cx="94"  cy="99" r="7"  fill="#007d32" opacity=".65"/>
+          <circle cx="26"  cy="99" r="5.5" fill="#007d32" opacity=".55"/>
+          <circle cx="13"  cy="37" r="7"  fill="#007d32" opacity=".75"/>
+          <circle cx="60"  cy="60" r="25" fill="#007d32"/>
+          <text x="60" y="68" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="22" font-weight="900">IQ</text>
+        </svg>
+        <div class="pik-hint">AI messaging · platform hub</div>
+      </div>
+      <div class="c-name">Neural Orbit</div>
+      <div class="c-desc">AI vizuální jazyk — uzly propojené kolem IQ středu. Silný tech/AI dojem. Při malých rozlišeních méně čitelný — ideální 48px+.</div>
+    </div>
+
+    <!-- B4 -->
+    <div class="card">
+      <div class="c-id">B4 — Circuit H</div>
+      <div class="prev prev-pik">
+        <svg viewBox="0 0 120 120" width="96" height="96">
+          <rect x="18" y="14" width="22" height="92" rx="4" fill="#007d32"/>
+          <rect x="80" y="14" width="22" height="92" rx="4" fill="#007d32"/>
+          <rect x="40" y="50" width="40" height="20" rx="3" fill="#007d32"/>
+          <circle cx="18"  cy="14"  r="5.5" fill="#00ee66"/>
+          <circle cx="40"  cy="14"  r="5.5" fill="#00ee66"/>
+          <circle cx="80"  cy="14"  r="5.5" fill="#00ee66"/>
+          <circle cx="102" cy="14"  r="5.5" fill="#00ee66"/>
+          <circle cx="18"  cy="106" r="5.5" fill="#00ee66"/>
+          <circle cx="40"  cy="106" r="5.5" fill="#00ee66"/>
+          <circle cx="80"  cy="106" r="5.5" fill="#00ee66"/>
+          <circle cx="102" cy="106" r="5.5" fill="#00ee66"/>
+        </svg>
+        <div class="pik-hint">HOPI identity · digital DNA</div>
+      </div>
+      <div class="c-name">Circuit H</div>
+      <div class="c-desc">Písmeno H s circuit-board elementy — spojuje HOPI identitu s tech/digitálním DNA. Výrazný, dobře čitelný. Odkazuje explicitně na HOPI.</div>
+    </div>
+
+    <!-- B5 -->
+    <div class="card">
+      <div class="c-id">B5 — Shield IQ</div>
+      <div class="prev prev-pik">
+        <svg viewBox="0 0 120 130" width="84" height="96">
+          <defs><linearGradient id="gb5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00aa44"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs>
+          <path d="M60,7 L113,27 L113,68 Q113,108 60,125 Q7,108 7,68 L7,27 Z" fill="url(#gb5)"/>
+          <path d="M60,17 L103,33 L103,68 Q103,101 60,115 Q17,101 17,68 L17,33 Z" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+          <text x="60" y="82" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="38" font-weight="900" letter-spacing="-1">IQ</text>
+        </svg>
+        <div class="pik-hint">Enterprise · security · corporate</div>
+      </div>
+      <div class="c-name">Shield IQ</div>
+      <div class="c-desc">Štít = enterprise, bezpečnost, spolehlivost — tradiční korporátní symbol. Silné poselství důvěry. Vhodné pokud cílíte na compliance/governance messaging.</div>
+    </div>
+
+    <!-- B6 -->
+    <div class="card">
+      <div class="c-id">B6 — Diamond IQ</div>
+      <div class="prev prev-pik">
+        <svg viewBox="0 0 120 120" width="96" height="96">
+          <defs><linearGradient id="gb6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00aa44"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs>
+          <rect x="23" y="23" width="74" height="74" rx="10" fill="url(#gb6)" transform="rotate(45 60 60)"/>
+          <text x="60" y="68" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="28" font-weight="900" letter-spacing="-1">IQ</text>
+        </svg>
+        <div class="pik-hint">Premium · quality · modern</div>
+      </div>
+      <div class="c-name">Diamond IQ</div>
+      <div class="c-desc">Rotovaný čtverec — prémiový, geometrický, dynamický. Dobře funguje jako velký badge. Při malých rozlišeních (favicon 16px) méně výrazný tvar.</div>
+    </div>
+
+  </div>
+</div>
+
+<hr>
+
+<!-- COMBINED RECOMMENDATION -->
+<div class="combined">
+  <div class="comb-label">Doporučená kombinace</div>
+  <div class="comb-row">
+    <svg viewBox="0 0 1450 240.6796" height="36" xmlns="http://www.w3.org/2000/svg">
+      <rect width="30.1059" height="240.6796" fill="#007d32"/>
+      <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+      <rect x="648" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/>
+      <text x="672" y="194" fill="rgba(255,255,255,.72)" font-family="'Segoe UI',Arial,sans-serif" font-size="192" font-weight="300">App</text>
+      <text x="1118" y="196" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text>
+    </svg>
+    <div style="color:rgba(255,255,255,.3);font-size:18px;padding:0 4px;">+</div>
+    <svg viewBox="0 0 120 120" width="44" height="44">
+      <defs><linearGradient id="gcomb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b040"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs>
+      <polygon points="60,7 108,33.5 108,86.5 60,113 12,86.5 12,33.5" fill="url(#gcomb)"/>
+      <text x="60" y="73" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="40" font-weight="900" letter-spacing="-2">IQ</text>
+    </svg>
+    <div>
+      <div style="font-size:13px;font-weight:800;">L1 Horizontal + B1 Hexagon IQ</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:3px;">Nav header: logotyp L1 &nbsp;·&nbsp; Favicon / badge: hexagon B1</div>
+    </div>
+  </div>
+  <div class="comb-note">
+    Kombinace L1 + B1 zachovává autentický HOPI brand v logotypu a přidává silný, škálovatelný hexagon jako piktogram. Hexagon funguje výborně jako favicon (16px), Teams app tile (32px), SharePoint site icon (96px) i jako dekorativní badge v prezentaci. Pro titulní strany doporučuji alternativně L3 (Stacked Badge) — silnější vizuální dojem na velké ploše. Napište svou volbu ("L_ + B_") a ihned ji zabudujeme.
+  </div>
+</div>
+
+<footer>
+  <div class="f-copy">HOPI AppIQ — Brand Concepts <span id="bc-ver-foot">v1.0</span> &nbsp;|&nbsp; 2026-04-16 &nbsp;|&nbsp; Powered by Claude AI</div>
+  <div class="f-cta"><strong>Napište volbu:</strong> "logotyp L_, piktogram B_" — pak ihned zabudujeme.</div>
+</footer>
+
+<script>
+// ── Verze Brand Concepts — jediné místo pro aktualizaci ──────────────────────
+const BRAND_VER = 'v1.2';
+(function(){
+  var ids = ['bc-ver-nav','bc-ver-foot'];
+  ids.forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=BRAND_VER; });
+})();
+</script>
+</body>
+</html>
