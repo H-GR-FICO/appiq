@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:1200px;height:630px;overflow:hidden;background:#04061A;}
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:
+    radial-gradient(ellipse 70% 80% at 15% 50%, rgba(232,117,10,.13) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 60% at 85% 20%, rgba(29,185,84,.08) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 40% at 75% 80%, rgba(59,130,246,.07) 0%, transparent 50%),
+    linear-gradient(135deg, #05060F 0%, #090918 40%, #060D0A 100%);
+  display:flex;align-items:stretch;
+  position:relative;overflow:hidden;
+}
+
+/* Grid background */
+body::before{
+  content:'';position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+
+/* Stars */
+.star{position:absolute;border-radius:50%;background:#fff;}
+
+/* LEFT PANEL */
+.left{
+  width:480px;flex-shrink:0;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:56px 48px;position:relative;z-index:2;
+}
+
+.eyebrow{
+  font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
+  color:rgba(232,117,10,.75);margin-bottom:20px;
+}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+.logo-wordmark{line-height:1;}
+.logo-hopi{font-size:28px;font-weight:900;color:#E8750A;letter-spacing:-0.5px;}
+.logo-appiq{font-size:18px;font-weight:300;color:rgba(255,255,255,.4);letter-spacing:1px;}
+
+/* Main headline */
+.headline{
+  font-size:48px;font-weight:900;line-height:1.05;
+  color:#fff;letter-spacing:-1px;margin-bottom:16px;
+}
+.headline .accent{
+  color:transparent;
+  background:linear-gradient(135deg,#E8750A,#FF9A3C);
+  -webkit-background-clip:text;background-clip:text;
+}
+
+.motto{
+  font-size:13px;font-style:italic;color:rgba(255,255,255,.45);
+  line-height:1.7;max-width:340px;margin-bottom:28px;
+  border-left:2px solid rgba(232,117,10,.4);padding-left:12px;
+}
+
+.tags{display:flex;gap:8px;flex-wrap:wrap;}
+.tag{
+  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  padding:4px 10px;border-radius:20px;border:1px solid;
+}
+.tag-or{background:rgba(232,117,10,.15);border-color:rgba(232,117,10,.35);color:rgba(232,117,10,.9);}
+.tag-gr{background:rgba(29,185,84,.12);border-color:rgba(29,185,84,.3);color:rgba(80,200,110,.9);}
+.tag-bl{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.3);color:rgba(100,160,255,.9);}
+
+/* DIVIDER */
+.divider{
+  width:1px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.1),transparent);
+  margin:40px 0;flex-shrink:0;
+}
+
+/* RIGHT PANEL */
+.right{
+  flex:1;display:flex;flex-direction:column;justify-content:center;
+  padding:48px 44px;position:relative;z-index:2;gap:14px;
+}
+
+/* Stat cards */
+.stat-row{display:flex;gap:12px;}
+.stat-card{
+  flex:1;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;padding:14px 16px;
+}
+.stat-n{font-size:32px;font-weight:900;color:#E8750A;line-height:1;}
+.stat-l{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;}
+
+/* Branch cards */
+.branch-row{display:flex;gap:12px;}
+.branch{
+  flex:1;border-radius:10px;padding:14px 16px;
+}
+.branch.home{background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.25);}
+.branch.ent{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.22);}
+.branch-icon{font-size:18px;margin-bottom:6px;}
+.branch-name{font-size:13px;font-weight:800;margin-bottom:3px;}
+.home .branch-name{color:rgba(80,210,110,.9);}
+.ent .branch-name{color:rgba(100,160,255,.9);}
+.branch-desc{font-size:10px;color:rgba(255,255,255,.4);line-height:1.5;}
+
+/* Bottom tag */
+.bottom-tag{
+  background:linear-gradient(90deg,rgba(232,117,10,.15),rgba(232,117,10,.05));
+  border:1px solid rgba(232,117,10,.25);border-radius:8px;
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+}
+.bt-left{font-size:11px;font-weight:700;color:rgba(232,117,10,.8);}
+.bt-right{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.5px;}
+
+/* Decorative orbit */
+.orbit{
+  position:absolute;right:-80px;top:50%;transform:translateY(-50%);
+  width:420px;height:420px;
+  border:1px solid rgba(232,117,10,.06);border-radius:50%;
+  pointer-events:none;z-index:1;
+}
+.orbit::before{
+  content:'';position:absolute;inset:40px;
+  border:1px solid rgba(29,185,84,.05);border-radius:50%;
+}
+.orbit::after{
+  content:'';position:absolute;inset:80px;
+  border:1px solid rgba(59,130,246,.05);border-radius:50%;
+}
+</style>
+</head>
+<body>
+
+<!-- Decorative stars -->
+<div class="star" style="width:2px;height:2px;top:8%;left:52%;opacity:.6;"></div>
+<div class="star" style="width:1.5px;height:1.5px;top:22%;left:67%;opacity:.4;"></div>
+<div class="star" style="width:2.5px;height:2.5px;top:15%;left:38%;opacity:.5;"></div>
+<div class="star" style="width:1px;height:1px;top:72%;left:55%;opacity:.5;"></div>
+<div class="star" style="width:2px;height:2px;top:88%;left:44%;opacity:.3;"></div>
+<div class="star" style="width:1.5px;height:1.5px;top:45%;left:72%;opacity:.4;"></div>
+<div class="star" style="width:1px;height:1px;top:60%;left:88%;opacity:.5;"></div>
+<div class="star" style="width:2px;height:2px;top:30%;left:93%;opacity:.3;"></div>
+<div class="star" style="width:1.5px;height:1.5px;top:78%;left:78%;opacity:.45;"></div>
+<div class="star" style="width:3px;height:3px;top:5%;left:80%;opacity:.25;"></div>
+
+<!-- Orbit decoration -->
+<div class="orbit"></div>
+
+<!-- LEFT -->
+<div class="left">
+  <div class="eyebrow">★ AppIQ Vision · David Gogela · HOPI</div>
+
+  <div class="logo">
+    <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
+      <defs>
+        <linearGradient id="d" x1="6" y1="6" x2="46" y2="46" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#E8750A"/>
+          <stop offset="100%" stop-color="#1DB954"/>
+        </linearGradient>
+      </defs>
+      <rect width="52" height="52" rx="11" fill="#0D0D1E"/>
+      <polygon points="26,5 47,26 26,47 5,26" fill="url(#d)" opacity=".9"/>
+      <text x="26" y="31" text-anchor="middle" fill="white" font-family="Arial" font-weight="900" font-size="11" letter-spacing="-0.3">IQ</text>
+    </svg>
+    <div class="logo-wordmark">
+      <div class="logo-hopi">HOPI AppIQ</div>
+      <div class="logo-appiq">AI Platform</div>
+    </div>
+  </div>
+
+  <div class="headline">
+    Business<br><span class="accent">Vision</span>
+  </div>
+
+  <div class="motto">
+    "Built for the universe.<br>Starting with you.<br>No limits — unless we set them."
+  </div>
+
+  <div class="tags">
+    <span class="tag tag-or">CEO Brief</span>
+    <span class="tag tag-gr">HOME Product</span>
+    <span class="tag tag-bl">ENTERPRISE</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- RIGHT -->
+<div class="right">
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-n">9</div>
+      <div class="stat-l">měsíců<br>vývoje</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">144+</div>
+      <div class="stat-l">splněných<br>úkolů</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">v7.21</div>
+      <div class="stat-l">aktuální<br>verze</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-n">1+AI</div>
+      <div class="stat-l">developer<br>tým</div>
+    </div>
+  </div>
+
+  <div class="branch-row">
+    <div class="branch home">
+      <div class="branch-icon">🏠</div>
+      <div class="branch-name">AppIQ HOME</div>
+      <div class="branch-desc">Finance · Zdraví · Vzdělávání<br>Fitness · Stravování<br><strong style="color:rgba(80,210,110,.7);">Launch 1. 1. 2027</strong></div>
+    </div>
+    <div class="branch ent">
+      <div class="branch-icon">🏢</div>
+      <div class="branch-name">AppIQ ENTERPRISE</div>
+      <div class="branch-desc">Logistika · Zdravotnictví<br>Zemědělství · Energetika · +<br><strong style="color:rgba(100,160,255,.7);">Launch 1. 1. 2028</strong></div>
+    </div>
+  </div>
+
+  <div class="bottom-tag">
+    <div class="bt-left">🚀 HOPI TechIQ s.r.o. — Q2 2026 · Budujeme 6. divizi HOPI. Zevnitř.</div>
+    <div class="bt-right">h-gr-fico.github.io/appiq</div>
+  </div>
+
+</div>
+</body>
+</html>

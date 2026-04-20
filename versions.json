@@ -1,6 +1,6 @@
 ﻿{
   "latest": "v7.21",
-  "updatedAt": "2026-04-19",
+  "updatedAt": "2026-04-20",
   "versions": [
     {
         "version":  "v7.20",
@@ -37,7 +37,7 @@
     },
     {
         "version":  "v7.21",
-        "date":  "2026-04-19",
+        "date":  "2026-04-20",
         "session":  "v7.21-WebPage_20260419_2341",
         "title":  "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
         "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
