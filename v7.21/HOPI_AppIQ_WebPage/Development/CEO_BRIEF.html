@@ -865,6 +865,7 @@ function checkPw(){
     setTimeout(function(){ov.style.display='none';},500);
     document.getElementById('doc-content').style.display='block';
     inp.value='';
+    if(window.ceoMusicStart) window.ceoMusicStart();
   } else {
     inp.classList.add('error');
     document.getElementById('pw-error').textContent='Nesprávné heslo.';
@@ -951,6 +952,7 @@ document.addEventListener('DOMContentLoaded',function(){
     fadeTo(0,1000,function(){if(_audio)_audio.pause();});
   }
   window.ceoMusicToggle=function(){if(_playing)stopMusic();else{_shouldPlay=true;startMusic(true);}};
+  window.ceoMusicStart=function(){if(!_playing){_shouldPlay=true;startMusic(false);}};
   // Obnovit stav — sdílí localStorage klíč s PERSONAL_PITCH
   var _wasOn=false;try{_wasOn=localStorage.getItem('pp_music_on')==='1';}catch(e){}
   if(_wasOn){_shouldPlay=true;startMusic(false);}

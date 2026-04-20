@@ -3802,14 +3802,26 @@
       "userExplanation": "Otestujeme že Coordination Center správně zobrazuje oba soubory s čitelným formátováním."
     },
     {
+      "id": "AIQ-00152",
+      "title": "CEO_BRIEF.html — fix: hudba nehraje po odemčení (checkPw nevolá ceoMusicStart)",
+      "description": "Bug: checkPw() v CEO_BRIEF.html po odemčení nespustí hudbu. Root příčina: chybí volání window.ceoMusicStart() v checkPw() — na rozdíl od PERSONAL_PITCH kde checkPw() volá ppMusicStart(). Zároveň IIFE neexponuje ceoMusicStart. Fix: (1) přidat window.ceoMusicStart do IIFE, (2) přidat volání ceoMusicStart v checkPw().",
+      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "domain": "Platform", "module": "Presentation", "component": "CEO_BRIEF.html",
+      "taskType": "fix", "effort": "XS", "estimatedTime": 10, "actualTime": null,
+      "assignee": "Claude", "createdAt": "2026-04-20 11:00", "createdBy": "David Gogela",
+      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "userExplanation": "Na CEO_BRIEF nehraje hudba po zadání hesla."
+    },
+    {
       "id": "AIQ-00151",
       "title": "PERSONAL_PITCH.html — odkaz na CEO_BRIEF.html (přechodné propojení před BIZ_HUB)",
       "description": "Přidat do PERSONAL_PITCH.html odkaz na CEO_BRIEF.html — sekce 'Strategické dokumenty' těsně před zavřením #doc-content. Bilingvní CS/EN. Přechodné řešení před implementací BIZ_HUB (BIZ-00029). Zároveň přidat do CEO_BRIEF breadcrumb zpět na PERSONAL_PITCH.",
-      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "stream": "WEB", "priority": "HIGH", "status": "CLOSED",
       "domain": "Platform", "module": "Presentation", "component": "PERSONAL_PITCH.html",
-      "taskType": "development", "effort": "XS", "estimatedTime": 20, "actualTime": null,
+      "taskType": "development", "effort": "XS", "estimatedTime": 20, "actualTime": 15,
       "assignee": "Claude", "createdAt": "2026-04-20 10:30", "createdBy": "David Gogela",
-      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "completedBy": "Claude", "completedAt": "2026-04-20 10:45", "durationDays": 0,
+      "comment": null, "note": "Strategic docs nav přidána dovnitř #doc-content (auto-hidden za heslem). Odkaz CEO_BRIEF.html target=_blank. Commit fabab26.",
       "userExplanation": "Dokud nebude BIZ_HUB hotový, propojíme PERSONAL_PITCH a CEO_BRIEF přímým odkazem."
     },
     {
