@@ -3,24 +3,50 @@
   "lastUpdated": "2026-04-19",
   "confidential": true,
   "description": "Business OIL — Open Issue List pro business stream AppIQ / HOPI TechIQ s.r.o. CITLIVÁ DATA — nesdílet mimo David Gogela + Claude.",
+  "platform": {
+    "name": "HOPI AppIQ",
+    "entity": "HOPI TechIQ s.r.o. (spin-off, target Q2 2026)",
+    "motto": "Built for the universe. Starting with you. No limits — unless we set them.",
+    "mottoShort": "From you to the universe — no limits unless we set them.",
+    "mottoCS": "Stavěno pro vesmír. Začínáme u vás. Bez limitů — pokud si je sami nezvolíme.",
+    "mottoCSShort": "Od vás po vesmír — bez limitů, pokud si je sami nezvolíme.",
+    "architecture": "Dual-branch platform: HOME + ENTERPRISE. Každá větev má 2 fáze: (1) Dev Environment — AI-powered personalizovaný vývoj aplikací, (2) Pre-built Templates — přednastavené šablony pro konkrétní domény a odvětví.",
+    "branches": {
+      "HOME": {
+        "description": "Produkt pro jednotlivce a rodiny. Primární komerční priorita — masový trh, cash flow od dne 1.",
+        "verticals": ["Domácí finance", "Osobní zdravotní péče", "Vzdělávání a škola", "Fitness a zdravý životní styl", "Stravování a výživa"],
+        "scale": "Jednotlivci → rodiny",
+        "launchTarget": "2027-01-01"
+      },
+      "ENTERPRISE": {
+        "description": "Produkt pro firmy všech velikostí a odvětví.",
+        "scaleBySize": ["Živnostníci a OSVČ", "Malé firmy (2–50)", "Střední firmy (50–500)", "Velké firmy (500+)", "Korporace a holdingové skupiny"],
+        "verticalsByIndustry": ["Logistika a doprava", "Potravinářská výroba", "Zemědělství", "Reality a developerství", "Energetika", "Veřejné služby", "Zdravotnictví (PRIORITA — fragmentované systémy, obrovské budgety, zdraví = #1 priorita každého)", "Veřejný sektor", "Státní správa", "IT a technologie", "Finance a pojišťovnictví"],
+        "launchTarget": "2028-01-01"
+      }
+    }
+  },
   "streams": {
-    "B2B_PILOT": {
-      "name": "B2B Pilot — HOPI GROUP",
-      "description": "Interní laboratoř skupiny HOPI — živý provoz AppIQ od teď. Finance portál jako první deployment, rozšíření na všechny divize.",
+    "HOPI_LAB": {
+      "name": "HOPI Internal Lab — HOPI GROUP",
+      "description": "Interní laboratoř skupiny HOPI — živý B2B ENTERPRISE deployment. Group Controlling portál jako první deployment. HOPI Group = první referenční zákazník + živá validace produktu. Paralelní provoz s HOME vývojem.",
       "launchDate": null,
-      "status": "ACTIVE"
+      "status": "ACTIVE",
+      "branch": "ENTERPRISE"
     },
-    "B2C_SAAS_HOME": {
-      "name": "B2C SaaS Home",
-      "description": "Retailový produkt — domácnosti a soukromí nekomerční klienti. SaaS subscriptions, freemium model.",
-      "launchDate": "2027-07-01",
-      "status": "PLANNED"
+    "HOME": {
+      "name": "AppIQ HOME — B2C produkt pro jednotlivce a rodiny",
+      "description": "PRIMÁRNÍ KOMERČNÍ PRIORITA. Masový trh — každý jednotlivec a každá rodina. Vertikály: domácí finance, osobní zdraví, vzdělávání, fitness, stravování. Freemium + subscription model. Cash flow od dne 1 částečně financuje vývoj platformy. Launch 1.1.2027.",
+      "launchDate": "2027-01-01",
+      "status": "PLANNED",
+      "branch": "HOME"
     },
-    "B2B_SAAS_ENTERPRISE": {
-      "name": "B2B SaaS Enterprise",
-      "description": "Produkt pro firmy — na základě pilotáže v HOPI GROUP. Enterprise subscriptions, white-label možnost.",
+    "ENTERPRISE": {
+      "name": "AppIQ ENTERPRISE — B2B produkt pro firmy",
+      "description": "Enterprise SaaS pro firmy všech velikostí a odvětví. Od živnostníků po korporace. Odvětvové šablony: logistika, zdravotnictví, zemědělství, realitní trh, energetika... Per-seat nebo flat fee licencování. Launch po HOME (validovaná platforma, stabilní tým).",
       "launchDate": "2028-01-01",
-      "status": "PLANNED"
+      "status": "PLANNED",
+      "branch": "ENTERPRISE"
     }
   },
   "entities": {
@@ -481,8 +507,8 @@
     },
     {
       "id": "BIZ-00022",
-      "title": "B2C SaaS Home — public launch 01.07.2027",
-      "description": "Plánování a realizace veřejného launche B2C SaaS Home: (1) Launch checklist: technika, legal, support, payment, marketing vše ready. (2) Launch den: koordinace PR, social media, paid ads spuštění. (3) Monitoring: real-time metriky (users, errors, payments, support tickets). (4) Hyper-care period: 2 týdny po launchi — zvýšená pozornost, rychlé fixe. (5) Post-launch review: co fungovalo, co ne, okamžité priority.",
+      "title": "B2C SaaS Home — public launch 01.01.2027",
+      "description": "Plánování a realizace veřejného launche B2C SaaS Home — PRIORITA #1 pro cash flow od dne 1: (1) Launch checklist: technika, legal, support, payment, marketing vše ready. (2) Launch den: koordinace PR, social media, paid ads spuštění. (3) Monitoring: real-time metriky (users, errors, payments, support tickets). (4) Hyper-care period: 2 týdny po launchi — zvýšená pozornost, rychlé fixe. (5) Post-launch review: co fungovalo, co ne, okamžité priority. Datum posunuto z 1.7.2027 na 1.1.2027 — 6 měsíců dříve, cash flow priorita.",
       "stream": "B2C_SAAS_HOME",
       "priority": "CRITICAL",
       "status": "OPEN",
@@ -493,8 +519,8 @@
       "owner": "David Gogela",
       "supportedBy": "Celý tým HOPI TechIQ",
       "splitTo": { "technical": null, "business": "BIZ-00022" },
-      "targetDate": "2027-07-01",
-      "targetDateExact": "2027-07-01",
+      "targetDate": "2027-01-01",
+      "targetDateExact": "2027-01-01",
       "createdAt": "2026-04-19",
       "completedAt": null,
       "note": "Milestone. Dependency: BIZ-00020 (security audit) + BIZ-00021 (beta hotová).",
@@ -520,6 +546,111 @@
       "completedAt": null,
       "note": "HOPI GROUP pilot = ideální B2B case study pro enterprise sales.",
       "userExplanation": "Připravíme nabídku AppIQ pro firmy — jiná cena než pro domácnosti, speciální smlouvy a dedikovaná podpora, aby velcí zákazníci dostali servis na míru."
+    },
+    {
+      "id": "BIZ-00024",
+      "title": "CEO/CFO Summary — platforma + AI Lab mindset + tým brief + nový business narrative",
+      "description": "Připravit stručný executive brief pro CEO/CFO HOPI Group: (1) Product Development top 5 — co bylo postaveno. (2) Mindset shift — klíčová změna: B2C SaaS je primární cíl (cash flow), HOPI pilot = laboratoř pro validaci produktu, nikoli cílová destinace. (3) Business narrative: B2C SaaS launch 1.1.2027 jako priorita #1; HOPI interní pilot paralelně jako product validation; strategičtí partneři: Anthropic (CEE lab), ARTIN, INTECS. (4) AI Lab — formální tým: co potřebujeme (budget, mandát). Formát: max. 1 strana A4 nebo 3–5 slidů. Jazyk: česky.",
+      "stream": "B2B_PILOT",
+      "priority": "HIGH",
+      "status": "IN PROGRESS",
+      "taskType": "communication",
+      "effort": "S",
+      "estimatedTime": 90,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude (draft + struktura)",
+      "splitTo": { "technical": null, "business": "BIZ-00024" },
+      "targetDate": "2026-Q2",
+      "targetDateExact": "2026-06-30",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Dependency: BIZ-00002 (AI Lab). Output: brief dokument nebo slide deck. Přímý vstup do BIZ-00004 (CEO/CFO pitch).",
+      "userExplanation": "Krátký brief pro šéfy — co jsme postavili, proč AI mění hru, co chceme jako AI Lab a co to HOPI přinese."
+    },
+    {
+      "id": "BIZ-00025",
+      "title": "Anthropic Partnership — HOPI AI Lab jako CEE partner Anthropic",
+      "description": "Strategický záměr: oslovit Anthropic s nabídkou partnerství — HOPI AI Lab jako jejich výzkumná, implementační a evangelizační laboratoř v regionu CEE (Česko, Slovensko, Polsko, Maďarsko, Rumunsko). Přidaná hodnota pro Anthropic: živé enterprise deployment, regionální referenční zákazník, CEE market entry bez vlastního týmu. Přidaná hodnota pro HOPI: přístup k API za zvýhodněných podmínek, technická podpora, PR/brand, možná investiční nebo akelerační spolupráce. Akční kroky: (1) Zmapovat kontaktní kanály Anthropic (partnerships, LinkedIn, events). (2) Připravit 1-page partnership proposal. (3) Oslovit — cold nebo přes síť.",
+      "stream": "ALL",
+      "priority": "HIGH",
+      "status": "OPEN",
+      "taskType": "strategy",
+      "effort": "M",
+      "estimatedTime": 180,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude (proposal draft, positioning)",
+      "splitTo": { "technical": null, "business": "BIZ-00025" },
+      "targetDate": "2026-Q3",
+      "targetDateExact": "2026-09-30",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Strategická příležitost — Anthropic hledá enterprise partnery mimo US. CEE region je podpokrytý. Správná chvíle je teď (agresivní enterprise expanze).",
+      "userExplanation": "Nabídneme Anthropicu spolupráci — HOPI bude jejich AI laboratoř pro střední a východní Evropu. Pro ně: reálné enterprise nasazení a regionální přítomnost. Pro nás: zvýhodněný přístup, support a brand."
+    },
+    {
+      "id": "BIZ-00026",
+      "title": "Personal Pitch — sekce BUSINESS DEVELOPMENT: track record + milníky",
+      "description": "Přidat do Personal Pitch samostatnou oblast BUSINESS DEVELOPMENT: (1) Business track record — skutečnost vs. plán (co bylo dosaženo, kdy, oproti původnímu plánu). (2) Plán vývoje businessu — hlavní milníky: B2B Pilot rollout, HOPI TechIQ s.r.o. founded, B2C SaaS Home launch, B2B Enterprise launch, Series A. (3) Vizualizace: timeline nebo tabulka skutečnost vs. plán. Cíl: přesvědčit investory a strategické partnery o exekuci a trakci. Jazyk: EN primárně (mezinárodní investor audience).",
+      "stream": "ALL",
+      "priority": "HIGH",
+      "status": "OPEN",
+      "taskType": "content",
+      "effort": "M",
+      "estimatedTime": 180,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude (struktura, copy, vizualizace návrh)",
+      "splitTo": { "technical": null, "business": "BIZ-00026" },
+      "targetDate": "2026-Q2",
+      "targetDateExact": "2026-06-30",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Výstup: sekce v Personal Pitch dokumentu/prezentaci. Páruje s BIZ-00027 (Product Development). Oba jsou vstupy pro investorský pitch.",
+      "userExplanation": "V Personal Pitch přidáme sekci o business vývoji — co jsme slíbili a co skutečně udělali, a kam business míří. Klíčové pro investory a partnery."
+    },
+    {
+      "id": "BIZ-00027",
+      "title": "Personal Pitch — sekce PRODUCT DEVELOPMENT: track record + milníky",
+      "description": "Přidat do Personal Pitch samostatnou oblast PRODUCT DEVELOPMENT: (1) Product track record — skutečnost vs. plán: co bylo vyvinuto, kdy, jaký byl původní plán vs. realita. (2) Shrnutí toho, co bylo postaveno: verze platformy (v1–v7.21+), klíčové features, architektura, AI integrace. (3) Plán vývoje produktu: hlavní milníky — Training Centre, AI Work Center, B2C features, Enterprise tier, mobile app. (4) Vizualizace: product roadmap timeline nebo tabulka skutečnost vs. plán. Cíl: demonstrovat produktovou exekuci, tempo vývoje a technologický záměr. Jazyk: EN primárně.",
+      "stream": "ALL",
+      "priority": "HIGH",
+      "status": "OPEN",
+      "taskType": "content",
+      "effort": "M",
+      "estimatedTime": 180,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude (struktura, copy, roadmap vizualizace návrh)",
+      "splitTo": { "technical": null, "business": "BIZ-00027" },
+      "targetDate": "2026-Q2",
+      "targetDateExact": "2026-06-30",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Výstup: sekce v Personal Pitch dokumentu/prezentaci. Páruje s BIZ-00026 (Business Development). Shrnout i co bylo uděláno — v7.21 releases jsou silný důkaz exekuce.",
+      "userExplanation": "V Personal Pitch přidáme sekci o produktovém vývoji — co jsme postavili vs. co jsme plánovali, a kam produkt míří. Investoři chtějí vidět tempo a schopnost doručit."
+    },
+    {
+      "id": "BIZ-00028",
+      "title": "David & Claude — Business Accelerator: příběh a koncept",
+      "description": "Zdokumentovat a komunikovat klíčový příběh: David (ekonom-controller bez dev zkušeností) + Claude (AI) = ryze technický produkt za 7 týdnů. Tři pilíře konceptu: (1) Ekonom+AI synergy — zkušenosti z businessu + AI schopnosti = produktový tým bez hranice mezi doménami. (2) Business Accelerator — AI jako akcelerátor, ne nástroj; Claude přítomen v každém rozhodnutí. (3) Výsledek za 7 týdnů — 17 800+ řádků kódu, 144+ úkolů, 91 git commitů, ~$900, 39h+ přímé práce. Kanonický citát Davida Gogely: 'Před dvěma měsíci bych si to nedokázal představit. Teď, co znám Clauda, mne již nikdo nepřesvědčí o opaku.' Hlavní poselství pro investory: tato synergie je replikovatelná a je součástí produktového záměru AppIQ.",
+      "stream": "ALL",
+      "priority": "HIGH",
+      "status": "IN PROGRESS",
+      "taskType": "content",
+      "effort": "S",
+      "estimatedTime": 60,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude",
+      "splitTo": { "technical": null, "business": "BIZ-00028" },
+      "targetDate": "2026-Q2",
+      "targetDateExact": "2026-04-30",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Sekce přidána do CEO_BRIEF.html (AIQ-00150). Kanonický citát a 3 karty (Ekonom+AI, Business Accelerator, Výsledek). Zvážit zařazení i do PERSONAL_PITCH a investor deck.",
+      "userExplanation": "Zachytit a komunikovat příběh spolupráce David+Claude jako klíčový investorský argument — dokáže, že platforma je stavěna na principu, který sama prodává."
     }
   ]
 }
