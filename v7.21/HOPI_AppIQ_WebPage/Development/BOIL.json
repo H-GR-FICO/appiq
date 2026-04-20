@@ -651,6 +651,27 @@
       "completedAt": null,
       "note": "Sekce přidána do CEO_BRIEF.html (AIQ-00150). Kanonický citát a 3 karty (Ekonom+AI, Business Accelerator, Výsledek). Zvážit zařazení i do PERSONAL_PITCH a investor deck.",
       "userExplanation": "Zachytit a komunikovat příběh spolupráce David+Claude jako klíčový investorský argument — dokáže, že platforma je stavěna na principu, který sama prodává."
+    },
+    {
+      "id": "BIZ-00029",
+      "title": "BIZ_HUB.html — Secure Strategic Center (rozcestník pro strategické dokumenty)",
+      "description": "Vytvořit centrální vstupní stránku BIZ_HUB.html jako bezpečnostní bránu a rozcestník pro všechny strategické dokumenty. Architektura: (1) Jedno heslo HOPI2026 → uloží 'biz_unlocked' do localStorage. (2) PERSONAL_PITCH.html + CEO_BRIEF.html zkontrolují biz_unlocked → přeskočí vlastní overlay. (3) Hub zobrazí karty: Personal Pitch · CEO Brief · (budoucí: Investor Deck, Market Strategy, Team & Start, Product Roadmap...). (4) Každá karta má stav (datum, verze, badge NEW). (5) Každý dokument dostane breadcrumb '← Business Strategic Center'. Design: shodný s ostatními strategickými dokumenty — dark glassmorphism, HOPI AppIQ branding, CS/EN. Sdílí story_personal.mp3 + _hopiq.js architekturu. Cíl: jeden odkaz ke sdílení, jednou odemčeno = vše odemčeno.",
+      "stream": "ALL",
+      "priority": "HIGH",
+      "status": "OPEN",
+      "taskType": "development",
+      "effort": "M",
+      "estimatedTime": 150,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude",
+      "splitTo": { "technical": null, "business": "BIZ-00029" },
+      "targetDate": "2026-04-20",
+      "targetDateExact": "2026-04-20",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Blocker pro škálování strategic section. PERSONAL_PITCH + CEO_BRIEF auth refactor (XS každá) nutný souběžně. Předchází: BIZ-00026, BIZ-00027 (obsah pro hub). Jednoduchý MVP: 2 karty + shared auth. Rozšiřovat iterativně.",
+      "userExplanation": "Chceme jeden sdílitelný odkaz na celou strategickou sekci — BIZ_HUB je brána s heslem a rozcestníkem. Přidání nového dokumentu = jedna nová karta, žádné duplikování auth logiky."
     }
   ]
 }

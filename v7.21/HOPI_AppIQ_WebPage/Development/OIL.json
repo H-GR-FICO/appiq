@@ -3802,6 +3802,17 @@
       "userExplanation": "Otestujeme že Coordination Center správně zobrazuje oba soubory s čitelným formátováním."
     },
     {
+      "id": "AIQ-00151",
+      "title": "PERSONAL_PITCH.html — odkaz na CEO_BRIEF.html (přechodné propojení před BIZ_HUB)",
+      "description": "Přidat do PERSONAL_PITCH.html odkaz na CEO_BRIEF.html — sekce 'Strategické dokumenty' těsně před zavřením #doc-content. Bilingvní CS/EN. Přechodné řešení před implementací BIZ_HUB (BIZ-00029). Zároveň přidat do CEO_BRIEF breadcrumb zpět na PERSONAL_PITCH.",
+      "stream": "WEB", "priority": "HIGH", "status": "IN PROGRESS",
+      "domain": "Platform", "module": "Presentation", "component": "PERSONAL_PITCH.html",
+      "taskType": "development", "effort": "XS", "estimatedTime": 20, "actualTime": null,
+      "assignee": "Claude", "createdAt": "2026-04-20 10:30", "createdBy": "David Gogela",
+      "completedBy": null, "completedAt": null, "durationDays": null, "comment": null, "note": null,
+      "userExplanation": "Dokud nebude BIZ_HUB hotový, propojíme PERSONAL_PITCH a CEO_BRIEF přímým odkazem."
+    },
+    {
       "id": "AIQ-00150",
       "title": "CEO_BRIEF.html — sekce 'David & Claude: Business Accelerator' — AI synergie, produktivita, citát",
       "description": "Přidat nový slide/sekci do CEO_BRIEF hned pod hero: (1) David & Claude = nejproduktivnější tým — vše vzniklo paralelně při práci v controllingu, (2) AI nezná hranic — David je ekonom/controller a s AI vyvíjí ryze technický produkt = Business Akcelerátor, (3) AI pomáhá všude: procesy, operativa, strategie, nápady, (4) citát Davida Gogely o změně pohledu na AI. Přidat do BOIL a BKONTEXT.",
