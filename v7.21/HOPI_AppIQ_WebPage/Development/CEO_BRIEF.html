@@ -29,6 +29,27 @@
 html{scroll-behavior:smooth;background:var(--bg);}
 body{font-family:'Segoe UI',system-ui,Arial,sans-serif;color:var(--text);background:var(--bg);line-height:1.6;overflow-x:hidden;}
 
+/* ═══ PASSWORD OVERLAY ════════════════════════════════════════════════ */
+#pw-overlay{position:fixed;inset:0;z-index:9999;background:linear-gradient(160deg,#060812 0%,#0E1020 55%,#080810 100%);display:flex;align-items:center;justify-content:center;}
+#pw-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:40px 48px;text-align:center;max-width:400px;width:90%;}
+#pw-logo-mark{margin-bottom:20px;}
+#pw-title{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
+#pw-subtitle{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
+#pw-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:0 0 20px;}
+#pw-label{font-size:11px;color:rgba(255,255,255,.45);margin-bottom:10px;text-align:left;letter-spacing:.3px;}
+#pw-input-wrap{position:relative;margin-bottom:12px;}
+#pw-input{width:100%;padding:10px 40px 10px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:14px;outline:none;transition:border .2s;font-family:'Segoe UI',Arial,sans-serif;}
+#pw-input:focus{border-color:rgba(232,117,10,.6);}
+#pw-input.error{border-color:rgba(255,80,80,.7);animation:pw-shake .4s ease;}
+#pw-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:rgba(255,255,255,.35);font-size:15px;padding:4px;}
+#pw-btn{width:100%;padding:11px;background:#E8750A;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;transition:background .2s;letter-spacing:.5px;}
+#pw-btn:hover{background:#d06008;}
+#pw-error{color:rgba(255,100,100,.85);font-size:12px;margin-top:8px;min-height:18px;}
+#pw-footer{margin-top:20px;font-size:10px;color:rgba(255,255,255,.18);letter-spacing:.8px;text-transform:uppercase;border-top:1px solid rgba(255,255,255,.06);padding-top:14px;}
+@keyframes pw-shake{0%,100%{transform:translateX(0);}20%,60%{transform:translateX(-6px);}40%,80%{transform:translateX(6px);}}
+@keyframes pw-fade-out{to{opacity:0;pointer-events:none;}}
+.pw-fade-out{animation:pw-fade-out .5s ease forwards;}
+
 /* ═══ STARS BACKGROUND ════════════════════════════════════════════════ */
 .stars{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
 .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d,3s) infinite ease-in-out var(--delay,0s);}
@@ -205,6 +226,32 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 </head>
 <body>
 
+<!-- ═══ PASSWORD OVERLAY ════════════════════════════════════════════════ -->
+<div id="pw-overlay">
+  <div id="pw-box">
+    <div id="pw-logo-mark">
+      <svg width="56" height="56" viewBox="0 0 52 52" fill="none">
+        <defs><linearGradient id="iq-pw" x1="6" y1="6" x2="46" y2="46" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8750A"/><stop offset="100%" stop-color="#1DB954"/></linearGradient></defs>
+        <rect width="52" height="52" rx="10" fill="#0D0D1A"/>
+        <polygon points="26,6 46,26 26,46 6,26" fill="url(#iq-pw)" opacity=".9"/>
+        <text x="26" y="31" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-weight="900" font-size="12" letter-spacing="-0.5">IQ</text>
+      </svg>
+      <div style="font-size:9px;font-weight:700;color:rgba(232,117,10,.65);letter-spacing:1.5px;margin-top:6px;text-transform:uppercase;">HOPI AppIQ</div>
+    </div>
+    <div id="pw-title">Business Vision</div>
+    <div id="pw-subtitle">HOPI TECHNOLOGY · důvěrný dokument</div>
+    <hr id="pw-divider">
+    <div id="pw-label">Přístupové heslo:</div>
+    <div id="pw-input-wrap">
+      <input id="pw-input" type="password" placeholder="Zadejte heslo…" autocomplete="off" spellcheck="false">
+      <button id="pw-toggle" onclick="togglePwShow()" title="Zobrazit/skrýt heslo">👁</button>
+    </div>
+    <button id="pw-btn" onclick="checkPw()">Otevřít dokument →</button>
+    <div id="pw-error"></div>
+    <div id="pw-footer">Tento dokument je určen výhradně jeho příjemci.</div>
+  </div>
+</div>
+
 <!-- ═══ STARS ═══════════════════════════════════════════════════════════ -->
 <div class="stars" id="stars-bg"></div>
 
@@ -236,6 +283,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 </nav>
 
 <!-- ═══ PAGE ═════════════════════════════════════════════════════════════ -->
+<div id="doc-content" style="display:none">
 <div class="page">
 
 <!-- ══════════════════════════════════════════════════════════════════════
@@ -638,8 +686,36 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 <footer>
   HOPI Technology · AppIQ Platform · © 2026 · Záměr Davida Gogely · Důvěrný dokument
 </footer>
+</div><!-- /doc-content -->
 
 <!-- ═══ JS ════════════════════════════════════════════════════════════════ -->
+<script>
+/* ── PASSWORD ── */
+var _PW = 'HOPI2026';
+function checkPw(){
+  var inp=document.getElementById('pw-input');
+  if(inp.value===_PW){
+    var ov=document.getElementById('pw-overlay');
+    ov.classList.add('pw-fade-out');
+    setTimeout(function(){ov.style.display='none';},500);
+    document.getElementById('doc-content').style.display='block';
+    inp.value='';
+  } else {
+    inp.classList.add('error');
+    document.getElementById('pw-error').textContent='Nesprávné heslo.';
+    setTimeout(function(){inp.classList.remove('error');inp.value='';inp.focus();},600);
+  }
+}
+function togglePwShow(){
+  var inp=document.getElementById('pw-input');
+  inp.type=inp.type==='password'?'text':'password';
+}
+document.addEventListener('DOMContentLoaded',function(){
+  var inp=document.getElementById('pw-input');
+  if(inp)inp.addEventListener('keydown',function(e){if(e.key==='Enter')checkPw();});
+  if(inp)inp.focus();
+});
+</script>
 <script>
 /* Stars */
 (function(){
