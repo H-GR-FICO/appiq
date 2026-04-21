@@ -8,62 +8,36 @@ html,body{width:1200px;height:630px;overflow:hidden;}
 body{
   font-family:'Segoe UI',Arial,sans-serif;
   background:#04061A;
-  display:flex;align-items:stretch;
-  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;text-align:center;
 }
-.left{
-  width:60px;background:#A855F7;flex-shrink:0;
+.bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%, rgba(168,85,247,.22) 0%, transparent 70%);
 }
-.content{
-  flex:1;display:flex;flex-direction:column;justify-content:center;
-  padding:64px 72px;position:relative;z-index:2;
-}
-.bg-glow{
-  position:absolute;
-  width:700px;height:700px;border-radius:50%;
-  background:radial-gradient(circle,rgba(168,85,247,.18) 0%,transparent 65%);
-  right:-100px;top:50%;transform:translateY(-50%);
-  pointer-events:none;
-}
-.label{
-  font-size:13px;font-weight:700;letter-spacing:5px;text-transform:uppercase;
-  color:rgba(168,85,247,.75);margin-bottom:28px;
+.top-bar{position:absolute;top:0;left:0;right:0;height:8px;background:#A855F7;}
+.bottom-bar{position:absolute;bottom:0;left:0;right:0;height:8px;background:#A855F7;}
+.tag{
+  font-size:14px;font-weight:700;letter-spacing:6px;text-transform:uppercase;
+  color:rgba(168,85,247,.8);margin-bottom:24px;position:relative;z-index:2;
 }
 .headline{
-  font-size:96px;font-weight:900;line-height:.95;letter-spacing:-3px;
-  color:#fff;margin-bottom:32px;
+  font-size:140px;font-weight:900;line-height:.9;letter-spacing:-4px;
+  color:#fff;margin-bottom:24px;position:relative;z-index:2;
 }
-.headline span{color:#A855F7;}
-.tagline{
-  font-size:22px;color:rgba(255,255,255,.45);font-weight:300;
-  letter-spacing:1px;margin-bottom:40px;
+.headline em{color:#A855F7;font-style:normal;}
+.sub{
+  font-size:20px;color:rgba(255,255,255,.4);font-weight:400;
+  letter-spacing:3px;text-transform:uppercase;position:relative;z-index:2;
 }
-.badge{
-  display:inline-flex;align-items:center;gap:10px;
-  background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.35);
-  border-radius:8px;padding:10px 20px;
-}
-.badge-text{font-size:14px;font-weight:700;letter-spacing:1px;color:rgba(192,132,252,.9);}
-.right-accent{
-  width:60px;background:rgba(168,85,247,.08);flex-shrink:0;
-  display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:28px;align-items:center;
-}
-.ver{font-size:10px;font-weight:700;color:rgba(255,255,255,.15);letter-spacing:2px;writing-mode:vertical-rl;transform:rotate(180deg);}
 </style>
 </head>
 <body>
-<div class="left"></div>
-<div class="content">
-  <div class="bg-glow"></div>
-  <div class="label">HOPI TechIQ s.r.o. · Confidential · 2026</div>
-  <div class="headline">Business<br><span>Case</span></div>
-  <div class="tagline">8 týdnů. ~$1k. Live deployment. Phase 1 Active.</div>
-  <div class="badge">
-    <span class="badge-text">🔒 Investment Readiness · CEE → WorldWide</span>
-  </div>
-</div>
-<div class="right-accent">
-  <div class="ver">INVESTOR BRIEF</div>
-</div>
+<div class="bg"></div>
+<div class="top-bar"></div>
+<div class="tag">HOPI TechIQ s.r.o. · Investor Brief · 2026</div>
+<div class="headline">Business<br><em>Case</em></div>
+<div class="sub">8 weeks · ~$1k · Live deployment.</div>
+<div class="bottom-bar"></div>
 </body>
 </html>
