@@ -1181,65 +1181,47 @@ document.addEventListener('DOMContentLoaded',function(){
 <!-- ═══ AMBIENT MUSIC ════════════════════════════════════════════════════ -->
 <script>
 (function(){
-  var ctx=null,nodes=[],playing=false;
-  var btn=null;
+  var _audio=null,_playing=false,_fadeId=null;
 
-  function buildPad(){
-    if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}}
-    ctx.resume().then(function(){
-      var master=ctx.createGain();
-      master.gain.setValueAtTime(0,ctx.currentTime);
-      master.gain.linearRampToValueAtTime(0.13,ctx.currentTime+3);
-      master.connect(ctx.destination);
-      var delay=ctx.createDelay(2);delay.delayTime.value=0.35;
-      var fb=ctx.createGain();fb.gain.value=0.38;
-      var wet=ctx.createGain();wet.gain.value=0.4;
-      delay.connect(fb);fb.connect(delay);delay.connect(wet);wet.connect(master);
-      var freqs=[110,130.81,164.81,220,329.63,440];
-      freqs.forEach(function(f,i){
-        var o1=ctx.createOscillator(),o2=ctx.createOscillator();
-        o1.type='sine';o2.type='sine';
-        o1.frequency.value=f;o2.frequency.value=f*1.003;
-        var g=ctx.createGain();g.gain.value=0.08/(i+1);
-        o1.connect(g);o2.connect(g);g.connect(master);g.connect(delay);
-        o1.start();o2.start();nodes.push(o1,o2,g);
-      });
-      var lfo=ctx.createOscillator(),lfoG=ctx.createGain();
-      lfo.frequency.value=0.12;lfoG.gain.value=0.025;
-      lfo.connect(lfoG);lfoG.connect(master.gain);lfo.start();
-      nodes.push(master,delay,fb,wet,lfo,lfoG);
-      window._ceoMaster=master;
-    });
-  }
-
-  function stopPad(){
-    if(window._ceoMaster){
-      try{window._ceoMaster.gain.linearRampToValueAtTime(0,ctx.currentTime+1.5);}catch(e){}
-      setTimeout(function(){
-        nodes.forEach(function(n){try{if(n.stop)n.stop();}catch(e){}try{n.disconnect();}catch(e){}});
-        nodes=[];window._ceoMaster=null;
-      },1600);
+  function getAudio(){
+    if(!_audio){
+      _audio=new Audio('_audio/story_personal.mp3');
+      _audio.loop=true;_audio.preload='auto';_audio.volume=0;
     }
+    return _audio;
   }
+
+  function fadeTo(target,ms,cb){
+    if(_fadeId)clearInterval(_fadeId);
+    var a=getAudio(),steps=Math.max(1,Math.round(ms/40)),i=0,v0=a.volume,diff=target-v0;
+    _fadeId=setInterval(function(){
+      i++;a.volume=Math.min(1,Math.max(0,v0+diff*(i/steps)));
+      if(i>=steps){clearInterval(_fadeId);_fadeId=null;if(cb)cb();}
+    },40);
+  }
+
+  function btn(){return document.getElementById('ceo-music-btn');}
 
   window.ceoMusicStart=function(){
-    if(playing)return;
-    buildPad();playing=true;
-    if(!btn)btn=document.getElementById('ceo-music-btn');
-    if(btn)btn.classList.add('active');
+    if(_playing)return;
+    var a=getAudio();a.volume=0;a.muted=true;
+    a.play().then(function(){a.muted=false;fadeTo(0.35,2000);}).catch(function(){});
+    _playing=true;
+    var b=btn();if(b)b.classList.add('active');
     try{localStorage.setItem('ceo_music','on');}catch(e){}
   };
 
   window.ceoMusicToggle=function(){
-    if(!playing){
-      buildPad();playing=true;
-      if(!btn)btn=document.getElementById('ceo-music-btn');
-      if(btn)btn.classList.add('active');
+    if(!_playing){
+      var a=getAudio();a.volume=0;a.muted=true;
+      a.play().then(function(){a.muted=false;fadeTo(0.35,2000);}).catch(function(){});
+      _playing=true;
+      var b=btn();if(b)b.classList.add('active');
       try{localStorage.setItem('ceo_music','on');}catch(e){}
     } else {
-      stopPad();playing=false;
-      if(!btn)btn=document.getElementById('ceo-music-btn');
-      if(btn)btn.classList.remove('active');
+      fadeTo(0,1000,function(){getAudio().pause();});
+      _playing=false;
+      var b=btn();if(b)b.classList.remove('active');
       try{localStorage.setItem('ceo_music','off');}catch(e){}
     }
   };

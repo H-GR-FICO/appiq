@@ -1741,75 +1741,46 @@ document.addEventListener('DOMContentLoaded',function(){
 <!-- ═══ AMBIENT MUSIC ═══════════════════════════════════════════════════ -->
 <script>
 (function(){
-  var ctx=null,nodes=[],playing=false,started=false;
-  var btn=null;
+  var playing=false,started=false,btn=null;
+  var _audio=null,_fadeId=null;
 
-  function buildPad(){
-    if(!ctx){
-      try{ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return;}
+  function getAudio(){
+    if(!_audio){
+      _audio=new Audio('_audio/story_personal.mp3');
+      _audio.loop=true;_audio.preload='auto';_audio.volume=0;
     }
-    ctx.resume().then(function(){
-      var master=ctx.createGain();
-      master.gain.setValueAtTime(0,ctx.currentTime);
-      master.gain.linearRampToValueAtTime(0.13,ctx.currentTime+3);
-      master.connect(ctx.destination);
-
-      var delay=ctx.createDelay(2);delay.delayTime.value=0.35;
-      var fb=ctx.createGain();fb.gain.value=0.38;
-      var wet=ctx.createGain();wet.gain.value=0.4;
-      delay.connect(fb);fb.connect(delay);delay.connect(wet);wet.connect(master);
-
-      var freqs=[110,130.81,164.81,220,329.63,440];
-      freqs.forEach(function(f,i){
-        var o1=ctx.createOscillator(),o2=ctx.createOscillator();
-        o1.type='sine';o2.type='sine';
-        o1.frequency.value=f;o2.frequency.value=f*1.003;
-        var g=ctx.createGain();
-        g.gain.value=0.08/(i+1);
-        o1.connect(g);o2.connect(g);
-        g.connect(master);g.connect(delay);
-        o1.start();o2.start();
-        nodes.push(o1,o2,g);
-      });
-
-      var lfo=ctx.createOscillator();
-      var lfoG=ctx.createGain();
-      lfo.frequency.value=0.12;lfoG.gain.value=0.025;
-      lfo.connect(lfoG);lfoG.connect(master.gain);
-      lfo.start();
-      nodes.push(master,delay,fb,wet,lfo,lfoG);
-      window._ibMaster=master;
-    });
+    return _audio;
   }
 
-  function stopPad(){
-    if(window._ibMaster){
-      try{
-        window._ibMaster.gain.setValueAtTime(window._ibMaster.gain.value,ctx.currentTime);
-        window._ibMaster.gain.linearRampToValueAtTime(0,ctx.currentTime+1.5);
-      }catch(e){}
-      setTimeout(function(){
-        nodes.forEach(function(n){try{if(n.stop)n.stop();}catch(e){}try{n.disconnect();}catch(e){}});
-        nodes=[];window._ibMaster=null;
-      },1600);
-    }
+  function fadeTo(target,ms,cb){
+    if(_fadeId)clearInterval(_fadeId);
+    var a=getAudio(),steps=Math.max(1,Math.round(ms/40)),i=0,v0=a.volume,diff=target-v0;
+    _fadeId=setInterval(function(){
+      i++;a.volume=Math.min(1,Math.max(0,v0+diff*(i/steps)));
+      if(i>=steps){clearInterval(_fadeId);_fadeId=null;if(cb)cb();}
+    },40);
   }
 
   window.ibMusicStart=function(){
     if(playing)return;
-    buildPad();playing=true;started=true;
+    var a=getAudio();a.volume=0;a.muted=true;
+    a.play().then(function(){a.muted=false;fadeTo(0.35,2000);}).catch(function(){});
+    playing=true;started=true;
     if((btn=document.getElementById('inv-music-btn')))btn.classList.add('active');
     try{localStorage.setItem('inv_music','on');}catch(e){}
   };
 
   window.invMusicToggle=function(){
     if(!playing){
-      buildPad();playing=true;started=true;
+      var a=getAudio();a.volume=0;a.muted=true;
+      a.play().then(function(){a.muted=false;fadeTo(0.35,2000);}).catch(function(){});
+      playing=true;started=true;
       if(!btn)btn=document.getElementById('inv-music-btn');
       if(btn)btn.classList.add('active');
       try{localStorage.setItem('inv_music','on');}catch(e){}
     } else {
-      stopPad();playing=false;
+      fadeTo(0,1000,function(){getAudio().pause();});
+      playing=false;
       if(!btn)btn=document.getElementById('inv-music-btn');
       if(btn)btn.classList.remove('active');
       try{localStorage.setItem('inv_music','off');}catch(e){}
