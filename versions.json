@@ -1,6 +1,6 @@
 ﻿{
   "latest": "v7.22",
-  "updatedAt": "2026-04-20",
+  "updatedAt": "2026-04-21",
   "versions": [
     {
         "version":  "v7.20",
@@ -63,8 +63,8 @@
     },
     {
         "version":  "v7.22",
-        "date":  "2026-04-20",
-        "session":  "v7.22-WebPage_20260420_1227",
+        "date":  "2026-04-21",
+        "session":  "session_20260420_2107",
         "title":  "CEO Brief, MIND-SET REVOLUTION, page split + music",
         "mainUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",

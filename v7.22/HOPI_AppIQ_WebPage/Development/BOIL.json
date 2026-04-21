@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "lastUpdated": "2026-04-19",
+  "lastUpdated": "2026-04-20",
   "confidential": true,
   "description": "Business OIL — Open Issue List pro business stream AppIQ / HOPI TechIQ s.r.o. CITLIVÁ DATA — nesdílet mimo David Gogela + Claude.",
   "platform": {
@@ -670,8 +670,29 @@
       "targetDateExact": "2026-04-20",
       "createdAt": "2026-04-20",
       "completedAt": null,
-      "note": "Blocker pro škálování strategic section. PERSONAL_PITCH + CEO_BRIEF auth refactor (XS každá) nutný souběžně. Předchází: BIZ-00026, BIZ-00027 (obsah pro hub). Jednoduchý MVP: 2 karty + shared auth. Rozšiřovat iterativně.",
-      "userExplanation": "Chceme jeden sdílitelný odkaz na celou strategickou sekci — BIZ_HUB je brána s heslem a rozcestníkem. Přidání nového dokumentu = jedna nová karta, žádné duplikování auth logiky."
+      "note": "Arch. rozhodnutí 2026-04-20: BIZ_HUB je součástí BIZ HUB architektury (ne standalone). Vstup přes BIZ_ENTRY.html (heslo + bomba) → BIZ_HUB.html (karty). Shared auth biz_unlocked (AIQ-00163, AIQ-00167). BIZ verzování b1.x (AIQ-00164, AIQ-00165). PERSONAL_PITCH + CEO_BRIEF auth refactor nutný (AIQ-00167). Předchází: BIZ-00026, BIZ-00027.",
+      "userExplanation": "BIZ_HUB je strategický rozcestník v rámci BIZ HUB světa — jedno heslo, jedna bomba, všechny dokumenty dostupné. Rozšiřovat přidáváním karet."
+    },
+    {
+      "id": "BIZ-00030",
+      "title": "HOPI TECHNOLOGY Division Hub — divizní platforma (strategický placeholder)",
+      "description": "Strategický záměr: vytvořit HOPI TECHNOLOGY Hub jako divizní nadřazenou vrstvu nad HOPI TechIQ a budoucími firmami divize. Architektura: HOPI TECHNOLOGY Hub → [HOPI TechIQ Hub, firma 2, firma 3...]. Aktuálně placeholder — spustit až vznikne druhá firma v divizi. Připravit: (1) Konceptuální design divisional hubu. (2) Branding HOPI TECHNOLOGY (divize vs. firma). (3) Navigační architektura mezi firmami. (4) Sdílené assety divisional úrovně.",
+      "stream": "ALL",
+      "priority": "LOW",
+      "status": "OPEN",
+      "taskType": "strategy",
+      "effort": "L",
+      "estimatedTime": 480,
+      "actualTime": null,
+      "owner": "David Gogela",
+      "supportedBy": "Claude",
+      "splitTo": { "technical": null, "business": "BIZ-00030" },
+      "targetDate": "2027-Q1",
+      "targetDateExact": "2027-03-31",
+      "createdAt": "2026-04-20",
+      "completedAt": null,
+      "note": "Arch. rozhodnutí 2026-04-20: HOPI TechIQ Hub je root pro tuto firmu. HOPI TECHNOLOGY Hub = budoucí divizní vrstva (6. divize HOPI Group). Aktivovat až vznikne 2. firma divize. HOPI TechIQ Hub musí být navržen tak, aby mohl být dítětem TECHNOLOGY Hubu bez přestavby.",
+      "userExplanation": "Až bude v divizi HOPI Technology více firem, potřebujeme jejich společný vstupní bod — divisional hub. Teď jen plánujeme, stavíme až bude potřeba."
     }
   ]
 }

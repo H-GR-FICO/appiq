@@ -6,6 +6,46 @@
 
 ---
 
+## AIQ-00160 až AIQ-00175 — HOPI TechIQ Platform Architecture (v8.0 milestone)
+
+**Datum:** 2026-04-20 | **Status:** OPEN (všechny)
+
+### Architektonické rozhodnutí
+
+Session 2026-04-20: David schválil kompletní architektonický refaktor platformy. Nová hierarchie:
+
+```
+HOPI TECHNOLOGY Hub (divize — budoucí, BIZ-00030)
+└── HOPI TechIQ Hub (root landing, AIQ-00161) — OPEN
+    ├── TECH HUB (AIQ-00162) — Studio, Finance App
+    │   └── selector.html → Studio v8.xx
+    └── BIZ HUB (AIQ-00163 + AIQ-00164) — Strategic docs
+        └── BIZ_HUB.html → Personal Pitch, CEO Brief...
+```
+
+### Klíčová rozhodnutí
+
+| Bod | Rozhodnutí |
+|-----|------------|
+| Root landing | Open, bez hesla |
+| Bomba | Root = žádná; TECH HUB = stávající bomba; BIZ HUB = nová bomba (za heslem) |
+| BIZ heslo | HOPI2026 → biz_unlocked localStorage |
+| Verzování | Stream-tagged: TECH = v8.xx, BIZ = b1.x, HQ = r1.x, FULL = milestony |
+| Deploy | DO_DEPLOY.ps1 -hub TECH/BIZ/HQ/FULL |
+| Archiv před změnami | AIQ-00160 CRITICAL — bez deploy, live v7.22 zůstane funkční |
+
+### Dependency chain
+
+`AIQ-00160 → AIQ-00161 → AIQ-00162 + AIQ-00163 → AIQ-00164 → AIQ-00165 → AIQ-00166`
+`AIQ-00163 → AIQ-00167 (shared auth)`
+`AIQ-00161..167 → AIQ-00168 (docs update)`
+
+### Proč teď
+
+David čeká na souhlas CEO a majitelů (WhatsApp odesláno 2026-04-20). Deploy nové architektury až po souhlasu. Archiv v7.22 (AIQ-00160) jako záchranná síť.
+
+---
+
 ## AIQ-00125 — Fix: HOPIQ agent chybí v Studio centrech
 
 **Datum:** 2026-04-19 | **Status:** REVIEW
