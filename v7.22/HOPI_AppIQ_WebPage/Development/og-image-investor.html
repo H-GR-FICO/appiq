@@ -4,229 +4,66 @@
 <meta charset="UTF-8">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:1200px;height:630px;overflow:hidden;background:#04061A;}
+html,body{width:1200px;height:630px;overflow:hidden;}
 body{
   font-family:'Segoe UI',Arial,sans-serif;
-  background:
-    radial-gradient(ellipse 70% 80% at 15% 50%, rgba(168,85,247,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 85% 20%, rgba(232,117,10,.08) 0%, transparent 55%),
-    radial-gradient(ellipse 40% 40% at 75% 80%, rgba(29,185,84,.07) 0%, transparent 50%),
-    linear-gradient(135deg, #05060F 0%, #0A0818 40%, #060A0D 100%);
+  background:#04061A;
   display:flex;align-items:stretch;
   position:relative;overflow:hidden;
 }
-
-body::before{
-  content:'';position:absolute;inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-  background-size:60px 60px;
-  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
-}
-
-.star{position:absolute;border-radius:50%;background:#fff;}
-
-/* LEFT PANEL */
 .left{
-  width:480px;flex-shrink:0;
-  display:flex;flex-direction:column;justify-content:center;
-  padding:56px 48px;position:relative;z-index:2;
+  width:60px;background:#A855F7;flex-shrink:0;
 }
-
-.eyebrow{
-  font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;
-  color:rgba(168,85,247,.8);margin-bottom:20px;
-}
-
-.logo{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
-.logo-wordmark{line-height:1;}
-.logo-hopi{font-size:28px;font-weight:900;color:#fff;letter-spacing:-0.5px;}
-.logo-appiq{font-size:18px;font-weight:300;color:rgba(168,85,247,.7);letter-spacing:1px;}
-
-.headline{
-  font-size:46px;font-weight:900;line-height:1.05;
-  color:#fff;letter-spacing:-1px;margin-bottom:16px;
-}
-.headline .accent{
-  color:transparent;
-  background:linear-gradient(135deg,#A855F7,#C084FC);
-  -webkit-background-clip:text;background-clip:text;
-}
-.headline .accent2{
-  color:transparent;
-  background:linear-gradient(135deg,#E8750A,#FF9A3C);
-  -webkit-background-clip:text;background-clip:text;
-}
-
-.tagline{
-  font-size:13px;color:rgba(255,255,255,.42);
-  line-height:1.7;max-width:340px;margin-bottom:28px;
-  border-left:2px solid rgba(168,85,247,.4);padding-left:12px;
-}
-
-.tags{display:flex;gap:8px;flex-wrap:wrap;}
-.tag{
-  font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-  padding:4px 10px;border-radius:20px;border:1px solid;
-}
-.tag-vi{background:rgba(168,85,247,.15);border-color:rgba(168,85,247,.35);color:rgba(192,132,252,.9);}
-.tag-or{background:rgba(232,117,10,.15);border-color:rgba(232,117,10,.35);color:rgba(232,117,10,.9);}
-.tag-gr{background:rgba(29,185,84,.12);border-color:rgba(29,185,84,.3);color:rgba(80,200,110,.9);}
-
-/* DIVIDER */
-.divider{
-  width:1px;background:linear-gradient(to bottom,transparent,rgba(255,255,255,.1),transparent);
-  margin:40px 0;flex-shrink:0;
-}
-
-/* RIGHT PANEL */
-.right{
+.content{
   flex:1;display:flex;flex-direction:column;justify-content:center;
-  padding:48px 44px;position:relative;z-index:2;gap:14px;
+  padding:64px 72px;position:relative;z-index:2;
 }
-
-.stat-row{display:flex;gap:12px;}
-.stat-card{
-  flex:1;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:10px;padding:14px 16px;
+.bg-glow{
+  position:absolute;
+  width:700px;height:700px;border-radius:50%;
+  background:radial-gradient(circle,rgba(168,85,247,.18) 0%,transparent 65%);
+  right:-100px;top:50%;transform:translateY(-50%);
+  pointer-events:none;
 }
-.stat-n{font-size:32px;font-weight:900;line-height:1;}
-.stat-n.vi{color:#A855F7;}
-.stat-n.or{color:#E8750A;}
-.stat-n.gr{color:#1DB954;}
-.stat-n.wh{color:rgba(255,255,255,.85);}
-.stat-l{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;}
-
-.proof-row{display:flex;gap:12px;}
-.proof{
-  flex:1;border-radius:10px;padding:14px 16px;
+.label{
+  font-size:13px;font-weight:700;letter-spacing:5px;text-transform:uppercase;
+  color:rgba(168,85,247,.75);margin-bottom:28px;
 }
-.proof.live{background:rgba(29,185,84,.08);border:1px solid rgba(29,185,84,.25);}
-.proof.ai{background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.22);}
-.proof-label{font-size:11px;font-weight:800;margin-bottom:4px;}
-.live .proof-label{color:rgba(80,210,110,.9);}
-.ai .proof-label{color:rgba(192,132,252,.9);}
-.proof-desc{font-size:10px;color:rgba(255,255,255,.38);line-height:1.5;}
-
-.bottom-tag{
-  background:linear-gradient(90deg,rgba(168,85,247,.15),rgba(168,85,247,.05));
-  border:1px solid rgba(168,85,247,.25);border-radius:8px;
-  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+.headline{
+  font-size:96px;font-weight:900;line-height:.95;letter-spacing:-3px;
+  color:#fff;margin-bottom:32px;
 }
-.bt-left{font-size:11px;font-weight:700;color:rgba(168,85,247,.85);}
-.bt-right{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:.5px;}
-
-.orbit{
-  position:absolute;right:-80px;top:50%;transform:translateY(-50%);
-  width:420px;height:420px;
-  border:1px solid rgba(168,85,247,.06);border-radius:50%;
-  pointer-events:none;z-index:1;
+.headline span{color:#A855F7;}
+.tagline{
+  font-size:22px;color:rgba(255,255,255,.45);font-weight:300;
+  letter-spacing:1px;margin-bottom:40px;
 }
-.orbit::before{
-  content:'';position:absolute;inset:40px;
-  border:1px solid rgba(232,117,10,.05);border-radius:50%;
+.badge{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.35);
+  border-radius:8px;padding:10px 20px;
 }
-.orbit::after{
-  content:'';position:absolute;inset:80px;
-  border:1px solid rgba(29,185,84,.05);border-radius:50%;
+.badge-text{font-size:14px;font-weight:700;letter-spacing:1px;color:rgba(192,132,252,.9);}
+.right-accent{
+  width:60px;background:rgba(168,85,247,.08);flex-shrink:0;
+  display:flex;flex-direction:column;justify-content:flex-end;padding-bottom:28px;align-items:center;
 }
+.ver{font-size:10px;font-weight:700;color:rgba(255,255,255,.15);letter-spacing:2px;writing-mode:vertical-rl;transform:rotate(180deg);}
 </style>
 </head>
 <body>
-
-<div class="star" style="width:2px;height:2px;top:8%;left:52%;opacity:.6;"></div>
-<div class="star" style="width:1.5px;height:1.5px;top:22%;left:67%;opacity:.4;"></div>
-<div class="star" style="width:2.5px;height:2.5px;top:15%;left:38%;opacity:.5;"></div>
-<div class="star" style="width:1px;height:1px;top:72%;left:55%;opacity:.5;"></div>
-<div class="star" style="width:2px;height:2px;top:88%;left:44%;opacity:.3;"></div>
-<div class="star" style="width:1.5px;height:1.5px;top:45%;left:72%;opacity:.4;"></div>
-<div class="star" style="width:1px;height:1px;top:60%;left:88%;opacity:.5;"></div>
-<div class="star" style="width:2px;height:2px;top:30%;left:93%;opacity:.3;"></div>
-<div class="star" style="width:3px;height:3px;top:5%;left:80%;opacity:.25;"></div>
-
-<div class="orbit"></div>
-
-<!-- LEFT -->
-<div class="left">
-  <div class="eyebrow">🔒 Investment Readiness · HOPI TechIQ s.r.o. · 2026</div>
-
-  <div class="logo">
-    <svg width="48" height="48" viewBox="0 0 52 52" fill="none">
-      <defs>
-        <linearGradient id="d" x1="6" y1="6" x2="46" y2="46" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#A855F7"/>
-          <stop offset="100%" stop-color="#E8750A"/>
-        </linearGradient>
-      </defs>
-      <rect width="52" height="52" rx="11" fill="#0D0D1E"/>
-      <polygon points="26,5 47,26 26,47 5,26" fill="url(#d)" opacity=".9"/>
-      <text x="26" y="31" text-anchor="middle" fill="white" font-family="Arial" font-weight="900" font-size="11" letter-spacing="-0.3">IQ</text>
-    </svg>
-    <div class="logo-wordmark">
-      <div class="logo-hopi">HOPI AppIQ</div>
-      <div class="logo-appiq">TechIQ s.r.o.</div>
-    </div>
-  </div>
-
-  <div class="headline">
-    Investor<br><span class="accent">Brief</span> <span class="accent2">2026</span>
-  </div>
-
-  <div class="tagline">
-    AI-powered Enterprise Platform.<br>
-    Od interního pilotu k celosvětovému SaaS.<br>
-    CEE → WorldWide. Anthropic partnership.
-  </div>
-
-  <div class="tags">
-    <span class="tag tag-vi">Investment Ready</span>
-    <span class="tag tag-or">Phase 1 Active</span>
-    <span class="tag tag-gr">Live Deploy</span>
+<div class="left"></div>
+<div class="content">
+  <div class="bg-glow"></div>
+  <div class="label">HOPI TechIQ s.r.o. · Confidential · 2026</div>
+  <div class="headline">Business<br><span>Case</span></div>
+  <div class="tagline">8 týdnů. ~$1k. Live deployment. Phase 1 Active.</div>
+  <div class="badge">
+    <span class="badge-text">🔒 Investment Readiness · CEE → WorldWide</span>
   </div>
 </div>
-
-<div class="divider"></div>
-
-<!-- RIGHT -->
-<div class="right">
-
-  <div class="stat-row">
-    <div class="stat-card">
-      <div class="stat-n vi">8</div>
-      <div class="stat-l">týdnů<br>do live</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-n or">109+</div>
-      <div class="stat-l">git<br>commits</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-n gr">~$1k</div>
-      <div class="stat-l">náklady<br>Phase 1</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-n wh">v7.22</div>
-      <div class="stat-l">aktuální<br>verze</div>
-    </div>
-  </div>
-
-  <div class="proof-row">
-    <div class="proof live">
-      <div class="proof-label">✅ Live Deployment</div>
-      <div class="proof-desc">GitHub Pages · HOPI Group pilot<br>Finance · Controlling · Portal<br><strong style="color:rgba(80,210,110,.7);">h-gr-fico.github.io/appiq</strong></div>
-    </div>
-    <div class="proof ai">
-      <div class="proof-label">🤖 AI-First Platform</div>
-      <div class="proof-desc">Claude AI integration<br>HOPIQ chatbot · 9D product model<br><strong style="color:rgba(192,132,252,.7);">HOME B2C launch Q1 2027</strong></div>
-    </div>
-  </div>
-
-  <div class="bottom-tag">
-    <div class="bt-left">🚀 HOPI TechIQ s.r.o. — Budujeme 6. divizi HOPI. Zevnitř. Pro svět.</div>
-    <div class="bt-right">Confidential · 2026</div>
-  </div>
-
+<div class="right-accent">
+  <div class="ver">INVESTOR BRIEF</div>
 </div>
 </body>
 </html>
