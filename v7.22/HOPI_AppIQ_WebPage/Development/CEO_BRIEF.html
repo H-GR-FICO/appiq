@@ -1222,7 +1222,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
   window.ceoMusicStart=function(){
     if(playing)return;
-    try{var s=localStorage.getItem('ceo_music');if(s==='off')return;}catch(e){}
     buildPad();playing=true;
     if(!btn)btn=document.getElementById('ceo-music-btn');
     if(btn)btn.classList.add('active');

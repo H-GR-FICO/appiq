@@ -207,10 +207,15 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
   .cta-items{grid-template-columns:1fr 1fr;}
 }
 @media(max-width:600px){
+  body{overflow-x:hidden;}
   section{padding:48px 16px;}
   .hero{padding:72px 16px 48px;}
-  .hero-stats{gap:24px;}
-  nav{padding:0 14px;}
+  .hero-logo svg{max-width:calc(100vw - 32px);height:auto;}
+  .hero-stats{gap:16px;}
+  .hero-stats .stat{min-width:72px;}
+  nav{padding:0 12px;}
+  .nav-logo svg{height:22px;}
+  .btn-lang{padding:3px 7px;font-size:10px;}
   .cta-items{grid-template-columns:1fr;}
   .cta-section{padding:28px 18px;}
 }
@@ -275,7 +280,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 
 <!-- ══ HERO ══════════════════════════════════════════════════════════════ -->
 <div class="hero">
-  <div class="hero-eyebrow">HOPI TechIQ presents HOPI AppIQ — unique AI Powered Platform</div>
+  <div class="hero-eyebrow">HOPI TechIQ s.r.o. · Investment Readiness · 2026</div>
 
   <div class="hero-logo">
     <svg viewBox="0 0 1260 240.6796" height="68" xmlns="http://www.w3.org/2000/svg">
@@ -286,11 +291,8 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
   </div>
 
   <div class="hero-title">
-    <div class="line1">HOPI AppIQ</div>
-    <div class="line2">
-      <span class="lang-cz">Investiční připravenost · HOPI TechIQ s.r.o.</span>
-      <span class="lang-en" style="display:none;">Investment Readiness · HOPI TechIQ s.r.o.</span>
-    </div>
+    <div class="line1"><span class="lang-cz">Investiční připravenost</span><span class="lang-en" style="display:none;">Investment Readiness</span></div>
+    <div class="line2">HOPI TechIQ s.r.o.</div>
   </div>
 
   <div class="hero-tagline">
@@ -1767,7 +1769,6 @@ document.addEventListener('DOMContentLoaded',function(){
 
   window.ibMusicStart=function(){
     if(playing)return;
-    try{var s=localStorage.getItem('inv_music');if(s==='off')return;}catch(e){}
     buildPad();playing=true;started=true;
     if((btn=document.getElementById('inv-music-btn')))btn.classList.add('active');
     try{localStorage.setItem('inv_music','on');}catch(e){}
