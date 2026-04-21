@@ -210,6 +210,9 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
 .fade-in.visible{opacity:1;transform:translateY(0);}
 
+/* ═══ MUSIC BUTTON ACTIVE ════════════════════════════════════════════ */
+#ceo-music-btn.active{background:rgba(29,185,84,.15);border-color:rgba(29,185,84,.4);color:#1DB954;}
+
 /* ═══ RESPONSIVE ═════════════════════════════════════════════════════ */
 @media(max-width:768px){
   .cards-2,.cards-3,.cards-5,.arch,.partners{grid-template-columns:1fr;}
@@ -265,7 +268,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
       <rect width="30.1059" height="318" fill="#007d32"/>
       <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
       <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
-      <text x="1300" y="148" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Segoe UI',Arial,sans-serif" font-size="58" font-style="italic">presents</text>
+      <text x="1300" y="148" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Segoe UI',Arial,sans-serif" font-size="58" font-style="italic">by</text>
       <g transform="translate(1340,0)">
         <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
         <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
@@ -274,7 +277,8 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
     </svg>
   </div>
   <div class="nav-right">
-    <button class="btn-lang active" id="btn-cz" onclick="setLang('cz')">CS</button>
+    <button id="ceo-music-btn" onclick="ceoMusicToggle()" title="Hudba / Music" style="background:none;border:1px solid rgba(255,255,255,.18);border-radius:4px;color:rgba(255,255,255,.5);font-size:13px;padding:3px 9px;cursor:pointer;transition:all .15s;line-height:1;">🎵</button>
+    <button class="btn-lang active" id="btn-cz" onclick="setLang('cz')">CZ</button>
     <button class="btn-lang" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
 </nav>
@@ -1167,5 +1171,78 @@ document.addEventListener('DOMContentLoaded',function(){
 })();
 </script>
 <script src="../../_hopiq.js"></script>
+
+<!-- ═══ AMBIENT MUSIC ════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  var ctx=null,nodes=[],playing=false;
+  var btn=null;
+
+  function ensureCtx(){
+    if(!ctx){try{ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return false;}}
+    if(ctx.state==='suspended')ctx.resume();
+    return true;
+  }
+
+  function buildPad(){
+    if(!ensureCtx())return;
+    var master=ctx.createGain();
+    master.gain.setValueAtTime(0,ctx.currentTime);
+    master.gain.linearRampToValueAtTime(0.13,ctx.currentTime+3);
+    master.connect(ctx.destination);
+    var delay=ctx.createDelay(2);delay.delayTime.value=0.35;
+    var fb=ctx.createGain();fb.gain.value=0.38;
+    var wet=ctx.createGain();wet.gain.value=0.4;
+    delay.connect(fb);fb.connect(delay);delay.connect(wet);wet.connect(master);
+    var freqs=[110,130.81,164.81,220,329.63,440];
+    freqs.forEach(function(f,i){
+      var o1=ctx.createOscillator(),o2=ctx.createOscillator();
+      o1.type='sine';o2.type='sine';
+      o1.frequency.value=f;o2.frequency.value=f*1.003;
+      var g=ctx.createGain();g.gain.value=0.08/(i+1);
+      o1.connect(g);o2.connect(g);g.connect(master);g.connect(delay);
+      o1.start();o2.start();nodes.push(o1,o2,g);
+    });
+    var lfo=ctx.createOscillator(),lfoG=ctx.createGain();
+    lfo.frequency.value=0.12;lfoG.gain.value=0.025;
+    lfo.connect(lfoG);lfoG.connect(master.gain);lfo.start();
+    nodes.push(master,delay,fb,wet,lfo,lfoG);
+    window._ceoMaster=master;
+  }
+
+  function stopPad(){
+    if(window._ceoMaster){
+      try{window._ceoMaster.gain.linearRampToValueAtTime(0,ctx.currentTime+1.5);}catch(e){}
+      setTimeout(function(){
+        nodes.forEach(function(n){try{if(n.stop)n.stop();}catch(e){}try{n.disconnect();}catch(e){}});
+        nodes=[];window._ceoMaster=null;
+      },1600);
+    }
+  }
+
+  window.ceoMusicStart=function(){
+    if(playing)return;
+    try{var s=localStorage.getItem('ceo_music');if(s==='off')return;}catch(e){}
+    buildPad();playing=true;
+    if(!btn)btn=document.getElementById('ceo-music-btn');
+    if(btn)btn.classList.add('active');
+    try{localStorage.setItem('ceo_music','on');}catch(e){}
+  };
+
+  window.ceoMusicToggle=function(){
+    if(!playing){
+      buildPad();playing=true;
+      if(!btn)btn=document.getElementById('ceo-music-btn');
+      if(btn)btn.classList.add('active');
+      try{localStorage.setItem('ceo_music','on');}catch(e){}
+    } else {
+      stopPad();playing=false;
+      if(!btn)btn=document.getElementById('ceo-music-btn');
+      if(btn)btn.classList.remove('active');
+      try{localStorage.setItem('ceo_music','off');}catch(e){}
+    }
+  };
+})();
+</script>
 </body>
 </html>

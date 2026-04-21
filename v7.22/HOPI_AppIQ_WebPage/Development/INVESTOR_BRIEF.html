@@ -7,11 +7,12 @@
 <meta property="og:title"       content="HOPI TechIQ s.r.o. — Investment Readiness 2026">
 <meta property="og:description" content="AI-powered Enterprise Platform. 8 týdnů do live deploymentu. ~$1k náklady. Phase 1 Active. CEE → WorldWide. Anthropic partnership.">
 <meta property="og:type"        content="website">
-<meta property="og:image"       content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/investor-og.svg">
+<meta property="og:image"       content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/investor-og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:type"  content="image/png">
 <meta name="twitter:card"       content="summary_large_image">
-<meta name="twitter:image"      content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/investor-og.svg">
+<meta name="twitter:image"      content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/investor-og.png">
 <style>
 /* ═══ RESET & BASE ═══════════════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -197,6 +198,9 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 .fade-in{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease;}
 .fade-in.visible{opacity:1;transform:translateY(0);}
 
+/* ═══ MUSIC BUTTON ACTIVE ═══════════════════════════════════════════════ */
+#inv-music-btn.active{background:rgba(29,185,84,.15);border-color:rgba(29,185,84,.4);color:#1DB954;}
+
 /* ═══ RESPONSIVE ══════════════════════════════════════════════════════ */
 @media(max-width:900px){
   .pillars,.why-grid,.phases{grid-template-columns:1fr;}
@@ -250,7 +254,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
       <rect width="30.1059" height="318" fill="#007d32"/>
       <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
       <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
-      <text x="1300" y="148" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Segoe UI',Arial,sans-serif" font-size="58" font-style="italic">presents</text>
+      <text x="1300" y="148" text-anchor="middle" fill="rgba(255,255,255,0.25)" font-family="'Segoe UI',Arial,sans-serif" font-size="58" font-style="italic">by</text>
       <g transform="translate(1340,0)">
         <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
         <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
@@ -259,7 +263,8 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
     </svg>
   </div>
   <div class="nav-right">
-    <button class="btn-lang active" id="btn-cz" onclick="setLang('cz')">CS</button>
+    <button id="inv-music-btn" onclick="invMusicToggle()" title="Hudba / Music" style="background:none;border:1px solid rgba(255,255,255,.18);border-radius:4px;color:rgba(255,255,255,.5);font-size:13px;padding:3px 9px;cursor:pointer;transition:all .15s;line-height:1;">🎵</button>
+    <button class="btn-lang active" id="btn-cz" onclick="setLang('cz')">CZ</button>
     <button class="btn-lang" id="btn-en" onclick="setLang('en')">EN</button>
   </div>
 </nav>
@@ -615,8 +620,8 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
       <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:12px;">★ V7.22 · LIVE dnes</div>
       <div style="font-size:14px;font-weight:700;margin-bottom:10px;">HOPI AppIQ Finance Portal</div>
       <div style="font-size:12px;color:var(--text-dim);line-height:1.7;">
-        <span class="lang-cz">Group Controlling portál, FX monitoring, SAP tile, HOPIQ chatbot, bilingvní CS/EN, password-chráněná CEO Brief + Personal Pitch. Reální uživatelé: David, CEO, CFO HOPI Group.</span>
-        <span class="lang-en" style="display:none;">Group Controlling portal, FX monitoring, SAP tile, HOPIQ chatbot, bilingual CS/EN, password-protected CEO Brief + Personal Pitch. Real users: David, CEO, CFO HOPI Group.</span>
+        <span class="lang-cz">Group Controlling portál, FX monitoring, SAP tile, HOPIQ chatbot, bilingvní CZ/EN, password-chráněná CEO Brief + Personal Pitch. Reální uživatelé: David, CEO, CFO HOPI Group.</span>
+        <span class="lang-en" style="display:none;">Group Controlling portal, FX monitoring, SAP tile, HOPIQ chatbot, bilingual CZ/EN, password-protected CEO Brief + Personal Pitch. Real users: David, CEO, CFO HOPI Group.</span>
       </div>
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
         <span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;background:var(--green-dim);border:1px solid var(--green-border);color:var(--green);">17 800+ <span class="lang-cz">řádků kódu</span><span class="lang-en" style="display:none;">lines of code</span></span>
@@ -809,51 +814,200 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
 
 <div class="sep"></div>
 
-<!-- ══ 90-DAY PLAN ════════════════════════════════════════════════════ -->
+<!-- ══ GO-TO-MARKET PLÁN ══════════════════════════════════════════════ -->
 <section class="fade-in">
-  <div class="s-eyebrow"><span class="lang-cz">Konkrétní plán</span><span class="lang-en" style="display:none;">Concrete Plan</span></div>
+  <div class="s-eyebrow"><span class="lang-cz">Konkrétní plán · B2C Launch 01.01.2027</span><span class="lang-en" style="display:none;">Concrete Plan · B2C Launch 01.01.2027</span></div>
   <div class="s-title">
-    <span class="lang-cz">90 dní k prvním platícím uživatelům</span>
-    <span class="lang-en" style="display:none;">90 Days to First Paying Users</span>
+    <span class="lang-cz">Cesta k prvním platícím uživatelům</span>
+    <span class="lang-en" style="display:none;">Road to First Paying Users</span>
   </div>
   <div class="s-sub">
-    <span class="lang-cz">Schválení dnes → první platící uživatel Q3 2026. Každý krok je definován a přiřazen.</span>
-    <span class="lang-en" style="display:none;">Approval today → first paying user Q3 2026. Every step is defined and assigned.</span>
+    <span class="lang-cz">B2C launch 01.01.2027 — dříve nelze z právních důvodů (registrace HOPI TechIQ s.r.o., ochrana značky, partnerské smlouvy). Každý krok je definován a přiřazen.</span>
+    <span class="lang-en" style="display:none;">B2C launch 01.01.2027 — earlier not possible for legal reasons (HOPI TechIQ s.r.o. registration, trademark protection, partnership agreements). Every step is defined and assigned.</span>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
     <div style="background:var(--vi-dim);border:1px solid var(--vi-border);border-radius:14px;padding:20px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--vi);margin-bottom:8px;"><span class="lang-cz">Měsíc 1 · Q2 2026</span><span class="lang-en" style="display:none;">Month 1 · Q2 2026</span></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--vi);margin-bottom:8px;"><span class="lang-cz">Fáze 1 · Q2 2026</span><span class="lang-en" style="display:none;">Phase 1 · Q2 2026</span></div>
       <div style="font-size:15px;font-weight:900;margin-bottom:12px;"><span class="lang-cz">Základ</span><span class="lang-en" style="display:none;">Foundation</span></div>
       <div style="display:flex;flex-direction:column;gap:7px;">
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span>HOPI TechIQ s.r.o. — <span class="lang-cz">zápis do OR</span><span class="lang-en" style="display:none;">company registration</span></span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span>Trademark + GDPR + IP assignment</span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span>Git repo + CI/CD pipeline</span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span><span class="lang-cz">Platform Core v8.0 spuštěn</span><span class="lang-en" style="display:none;">Platform Core v8.0 launched</span></span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span><span class="lang-cz">Anthropic kontakt navázán</span><span class="lang-en" style="display:none;">Anthropic contact established</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span>HOPI TechIQ s.r.o. — <span class="lang-cz">registrace</span><span class="lang-en" style="display:none;">registration</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span>Trademark + GDPR + IP</span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span><span class="lang-cz">Platform Core v8.0 live</span><span class="lang-en" style="display:none;">Platform Core v8.0 live</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--vi);flex-shrink:0;">→</span><span><span class="lang-cz">Anthropic partnerství</span><span class="lang-en" style="display:none;">Anthropic partnership</span></span></div>
       </div>
     </div>
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:20px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;"><span class="lang-cz">Měsíc 2</span><span class="lang-en" style="display:none;">Month 2</span></div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--blue);margin-bottom:8px;"><span class="lang-cz">Fáze 2 · Q3 2026</span><span class="lang-en" style="display:none;">Phase 2 · Q3 2026</span></div>
       <div style="font-size:15px;font-weight:900;margin-bottom:12px;">MVP + Beta</div>
       <div style="display:flex;flex-direction:column;gap:7px;">
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span>HOME Finance MVP live</span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span><span class="lang-cz">HOPIQ chatbot integrace</span><span class="lang-en" style="display:none;">HOPIQ chatbot integration</span></span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span><span class="lang-cz">Stripe platby aktivní</span><span class="lang-en" style="display:none;">Stripe payments active</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span>HOME Finance MVP</span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span>HOPIQ chatbot live</span></div>
         <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span>Closed beta · 10–50 users</span></div>
         <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--blue);flex-shrink:0;">→</span><span><span class="lang-cz">HOPI pilot interně</span><span class="lang-en" style="display:none;">HOPI pilot internally</span></span></div>
       </div>
     </div>
-    <div style="background:var(--green-dim);border:1px solid var(--green-border);border-radius:14px;padding:20px;">
-      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px;"><span class="lang-cz">Měsíc 3 · Q3 2026</span><span class="lang-en" style="display:none;">Month 3 · Q3 2026</span></div>
-      <div style="font-size:15px;font-weight:900;margin-bottom:12px;">Launch</div>
+    <div style="background:var(--surface);border:1px solid var(--amber-border);border-radius:14px;padding:20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber);margin-bottom:8px;"><span class="lang-cz">Fáze 3 · Q4 2026</span><span class="lang-en" style="display:none;">Phase 3 · Q4 2026</span></div>
+      <div style="font-size:15px;font-weight:900;margin-bottom:12px;"><span class="lang-cz">Příprava launche</span><span class="lang-en" style="display:none;">Launch Prep</span></div>
       <div style="display:flex;flex-direction:column;gap:7px;">
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">Soft public launch</span><span class="lang-en" style="display:none;">Soft public launch</span></span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span>HOME Finance + Health live</span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">Cíl: 100 platících uživatelů</span><span class="lang-en" style="display:none;">Target: 100 paying users</span></span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">Founder brand PR (David)</span><span class="lang-en" style="display:none;">Founder brand PR (David)</span></span></div>
-        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">1. developer onboard</span><span class="lang-en" style="display:none;">1st developer onboarded</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--amber);flex-shrink:0;">→</span><span><span class="lang-cz">Stripe platby + onboarding</span><span class="lang-en" style="display:none;">Stripe payments + onboarding</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--amber);flex-shrink:0;">→</span><span><span class="lang-cz">Bezpečnost + compliance audit</span><span class="lang-en" style="display:none;">Security + compliance audit</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--amber);flex-shrink:0;">→</span><span>HOME Health + Education live</span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--amber);flex-shrink:0;">→</span><span><span class="lang-cz">Founder brand PR</span><span class="lang-en" style="display:none;">Founder brand PR</span></span></div>
       </div>
     </div>
+    <div style="background:var(--green-dim);border:1px solid var(--green-border);border-radius:14px;padding:20px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);margin-bottom:8px;"><span class="lang-cz">🚀 Launch · 01.01.2027</span><span class="lang-en" style="display:none;">🚀 Launch · 01.01.2027</span></div>
+      <div style="font-size:15px;font-weight:900;margin-bottom:12px;">B2C Live</div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">Veřejné spuštění HOME B2C</span><span class="lang-en" style="display:none;">Public HOME B2C launch</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span>Freemium → Premium PLG</span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">Cíl: 100+ platících uživatelů</span><span class="lang-en" style="display:none;">Target: 100+ paying users</span></span></div>
+        <div style="font-size:12px;color:var(--text-dim);display:flex;gap:8px;"><span style="color:var(--green);flex-shrink:0;">→</span><span><span class="lang-cz">HOPI jako living proof</span><span class="lang-en" style="display:none;">HOPI as living proof</span></span></div>
+      </div>
+    </div>
+  </div>
+  <!-- COUNTDOWN TO LAUNCH -->
+  <div style="margin-top:24px;background:linear-gradient(135deg,rgba(29,185,84,.1),rgba(29,185,84,.03));border:1px solid rgba(29,185,84,.25);border-radius:16px;padding:28px 24px;text-align:center;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(29,185,84,.7);margin-bottom:18px;">
+      <span class="lang-cz">🚀 Do B2C launche 01.01.2027 zbývá</span>
+      <span class="lang-en" style="display:none;">🚀 Until B2C Launch 01.01.2027</span>
+    </div>
+    <div style="display:flex;justify-content:center;align-items:center;gap:clamp(16px,3vw,40px);flex-wrap:wrap;">
+      <div style="text-align:center;">
+        <div id="ctdown-days" style="font-size:clamp(56px,10vw,96px);font-weight:900;color:#1DB954;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-2px;">—</div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.4);margin-top:4px;"><span class="lang-cz">dní</span><span class="lang-en" style="display:none;">days</span></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;color:rgba(29,185,84,.45);">
+        <div style="text-align:center;">
+          <div id="ctdown-hours" style="font-size:clamp(22px,3vw,36px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;">—</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px;"><span class="lang-cz">hod</span><span class="lang-en" style="display:none;">hrs</span></div>
+        </div>
+        <span style="font-size:24px;font-weight:300;margin-bottom:14px;">:</span>
+        <div style="text-align:center;">
+          <div id="ctdown-mins" style="font-size:clamp(22px,3vw,36px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;">—</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px;"><span class="lang-cz">min</span><span class="lang-en" style="display:none;">min</span></div>
+        </div>
+        <span style="font-size:24px;font-weight:300;margin-bottom:14px;">:</span>
+        <div style="text-align:center;">
+          <div id="ctdown-secs" style="font-size:clamp(22px,3vw,36px);font-weight:700;font-variant-numeric:tabular-nums;line-height:1;">—</div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px;"><span class="lang-cz">sek</span><span class="lang-en" style="display:none;">sec</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:11px;color:rgba(255,255,255,.25);font-style:italic;">
+      <span class="lang-cz">⚖️ Podmíněno dokončením právních kroků: registrace s.r.o. · ochrana značky · smlouva s Anthropic · GDPR compliance.</span>
+      <span class="lang-en" style="display:none;">⚖️ Conditional on: s.r.o. registration · trademark · Anthropic agreement · GDPR compliance.</span>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ══ AI-DRIVEN DEVELOPMENT ══════════════════════════════════════════════ -->
+<section class="fade-in" id="s-ai-dev">
+  <div class="s-eyebrow"><span class="lang-cz">Jak budujeme · Technologický diferenciátor</span><span class="lang-en" style="display:none;">How We Build · Technology Differentiator</span></div>
+  <div class="s-title">
+    <span class="lang-cz">90% AI · 10% Human in the Loop</span>
+    <span class="lang-en" style="display:none;">90% AI · 10% Human in the Loop</span>
+  </div>
+  <div class="s-sub">
+    <span class="lang-cz">Nestavíme jen AI platformu. Stavíme ji AI-first procesem. Každý řádek produkčního kódu prošel AI pipeline.</span>
+    <span class="lang-en" style="display:none;">We're not just building an AI platform. We're building it with an AI-first process. Every line of production code passed through the AI pipeline.</span>
+  </div>
+
+  <!-- PIPELINE VISUAL -->
+  <div style="position:relative;margin-bottom:32px;">
+    <div style="display:flex;align-items:stretch;gap:0;flex-wrap:wrap;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.08);">
+      <div style="flex:1;min-width:130px;background:rgba(168,85,247,.12);padding:20px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:22px;margin-bottom:8px;">💡</div>
+        <div style="font-size:11px;font-weight:700;color:var(--vi);margin-bottom:4px;"><span class="lang-cz">Záměr</span><span class="lang-en" style="display:none;">Intent</span></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);">Human → OIL task</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;background:rgba(232,117,10,.2);border-radius:4px;padding:2px 6px;color:#E8750A;">10%</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 4px;color:rgba(255,255,255,.15);font-size:18px;">›</div>
+      <div style="flex:1;min-width:130px;background:rgba(168,85,247,.08);padding:20px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:22px;margin-bottom:8px;">🤖</div>
+        <div style="font-size:11px;font-weight:700;color:var(--vi);margin-bottom:4px;"><span class="lang-cz">AI Architektura</span><span class="lang-en" style="display:none;">AI Architecture</span></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);">Claude → ARCH_MAP</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;background:rgba(168,85,247,.2);border-radius:4px;padding:2px 6px;color:var(--vi);">AI</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 4px;color:rgba(255,255,255,.15);font-size:18px;">›</div>
+      <div style="flex:1;min-width:130px;background:rgba(168,85,247,.08);padding:20px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:22px;margin-bottom:8px;">⚡</div>
+        <div style="font-size:11px;font-weight:700;color:var(--vi);margin-bottom:4px;"><span class="lang-cz">AI Kód</span><span class="lang-en" style="display:none;">AI Code</span></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);">Claude → HTML/CSS/JS</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;background:rgba(168,85,247,.2);border-radius:4px;padding:2px 6px;color:var(--vi);">AI</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 4px;color:rgba(255,255,255,.15);font-size:18px;">›</div>
+      <div style="flex:1;min-width:130px;background:rgba(232,117,10,.08);padding:20px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:22px;margin-bottom:8px;">👁</div>
+        <div style="font-size:11px;font-weight:700;color:#E8750A;margin-bottom:4px;"><span class="lang-cz">Human Review</span><span class="lang-en" style="display:none;">Human Review</span></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);">David → approval</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;background:rgba(232,117,10,.2);border-radius:4px;padding:2px 6px;color:#E8750A;">10%</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 4px;color:rgba(255,255,255,.15);font-size:18px;">›</div>
+      <div style="flex:1;min-width:130px;background:rgba(168,85,247,.08);padding:20px 16px;text-align:center;border-right:1px solid rgba(255,255,255,.06);">
+        <div style="font-size:22px;margin-bottom:8px;">🔬</div>
+        <div style="font-size:11px;font-weight:700;color:var(--vi);margin-bottom:4px;"><span class="lang-cz">AI Test</span><span class="lang-en" style="display:none;">AI Test</span></div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);">Claude → OIL test task</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;background:rgba(168,85,247,.2);border-radius:4px;padding:2px 6px;color:var(--vi);">AI</div>
+      </div>
+      <div style="display:flex;align-items:center;padding:0 4px;color:rgba(255,255,255,.15);font-size:18px;">›</div>
+      <div style="flex:1;min-width:130px;background:rgba(29,185,84,.1);padding:20px 16px;text-align:center;">
+        <div style="font-size:22px;margin-bottom:8px;">🚀</div>
+        <div style="font-size:11px;font-weight:700;color:var(--green);margin-bottom:4px;">Deploy</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.35);">GitHub Pages · Live</div>
+        <div style="margin-top:8px;font-size:9px;font-weight:700;background:rgba(29,185,84,.2);border-radius:4px;padding:2px 6px;color:var(--green);">CI/CD</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI vs HUMAN SPLIT -->
+  <div style="display:grid;grid-template-columns:9fr 1fr;gap:8px;margin-bottom:28px;">
+    <div style="background:linear-gradient(90deg,rgba(168,85,247,.18),rgba(168,85,247,.08));border:1px solid var(--vi-border);border-radius:10px;padding:16px 20px;">
+      <div style="font-size:11px;font-weight:700;color:var(--vi);letter-spacing:1px;margin-bottom:4px;">🤖 AI — 90%</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.65);">
+        <span class="lang-cz">Architektura, kód, testy, dokumentace, OIL tracking, code review, deploy scripty, CHANGELOG — vše generuje Claude.</span>
+        <span class="lang-en" style="display:none;">Architecture, code, tests, documentation, OIL tracking, code review, deploy scripts, CHANGELOG — all generated by Claude.</span>
+      </div>
+    </div>
+    <div style="background:rgba(232,117,10,.1);border:1px solid rgba(232,117,10,.25);border-radius:10px;padding:16px 20px;text-align:center;">
+      <div style="font-size:11px;font-weight:700;color:#E8750A;letter-spacing:1px;margin-bottom:4px;">👤 Human — 10%</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.65);">
+        <span class="lang-cz">Záměr, rozhodnutí, schválení výstupu.</span>
+        <span class="lang-en" style="display:none;">Intent, decisions, output approval.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+      <div style="font-size:28px;font-weight:900;color:var(--vi);line-height:1;">7</div>
+      <div style="font-size:9px;color:var(--text-muted);margin-top:4px;"><span class="lang-cz">týdnů do v7.22 live</span><span class="lang-en" style="display:none;">weeks to v7.22 live</span></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+      <div style="font-size:28px;font-weight:900;color:var(--vi);line-height:1;">221+</div>
+      <div style="font-size:9px;color:var(--text-muted);margin-top:4px;"><span class="lang-cz">složek v8.0 architektury</span><span class="lang-en" style="display:none;">v8.0 architecture folders</span></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+      <div style="font-size:28px;font-weight:900;color:var(--vi);line-height:1;">17.8k</div>
+      <div style="font-size:9px;color:var(--text-muted);margin-top:4px;"><span class="lang-cz">řádků kódu · 1 člověk</span><span class="lang-en" style="display:none;">lines of code · 1 person</span></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+      <div style="font-size:28px;font-weight:900;color:var(--green);line-height:1;">~$900</div>
+      <div style="font-size:9px;color:var(--text-muted);margin-top:4px;"><span class="lang-cz">celkové AI náklady</span><span class="lang-en" style="display:none;">total AI cost</span></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center;">
+      <div style="font-size:28px;font-weight:900;color:var(--vi);line-height:1;">298</div>
+      <div style="font-size:9px;color:var(--text-muted);margin-top:4px;"><span class="lang-cz">OIL tasků zdokumentováno</span><span class="lang-en" style="display:none;">OIL tasks documented</span></div>
+    </div>
+  </div>
+
+  <div class="quote" style="margin:0;">
+    <span class="lang-cz">"Kdybychom vyvíjeli klasicky, potřebujeme 5 developerů, 18 měsíců a miliony. My máme <strong>1 člověka + Claude API</strong> — a za 7 týdnů live produkt s reálnými uživateli. To je náš technologický moat."</span>
+    <span class="lang-en" style="display:none;">"Traditional development: 5 developers, 18 months, millions. We have <strong>1 person + Claude API</strong> — and a live product with real users in 7 weeks. That's our technology moat."</span>
   </div>
 </section>
 
@@ -887,8 +1041,8 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
         <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;"><span class="lang-cz">divisí · odvětví</span><span class="lang-en" style="display:none;">divisions · industries</span></div>
       </div>
       <div style="text-align:center;">
-        <div style="font-size:clamp(28px,4vw,42px);font-weight:800;color:#E8750A;line-height:1;">5</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;"><span class="lang-cz">zemí v CEE regionu</span><span class="lang-en" style="display:none;">countries in CEE region</span></div>
+        <div style="font-size:clamp(28px,4vw,42px);font-weight:800;color:#E8750A;line-height:1;">8</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:4px;"><span class="lang-cz">zemí v CEE+DACH regionu</span><span class="lang-en" style="display:none;">countries in CEE+DACH region</span></div>
       </div>
       <div style="text-align:center;">
         <div style="font-size:clamp(28px,4vw,42px);font-weight:800;color:#E8750A;line-height:1;">#1</div>
@@ -901,7 +1055,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
       <span style="background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;color:rgba(232,117,10,.9);">🌾 Agriculture · <span class="lang-cz">Zemědělství</span><span class="lang-en" style="display:none;">Agriculture</span></span>
       <span style="background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.25);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;color:rgba(232,117,10,.9);">🔧 Services · <span class="lang-cz">Podpůrné služby</span><span class="lang-en" style="display:none;">Support Services</span></span>
       <span style="background:rgba(0,125,50,.12);border:1px solid rgba(0,125,50,.25);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;color:rgba(29,185,84,.8);">🏦 Holding · Finance · IT</span>
-      <span style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.4);">CZ · SK · PL · HU · RO</span>
+      <span style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px 12px;font-size:11px;color:rgba(255,255,255,.4);">CZ · SK · PL · HU · RO · DE · BG · HR</span>
     </div>
   </div>
 
@@ -994,7 +1148,7 @@ footer{text-align:center;padding:24px;font-size:10px;letter-spacing:1.5px;text-t
       <!-- SHARED VISION CHIPS -->
       <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
         <span style="background:rgba(204,120,92,.12);border:1px solid rgba(204,120,92,.25);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:600;color:rgba(204,120,92,.9);">
-          <span class="lang-cz">🏠 V čele rodina</span><span class="lang-en" style="display:none;">🏠 Family at the helm</span>
+          <span class="lang-cz">👥 Vedena zakladateli</span><span class="lang-en" style="display:none;">👥 Founder-led</span>
         </span>
         <span style="background:rgba(204,120,92,.12);border:1px solid rgba(204,120,92,.25);border-radius:100px;padding:6px 16px;font-size:11px;font-weight:600;color:rgba(204,120,92,.9);">
           <span class="lang-cz">💻 Technology DNA</span><span class="lang-en" style="display:none;">💻 Technology DNA</span>
@@ -1521,6 +1675,117 @@ document.addEventListener('DOMContentLoaded',function(){
     entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
   },{threshold:.1});
   els.forEach(function(el){io.observe(el);});
+})();
+</script>
+
+<!-- ═══ COUNTDOWN ═══════════════════════════════════════════════════════ -->
+<script>
+(function(){
+  function pad(n){return n<10?'0'+n:''+n;}
+  function tick(){
+    var target=new Date('2027-01-01T00:00:00');
+    var now=new Date();
+    var diff=Math.max(0,target.getTime()-now.getTime());
+    var d=Math.floor(diff/86400000);
+    var h=Math.floor((diff%86400000)/3600000);
+    var m=Math.floor((diff%3600000)/60000);
+    var s=Math.floor((diff%60000)/1000);
+    var el;
+    if((el=document.getElementById('ctdown-days')))el.textContent=d;
+    if((el=document.getElementById('ctdown-hours')))el.textContent=pad(h);
+    if((el=document.getElementById('ctdown-mins')))el.textContent=pad(m);
+    if((el=document.getElementById('ctdown-secs')))el.textContent=pad(s);
+  }
+  tick();
+  setInterval(tick,1000);
+})();
+</script>
+
+<!-- ═══ AMBIENT MUSIC ═══════════════════════════════════════════════════ -->
+<script>
+(function(){
+  var ctx=null,nodes=[],playing=false,started=false;
+  var btn=null;
+
+  function ensureCtx(){
+    if(!ctx){
+      try{ctx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return false;}
+    }
+    if(ctx.state==='suspended')ctx.resume();
+    return true;
+  }
+
+  function buildPad(){
+    if(!ensureCtx())return;
+    var master=ctx.createGain();
+    master.gain.setValueAtTime(0,ctx.currentTime);
+    master.gain.linearRampToValueAtTime(0.13,ctx.currentTime+3);
+    master.connect(ctx.destination);
+
+    /* reverb via ConvolverNode approximation using delay+feedback */
+    var delay=ctx.createDelay(2);delay.delayTime.value=0.35;
+    var fb=ctx.createGain();fb.gain.value=0.38;
+    var wet=ctx.createGain();wet.gain.value=0.4;
+    delay.connect(fb);fb.connect(delay);delay.connect(wet);wet.connect(master);
+
+    /* A-minor pad: A2 C3 E3 A3 E4 A4 — gentle detuned pairs */
+    var freqs=[110,130.81,164.81,220,329.63,440];
+    freqs.forEach(function(f,i){
+      var o1=ctx.createOscillator(),o2=ctx.createOscillator();
+      o1.type='sine';o2.type='sine';
+      o1.frequency.value=f;o2.frequency.value=f*1.003;
+      var g=ctx.createGain();
+      g.gain.value=0.08/(i+1);
+      o1.connect(g);o2.connect(g);
+      g.connect(master);g.connect(delay);
+      o1.start();o2.start();
+      nodes.push(o1,o2,g);
+    });
+
+    /* slow LFO tremolo */
+    var lfo=ctx.createOscillator();
+    var lfoG=ctx.createGain();
+    lfo.frequency.value=0.12;lfoG.gain.value=0.025;
+    lfo.connect(lfoG);lfoG.connect(master.gain);
+    lfo.start();
+    nodes.push(master,delay,fb,wet,lfo,lfoG);
+    window._ibMaster=master;
+  }
+
+  function stopPad(){
+    if(window._ibMaster){
+      try{
+        window._ibMaster.gain.setValueAtTime(window._ibMaster.gain.value,ctx.currentTime);
+        window._ibMaster.gain.linearRampToValueAtTime(0,ctx.currentTime+1.5);
+      }catch(e){}
+      setTimeout(function(){
+        nodes.forEach(function(n){try{if(n.stop)n.stop();}catch(e){}try{n.disconnect();}catch(e){}});
+        nodes=[];window._ibMaster=null;
+      },1600);
+    }
+  }
+
+  window.ibMusicStart=function(){
+    if(playing)return;
+    try{var s=localStorage.getItem('inv_music');if(s==='off')return;}catch(e){}
+    buildPad();playing=true;started=true;
+    if((btn=document.getElementById('inv-music-btn')))btn.classList.add('active');
+    try{localStorage.setItem('inv_music','on');}catch(e){}
+  };
+
+  window.invMusicToggle=function(){
+    if(!playing){
+      buildPad();playing=true;started=true;
+      if(!btn)btn=document.getElementById('inv-music-btn');
+      if(btn)btn.classList.add('active');
+      try{localStorage.setItem('inv_music','on');}catch(e){}
+    } else {
+      stopPad();playing=false;
+      if(!btn)btn=document.getElementById('inv-music-btn');
+      if(btn)btn.classList.remove('active');
+      try{localStorage.setItem('inv_music','off');}catch(e){}
+    }
+  };
 })();
 </script>
 </body>
