@@ -92,9 +92,11 @@
         "title":  "Navigation propojení stránek + OG images v2 + music tab-pause",
         "mainUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
-        "changes":  {
-    
-                    },
+        "changes":  [
+                        "[Vývoj] Navigace — kompletní propojení PITCH ↔ CEO ↔ ENTRY ↔ BRIEF (karty + nav tlačítka)",
+                        "[Design] OG Images v2 — centrovaný layout, 3 PNG (Business Vision / Business Case / Investor Gateway)",
+                        "[Oprava] Music tab-pause — auto-stop při přepnutí záložky na všech 3 stránkách"
+                    ],
         "promoLevel":  null,
         "promoText":  null,
         "promoTextEn":  null,
