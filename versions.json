@@ -1,6 +1,6 @@
 ﻿{
   "latest": "v7.23",
-  "updatedAt": "2026-04-21",
+  "updatedAt": "2026-04-22",
   "versions": [
     {
         "version":  "v7.20",
@@ -87,8 +87,8 @@
     },
     {
         "version":  "v7.23",
-        "date":  "2026-04-21",
-        "session":  "session_20260421_2034",
+        "date":  "2026-04-22",
+        "session":  "session_20260421_2057",
         "title":  "Navigation propojení stránek + OG images v2 + music tab-pause",
         "mainUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
