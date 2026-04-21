@@ -1229,6 +1229,10 @@ document.addEventListener('DOMContentLoaded',function(){
       try{localStorage.setItem('ceo_music','off');}catch(e){}
     }
   };
+
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden&&_playing){fadeTo(0,600,function(){getAudio().pause();});_playing=false;var b=btn();if(b)b.classList.remove('active');}
+  });
 })();
 </script>
 </body>
