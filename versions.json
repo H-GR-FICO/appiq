@@ -1,5 +1,5 @@
 ﻿{
-  "latest": "v7.22",
+  "latest": "v7.23",
   "updatedAt": "2026-04-21",
   "versions": [
     {
@@ -84,6 +84,25 @@
         "pitchUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.23",
+        "date":  "2026-04-21",
+        "session":  "session_20260421_2000",
+        "title":  "Navigation propojení stránek + OG images v2 + music tab-pause",
+        "mainUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  {
+    
+                    },
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }
