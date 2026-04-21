@@ -1,5 +1,5 @@
 ﻿{
-  "latest": "v7.23",
+  "latest": "v7.24",
   "updatedAt": "2026-04-22",
   "versions": [
     {
@@ -105,6 +105,25 @@
         "pitchUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.24",
+        "date":  "2026-04-22",
+        "session":  "session_20260421_2057",
+        "title":  "Anthropic Journey + David vs Goliáš",
+        "mainUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  {
+    
+                    },
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }
