@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="cs" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — HOPIQ Center (FC-8)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── NAV ── */
+nav{background:#161b22;border-bottom:2px solid #7c3aed;padding:0 20px;height:48px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.hc-back{color:#c4b5fd;font-size:12px;font-weight:700;text-decoration:none;border:1px solid rgba(124,58,237,.4);border-radius:5px;padding:4px 12px;transition:all .2s;white-space:nowrap;}
+.hc-back:hover{background:rgba(124,58,237,.2);border-color:#c4b5fd;}
+.hc-brand{font-size:13px;font-weight:700;color:#e6edf3;}
+.hc-badge{font-size:10px;background:rgba(124,58,237,.25);color:#c4b5fd;border:1px solid rgba(124,58,237,.4);border-radius:10px;padding:2px 9px;font-weight:700;white-space:nowrap;}
+
+/* hide floating hopiq button — replaced by inline chat */
+#hopiq-btn{display:none!important;}
+
+/* ── TABS ── */
+.hc-tabs{display:flex;gap:0;background:#161b22;border-bottom:1px solid #30363d;flex-shrink:0;}
+.hc-tab{padding:9px 22px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#8b949e;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Segoe UI',Arial,sans-serif;transition:all .15s;white-space:nowrap;}
+.hc-tab.active{color:#c4b5fd;border-bottom-color:#7c3aed;}
+.hc-tab:hover:not(.active){color:#e6edf3;background:#21262d;}
+
+/* ── BODY ── */
+.hc-body{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.hc-pane{flex:1;overflow:hidden;display:none;flex-direction:column;}
+.hc-pane.active{display:flex;}
+
+/* ── CHATBOT TAB ── */
+.chat-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;max-width:820px;width:100%;margin:0 auto;padding:16px 20px 0;}
+.chat-hdr{font-size:11px;font-weight:700;color:#8b949e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #21262d;display:flex;align-items:center;gap:8px;}
+.chat-hdr-dot{width:8px;height:8px;border-radius:50%;background:#3fb950;flex-shrink:0;}
+.chat-messages{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px;padding-bottom:12px;}
+.chat-msg{padding:10px 14px;border-radius:10px;font-size:13px;line-height:1.55;max-width:85%;white-space:pre-wrap;word-break:break-word;}
+.chat-msg.system{background:#161b22;color:#8b949e;border:1px solid #21262d;align-self:center;font-size:12px;max-width:100%;}
+.chat-msg.user{background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.3);color:#e6edf3;align-self:flex-end;}
+.chat-msg.assistant{background:#161b22;border:1px solid #30363d;color:#e6edf3;align-self:flex-start;}
+.chat-typing{align-self:flex-start;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:10px 14px;display:flex;gap:5px;align-items:center;}
+.chat-typing span{width:7px;height:7px;border-radius:50%;background:#484f58;animation:blink 1.2s infinite;}
+.chat-typing span:nth-child(2){animation-delay:.2s;}
+.chat-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes blink{0%,80%,100%{opacity:.25;}40%{opacity:1;}}
+.chat-input-row{display:flex;gap:10px;padding:12px 0 16px;flex-shrink:0;}
+.chat-input{flex:1;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px 14px;font-size:13px;color:#e6edf3;font-family:'Segoe UI',Arial,sans-serif;resize:none;outline:none;line-height:1.5;max-height:90px;}
+.chat-input:focus{border-color:rgba(124,58,237,.6);}
+.chat-send{background:#7c3aed;border:none;border-radius:8px;padding:0 18px;cursor:pointer;color:#fff;font-size:18px;flex-shrink:0;transition:background .2s;}
+.chat-send:hover{background:#6d28d9;}
+.chat-send:disabled{background:#30363d;cursor:default;}
+.chat-reset{background:transparent;border:1px solid #30363d;border-radius:8px;padding:0 12px;cursor:pointer;color:#8b949e;font-size:11px;font-weight:700;flex-shrink:0;transition:all .2s;}
+.chat-reset:hover{border-color:#484f58;color:#e6edf3;}
+.sp-toggle{background:transparent;border:1px solid rgba(124,58,237,.3);border-radius:6px;padding:2px 9px;font-size:10px;font-weight:700;color:#c4b5fd;cursor:pointer;margin-left:auto;transition:all .2s;white-space:nowrap;}
+.sp-toggle:hover{background:rgba(124,58,237,.15);}
+.sp-toggle.custom-active{border-color:#f0883e;color:#f0883e;}
+.sp-panel{background:#0d1117;border-bottom:1px solid #21262d;padding:10px 0;flex-shrink:0;display:none;}
+.sp-panel.open{display:block;}
+.sp-textarea{width:100%;background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px 14px;font-size:11px;color:#e6edf3;font-family:Consolas,monospace;resize:vertical;outline:none;line-height:1.5;min-height:120px;max-height:260px;}
+.sp-textarea:focus{border-color:rgba(124,58,237,.5);}
+.sp-actions{display:flex;gap:8px;margin-top:8px;align-items:center;}
+.sp-save{background:#7c3aed;border:none;border-radius:6px;padding:5px 14px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;transition:background .2s;}
+.sp-save:hover{background:#6d28d9;}
+.sp-reset-btn{background:transparent;border:1px solid #30363d;border-radius:6px;padding:5px 12px;font-size:11px;font-weight:700;color:#8b949e;cursor:pointer;transition:all .2s;}
+.sp-reset-btn:hover{border-color:#484f58;color:#e6edf3;}
+.sp-status{font-size:11px;color:#8b949e;margin-left:4px;}
+
+/* ── KB TAB ── */
+.kb-content{flex:1;overflow-y:auto;padding:20px;}
+.kb-section{max-width:820px;margin:0 auto;}
+.kb-hdr{font-size:11px;font-weight:700;color:#8b949e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #21262d;}
+.kb-status-bar{display:flex;align-items:center;gap:12px;background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px 18px;margin-bottom:20px;}
+.kb-status-dot{width:10px;height:10px;border-radius:50%;background:#f0883e;flex-shrink:0;}
+.kb-status-dot.active{background:#3fb950;}
+.kb-status-text{font-size:13px;color:#e6edf3;flex:1;}
+.kb-status-sub{font-size:11px;color:#8b949e;}
+.kb-refresh-btn{background:rgba(124,58,237,.15);border:1px solid rgba(124,58,237,.4);border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:#c4b5fd;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.kb-refresh-btn:hover{background:rgba(124,58,237,.3);}
+.kb-url-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
+.kb-url-item{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
+.kb-url-icon{font-size:16px;flex-shrink:0;}
+.kb-url-info{flex:1;min-width:0;}
+.kb-url-name{font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:2px;}
+.kb-url-addr{font-size:11px;color:#484f58;font-family:Consolas,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kb-url-badge{font-size:10px;font-weight:700;border-radius:4px;padding:2px 8px;flex-shrink:0;}
+.kb-badge-pending{background:#2d2000;color:#f0883e;border:1px solid rgba(240,136,62,.3);}
+.kb-badge-active{background:#0d4429;color:#3fb950;border:1px solid rgba(63,185,80,.3);}
+.kb-note{font-size:12px;color:#484f58;background:#161b22;border:1px solid #21262d;border-radius:8px;padding:14px 16px;border-left:3px solid rgba(124,58,237,.4);}
+
+/* ── AGENTS TAB ── */
+.agents-content{flex:1;overflow-y:auto;padding:20px;}
+.agents-section{max-width:820px;margin:0 auto;}
+.agents-hdr{font-size:11px;font-weight:700;color:#8b949e;letter-spacing:.1em;text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #21262d;}
+.agent-phase{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:20px;margin-bottom:16px;}
+.agent-phase-label{font-size:10px;font-weight:700;color:#c4b5fd;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;}
+.agent-phase-title{font-size:16px;font-weight:800;color:#e6edf3;margin-bottom:8px;}
+.agent-phase-desc{font-size:13px;color:#8b949e;line-height:1.6;}
+.agent-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px;}
+.agent-card{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;}
+.agent-card-icon{font-size:22px;}
+.agent-card-name{font-size:13px;font-weight:700;color:#e6edf3;}
+.agent-card-desc{font-size:12px;color:#8b949e;line-height:1.5;}
+.agent-chip{display:inline-block;font-size:9px;font-weight:700;border-radius:4px;padding:2px 7px;margin-top:4px;align-self:flex-start;}
+.chip-live{background:#0d4429;color:#3fb950;border:1px solid rgba(63,185,80,.3);}
+.chip-soon{background:#2d0849;color:#d2a8ff;border:1px solid rgba(210,168,255,.3);}
+.chip-future{background:#21262d;color:#484f58;border:1px solid #30363d;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="hc-back" href="../index.html">← Studio Hub</a>
+  <div class="hc-brand">🤖 HOPIQ Center</div>
+  <div class="hc-badge">FC-8</div>
+</nav>
+
+<div class="hc-tabs">
+  <button class="hc-tab active" data-pane="chatbot" onclick="hcTab('chatbot')">🤖 Chatbot</button>
+  <button class="hc-tab" data-pane="kb" onclick="hcTab('kb')">📚 Knowledge Base</button>
+  <button class="hc-tab" data-pane="agents" onclick="hcTab('agents')">🔮 Agents</button>
+</div>
+
+<div class="hc-body">
+
+  <!-- ── CHATBOT PANE ── -->
+  <div class="hc-pane active" id="pane-chatbot">
+    <div class="chat-wrap">
+      <div class="chat-hdr">
+        <div class="chat-hdr-dot"></div>
+        HOPIQ AI · Test konzole · claude-haiku-4-5
+        <button class="sp-toggle" id="sp-toggle-btn" onclick="spToggle()" title="Upravit system prompt">⚙ System Prompt</button>
+      </div>
+      <div class="sp-panel" id="sp-panel">
+        <textarea class="sp-textarea" id="sp-textarea" placeholder="System prompt…"></textarea>
+        <div class="sp-actions">
+          <button class="sp-save" onclick="spSave()">✓ Uložit</button>
+          <button class="sp-reset-btn" onclick="spReset()">↺ Výchozí</button>
+          <span class="sp-status" id="sp-status"></span>
+        </div>
+      </div>
+      <div class="chat-messages" id="hc-messages">
+        <div class="chat-msg system">Ahoj! Jsem HOPIQ, AI asistent platformy AppIQ. Toto je testovací konzole — zprávy se zde nesdílí s widgetem na ostatních stránkách.</div>
+      </div>
+      <div class="chat-input-row">
+        <button class="chat-reset" onclick="hcChatReset()" title="Nový rozhovor">↺ Reset</button>
+        <textarea class="chat-input" id="hc-input" rows="1" placeholder="Napiš dotaz…" onkeydown="hcKey(event)" oninput="hcResize(this)"></textarea>
+        <button class="chat-send" id="hc-send" onclick="hcSend()" title="Odeslat">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── KNOWLEDGE BASE PANE ── -->
+  <div class="hc-pane" id="pane-kb">
+    <div class="kb-content">
+      <div class="kb-section">
+        <div class="kb-hdr">Zdroje znalostní báze</div>
+
+        <div class="kb-status-bar">
+          <div class="kb-status-dot active" id="kb-dot"></div>
+          <div>
+            <div class="kb-status-text" id="kb-status-text">Znalostní báze aktivní — 12 HOPI webů (system prompt)</div>
+            <div class="kb-status-sub" id="kb-status-sub">Načteno: 2026-04-19 · Aktualizace: říct Claudovi</div>
+          </div>
+          <button class="kb-refresh-btn" onclick="kbRefresh()" id="kb-refresh-btn">⟳ Aktualizovat</button>
+        </div>
+
+        <div class="kb-hdr" style="margin-top:4px;">Plánované URL zdroje</div>
+        <div class="kb-url-list" id="kb-url-list">
+          <div class="kb-url-item"><div class="kb-url-icon">🏢</div><div class="kb-url-info"><div class="kb-url-name">HOPI Holding</div><div class="kb-url-addr">https://hopiholding.eu</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🚚</div><div class="kb-url-info"><div class="kb-url-name">HOPI Logistics</div><div class="kb-url-addr">https://hopilogistics.eu/cz-cs/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🌍</div><div class="kb-url-info"><div class="kb-url-name">HOPI Global Solution</div><div class="kb-url-addr">https://hopiglobal.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🐟</div><div class="kb-url-info"><div class="kb-url-name">HOPI CEE Fish HUB</div><div class="kb-url-addr">https://www.hopifishhub.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🥛</div><div class="kb-url-info"><div class="kb-url-name">Hollandia</div><div class="kb-url-addr">https://www.hollandia.cz/cs</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🍲</div><div class="kb-url-info"><div class="kb-url-name">Cibule Bistro</div><div class="kb-url-addr">https://www.cibulebistro.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🫒</div><div class="kb-url-info"><div class="kb-url-name">AD Fine Dine</div><div class="kb-url-addr">https://adfinedine.de/en/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🧊</div><div class="kb-url-info"><div class="kb-url-name">Eat Smart</div><div class="kb-url-addr">https://eatsmart.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">📦</div><div class="kb-url-info"><div class="kb-url-name">HOPI Food Broker</div><div class="kb-url-addr">https://www.hopifoodbroker.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🌿</div><div class="kb-url-info"><div class="kb-url-name">Farma Otročín</div><div class="kb-url-addr">https://farmaotrocin.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">🌿</div><div class="kb-url-info"><div class="kb-url-name">Farma Malonty</div><div class="kb-url-addr">https://farmamalonty.cz/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+          <div class="kb-url-item"><div class="kb-url-icon">💼</div><div class="kb-url-info"><div class="kb-url-name">HOPI Jobs</div><div class="kb-url-addr">https://hopijobs.eu/</div></div><span class="kb-url-badge kb-badge-active">ACTIVE</span></div>
+        </div>
+
+        <div class="kb-note">
+          Obsah byl jednorázově načten a vložen přímo do system promptu. Chceš přidat nový web nebo aktualizovat obsah → řekni Claudovi.<br>
+          Editor system promptu: záložka Chatbot → tlačítko <strong>⚙ System Prompt</strong>.
+        </div>
+
+        <div class="kb-hdr" style="margin-top:28px;">Co HOPIQ zná — přehled</div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-bottom:20px;">
+
+          <div style="background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:11px;font-weight:700;color:#c4b5fd;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">🤖 AppIQ Platforma</div>
+            <div style="font-size:12px;color:#8b949e;line-height:2;">
+              ✓ Struktura a navigace AppIQ Studio<br>
+              ✓ Admin Center — OIL backlog, release, deploy<br>
+              ✓ Dev Center, Test Center, Promo Web, Docs<br>
+              ✓ Finance Portal — moduly a funkce<br>
+              ✓ Archivační a deployment procedury<br>
+              ✓ OIL task tracker — formáty, statusy, flow<br>
+              ✓ Aktuální verze a changelog (v7.20)<br>
+              ✓ Klíčové soubory (_i18n.js, _ver.js, OIL.json…)<br>
+              ✓ HOPI Holding — org. struktura a divize<br>
+              ✓ AppIQ obchodní záměr (spin-off, SaaS)
+            </div>
+          </div>
+
+          <div style="background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:11px;font-weight:700;color:#3fb950;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;">🌍 HOPI Group — weby</div>
+            <div style="font-size:12px;color:#8b949e;line-height:2;">
+              ✓ HOPI Holding — skupina, divize, hodnoty<br>
+              ✓ HOPI Logistics — sklady, doprava, ČR/SK/HU/PL/RO<br>
+              ✓ HOPI Global Solution — mezinárodní přeprava<br>
+              ✓ HOPI CEE Fish HUB — ryby a mořské plody<br>
+              ✓ Hollandia — jogurty, mléčné výrobky<br>
+              ✓ Cibule Bistro — polévky a vývary<br>
+              ✓ AD Fine Dine — antipasti a delikatesy<br>
+              ✓ Eat Smart — chytré firemní stravování<br>
+              ✓ HOPI Food Broker — distribuce potravin<br>
+              ✓ Farma Otročín + Farma Malonty — bio zemědělství<br>
+              ✓ HOPI Jobs — kariérní portál
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AGENTS PANE ── -->
+  <div class="hc-pane" id="pane-agents">
+    <div class="agents-content">
+      <div class="agents-section">
+        <div class="agents-hdr">AI Agents — roadmapa</div>
+
+        <div class="agent-phase">
+          <div class="agent-phase-label">Phase 0 — aktuálně live</div>
+          <div class="agent-phase-title">HOPIQ — konverzační AI asistent</div>
+          <div class="agent-phase-desc">Reaktivní chatbot dostupný na všech Studio stránkách a prezentacích. Zodpovídá dotazy o platformě, navigaci a architektuře AppIQ.</div>
+          <div class="agent-card-grid">
+            <div class="agent-card">
+              <div class="agent-card-icon">🤖</div>
+              <div class="agent-card-name">HOPIQ Chat Widget</div>
+              <div class="agent-card-desc">Floating chat na všech Studio stránkách. Proxy: Cloudflare Worker. Model: claude-haiku-4-5.</div>
+              <span class="agent-chip chip-live">LIVE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-phase">
+          <div class="agent-phase-label">Phase 1 — plánováno (AIQ-00134)</div>
+          <div class="agent-phase-title">HOPIQ + Knowledge Base</div>
+          <div class="agent-phase-desc">HOPIQ rozšířen o automaticky aktualizovanou znalostní bázi z hopiholding.eu a dceřiných společností. KV cache přes Cloudflare, refresh 1× denně.</div>
+          <div class="agent-card-grid">
+            <div class="agent-card">
+              <div class="agent-card-icon">📚</div>
+              <div class="agent-card-name">Web Scraping Agent</div>
+              <div class="agent-card-desc">Cloudflare Worker Cron — fetchuje HOPI weby, extrahuje text, ukládá do KV namespace.</div>
+              <span class="agent-chip chip-soon">IN PROGRESS</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="agent-phase">
+          <div class="agent-phase-label">Phase 2 — budoucí rozvoj</div>
+          <div class="agent-phase-title">Specializovaní AI agenti</div>
+          <div class="agent-phase-desc">Proaktivní agenti napojení na SAP, BNS, Power BI a další systémy HOPI. Automatizace reportingu, alertů a schvalovacích workflow.</div>
+          <div class="agent-card-grid">
+            <div class="agent-card">
+              <div class="agent-card-icon">📊</div>
+              <div class="agent-card-name">Reporting Agent</div>
+              <div class="agent-card-desc">Automatická příprava měsíčních reportů z dat SAP a Power BI.</div>
+              <span class="agent-chip chip-future">FUTURE</span>
+            </div>
+            <div class="agent-card">
+              <div class="agent-card-icon">⚠️</div>
+              <div class="agent-card-name">Alert Agent</div>
+              <div class="agent-card-desc">Monitoring KPI thresholdů a notifikace odpovědných osob.</div>
+              <span class="agent-chip chip-future">FUTURE</span>
+            </div>
+            <div class="agent-card">
+              <div class="agent-card-icon">✅</div>
+              <div class="agent-card-name">Approval Agent</div>
+              <div class="agent-card-desc">Automatizace schvalovacích workflow — FX, objednávky, výkazy.</div>
+              <span class="agent-chip chip-future">FUTURE</span>
+            </div>
+            <div class="agent-card">
+              <div class="agent-card-icon">🗂️</div>
+              <div class="agent-card-name">SAP Integration Agent</div>
+              <div class="agent-card-desc">Přímé dotazování na SAP data přirozeným jazykem.</div>
+              <span class="agent-chip chip-future">FUTURE</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+function hcTab(id) {
+  document.querySelectorAll('.hc-tab').forEach(function(t){ t.classList.toggle('active', t.dataset.pane===id); });
+  document.querySelectorAll('.hc-pane').forEach(function(p){ p.classList.toggle('active', p.id==='pane-'+id); });
+}
+
+// ── Chat ─────────────────────────────────────────────────────────────────────
+var PROXY_URL = 'https://hopi-appiq.dgogela.workers.dev';
+var SYSTEM_PROMPT = `Jsi HOPIQ — AI asistent platformy HOPI AppIQ. Komunikuj stručně a profesionálně. Odpovídej česky pokud se ptají česky, anglicky pokud anglicky. Pokud nevíš přesnou odpověď, řekni to upřímně.
+
+## ORGANIZACE
+HOPI Holding je středoevropská skupina s divisemi: Supply Chain, Foods, Agriculture, Services, Holding (IT, Finance, Group Management). AppIQ je vyvíjen Davidem Gogelou (Head of Group Controlling, HOPI Holding) jako interní pilot Finance Phase 0. Cíl: Finance pilot → rollout na všechny divize HOPI → spin-off jako 6. divize "HOPI Tech / AppIQ s.r.o." → komerční SaaS.
+
+## HOPI AppIQ — PLATFORMA
+AI-powered Enterprise Application Platform. Dva streamy:
+- WEB stream: AppIQ Studio (Hub, Prezentace, Personal Pitch, Admin Center, Dev Center, Test Center, Promo Web, Documentation Center)
+- APP stream: Finance portál (Group Controlling SPA — Calendar, Tracking, OrgChart, Reporting, FX, SAP, BNS, SharePoint integrace)
+
+## NAVIGACE — AppIQ Studio
+Studio Hub → Admin Center, Dev Center, Test Center, Promo Web, Documentation Center, HOPIQ Center (správa AI), Finance Portal.
+
+## HOPIQ CENTER
+Dedicated sekce pro správu AI asistenta HOPIQ a budoucích agentů. Záložky: Chatbot (test konzole), Knowledge Base (web zdroje), Agents (roadmapa Phase 0→2).
+
+## HOPI GROUP — ZNALOSTNÍ BÁZE
+HOPI Holding je česká rodinná skupina (zal. 1992), působí ve střední Evropě. 5 divisí:
+
+### SUPPLY CHAIN
+**HOPI Logistics** — logistika na míru. Skladování (-25 až +25°C), telemetrická doprava, e-commerce fulfillment (eHOPI). 700+ zaměstnanců, 15 distribučních center, ČR/SK/HU/PL/RO. Zákazníci: P&G, Tesco, Nestlé, Mondelez, Coca-Cola.
+**HOPI Global Solution** — mezinárodní přeprava (silnice, železnice, námořní, letecká). 11 lokalit v ČR/SK/HU/PL/RO/HR. ISO 9001.
+**HOPI CEE Fish HUB** — logistika a zpracování ryb a mořských plodů. Z moře do Prahy za 18 hodin. Člen Seafoodways.
+
+### FOODS
+**Hollandia** — česká mlékárna od 1989, Klášterec nad Ohří. Jogurty (BIO, bez laktózy, krémové), sýry, jogurtové nápoje, zmrzliny.
+**Cibule Bistro** — polévky a vývary bez barviv a glutamátu. Hovězí/kuřecí/pho vývary 6–12 hodin tažené.
+**AD Fine Dine** — prémiové antipasti a delikatesy pro mezinárodní řetězce (olivy, party mixy, veganské produkty). HOPI majoritní akcionář od 2020.
+**Eat Smart** — chytré firemní stravování přes automatizované lednice v kancelářích. 80+ firemních klientů, 2 000+ zaměstnanců denně.
+**HOPI Food Broker** — distribuce potravinových výrobců. Import, compliance, 3PL, prodej v Makro/Metro/Globus/Rohlík/Billa.
+
+### AGRICULTURE
+**Farma Otročín** — největší ekologický producent biomléka v ČR, Slavkovský les. Biomléko, biomaso, myslivost.
+**Farma Malonty** — ekologická farma, jižní Čechy. Mléko a mléčné výrobky, bio certifikace.
+
+### SERVICES & HOLDING
+**HOPI Jobs** — kariérní portál skupiny. **HOPI Academy** — vzdělávací program pro zaměstnance. **HOLDING** — IT, Finance (Group Controlling), Group Management.`;
+
+var _msgs = [];
+
+function hcSend() {
+  var inp = document.getElementById('hc-input');
+  var text = (inp.value || '').trim();
+  if (!text) return;
+  inp.value = ''; inp.style.height = '';
+
+  appendChat('user', text);
+  _msgs.push({role:'user', content:text});
+
+  var btn = document.getElementById('hc-send');
+  if (btn) btn.disabled = true;
+
+  var typing = document.createElement('div');
+  typing.className = 'chat-typing'; typing.id = 'hc-typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  document.getElementById('hc-messages').appendChild(typing);
+  scrollChat();
+
+  fetch(PROXY_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({messages:_msgs, system:SYSTEM_PROMPT})
+  })
+  .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+  .then(function(data){
+    removeTyping();
+    var reply = '';
+    if (data.content && data.content[0] && data.content[0].text) reply = data.content[0].text;
+    else if (data.error) reply = '⚠️ ' + (data.error.message || 'Chyba API');
+    if (reply) { _msgs.push({role:'assistant',content:reply}); appendChat('assistant', reply); }
+    if (btn) btn.disabled = false;
+  })
+  .catch(function(e){
+    removeTyping();
+    appendChat('assistant', '⚠️ Nepodařilo se připojit k AI. (' + e.message + ')');
+    if (btn) btn.disabled = false;
+  });
+}
+
+function appendChat(role, text) {
+  var msgs = document.getElementById('hc-messages');
+  var el = document.createElement('div');
+  el.className = 'chat-msg ' + role;
+  el.textContent = text;
+  msgs.appendChild(el);
+  scrollChat();
+}
+
+function removeTyping() { var el = document.getElementById('hc-typing'); if (el) el.parentNode.removeChild(el); }
+function scrollChat() { var m = document.getElementById('hc-messages'); if (m) m.scrollTop = m.scrollHeight; }
+function hcKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); hcSend(); } }
+function hcResize(el) { el.style.height=''; el.style.height = Math.min(el.scrollHeight,90)+'px'; }
+function hcChatReset() {
+  _msgs = [];
+  var m = document.getElementById('hc-messages');
+  m.innerHTML = '<div class="chat-msg system">Nový rozhovor zahájen.</div>';
+}
+
+// ── System Prompt Editor ──────────────────────────────────────────────────────
+var SP_KEY = 'hopiq_custom_prompt';
+
+function getActivePrompt() {
+  return localStorage.getItem(SP_KEY) || SYSTEM_PROMPT;
+}
+
+function spUpdateIndicator() {
+  var custom = !!localStorage.getItem(SP_KEY);
+  var btn = document.getElementById('sp-toggle-btn');
+  if (btn) {
+    btn.classList.toggle('custom-active', custom);
+    btn.title = custom ? '⚙ Vlastní prompt aktivní — klikni pro editaci' : '⚙ System Prompt — klikni pro editaci';
+    btn.textContent = custom ? '⚙ Vlastní prompt ✓' : '⚙ System Prompt';
+  }
+}
+
+function spToggle() {
+  var panel = document.getElementById('sp-panel');
+  var isOpen = panel.classList.toggle('open');
+  if (isOpen) {
+    var ta = document.getElementById('sp-textarea');
+    ta.value = getActivePrompt();
+    document.getElementById('sp-status').textContent = localStorage.getItem(SP_KEY) ? '● Vlastní prompt aktivní' : '● Výchozí prompt';
+  }
+}
+
+function spSave() {
+  var val = document.getElementById('sp-textarea').value.trim();
+  if (!val) return;
+  localStorage.setItem(SP_KEY, val);
+  document.getElementById('sp-status').textContent = '✓ Uloženo';
+  spUpdateIndicator();
+  setTimeout(function(){ document.getElementById('sp-status').textContent = '● Vlastní prompt aktivní'; }, 1500);
+}
+
+function spReset() {
+  localStorage.removeItem(SP_KEY);
+  document.getElementById('sp-textarea').value = SYSTEM_PROMPT;
+  document.getElementById('sp-status').textContent = '↺ Obnoveno na výchozí';
+  spUpdateIndicator();
+  setTimeout(function(){ document.getElementById('sp-status').textContent = '● Výchozí prompt'; }, 1500);
+}
+
+// ── KB refresh ────────────────────────────────────────────────────────────────
+function kbRefresh() {
+  var btn = document.getElementById('kb-refresh-btn');
+  btn.textContent = '⟳ Probíhá…'; btn.disabled = true;
+  setTimeout(function(){
+    document.getElementById('kb-status-text').textContent = 'Znalostní báze aktivní — 12 HOPI webů (system prompt)';
+    btn.textContent = '⟳ Aktualizovat'; btn.disabled = false;
+  }, 800);
+}
+
+// Init
+spUpdateIndicator();
+</script>
+
+<script src="../../../_hopiq.js"></script>
+</body>
+</html>

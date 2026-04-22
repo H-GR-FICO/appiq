@@ -1,0 +1,172 @@
+﻿{
+    "schemaVersion":  "1.0",
+    "status":  "OK",
+    "version":  "v7.25",
+    "session":  "v7.25-WebPage_20260422_1359",
+    "timestamp":  "2026-04-22 13:59",
+    "stats":  {
+                  "totalFiles":  78,
+                  "totalSizeKb":  37651.4,
+                  "byType":  {
+                                 "html":  37,
+                                 "json":  3,
+                                 "md":  8,
+                                 "js":  4,
+                                 "svg":  2,
+                                 "png":  18,
+                                 "txt":  1,
+                                 "css":  1,
+                                 "mp3":  3,
+                                 "other":  1
+                             },
+                  "previousTotal":  56
+              },
+    "verify":  {
+                   "passed":  27,
+                   "failed":  0,
+                   "checks":  [
+                                  {
+                                      "file":  "PERSONAL_PITCH.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_PRESENTATION.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_ver.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "RESPONSIVE_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "docs/index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/story_personal.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "MANAGEMENT_COCKPIT.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/_shell.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/_cockpit.css",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/overview.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/launch-plan.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/task-control.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/motivation.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_CONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BOIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BKONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CHANGELOG.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_ARCHITECTURE.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CLAUDE.md",
+                                      "ok":  true
+                                  }
+                              ]
+               },
+    "diff":  {
+                 "previousSession":  "v7.24-WebPage_20260422_0204",
+                 "added":  [
+                               "ANTHROPIC_2PAGER.html",
+                               "cockpit/_cockpit.css",
+                               "cockpit/_shell.js",
+                               "cockpit/_template.html",
+                               "cockpit/boil-board.html",
+                               "cockpit/budget-track.html",
+                               "cockpit/capacity.html",
+                               "cockpit/decisions.html",
+                               "cockpit/documentation.html",
+                               "cockpit/financial.html",
+                               "cockpit/kpi.html",
+                               "cockpit/launch-plan.html",
+                               "cockpit/methodology.html",
+                               "cockpit/motivation.html",
+                               "cockpit/oil-board.html",
+                               "cockpit/overview.html",
+                               "cockpit/sources.html",
+                               "cockpit/task-control.html",
+                               "cockpit/team.html",
+                               "cockpit/timeline.html",
+                               "cockpit-og.svg",
+                               "MANAGEMENT_COCKPIT.html"
+                           ],
+                 "removed":  [
+
+                             ],
+                 "changed":  [
+                                 "ANTHROPIC_ONEPAGER.html",
+                                 "BKONTEXT.md",
+                                 "BOIL.json",
+                                 "CEO_BRIEF.html",
+                                 "CHANGELOG.md",
+                                 "INVESTOR_BRIEF.html",
+                                 "OIL.json",
+                                 "OIL_CONTEXT.md",
+                                 "PERSONAL_PITCH.html"
+                             ]
+             },
+    "changelog":  "## v7.25 — MANAGEMENT COCKPIT: 3 nové sekce + Compliance opravy\n\n\u003e Datum: 2026-04-22 · Session: David Gogela + Claude · AIQ-00313..00317, BIZ-00122..00123\n\n### Přidáno\n\n**MANAGEMENT COCKPIT rozšířen na 16 sekcí — 3 nové live dashboardy**\n\n**Sekce 02 — Executive Overview Dashboard (`cockpit/overview.html`)**\n- Ranní briefing: live OIL+BOIL statistiky na jedné obrazovce bez přepínání\n- 5 widgetových bloků: Project Pulse (open/closed/S1/REVIEW), Execution (kapacita Claude vs. David), Launch Countdown (B2C/B2B/HOPI GROUP), Strategic (tým/partneři), Finance (placeholders)\n- Každý widget kliknutelný na příslušnou plnou sekci\n\n**Sekce 03 — Launch Plan · Countdown (`cockpit/launch-plan.html`)**\n- Živé odpočítávání k 3 milníkům: HOPI GROUP (01.06.2026), B2C (01.01.2027), B2B (01.01.2028)\n- Progress bar pro každý track (procenta uplynulé doby)\n- Department rollout timeline: Finance → Legal → Operations → HR/IT → Dceřiné (~30 společností)\n- Info karty: B2C profily (H1–H4, Freemium→Premium, PLG) + B2B parametry\n\n**Sekce 08 — Task Control Center (`cockpit/task-control.html`)**\n- Tab 1 Priority Board: Kanban S1-KRITICKÝ / S2-ZÁVAŽNÝ / S3-STŘEDNÍ / S4-NÍZKÝ, filtr ALL/AIQ/BIZ/REVIEW\n- Tab 2 Linked View: BIZ task (BOIL) jako accordion, pod ním linked AIQ tasky z OIL, vizuální BIZ→TECH šipka\n- Tab 3 Capacity Split: Claude vs. David počet + suma estimatedTime, REVIEW bottleneck list, domain breakdown\n- Čte OIL.json + BOIL.json dynamicky (žádné hardcoded hodnoty)\n\n### Opraveno\n\n**9 Anthropic compliance a platform accuracy oprav (AIQ-00313)**\n- Odstraněna slova \"production\", \"reální uživatelé\", \"reálná data\" kde nepravdivé\n- PoC/pilot framing opraven v PERSONAL_PITCH.html, PORTAL_PRESENTATION.html, BUSINESS_CASE.html\n- CS i EN verze konzistentní\n\n**MANAGEMENT COCKPIT vizuální opravy (AIQ-00317)**\n- Název \"MNG COCKPIT\" → \"MANAGEMENT COCKPIT\" (auth overlay, topnav, hero h1)\n- Kontrast muted textu: `#6b7280` → `#94a3b8` (čitelnější labely)\n- Patkové písmo → bezpatkové (`\u0027Segoe UI\u0027, system-ui, sans-serif`) na všech popisných prvcích\n- Integrace `_shell.js` opravena — topbar (← Zpět na Cockpit) funguje na všech 3 nových stránkách"
+}

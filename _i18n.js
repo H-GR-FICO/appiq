@@ -834,9 +834,13 @@ window.I18n = (function () {
     /** Přístup k raw datům (pro Language tab key browser) */
     data: function () { return _T; },
 
-    /** Inicializace — načte jazyk z localStorage, aplikuje na DOM */
+    /** Inicializace — načte jazyk z URL ?lang=, jinak localStorage, jinak výchozí CZ */
     init: function () {
-      try { var stored = localStorage.getItem('hopi_lang'); if (stored && _T[stored]) _lang = stored; } catch (e) {}
+      try {
+        var urlLang = new URLSearchParams(window.location.search).get('lang');
+        if (urlLang && _T[urlLang]) { _lang = urlLang; localStorage.setItem('hopi_lang', urlLang); }
+        else { var stored = localStorage.getItem('hopi_lang'); if (stored && _T[stored]) _lang = stored; }
+      } catch (e) {}
       _applyDOM();
     }
   };

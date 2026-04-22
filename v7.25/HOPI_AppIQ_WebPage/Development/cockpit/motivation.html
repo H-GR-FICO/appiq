@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motivation Chamber — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Hero quote ──────────────────────────────── */
+    .mot-hero {
+      text-align: center; padding: 48px 24px 40px;
+      background: radial-gradient(ellipse at 50% 60%, rgba(168,85,247,.12) 0%, transparent 70%);
+      border: 1px solid rgba(168,85,247,.2); border-radius: var(--c-radius);
+      margin-bottom: 36px; position: relative; overflow: hidden;
+    }
+    .mot-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(168,85,247,.015) 30px, rgba(168,85,247,.015) 31px);
+    }
+    .mot-logo { font-size: 48px; margin-bottom: 16px; display: block; position: relative; }
+    .mot-quote {
+      font-size: clamp(18px, 3vw, 28px); font-weight: 700; color: var(--c-white);
+      line-height: 1.4; max-width: 720px; margin: 0 auto 20px;
+      position: relative;
+    }
+    .mot-quote em { color: var(--c-violet); font-style: normal; }
+    .mot-author {
+      font-size: 13px; color: var(--c-muted); font-family: var(--c-font-mono);
+      letter-spacing: 2px; position: relative;
+    }
+
+    /* ── Big numbers ─────────────────────────────── */
+    .big-num-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px; margin-bottom: 32px;
+    }
+    .big-num {
+      text-align: center; padding: 28px 20px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      transition: border-color .2s, transform .15s;
+    }
+    .big-num:hover { border-color: rgba(168,85,247,.4); transform: translateY(-2px); }
+    .big-num-val { font-size: clamp(36px, 5vw, 56px); font-weight: 900;
+                   font-family: var(--c-font-mono); line-height: 1; }
+    .big-num-lbl { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-mono);
+                   letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; }
+    .big-num-sub { font-size: 12px; color: var(--c-text); margin-top: 6px; }
+
+    /* ── Phase exit map ──────────────────────────── */
+    .exit-map {
+      display: flex; align-items: center; gap: 0;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .exit-step {
+      flex: 1; padding: 20px 16px; text-align: center;
+      border-right: 1px solid var(--c-border);
+      position: relative; transition: background .2s;
+    }
+    .exit-step:last-child { border-right: none; }
+    .exit-step.done  { background: rgba(34,197,94,.04); }
+    .exit-step.now   { background: rgba(168,85,247,.06); }
+    .exit-step:hover { background: rgba(168,85,247,.04); }
+    .exit-step-num { font-size: 9px; font-family: var(--c-font-mono); color: var(--c-muted); letter-spacing: 2px; }
+    .exit-step-val { font-size: 18px; font-weight: 900; font-family: var(--c-font-mono);
+                     line-height: 1; margin: 8px 0 4px; }
+    .exit-step-lbl { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-mono); letter-spacing: 1px; }
+    .exit-arrow {
+      padding: 0 4px; font-size: 18px; color: var(--c-border);
+      display: flex; align-items: center; flex-shrink: 0;
+    }
+
+    /* ── Mottos wall ─────────────────────────────── */
+    .mottos-wall {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px; margin-bottom: 32px;
+    }
+    .motto-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 18px 20px;
+      display: flex; align-items: flex-start; gap: 12px;
+      transition: border-color .2s;
+    }
+    .motto-card:hover { border-color: rgba(168,85,247,.3); }
+    .motto-icon { font-size: 28px; flex-shrink: 0; }
+    .motto-text { font-size: 15px; font-weight: 700; color: var(--c-white); line-height: 1.4; }
+    .motto-sub  { font-size: 11px; color: var(--c-muted); margin-top: 4px; line-height: 1.5; }
+
+    /* ── TAM ─────────────────────────────────────── */
+    .tam-strip {
+      display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px;
+    }
+    .tam-card {
+      flex: 1; min-width: 160px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 16px 18px; text-align: center;
+    }
+    .tam-val { font-size: 26px; font-weight: 900; font-family: var(--c-font-mono); }
+    .tam-lbl { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-mono);
+               letter-spacing: 1.5px; margin-top: 5px; }
+    .tam-sub { font-size: 11px; color: var(--c-text); margin-top: 4px; }
+
+    @media (max-width: 768px) {
+      .exit-map { flex-direction: column; }
+      .exit-step { border-right: none; border-bottom: 1px solid var(--c-border); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Motivation Chamber</h1>
+    <p class="page-subtitle">Proč to děláme · Kam jdeme · Jak velké to může být</p>
+
+    <!-- ── Hero quote ─────────────────────────────── -->
+    <div class="mot-hero">
+      <span class="mot-logo">⬡</span>
+      <div class="mot-quote">
+        "Nejde o to, co máme dnes.<br>
+        Jde o to, co <em>budujeme</em> —<br>
+        a kdo si vezme podíl na <em>zítřku</em>."
+      </div>
+      <div class="mot-author">— David Gogela · Founder, HOPI TechIQ s.r.o.</div>
+    </div>
+
+    <!-- ── Big numbers ────────────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-mono);letter-spacing:2px;margin-bottom:16px">— VELKÁ ČÍSLA</h2>
+    <div class="big-num-grid">
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-violet)" id="mn-aiq">—</div>
+        <div class="big-num-lbl">AIQ Tasků uzavřeno</div>
+        <div class="big-num-sub">Live z OIL.json</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-green)">109+</div>
+        <div class="big-num-lbl">Git Commits</div>
+        <div class="big-num-sub">h-gr-fico/appiq</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-blue)" id="mn-days">—</div>
+        <div class="big-num-lbl">Dní projektu</div>
+        <div class="big-num-sub">Od 01.02.2026</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-amber)" id="mn-b2c">—</div>
+        <div class="big-num-lbl">Dnů do B2C Launch</div>
+        <div class="big-num-sub">Cíl: 01.01.2027</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-green)">~$1,000</div>
+        <div class="big-num-lbl">Celková investice</div>
+        <div class="big-num-sub">8 týdnů → funkční platforma</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-pink)">200–500×</div>
+        <div class="big-num-lbl">Odhadované ROI</div>
+        <div class="big-num-sub">$1K → €200–500K value</div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Phase → Exit map ───────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-mono);letter-spacing:2px;margin-bottom:16px">— PHASE → EXIT MAPA</h2>
+    <div class="exit-map">
+      <div class="exit-step done">
+        <div class="exit-step-num">PHASE 0</div>
+        <div class="exit-step-val" style="color:var(--c-green)">MVP</div>
+        <div class="exit-step-lbl">Platforma live</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step now">
+        <div class="exit-step-num">PHASE 1 · TEĎ</div>
+        <div class="exit-step-val" style="color:var(--c-violet)">B2C Launch</div>
+        <div class="exit-step-lbl">01.01.2027</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step">
+        <div class="exit-step-num">PHASE 2</div>
+        <div class="exit-step-val" style="color:var(--c-blue)">Enterprise</div>
+        <div class="exit-step-lbl">2028</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step">
+        <div class="exit-step-num">PHASE 3</div>
+        <div class="exit-step-val" style="color:var(--c-amber)">Marketplace</div>
+        <div class="exit-step-lbl">2029+</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step" style="background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.2)">
+        <div class="exit-step-num">EXIT</div>
+        <div class="exit-step-val" style="color:var(--c-green)">€5–20M</div>
+        <div class="exit-step-lbl">Acquisition / IPO</div>
+      </div>
+    </div>
+
+    <!-- ── TAM ────────────────────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-mono);letter-spacing:2px;margin-bottom:16px">— TRŽNÍ POTENCIÁL (TAM)</h2>
+    <div class="tam-strip">
+      <div class="tam-card" style="border-color:rgba(96,165,250,.2)">
+        <div class="tam-val" style="color:var(--c-blue)">$47B</div>
+        <div class="tam-lbl">TAM — No-Code/Low-Code</div>
+        <div class="tam-sub">Global market 2027</div>
+      </div>
+      <div class="tam-card" style="border-color:rgba(168,85,247,.2)">
+        <div class="tam-val" style="color:var(--c-violet)">$22B</div>
+        <div class="tam-lbl">SAM — AI Productivity Tools</div>
+        <div class="tam-sub">SMB + prosumer segment</div>
+      </div>
+      <div class="tam-card" style="border-color:rgba(34,197,94,.2)">
+        <div class="tam-val" style="color:var(--c-green)">$2B</div>
+        <div class="tam-lbl">SOM — Realistický cíl 3 roky</div>
+        <div class="tam-sub">CE + Western Europe</div>
+      </div>
+      <div class="tam-card" style="border-color:rgba(245,158,11,.2)">
+        <div class="tam-val" style="color:var(--c-amber)">30M+</div>
+        <div class="tam-lbl">Potenciální uživatelé HOME</div>
+        <div class="tam-sub">Jednotlivci + rodiny CZ/SK/PL/DE</div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Mottos wall ────────────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-mono);letter-spacing:2px;margin-bottom:16px">— ŘÍDÍCÍ PRINCIPY</h2>
+    <div class="mottos-wall">
+      <div class="motto-card" style="border-color:rgba(168,85,247,.25)">
+        <div class="motto-icon">💰</div>
+        <div>
+          <div class="motto-text">Budget je svatý</div>
+          <div class="motto-sub">Každá koruna musí mít měřitelný výstup. Žádné výdaje bez business důvodu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(34,197,94,.2)">
+        <div class="motto-icon">👑</div>
+        <div>
+          <div class="motto-text">Cash is King</div>
+          <div class="motto-sub">Revenue a cash injection jsou základem přežití a růstu. Pipeline = životní pojistka.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(96,165,250,.2)">
+        <div class="motto-icon">🎯</div>
+        <div>
+          <div class="motto-text">All Actions Must Be Business Driven</div>
+          <div class="motto-sub">Žádná feature, žádný kód, žádné rozhodnutí bez jasného business dopadu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(245,158,11,.2)">
+        <div class="motto-icon">🚀</div>
+        <div>
+          <div class="motto-text">Living Proof First</div>
+          <div class="motto-sub">Stavíme to pro sebe. HOPI pilot = důkaz že to funguje. Pak prodáváme světu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(236,72,153,.2)">
+        <div class="motto-icon">🤖</div>
+        <div>
+          <div class="motto-text">1 Person + AI = Team</div>
+          <div class="motto-sub">Claude Code + David = rychlost development agentury při zlomku ceny. Proof of concept AI-first buildu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(168,85,247,.15)">
+        <div class="motto-icon">⬡</div>
+        <div>
+          <div class="motto-text">Built for the Universe. Starting with you.</div>
+          <div class="motto-sub">Od jednoho uživatele po celé odvětví. Architektura bez limitů — pokud si je sami nezvolíme.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({ section: 'Motivation Chamber', backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
+    const B2C = new Date('2027-01-01'), PROJ = new Date('2026-02-01');
+    function daysTo(d)   { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
+    function daysFrom(d) { return Math.ceil((new Date() - d) / 86400000); }
+    function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
+    document.addEventListener('DOMContentLoaded', () => {
+      setText('mn-days', daysFrom(PROJ));
+      setText('mn-b2c',  daysTo(B2C));
+    });
+    fetch('../OIL.json').then(r=>r.json()).then(d => {
+      const closed = (d.tasks||[]).filter(t=>t.status==='CLOSED').length;
+      setText('mn-aiq', closed);
+    }).catch(()=>{});
+  </script>
+</body>
+</html>
