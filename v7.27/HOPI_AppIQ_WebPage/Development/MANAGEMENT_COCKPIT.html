@@ -11,6 +11,11 @@
   <meta property="og:url" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/MANAGEMENT_COCKPIT.html"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:image" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/cockpit-og.png"/>
+  <!-- Data bundles — file:// safe, no fetch() -->
+  <script src="cockpit/oil-data.js"></script>
+  <script src="cockpit/boil-data.js"></script>
+  <script src="cockpit/business-model.js"></script>
+  <script src="cockpit/cockpit-data.js"></script>
   <style>
     /* ── Reset & Base ──────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -303,19 +308,72 @@
     .story-step.a { background: rgba(245,158,11,0.18);  color: var(--amber);  border: 1px solid rgba(245,158,11,0.40); }
     .story-step.g { background: rgba(34,197,94,0.18);   color: var(--green);  border: 1px solid rgba(34,197,94,0.40); }
 
+    /* ── Cluster grid ──────────────────────────────── */
+    .cluster-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .cluster-card {
+      display: flex; flex-direction: column;
+      background: var(--bg2); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      text-decoration: none;
+      transition: transform .18s, box-shadow .18s, border-color .18s;
+    }
+    .cluster-card:hover { transform: translateY(-3px); }
+    .cluster-top { padding: 28px 22px 18px; flex: 1; }
+    .cluster-icon { font-size: 48px; display: block; margin-bottom: 14px; line-height: 1; }
+    .cluster-label {
+      font-size: 9px; font-family: var(--sans); color: var(--muted);
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 5px;
+    }
+    .cluster-name {
+      font-size: 22px; font-weight: 900; color: var(--white);
+      font-family: var(--sans); margin-bottom: 9px; letter-spacing: -.3px;
+    }
+    .cluster-desc { font-size: 12px; color: var(--muted); font-family: var(--sans); line-height: 1.55; }
+    .cluster-foot {
+      padding: 11px 22px; border-top: 1px solid var(--border);
+      background: rgba(255,255,255,.02);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cluster-count { font-size: 11px; color: var(--muted); font-family: var(--sans); letter-spacing: .5px; }
+    .cluster-open  { font-size: 12px; font-family: var(--sans); font-weight: 700; }
+
+    .cluster-card[data-color="violet"] { border-top: 3px solid var(--violet); }
+    .cluster-card[data-color="violet"]:hover { border-color: var(--violet); box-shadow: 0 14px 42px rgba(168,85,247,.2); }
+    .cluster-card[data-color="violet"] .cluster-open { color: var(--violet); }
+    .cluster-card[data-color="blue"]   { border-top: 3px solid var(--blue); }
+    .cluster-card[data-color="blue"]:hover   { border-color: var(--blue);   box-shadow: 0 14px 42px rgba(96,165,250,.18); }
+    .cluster-card[data-color="blue"]   .cluster-open { color: var(--blue); }
+    .cluster-card[data-color="green"]  { border-top: 3px solid var(--green); }
+    .cluster-card[data-color="green"]:hover  { border-color: var(--green);  box-shadow: 0 14px 42px rgba(34,197,94,.15); }
+    .cluster-card[data-color="green"]  .cluster-open { color: var(--green); }
+    .cluster-card[data-color="amber"]  { border-top: 3px solid var(--amber); }
+    .cluster-card[data-color="amber"]:hover  { border-color: var(--amber);  box-shadow: 0 14px 42px rgba(245,158,11,.15); }
+    .cluster-card[data-color="amber"]  .cluster-open { color: var(--amber); }
+    .cluster-card[data-color="pink"]   { border-top: 3px solid var(--pink); }
+    .cluster-card[data-color="pink"]:hover   { border-color: var(--pink);   box-shadow: 0 14px 42px rgba(236,72,153,.15); }
+    .cluster-card[data-color="pink"]   .cluster-open { color: var(--pink); }
+
     /* ── Responsive ────────────────────────────────── */
     @media (max-width: 1024px) {
-      .sections-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+      .cluster-grid { grid-template-columns: repeat(3, 1fr); }
     }
     @media (max-width: 768px) {
       .topnav-links { display: none; }
       .hero-title { letter-spacing: 3px; }
       .hero-kpis { gap: 20px; }
-      .sections-grid { grid-template-columns: 1fr 1fr; }
+      .cluster-grid { grid-template-columns: repeat(2, 1fr); }
       .phase-bar { justify-content: flex-start; }
     }
     @media (max-width: 480px) {
-      .sections-grid { grid-template-columns: 1fr; }
+      .cluster-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .cluster-icon { font-size: 38px; }
+      .cluster-name { font-size: 18px; }
+      .cluster-top  { padding: 20px 16px 14px; }
+      .cluster-foot { padding: 10px 16px; }
     }
   </style>
 </head>
@@ -428,34 +486,22 @@
 
     <div class="story-strip">
       <div class="story-strip-label" id="cockpit-story-label">PŘÍBĚH COCKPITU</div>
-      <div class="story-flow">
-        <span class="story-step v"><span class="sn">01</span>Proč</span>
+      <div class="story-flow" id="story-flow">
+        <span class="story-step v"><span class="sn">A</span><span id="ss-a">Strategie</span></span>
         <span class="story-arrow">→</span>
-        <span class="story-step b"><span class="sn">02</span>Kdy</span>
+        <span class="story-step b"><span class="sn">B</span><span id="ss-b">Stav</span></span>
         <span class="story-arrow">→</span>
-        <span class="story-step a"><span class="sn">03–04</span>Jak</span>
+        <span class="story-step g"><span class="sn">C</span><span id="ss-c">Finance</span></span>
         <span class="story-arrow">→</span>
-        <span class="story-step v"><span class="sn">05</span>Kde jsme</span>
+        <span class="story-step a"><span class="sn">D</span><span id="ss-d">Exekuce</span></span>
         <span class="story-arrow">→</span>
-        <span class="story-step b"><span class="sn">06</span>Čísla</span>
+        <span class="story-step p" style="background:rgba(236,72,153,.18);color:var(--pink);border:1px solid rgba(236,72,153,.4)"><span class="sn">E</span><span id="ss-e">Tým</span></span>
         <span class="story-arrow">→</span>
-        <span class="story-step g"><span class="sn">07–08</span>Peníze</span>
-        <span class="story-arrow">→</span>
-        <span class="story-step b"><span class="sn">09</span>Milníky</span>
-        <span class="story-arrow">→</span>
-        <span class="story-step a"><span class="sn">10–12</span>Práce</span>
-        <span class="story-arrow">→</span>
-        <span class="story-step v"><span class="sn">13–15</span>Koordinace</span>
-        <span class="story-arrow">→</span>
-        <span class="story-step b"><span class="sn">16–17</span>Tým</span>
-        <span class="story-arrow">→</span>
-        <span class="story-step v"><span class="sn">18–19</span>Metodika</span>
-        <span class="story-arrow">→</span>
-        <span class="story-step g"><span class="sn">20</span>Dokumenty</span>
+        <span class="story-step b"><span class="sn">F</span><span id="ss-f">Znalosti</span></span>
       </div>
     </div>
 
-    <div class="sections-grid" id="sections-grid">
+    <div class="cluster-grid" id="sections-grid">
       <!-- Cards rendered by JS -->
     </div>
   </div>
@@ -467,10 +513,7 @@
     <span>v8.0 · AIQ-00309</span>
   </footer>
 
-  <!-- ══ AUDIO ════════════════════════════════════════════ -->
-  <audio id="bg-music" loop>
-    <source src="cockpit-music.mp3" type="audio/mpeg"/>
-  </audio>
+  <!-- ══ AUDIO — created dynamically in JS (matches Studio pattern) ══ -->
 
   <script>
     // ── Config ─────────────────────────────────────────────
@@ -480,8 +523,9 @@
     const MUS_KEY  = 'hopi_audio_on';
     const B2C_DATE = new Date('2027-01-01');
 
-    // ── Section definitions ────────────────────────────────
-    const SECTIONS = [
+    // ── Section & Cluster definitions — loaded from cockpit/cockpit-data.js ──
+    // window.COCKPIT_SECTIONS + window.COCKPIT_CLUSTERS set by that bundle.
+    const __LEGACY_SECTIONS_REMOVED = [
       { num:'01', icon:'🌟', name:{cs:'Motivační prostor', en:'Motivation Chamber'},
         desc:{cs:'Loga, velká čísla, Phase mapa, citáty — WOW pro majitele.',
               en:'Logos, big numbers, phase map, quotes — WOW for owners.'},
@@ -628,7 +672,9 @@
     function checkAuth() {
       const val = document.getElementById('auth-input').value;
       if (val === PASS) {
-        localStorage.setItem(AUTH_KEY, '1');
+        sessionStorage.setItem(AUTH_KEY, '1');   // for back nav within same tab
+        localStorage.setItem(AUTH_KEY, '1');      // for sub-pages cross-directory on file://
+        localStorage.setItem(MUS_KEY, '1');       // password click = music trigger → ensure pref is ON
         document.getElementById('auth-overlay').style.display = 'none';
         showUI();
       } else {
@@ -663,111 +709,168 @@
 
     // ── Music ──────────────────────────────────────────────
     const MUS_TIME_KEY = 'hopi_audio_time';
-    function initMusic() {
-      const audio = document.getElementById('bg-music');
+    let _bgAudio = null;
+    let _bgPlaying = false;
+    let _bgStarting = false;
+    let _bgFadeId = null;
 
-      // Restore playback position from previous page navigation
-      const savedTime = parseFloat(sessionStorage.getItem(MUS_TIME_KEY) || '0');
-      audio.addEventListener('canplay', () => {
-        if (savedTime > 0) audio.currentTime = savedTime;
-      }, { once: true });
-      if (audio.readyState >= 3 && savedTime > 0) audio.currentTime = savedTime;
-
-      const on = localStorage.getItem(MUS_KEY) !== '0';
-      if (on) {
-        audio.play().catch(() => {
-          // Autoplay blocked — start on first user interaction
-          document.addEventListener('click', () => { audio.play().catch(() => {}); }, { once: true });
-        });
-      }
-      updateMusicBtn();
-
-      // Save position when leaving page
-      window.addEventListener('beforeunload', () => {
-        sessionStorage.setItem(MUS_TIME_KEY, String(audio.currentTime));
-      });
+    function _bgFadeTo(vol, ms, cb) {
+      if (_bgFadeId) { clearInterval(_bgFadeId); _bgFadeId = null; }
+      if (!_bgAudio) return;
+      let i = 0, n = Math.max(1, Math.round(ms / 40)), v0 = _bgAudio.volume;
+      _bgFadeId = setInterval(() => {
+        i++; _bgAudio.volume = Math.min(1, Math.max(0, v0 + (vol - v0) * (i / n)));
+        if (i >= n) { clearInterval(_bgFadeId); _bgFadeId = null; if (cb) cb(); }
+      }, 40);
     }
+
+    function _bgIsOn() {
+      try { return localStorage.getItem(MUS_KEY) !== '0'; } catch(e) { return true; }
+    }
+
+    function _bgTryPlay() {
+      if (_bgPlaying || _bgStarting) return;
+      _bgStarting = true;
+      _bgAudio.volume = 0; _bgAudio.muted = true;
+      const pr = _bgAudio.play();
+      if (pr && pr.then) {
+        pr.then(() => {
+          _bgStarting = false; _bgAudio.muted = false; _bgPlaying = true;
+          try { localStorage.setItem(MUS_KEY, '1'); } catch(e) {}
+          const saved = parseFloat(sessionStorage.getItem(MUS_TIME_KEY) || '0');
+          if (saved > 0) _bgAudio.currentTime = saved;
+          updateMusicBtn();
+          _bgFadeTo(0.7, 400);
+        }, () => {
+          _bgStarting = false; _bgAudio.muted = false; _bgPlaying = false;
+          updateMusicBtn();
+        });
+      } else {
+        _bgStarting = false; _bgPlaying = true; updateMusicBtn();
+      }
+    }
+
+    function initMusic() {
+      if (_bgAudio) return;
+      _bgAudio = new Audio('cockpit-music.mp3');
+      _bgAudio.loop = true; _bgAudio.preload = 'auto'; _bgAudio.volume = 0;
+
+      if (_bgIsOn()) _bgTryPlay();
+
+      // permanent listeners — no { once:true }, no removeEventListener — capture phase (Studio pattern)
+      window.addEventListener('pointerdown', function(e) {
+        var btn = document.getElementById('music-btn');
+        if (btn && btn.contains(e.target)) return;
+        if (_bgIsOn() && !_bgPlaying && !_bgStarting) _bgTryPlay();
+      }, true);
+      window.addEventListener('click', function(e) {
+        var btn = document.getElementById('music-btn');
+        if (btn && btn.contains(e.target)) return;
+        if (_bgIsOn() && !_bgPlaying && !_bgStarting) _bgTryPlay();
+      }, true);
+      window.addEventListener('keydown', function() {
+        if (_bgIsOn() && !_bgPlaying && !_bgStarting) _bgTryPlay();
+      }, true);
+
+      window.addEventListener('beforeunload', () => {
+        try { sessionStorage.setItem(MUS_TIME_KEY, String(_bgAudio.currentTime)); } catch(e) {}
+      });
+      document.addEventListener('visibilitychange', () => {
+        if (!_bgAudio) return;
+        if (document.hidden) { _bgFadeTo(0, 600); }
+        else if (_bgPlaying) { _bgFadeTo(0.7, 400); }
+      });
+      updateMusicBtn();
+    }
+
     function toggleMusic() {
-      const audio = document.getElementById('bg-music');
-      const on = localStorage.getItem(MUS_KEY) !== '0';
-      if (on) { audio.pause(); localStorage.setItem(MUS_KEY, '0'); }
-      else    { audio.play().catch(()=>{}); localStorage.setItem(MUS_KEY, '1'); }
+      if (!_bgAudio) return;
+      if (_bgPlaying) {
+        _bgFadeTo(0, 300, () => { _bgAudio.pause(); _bgPlaying = false; updateMusicBtn(); });
+        localStorage.setItem(MUS_KEY, '0');
+      } else {
+        localStorage.setItem(MUS_KEY, '1');
+        _bgTryPlay();
+      }
       updateMusicBtn();
     }
     function updateMusicBtn() {
       const btn = document.getElementById('music-btn');
       if (!btn) return;
-      btn.textContent = localStorage.getItem(MUS_KEY) !== '0' ? '♬' : '♪';
+      btn.textContent = _bgPlaying ? '♬' : '♪';
     }
 
     // ── Countdown ─────────────────────────────────────────
     function daysTo(d) { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
 
-    // ── Render sections ────────────────────────────────────
+    // ── Render cluster grid ───────────────────────────────
     function renderSections() {
       const lang = getLang();
+      const cs = lang === 'cs';
+
       const sh = document.getElementById('sections-heading');
-      if (sh) sh.textContent = lang === 'en' ? '— SECTIONS' : '— SEKCE';
+      if (sh) sh.textContent = cs ? '— CELKY' : '— CLUSTERS';
       const sl = document.getElementById('cockpit-story-label');
-      if (sl) sl.textContent = lang === 'en' ? 'COCKPIT STORY' : 'PŘÍBĚH COCKPITU';
+      if (sl) sl.textContent = cs ? 'PŘÍBĚH COCKPITU' : 'COCKPIT STORY';
+
+      // Update story strip labels
+      const CLUSTERS = window.COCKPIT_CLUSTERS || [];
+      const storyIds = ['ss-a','ss-b','ss-c','ss-d','ss-e','ss-f'];
+      CLUSTERS.forEach((c, i) => {
+        const el = document.getElementById(storyIds[i]);
+        if (el) el.textContent = c.name[lang];
+      });
+
       const grid = document.getElementById('sections-grid');
-      grid.innerHTML = SECTIONS.map(s => `
-        <a href="${s.url}" class="sec-card" data-color="${s.color}">
-          <div class="sec-card-header">
-            <div class="sec-num">${lang === 'cs' ? 'SEKCE' : 'SECTION'} ${s.num}</div>
-            <span class="sec-icon">${s.icon}</span>
-            <div class="sec-name">${s.name[lang]}</div>
-            <div class="sec-desc">${s.desc[lang]}</div>
+      grid.innerHTML = CLUSTERS.map(c => {
+        const cnt = c.sections.length;
+        const lbl = cs
+          ? (cnt === 1 ? '1 sekce' : cnt < 5 ? `${cnt} sekce` : `${cnt} sekcí`)
+          : `${cnt} section${cnt !== 1 ? 's' : ''}`;
+        const openLbl = cs ? 'Zobrazit sekce →' : 'View sections →';
+        return `<a href="cockpit/cluster.html?id=${c.id}" class="cluster-card" data-color="${c.color}">
+          <div class="cluster-top">
+            <span class="cluster-icon">${c.icon}</span>
+            <div class="cluster-label">${cs ? 'SKUPINA' : 'CLUSTER'}</div>
+            <div class="cluster-name">${(c.name || {})[lang] || ''}</div>
+            <div class="cluster-desc">${(c.desc || {})[lang] || ''}</div>
           </div>
-          <div class="sec-card-kpis">
-            ${s.kpis.map(k => `
-              <div class="sec-kpi">
-                <div class="sec-kpi-val ${k.color}" id="${k.id}">—</div>
-                <div class="sec-kpi-lbl">${k.lbl[lang]}</div>
-              </div>`).join('')}
+          <div class="cluster-foot">
+            <span class="cluster-count">${lbl}</span>
+            <span class="cluster-open">${openLbl}</span>
           </div>
-          <div class="sec-card-footer">
-            <span class="sec-open-btn">${lang === 'cs' ? 'Otevřít →' : 'Open →'}</span>
-            <span class="sec-tag">AIQ-00309</span>
-          </div>
-        </a>`).join('');
+        </a>`;
+      }).join('');
     }
 
     // ── Load live data ─────────────────────────────────────
     function loadData() {
-      // OIL.json
-      fetch('OIL.json').then(r => r.json()).then(data => {
-        const tasks = data.tasks || [];
-        const open   = tasks.filter(t => t.status === 'OPEN').length;
-        const review = tasks.filter(t => t.status === 'REVIEW').length;
-        const inprog = tasks.filter(t => t.status === 'IN PROGRESS').length;
-        const closed = tasks.filter(t => t.status === 'CLOSED').length;
+      // OIL — from pre-bundled JS (file:// safe, no fetch)
+      const oilTasks = ((window.OIL_DATA || {}).tasks || []);
+      const open   = oilTasks.filter(t => t.status === 'OPEN').length;
+      const review = oilTasks.filter(t => t.status === 'REVIEW').length;
+      const inprog = oilTasks.filter(t => t.status === 'IN PROGRESS').length;
+      const closed = oilTasks.filter(t => t.status === 'CLOSED').length;
+      setText('kpi-open',   open + review + inprog);
+      setText('kpi-closed', closed);
+      setText('oil-open',   open);
+      setText('oil-review', review);
+      setText('oil-closed', closed);
+      setText('kpi-open2',  open);
+      setText('kpi-cls2',   closed);
+      const claudeTasks = oilTasks.filter(t => t.assignee === 'Claude').length;
+      const davidTasks  = oilTasks.filter(t => t.assignee === 'David Gogela').length;
+      const total = claudeTasks + davidTasks || 1;
+      setText('cap-claude', Math.round(claudeTasks/total*100) + '%');
+      setText('cap-david',  Math.round(davidTasks/total*100) + '%');
 
-        setText('kpi-open',   open + review + inprog);
-        setText('kpi-closed', closed);
-        setText('oil-open',   open);
-        setText('oil-review', review);
-        setText('oil-closed', closed);
-        setText('kpi-open2',  open);
-        setText('kpi-cls2',   closed);
-
-        // Capacity estimate
-        const claudeTasks = tasks.filter(t => t.assignee === 'Claude').length;
-        const davidTasks  = tasks.filter(t => t.assignee === 'David Gogela').length;
-        const total = claudeTasks + davidTasks || 1;
-        setText('cap-claude', Math.round(claudeTasks/total*100) + '%');
-        setText('cap-david',  Math.round(davidTasks/total*100) + '%');
-      }).catch(() => {});
-
-      // BOIL.json
-      fetch('BOIL.json').then(r => r.json()).then(data => {
-        const tasks = data.tasks || [];
-        const open   = tasks.filter(t => t.status === 'OPEN' || t.status === 'IN PROGRESS').length;
-        const closed = tasks.filter(t => t.status === 'CLOSED').length;
-        setText('kpi-biz',    open);
-        setText('boil-open',  open);
-        setText('boil-closed',closed);
-      }).catch(() => {});
+      // BOIL — from pre-bundled JS
+      const boilTasks = ((window.BOIL_DATA || {}).tasks || []);
+      const bizOpen   = boilTasks.filter(t => t.status === 'OPEN' || t.status === 'IN PROGRESS').length;
+      const bizClosed = boilTasks.filter(t => t.status === 'CLOSED').length;
+      setText('kpi-biz',    bizOpen);
+      setText('boil-open',  bizOpen);
+      setText('boil-closed', bizClosed);
 
       // Countdown — hero + banner + timeline card
       const days = daysTo(B2C_DATE);
@@ -808,22 +911,20 @@
       setText('mot-tam',     '30M+');
       setText('mot-d', Math.ceil((new Date() - new Date('2026-02-01'))/86400000));
 
-      // Business model — live from JSON
-      fetch('cockpit/business-model.json').then(r => r.json()).then(bm => {
-        const mid = (bm.scenarios || []).find(s => s.id === 'middle');
-        if (mid) {
-          const y3 = mid.projections && mid.projections.y3_arr_eur;
-          const exitAcq = (bm.exit_paths || []).find(e => e.id === 'acquisition');
-          if (y3) {
-            const y3fmt = y3 >= 1e6 ? '€' + (y3/1e6).toFixed(0) + 'M ARR' : '€' + (y3/1e3).toFixed(0) + 'K ARR';
-            setText('mc-val',   y3fmt);
-            setText('bm-y3arr', y3fmt);
-            if (exitAcq) setText('mc-exit', '€' + ((y3 * exitAcq.multiple_arr)/1e6).toFixed(0) + 'M');
-            setText('bm-exit', exitAcq ? '€' + ((y3 * exitAcq.multiple_arr)/1e6).toFixed(0) + 'M' : '—');
-          }
+      // Business model — from pre-bundled JS
+      const bm = window.BUSINESS_MODEL_DATA || {};
+      const mid = (bm.scenarios || []).find(s => s.id === 'middle');
+      if (mid) {
+        const y3 = mid.projections && mid.projections.y3_arr_eur;
+        const exitAcq = (bm.exit_paths || []).find(e => e.id === 'acquisition');
+        if (y3) {
+          const y3fmt = y3 >= 1e6 ? '€' + (y3/1e6).toFixed(0) + 'M ARR' : '€' + (y3/1e3).toFixed(0) + 'K ARR';
+          setText('mc-val',   y3fmt);
+          setText('bm-y3arr', y3fmt);
+          if (exitAcq) setText('mc-exit', '€' + ((y3 * exitAcq.multiple_arr)/1e6).toFixed(0) + 'M');
+          setText('bm-exit', exitAcq ? '€' + ((y3 * exitAcq.multiple_arr)/1e6).toFixed(0) + 'M' : '—');
         }
-        // doc-total = page count, managed by static below
-      }).catch(() => {});
+      }
 
       // Last updated
       const now = new Date();
@@ -842,15 +943,17 @@
       setText('footer-date', d.toLocaleDateString('cs-CZ'));
     }
 
-    // ── Boot ───────────────────────────────────────────────
+    // ── Boot ──────────────────────────────────────────────
+    // First visit: show overlay → VSTOUPIT click = user gesture = Chrome allows audio.play()
+    // Return visits (lang change, back nav): auto-skip overlay, music retried on first user interaction
     window.addEventListener('DOMContentLoaded', () => {
-      if (localStorage.getItem(AUTH_KEY) === '1') {
-        document.getElementById('auth-overlay').style.display = 'none';
-        showUI();
-      }
       document.getElementById('auth-input').addEventListener('keydown', e => {
         if (e.key === 'Enter') checkAuth();
       });
+      if (sessionStorage.getItem(AUTH_KEY) === '1') {
+        document.getElementById('auth-overlay').style.display = 'none';
+        showUI();
+      }
     });
   </script>
 </body>
