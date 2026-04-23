@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Sales Model — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Scenario switcher ───────────────────────── */
+    .scenario-bar {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 28px; align-items: center;
+    }
+    .scenario-bar label {
+      font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 2px; text-transform: uppercase; margin-right: 4px;
+    }
+    .scn-btn {
+      padding: 8px 18px; border-radius: 8px; cursor: pointer;
+      font-size: 13px; font-family: var(--c-font-sans); font-weight: 700;
+      border: 1px solid var(--c-border); background: var(--c-bg2);
+      color: var(--c-muted); letter-spacing: 1px;
+      transition: all .15s;
+    }
+    .scn-btn.active-conservative { border-color: var(--c-blue);   color: var(--c-blue);   background: rgba(96,165,250,.1); }
+    .scn-btn.active-middle       { border-color: var(--c-green);  color: var(--c-green);  background: rgba(34,197,94,.1); }
+    .scn-btn.active-ambitious    { border-color: var(--c-violet); color: var(--c-violet); background: rgba(168,85,247,.1); }
+    .scn-btn.active-dream        { border-color: var(--c-amber);  color: var(--c-amber);  background: rgba(245,158,11,.1); }
+    .anchor-badge {
+      font-size: 9px; background: rgba(34,197,94,.15); color: var(--c-green);
+      border: 1px solid rgba(34,197,94,.3); border-radius: 4px;
+      padding: 2px 6px; font-family: var(--c-font-sans); letter-spacing: 1px;
+      vertical-align: middle; margin-left: 4px;
+    }
+
+    /* ── ARR Projection row ──────────────────────── */
+    .arr-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px; margin-bottom: 28px;
+    }
+    .arr-card {
+      text-align: center; padding: 22px 16px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); transition: border-color .2s;
+    }
+    .arr-year { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase; }
+    .arr-val  { font-size: clamp(22px, 3.5vw, 36px); font-weight: 900; font-family: var(--c-font-sans); line-height: 1; }
+    .arr-sub  { font-size: 11px; color: var(--c-muted); margin-top: 6px; }
+
+    /* ── Exit paths ──────────────────────────────── */
+    .exit-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px; margin-bottom: 32px;
+    }
+    .exit-card {
+      padding: 20px 18px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); transition: border-color .2s, transform .15s;
+      position: relative;
+    }
+    .exit-card:hover { transform: translateY(-2px); }
+    .exit-card.baseline { border-color: rgba(34,197,94,.3); }
+    .exit-baseline-tag {
+      position: absolute; top: 10px; right: 10px;
+      font-size: 9px; background: rgba(34,197,94,.15); color: var(--c-green);
+      border: 1px solid rgba(34,197,94,.3); border-radius: 4px;
+      padding: 2px 6px; font-family: var(--c-font-sans); letter-spacing: 1px;
+    }
+    .exit-name    { font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 1px; margin-bottom: 10px; text-transform: uppercase; }
+    .exit-multiple { font-size: 11px; color: var(--c-muted); margin-bottom: 6px; }
+    .exit-val     { font-size: clamp(24px, 3vw, 34px); font-weight: 900; font-family: var(--c-font-sans); line-height: 1; }
+    .exit-hopi    { font-size: 11px; color: var(--c-muted); margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--c-border); }
+
+    /* ── Segment tables ──────────────────────────── */
+    .seg-section { margin-bottom: 32px; }
+    .seg-group-title {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px;
+      padding-bottom: 8px; border-bottom: 1px solid var(--c-border);
+    }
+    .seg-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .seg-card {
+      padding: 16px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; transition: border-color .2s;
+    }
+    .seg-card:hover { border-color: rgba(168,85,247,.3); }
+    .seg-name  { font-size: 13px; font-weight: 700; color: var(--c-white); margin-bottom: 4px; }
+    .seg-price { font-size: 22px; font-weight: 900; font-family: var(--c-font-sans); color: var(--c-violet); }
+    .seg-unit  { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .seg-free  { font-size: 10px; color: var(--c-green); margin-top: 4px; }
+    .seg-base  { font-size: 11px; color: var(--c-muted); margin-top: 4px; }
+
+    /* ── HOPI transfer pricing ───────────────────── */
+    .tp-section { margin-bottom: 32px; }
+    .tp-formula {
+      background: var(--c-bg3); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;
+      font-family: var(--c-font-sans); font-size: 12px; color: var(--c-muted); line-height: 1.8;
+    }
+    .tp-formula strong { color: var(--c-green); }
+    .tp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .tp-table th { text-align: left; padding: 8px 12px; font-family: var(--c-font-sans); font-size: 10px; letter-spacing: 1.5px; color: var(--c-muted); border-bottom: 1px solid var(--c-border); text-transform: uppercase; }
+    .tp-table td { padding: 10px 12px; border-bottom: 1px solid rgba(26,42,74,.5); color: var(--c-text); }
+    .tp-table tr:hover td { background: rgba(168,85,247,.04); }
+    .tp-total { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); margin-top: 8px; }
+
+    /* ── Cost assumptions ────────────────────────── */
+    .cost-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 10px; margin-bottom: 24px;
+    }
+    .cost-card {
+      padding: 14px 16px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; text-align: center;
+    }
+    .cost-val { font-size: 20px; font-weight: 900; font-family: var(--c-font-sans); color: var(--c-amber); }
+    .cost-lbl { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 1px; margin-top: 4px; text-transform: uppercase; }
+    .cost-edit { font-size: 10px; color: rgba(168,85,247,.5); margin-top: 3px; cursor: pointer; }
+
+    /* ── Section divider ─────────────────────────── */
+    .bm-divider { border: none; border-top: 1px solid var(--c-border); margin: 28px 0; }
+    .bm-section-title {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    /* ── Freemium note ───────────────────────────── */
+    .freemium-note {
+      background: rgba(34,197,94,.06); border: 1px solid rgba(34,197,94,.2);
+      border-radius: 8px; padding: 12px 16px; font-size: 12px; color: var(--c-text);
+      margin-bottom: 16px; font-family: var(--c-font-sans);
+    }
+    .freemium-note strong { color: var(--c-green); }
+  </style>
+</head>
+<body>
+  <div id="cockpit-shell"></div>
+  <main class="cockpit-page" id="main-content">
+
+    <h1 class="page-title"><span>💰</span> Business Sales Model</h1>
+    <p class="page-subtitle">Ceník · ARR projekce · Exit valuace · Transfer pricing · 4 scénáře</p>
+
+    <!-- ── Scenario switcher ─────────────────────────────── -->
+    <div class="scenario-bar">
+      <label>SCÉNÁŘ:</label>
+      <button class="scn-btn" data-scn="conservative" onclick="setScenario('conservative')">Conservative</button>
+      <button class="scn-btn" data-scn="middle" onclick="setScenario('middle')">Middle <span class="anchor-badge">KOTVA</span></button>
+      <button class="scn-btn" data-scn="ambitious" onclick="setScenario('ambitious')">Ambitious</button>
+      <button class="scn-btn" data-scn="dream" onclick="setScenario('dream')">Dream 🌟</button>
+    </div>
+
+    <!-- ── ARR projections ───────────────────────────────── -->
+    <h2 class="bm-section-title">— ARR PROJEKCE (ANNUAL RECURRING REVENUE)</h2>
+    <div class="arr-grid" id="arr-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <!-- ── Exit valuations ──────────────────────────────── -->
+    <h2 class="bm-section-title">— EXIT VALUACE (PŘI Y3 ARR)</h2>
+    <div class="exit-grid" id="exit-grid">
+      <!-- populated by JS -->
+    </div>
+
+    <hr class="bm-divider"/>
+
+    <!-- ── Segments ─────────────────────────────────────── -->
+    <h2 class="bm-section-title">— CENÍK SEGMENTŮ</h2>
+    <div id="segments-container">
+      <!-- populated by JS -->
+    </div>
+
+    <hr class="bm-divider"/>
+
+    <!-- ── HOPI Transfer pricing ─────────────────────────── -->
+    <h2 class="bm-section-title">— HOPI GROUP: INTERNÍ TRANSFER PRICING</h2>
+    <div class="tp-section">
+      <div class="tp-formula" id="tp-formula">
+        <!-- populated by JS -->
+      </div>
+      <table class="tp-table" id="tp-table">
+        <thead>
+          <tr>
+            <th>Divize</th>
+            <th>Uživatelé (pl.)</th>
+            <th>Transfer cena</th>
+            <th>Měsíční příjem</th>
+            <th>Roční příjem</th>
+          </tr>
+        </thead>
+        <tbody id="tp-tbody">
+          <!-- populated by JS -->
+        </tbody>
+      </table>
+      <div class="tp-total" id="tp-total"></div>
+    </div>
+
+    <hr class="bm-divider"/>
+
+    <!-- ── Cost assumptions ──────────────────────────────── -->
+    <h2 class="bm-section-title">— COST ASSUMPTIONS (EDITOVATELNÉ)</h2>
+    <div class="cost-grid" id="cost-grid">
+      <!-- populated by JS -->
+    </div>
+    <div style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);">
+      Vše editovatelné přes GitHub API (AIQ-00319) · Zdrojový soubor: <code style="color:var(--c-violet)">cockpit/business-model.json</code>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: {cs:'Prodejní model', en:'Business Sales Model'},
+      sectionNum: '17',
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music: '../cockpit-music.mp3'
+    });
+
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      var el = document.querySelector('.page-subtitle');
+      if (el) el.textContent = 'Pricing · ARR projections · Exit valuation · Transfer pricing · 4 scenarios';
+      var scnLbl = document.querySelector('.scenario-bar label');
+      if (scnLbl) scnLbl.textContent = 'SCENARIO:';
+      var anchor = document.querySelector('.anchor-badge');
+      if (anchor) anchor.textContent = 'ANCHOR';
+      document.querySelectorAll('.bm-section-title').forEach(function(h) {
+        h.textContent = h.textContent
+          .replace('— ARR PROJEKCE (ANNUAL RECURRING REVENUE)','— ARR PROJECTIONS (ANNUAL RECURRING REVENUE)')
+          .replace('— EXIT VALUACE (PŘI Y3 ARR)','— EXIT VALUATION (AT Y3 ARR)')
+          .replace('— CENÍK SEGMENTŮ','— SEGMENT PRICING')
+          .replace('— HOPI GROUP: INTERNÍ TRANSFER PRICING','— HOPI GROUP: INTERNAL TRANSFER PRICING')
+          .replace('— COST ASSUMPTIONS (EDITOVATELNÉ)','— COST ASSUMPTIONS (EDITABLE)');
+      });
+      document.querySelectorAll('.tp-table th').forEach(function(th) {
+        th.textContent = th.textContent
+          .replace('Divize','Division').replace('Uživatelé (pl.)','Users (est.)')
+          .replace('Transfer cena','Transfer price').replace('Měsíční příjem','Monthly revenue')
+          .replace('Roční příjem','Annual revenue');
+      });
+      var footer = document.querySelector('[style*="font-size:11px"][style*="color:var(--c-muted)"]');
+      if (footer) footer.innerHTML = 'All values editable via GitHub API (AIQ-00319) · Source file: <code style="color:var(--c-violet)">cockpit/business-model.json</code>';
+    })();
+
+    let BM = null;
+    let activeScenario = 'middle';
+
+    // ── Formatting helpers ─────────────────────────────────
+    function fmtEur(v, compact = false) {
+      if (v === null || v === undefined) return '—';
+      if (compact) {
+        if (v >= 1e6) return '€' + (v / 1e6).toFixed(1) + 'M';
+        if (v >= 1e3) return '€' + (v / 1e3).toFixed(0) + 'K';
+        return '€' + v.toFixed(0);
+      }
+      return '€' + v.toLocaleString('cs-CZ');
+    }
+
+    function colorClass(c) {
+      const map = { blue: 'var(--c-blue)', green: 'var(--c-green)', violet: 'var(--c-violet)', amber: 'var(--c-amber)' };
+      return map[c] || 'var(--c-text)';
+    }
+
+    // ── Scenario switcher ──────────────────────────────────
+    function setScenario(id) {
+      activeScenario = id;
+      document.querySelectorAll('.scn-btn').forEach(b => {
+        b.className = 'scn-btn' + (b.dataset.scn === id ? ' active-' + id : '');
+      });
+      if (BM) render();
+    }
+
+    // ── Main render ────────────────────────────────────────
+    function render() {
+      const scn = BM.scenarios.find(s => s.id === activeScenario);
+      if (!scn) return;
+      renderARR(scn);
+      renderExit(scn);
+    }
+
+    function renderARR(scn) {
+      const p = scn.projections;
+      const color = colorClass(scn.color);
+      const years = [
+        { year: 'Y1 · 2027', val: p.y1_arr_eur },
+        { year: 'Y2 · 2028', val: p.y2_arr_eur },
+        { year: 'Y3 · 2029', val: p.y3_arr_eur }
+      ];
+      const freemium = BM.segments.some(s => s.pricing_model === 'freemium' && s.active);
+      let html = '';
+      years.forEach(y => {
+        html += `<div class="arr-card">
+          <div class="arr-year">${y.year}</div>
+          <div class="arr-val" style="color:${color}">${fmtEur(y.val, true)}</div>
+          <div class="arr-sub">ARR ${y.val ? fmtEur(y.val) : 'TBD'}</div>
+        </div>`;
+      });
+      if (freemium) {
+        html += `<div class="arr-card">
+          <div class="arr-year">${Shell.getLang() === 'en' ? 'CONVERSION' : 'KONVERZE'}</div>
+          <div class="arr-val" style="color:var(--c-green)">${(scn.freemium_conversion_rate * 100).toFixed(0)}%</div>
+          <div class="arr-sub">freemium → premium</div>
+        </div>`;
+      }
+      // HOPI Group uplift
+      const hg = BM.hopi_group_baseline;
+      const upliftVal = scn.projections.y3_arr_eur ? scn.projections.y3_arr_eur * (hg.uplift_pct / 100) * 10 : null;
+      html += `<div class="arr-card" style="border-color:rgba(34,197,94,.25)">
+        <div class="arr-year">HOPI GROUP UPLIFT</div>
+        <div class="arr-val" style="color:var(--c-green)">${upliftVal ? fmtEur(upliftVal, true) : '—'}</div>
+        <div class="arr-sub">+${hg.uplift_pct}% · z ${fmtEur(hg.group_valuation_eur, true)} baseline</div>
+      </div>`;
+      document.getElementById('arr-grid').innerHTML = html;
+    }
+
+    function renderExit(scn) {
+      const y3 = scn.projections.y3_arr_eur;
+      let html = '';
+      BM.exit_paths.forEach(ep => {
+        const val = y3 ? y3 * ep.multiple_arr : null;
+        const isBase = ep.is_baseline;
+        html += `<div class="exit-card${isBase ? ' baseline' : ''}">
+          ${isBase ? '<span class="exit-baseline-tag">BASELINE</span>' : ''}
+          <div class="exit-name">${ep.name[Shell.getLang()] || ep.name.cs}</div>
+          <div class="exit-multiple">${ep.multiple_arr}× ARR</div>
+          <div class="exit-val" style="color:${isBase ? 'var(--c-green)' : 'var(--c-violet)'}">${fmtEur(val, true)}</div>
+          ${val ? `<div class="arr-sub" style="margin-top:6px">${fmtEur(val)}</div>` : ''}
+          ${isBase ? `<div class="exit-hopi">HOPI Group = ${fmtEur(BM.hopi_group_baseline.group_valuation_eur, true)} · AppIQ ${Shell.getLang() === 'en' ? 'adds' : 'přidá'} +${BM.hopi_group_baseline.uplift_pct}%</div>` : ''}
+        </div>`;
+      });
+      document.getElementById('exit-grid').innerHTML = html;
+    }
+
+    function renderSegments() {
+      const groups = {};
+      (BM.segments || []).forEach(s => {
+        if (!groups[s.group]) groups[s.group] = [];
+        groups[s.group].push(s);
+      });
+      let html = '';
+      const groupColors = {
+        'HOME B2C': 'var(--c-violet)',
+        'Enterprise B2B': 'var(--c-blue)',
+        'Cockpit B2B': 'var(--c-amber)',
+        'Cockpit HOME': 'var(--c-green)'
+      };
+      Object.keys(groups).forEach(g => {
+        html += `<div class="seg-section">
+          <div class="seg-group-title" style="color:${groupColors[g] || 'var(--c-muted)'}">${g}</div>
+          <div class="seg-grid">`;
+        groups[g].forEach(s => {
+          let priceHtml = '';
+          if (s.pricing_model === 'per_unit' && s.base_price_eur) {
+            priceHtml = `<div class="seg-price" style="font-size:18px">€${s.base_price_eur} + €${s.per_user_eur}/user</div>
+              <div class="seg-unit">base + per seat · max ${s.max_users || '∞'} users</div>`;
+          } else {
+            priceHtml = `<div class="seg-price">€${s.price_monthly_eur}</div>
+              <div class="seg-unit">/${Shell.getLang() === 'en' ? 'month' : 'měsíc'} · per ${s.unit_type}</div>`;
+          }
+          html += `<div class="seg-card">
+            <div class="seg-name">${s.name[Shell.getLang()] || s.name.cs}</div>
+            ${priceHtml}
+            ${s.free_tier ? `<div class="seg-free">✓ ${Shell.getLang() === 'en' ? 'Freemium available' : 'Freemium dostupné'}</div>` : ''}
+          </div>`;
+        });
+        html += `</div></div>`;
+      });
+      document.getElementById('segments-container').innerHTML = html;
+    }
+
+    function renderTransferPricing() {
+      const tp = BM.transfer_pricing_calc;
+      document.getElementById('tp-formula').innerHTML =
+        `<strong>OECD Cost-Plus metoda:</strong><br>
+        Referenční cena: €${tp.reference_price_eur} &nbsp;·&nbsp;
+        Gross margin: ${tp.gross_margin_pct}%<br>
+        Full costs: €${tp.reference_price_eur} × (1 − ${tp.gross_margin_pct / 100}) = <strong>€${tp.full_costs_eur}</strong><br>
+        Transfer price: €${tp.full_costs_eur} × ${1 + tp.markup_pct / 100} = <strong>€${tp.transfer_price_eur}</strong>
+        → ${Shell.getLang() === 'en' ? 'rounded' : 'zaokrouhleno'} <strong>€${tp.rounded_eur}/user/${Shell.getLang() === 'en' ? 'month' : 'měsíc'}</strong>`;
+
+      let rows = '';
+      let totalMonthly = 0;
+      (BM.internal_billing || []).forEach(d => {
+        const monthly = d.transfer_price_per_user_eur * d.placeholder_users;
+        const annual = monthly * 12;
+        totalMonthly += monthly;
+        rows += `<tr>
+          <td>${d.division}</td>
+          <td>${d.placeholder_users} <span style="color:var(--c-muted);font-size:10px">(placeholder)</span></td>
+          <td style="color:var(--c-green);font-family:var(--c-font-sans)">€${d.transfer_price_per_user_eur.toFixed(2)}/user</td>
+          <td style="font-family:var(--c-font-sans)">${fmtEur(monthly)}</td>
+          <td style="font-family:var(--c-font-sans);color:var(--c-violet)">${fmtEur(annual)}</td>
+        </tr>`;
+      });
+      document.getElementById('tp-tbody').innerHTML = rows;
+      const isEn = Shell.getLang() === 'en';
+      document.getElementById('tp-total').innerHTML =
+        `${isEn ? 'HOPI Group total' : 'Celkem HOPI Group'}: <span style="color:var(--c-green)">${fmtEur(totalMonthly)}/${isEn ? 'month' : 'měsíc'}</span> ·
+        <span style="color:var(--c-violet)">${fmtEur(totalMonthly * 12)}/${isEn ? 'year' : 'rok'}</span>
+        (${isEn ? 'using placeholder user counts' : 'při placeholder hodnotách počtů uživatelů'})`;
+    }
+
+    function renderCostAssumptions() {
+      const ca = BM.cost_assumptions;
+      const items = [
+        { val: ca.gross_margin_pct + '%', lbl: 'Gross Margin' },
+        { val: '€' + ca.api_cost_per_session_eur, lbl: 'API cost / session' },
+        { val: ca.avg_sessions_per_user_monthly + 'x', lbl: 'Sessions / user / ' + (Shell.getLang() === 'en' ? 'month' : 'měsíc') },
+        { val: ca.payment_processing_pct + '%', lbl: 'Payment processing' },
+        { val: '€' + ca.hosting_per_user_eur, lbl: 'Hosting / user / ' + (Shell.getLang() === 'en' ? 'month' : 'měsíc') }
+      ];
+      let html = '';
+      items.forEach(i => {
+        html += `<div class="cost-card">
+          <div class="cost-val">${i.val}</div>
+          <div class="cost-lbl">${i.lbl}</div>
+          <div class="cost-edit">✎ ${Shell.getLang() === 'en' ? 'editable' : 'editovatelné'}</div>
+        </div>`;
+      });
+      document.getElementById('cost-grid').innerHTML = html;
+    }
+
+    // ── Load data ──────────────────────────────────────────
+    fetch('business-model.json')
+      .then(r => r.json())
+      .then(data => {
+        BM = data;
+        setScenario('middle');
+        renderSegments();
+        renderTransferPricing();
+        renderCostAssumptions();
+      })
+      .catch(() => {
+        document.getElementById('arr-grid').innerHTML =
+          '<div style="color:var(--c-muted);font-family:var(--c-font-sans);padding:20px">⚠ business-model.json nenalezen</div>';
+      });
+  </script>
+</body>
+</html>

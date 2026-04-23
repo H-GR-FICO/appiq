@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Methodology — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Rule card ───────────────────────────────── */
+    .rule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap:16px; margin-bottom:32px; }
+    .rule-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px;
+      position: relative;
+    }
+    .rule-number {
+      position: absolute; top: 14px; right: 16px;
+      font-family: var(--c-font-sans); font-size: 24px; font-weight: 800;
+      opacity: .08; line-height: 1;
+    }
+    .rule-label {
+      font-size: 10px; font-family: var(--c-font-sans); letter-spacing: 1.5px;
+      color: var(--c-muted); margin-bottom: 6px;
+    }
+    .rule-title { font-size: 15px; font-weight: 700; color: var(--c-white); margin-bottom: 8px; }
+    .rule-desc { font-size: 12px; color: var(--c-text); line-height: 1.7; }
+    .rule-tag {
+      display: inline-block; margin-top: 10px; padding: 2px 8px;
+      border-radius: 10px; font-size: 10px; font-family: var(--c-font-sans);
+    }
+
+    /* ── Model guide ─────────────────────────────── */
+    .model-grid { display: grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-bottom:32px; }
+    .model-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden;
+    }
+    .model-header { padding: 16px 18px; border-bottom: 1px solid var(--c-border); }
+    .model-name { font-size: 16px; font-weight: 800; color: var(--c-white); margin-bottom: 4px; }
+    .model-id { font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted); }
+    .model-body { padding: 16px 18px; }
+    .model-use-row {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 6px 0; border-bottom: 1px solid rgba(26,42,74,.4);
+      font-size: 12px; color: var(--c-text);
+    }
+    .model-use-row:last-child { border-bottom: none; }
+    .model-use-icon { flex-shrink: 0; font-size: 14px; }
+    .model-footer { padding: 12px 18px; border-top: 1px solid var(--c-border); }
+    .model-price { font-family: var(--c-font-sans); font-size: 12px; }
+    .model-when { font-size: 11px; color: var(--c-muted); margin-top: 4px; }
+
+    /* ── Workflow step ───────────────────────────── */
+    .wf-list { list-style: none; padding: 0; margin: 0 0 32px; }
+    .wf-item {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 18px; border-bottom: 1px solid var(--c-border);
+      background: var(--c-bg2);
+    }
+    .wf-item:first-child { border-radius: var(--c-radius) var(--c-radius) 0 0; }
+    .wf-item:last-child { border-bottom: none; border-radius: 0 0 var(--c-radius) var(--c-radius); }
+    .wf-step-num {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; font-family: var(--c-font-sans);
+    }
+    .wf-content { flex: 1; }
+    .wf-title { font-size: 13px; font-weight: 700; color: var(--c-white); margin-bottom: 4px; }
+    .wf-desc { font-size: 12px; color: var(--c-text); line-height: 1.6; }
+    .wf-tag { font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted); margin-top: 4px; }
+
+    /* ── Principle table ─────────────────────────── */
+    .principle-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    .principle-table th {
+      padding: 10px 14px; text-align: left;
+      font-size: 10px; font-family: var(--c-font-sans); letter-spacing: 1.2px;
+      color: var(--c-muted); border-bottom: 1px solid var(--c-border);
+    }
+    .principle-table td {
+      padding: 10px 14px; border-bottom: 1px solid rgba(26,42,74,.4);
+      font-size: 12px; color: var(--c-text); vertical-align: top;
+    }
+    .principle-table tr:last-child td { border-bottom: none; }
+    .principle-table td:first-child { color: var(--c-white); font-weight: 600; white-space: nowrap; }
+
+    /* ── Budget rule ─────────────────────────────── */
+    .budget-rule {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px 24px; margin-bottom: 32px;
+    }
+    .budget-rule h3 { font-size: 13px; font-weight: 700; color: var(--c-white); margin: 0 0 12px; }
+    .budget-tier-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 8px 0; border-bottom: 1px solid rgba(26,42,74,.4);
+      font-size: 12px;
+    }
+    .budget-tier-row:last-child { border-bottom: none; }
+    .bt-task { flex: 0 0 120px; font-family: var(--c-font-sans); font-size: 11px; }
+    .bt-model { flex: 0 0 140px; color: var(--c-white); font-weight: 600; }
+    .bt-reason { flex: 1; color: var(--c-muted); }
+
+    @media (max-width: 900px) { .model-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Methodology</h1>
+    <p class="page-subtitle">AI pravidla · Model selection guide · Workflow konvence · Budget strategie</p>
+
+    <!-- ── KPI strip ──────────────────────────────── -->
+    <div class="c-kpi-grid" style="margin-bottom:32px">
+      <div class="c-card">
+        <div class="c-card-title">Aktivní pravidla</div>
+        <div class="c-card-value" style="color:var(--c-violet)">12</div>
+        <div class="c-card-sub">OIL-first · STOP · Brainstorm...</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">Workflow fází</div>
+        <div class="c-card-value" style="color:var(--c-blue)">5</div>
+        <div class="c-card-sub">OPEN → CLOSED</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">AI modely</div>
+        <div class="c-card-value" style="color:var(--c-amber)">3</div>
+        <div class="c-card-sub">Opus · Sonnet · Haiku</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">Architekturní vrstvy</div>
+        <div class="c-card-value" style="color:var(--c-green)">5</div>
+        <div class="c-card-sub">Visual · Data · Workflow · Integration · AI</div>
+      </div>
+    </div>
+
+    <!-- ── Model selection guide ──────────────────── -->
+    <h2 class="section-title">Model Selection Guide</h2>
+    <div class="model-grid">
+      <div class="model-card">
+        <div class="model-header">
+          <div class="model-name" style="color:var(--c-amber)">Opus 4.7</div>
+          <div class="model-id">claude-opus-4-7 · FAST mode</div>
+        </div>
+        <div class="model-body">
+          <div class="model-use-row"><span class="model-use-icon">🏛️</span>Strategická architektonická rozhodnutí</div>
+          <div class="model-use-row"><span class="model-use-icon">💰</span>Investor materiály a pitch deck</div>
+          <div class="model-use-row"><span class="model-use-icon">📊</span>Komplexní analýzy — market, konkurence</div>
+          <div class="model-use-row"><span class="model-use-icon">🔍</span>Code review celých modulů</div>
+          <div class="model-use-row"><span class="model-use-icon">🧩</span>Nové architektonické vzory (první návrh)</div>
+        </div>
+        <div class="model-footer">
+          <div class="model-price" style="color:var(--c-amber)">~$15 / 1M tokenů</div>
+          <div class="model-when">⚠️ Použít jen když Sonnet nestačí — budget impact!</div>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <div class="model-header">
+          <div class="model-name" style="color:var(--c-violet)">Sonnet 4.6</div>
+          <div class="model-id">claude-sonnet-4-6 · DEFAULT</div>
+        </div>
+        <div class="model-body">
+          <div class="model-use-row"><span class="model-use-icon">💻</span>Veškerý vývoj a kódování</div>
+          <div class="model-use-row"><span class="model-use-icon">📝</span>Dokumentace a OIL management</div>
+          <div class="model-use-row"><span class="model-use-icon">🔧</span>Bugfixy a refaktoring</div>
+          <div class="model-use-row"><span class="model-use-icon">📋</span>Analýza a plánování v session</div>
+          <div class="model-use-row"><span class="model-use-icon">🗣️</span>Konverzace a rozhodování</div>
+        </div>
+        <div class="model-footer">
+          <div class="model-price" style="color:var(--c-violet)">~$3 / 1M tokenů</div>
+          <div class="model-when">✅ Výchozí volba — 95% všech úkolů</div>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <div class="model-header">
+          <div class="model-name" style="color:var(--c-green)">Haiku 4.5</div>
+          <div class="model-id">claude-haiku-4-5-20251001 · SCALE</div>
+        </div>
+        <div class="model-body">
+          <div class="model-use-row"><span class="model-use-icon">💬</span>HOPIQ chatbot pro end-users</div>
+          <div class="model-use-row"><span class="model-use-icon">🌍</span>Auto-překlady i18n v produkci</div>
+          <div class="model-use-row"><span class="model-use-icon">📡</span>API batch operace (klasifikace, tagy)</div>
+          <div class="model-use-row"><span class="model-use-icon">⚡</span>Real-time odpovědi (&lt;200ms latence)</div>
+          <div class="model-use-row"><span class="model-use-icon">🔔</span>Automatizované notifikace</div>
+        </div>
+        <div class="model-footer">
+          <div class="model-price" style="color:var(--c-green)">~$0.25 / 1M tokenů</div>
+          <div class="model-when">🚀 Pro škálování — uživatelské interakce</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Budget decision matrix ─────────────────── -->
+    <div class="budget-rule">
+      <h3>Budget decision matrix — který model pro jaký task?</h3>
+      <div class="budget-tier-row">
+        <span class="bt-task" style="color:var(--c-muted)">TASK TYPE</span>
+        <span class="bt-model" style="color:var(--c-muted)">MODEL</span>
+        <span class="bt-reason" style="color:var(--c-muted)">DŮVOD</span>
+      </div>
+      <div class="budget-tier-row">
+        <span class="bt-task">development</span>
+        <span class="bt-model" style="color:var(--c-violet)">Sonnet 4.6</span>
+        <span class="bt-reason">Dostačující výkon, 5× levnější než Opus</span>
+      </div>
+      <div class="budget-tier-row">
+        <span class="bt-task">architecture</span>
+        <span class="bt-model" style="color:var(--c-amber)">Opus 4.7</span>
+        <span class="bt-reason">Komplexní reasoning — Sonnet může dělat chyby</span>
+      </div>
+      <div class="budget-tier-row">
+        <span class="bt-task">docs / content</span>
+        <span class="bt-model" style="color:var(--c-violet)">Sonnet 4.6</span>
+        <span class="bt-reason">Plná kvalita, nepotřebuje Opus reasoning</span>
+      </div>
+      <div class="budget-tier-row">
+        <span class="bt-task">investor / pitch</span>
+        <span class="bt-model" style="color:var(--c-amber)">Opus 4.7</span>
+        <span class="bt-reason">Strategický výstup — žádné kompromisy</span>
+      </div>
+      <div class="budget-tier-row">
+        <span class="bt-task">user chatbot</span>
+        <span class="bt-model" style="color:var(--c-green)">Haiku 4.5</span>
+        <span class="bt-reason">Rychlost + cena × škálování uživatelů</span>
+      </div>
+      <div class="budget-tier-row">
+        <span class="bt-task">i18n překlad</span>
+        <span class="bt-model" style="color:var(--c-green)">Haiku 4.5</span>
+        <span class="bt-reason">Batch operace — volume je klíčový faktor</span>
+      </div>
+    </div>
+
+    <!-- ── OIL-first workflow ─────────────────────── -->
+    <h2 class="section-title">OIL-first workflow</h2>
+    <ul class="wf-list">
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(168,85,247,.2);color:var(--c-violet)">1</div>
+        <div class="wf-content">
+          <div class="wf-title">Registrace úkolu před zahájením</div>
+          <div class="wf-desc">Každý úkol musí mít záznam v OIL.json se statusem IN PROGRESS DŘÍVE než Claude napíše první řádek kódu. Platí i pro 5minutový fix.</div>
+          <div class="wf-tag">AIQ-NNNNN formát · id, taskType, effort, estimatedTime, assignee, createdAt</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(96,165,250,.2);color:var(--c-blue)">2</div>
+        <div class="wf-content">
+          <div class="wf-title">Práce na úkolu</div>
+          <div class="wf-desc">Claude realizuje. Pokud se při práci objeví nový neznámý úkol — STOP → zaregistrovat nový AIQ → pak pokračovat. Žádné organicky vznikající práce bez záznamu.</div>
+          <div class="wf-tag">STOP pravidlo · platí bez výjimky</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(34,197,94,.2);color:var(--c-green)">3</div>
+        <div class="wf-content">
+          <div class="wf-title">CLOSED / REVIEW — ihned zapsat kontext</div>
+          <div class="wf-desc">Po uzavření: doplnit actualTime, completedAt, durationDays. IHNED zapsat do OIL_CONTEXT.md co bylo uděláno, klíčová rozhodnutí, poznámky. Nečekat na konec session.</div>
+          <div class="wf-tag">OIL_CONTEXT.md je povinné · ne volitelné</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(245,158,11,.2);color:var(--c-amber)">4</div>
+        <div class="wf-content">
+          <div class="wf-title">Test task companion</div>
+          <div class="wf-desc">Pro každý development nebo fix task musí Claude vytvořit companion test task(y) s testType a linkedTask. Testování je součást každého vývojového cyklu.</div>
+          <div class="wf-tag">functional · visual · content · integration · regression · acceptance · code-review</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(236,72,153,.2);color:var(--c-pink)">5</div>
+        <div class="wf-content">
+          <div class="wf-title">Konec session — archivace</div>
+          <div class="wf-desc">BRIEFING.md aktualizovat. OIL.json, OIL_CONTEXT.md, BKONTEXT.md, ARCH_MAP.md zkopírovat do _SESSION_START/. Spustit AUTO_ARCHIVE.bat. Bez tohoto session NENÍ uzavřena.</div>
+          <div class="wf-tag">_SESSION_START/ · AUTO_ARCHIVE.bat · CHANGELOG.md</div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- ── Architekturní principy ──────────────────── -->
+    <h2 class="section-title">Architekturní principy (5 závazných pravidel)</h2>
+    <div style="background:var(--c-bg2);border:1px solid var(--c-border);border-radius:var(--c-radius);overflow:hidden;margin-bottom:32px">
+      <table class="principle-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Princip</th>
+            <th>Pravidlo</th>
+            <th>Porušení znamená</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Single Responsibility</td>
+            <td>Každý modul dělá JEDNU věc</td>
+            <td>Refaktor → 2 moduly</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Event Bus</td>
+            <td>Moduly komunikují POUZE přes AppIQ.emit() / AppIQ.on()</td>
+            <td>Přímé volání mezi moduly = STOP</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Data Layer</td>
+            <td>Veškerý přístup k datům přes _data.js — nikdy fetch() přímo v HTML</td>
+            <td>Porušení = technical debt</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>DRY</td>
+            <td>Stejný kód na 2 místech → patří do modulu</td>
+            <td>Duplicita = bug risk</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Backend-Ready</td>
+            <td>JSON→REST→SQL = změna POUZE v _data.js. Nula změn v HTML/modulech.</td>
+            <td>Porušení = přepis frontendu</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Deployment pravidla ────────────────────── -->
+    <h2 class="section-title">Deployment pravidla</h2>
+    <div class="rule-grid">
+      <div class="rule-card">
+        <div class="rule-number" style="color:var(--c-violet)">1</div>
+        <div class="rule-label">DEPLOY RULE 1</div>
+        <div class="rule-title">Nová funkce = nová verze</div>
+        <div class="rule-desc">Větší změna (nový slide, nová feature, refactor) → vždy spustit DO_DEPLOY.ps1 → vznikne nová složka vX.XX/ → push. Předchozí verze zůstane nedotčená.</div>
+        <span class="rule-tag" style="background:rgba(168,85,247,.15);color:var(--c-violet)">DO_DEPLOY.ps1</span>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-number" style="color:var(--c-blue)">2</div>
+        <div class="rule-label">DEPLOY RULE 2</div>
+        <div class="rule-title">Hotfix = patch do aktuální verze</div>
+        <div class="rule-desc">Malá oprava (CSS, text, drobný bug) → opravit přímo v aktuální verzi → push. Přijatelné riziko, protože předchozí verze je stále k dispozici jako záchranná síť.</div>
+        <span class="rule-tag" style="background:rgba(96,165,250,.15);color:var(--c-blue)">direct patch</span>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-number" style="color:var(--c-green)">3</div>
+        <div class="rule-label">DEPLOY RULE 3</div>
+        <div class="rule-title">Staré verze NIKDY nesmazat</div>
+        <div class="rule-desc">Složky v7.20/, v7.19/... jsou záchranná síť. Pokud nová verze nefunguje, David pošle odkaz na starší verzi za 30 sekund. Mazat pouze pokud David explicitně řekne.</div>
+        <span class="rule-tag" style="background:rgba(34,197,94,.15);color:var(--c-green)">záchranná síť</span>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-number" style="color:var(--c-amber)">4</div>
+        <div class="rule-label">DEPLOY RULE 4</div>
+        <div class="rule-title">Release notes VŽDY před deployem</div>
+        <div class="rule-desc">Claude sestaví Layer 2 (detail tasků) + Layer 1 (3–5 nejdůležitějších). David schválí wording. Zapsat do CHANGELOG.md + bumpe _ver.js. Teprve pak DO_DEPLOY.ps1.</div>
+        <span class="rule-tag" style="background:rgba(245,158,11,.15);color:var(--c-amber)">AIQ-00296 · AIQ-00298</span>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-number" style="color:var(--c-pink)">5</div>
+        <div class="rule-label">DEPLOY RULE 5</div>
+        <div class="rule-title">Preflight blokuje deploy bez CHANGELOG</div>
+        <div class="rule-desc">DO_DEPLOY.ps1 PREFLIGHT blokuje deploy pokud CHANGELOG nemá dnešní datum. Bez výjimky. Tento mechanismus chrání před deployem bez dokumentace změn.</div>
+        <span class="rule-tag" style="background:rgba(236,72,153,.15);color:var(--c-pink)">preflight check</span>
+      </div>
+
+      <div class="rule-card">
+        <div class="rule-number" style="color:var(--c-violet)">6</div>
+        <div class="rule-label">VISUAL RULE</div>
+        <div class="rule-title">Vizuální kvalita — 100% před pushnutím</div>
+        <div class="rule-desc">Každý CSS/layout úkol musí mít deviceImpact ověřen. @media bloky patří NA KONEC CSS (ne doprostřed). Pokud nelze ověřit v DevTools → upozornit Davida, počkat na souhlas.</div>
+        <span class="rule-tag" style="background:rgba(168,85,247,.15);color:var(--c-violet)">NB-M + PH-M minimum</span>
+      </div>
+    </div>
+
+    <!-- ── TOTAL AGILE principy ───────────────────── -->
+    <h2 class="section-title">TOTAL AGILE — Management principy</h2>
+    <ul class="wf-list">
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(168,85,247,.2);color:var(--c-violet)">▶</div>
+        <div class="wf-content">
+          <div class="wf-title">CEO Brief každý den</div>
+          <div class="wf-desc">Strategické rozhodnutí David Gogela. Management vidí progress POŘÁD AKTUÁLNĚ. Claude na konci každé session aktualizuje Daily Teaser v CEO_BRIEF.html — datum, co přibylo, klíčové změny.</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(34,197,94,.2);color:var(--c-green)">▶</div>
+        <div class="wf-content">
+          <div class="wf-title">Brainstorming Capture pravidlo</div>
+          <div class="wf-desc">David říká "pojďme out-of-the-box" → Claude IHNED zapíše celý vstup do BRAINSTORM_LOG.md (append). Potvrdí Davidovi. Teprve pak zpracovává. Důvod: context window ztráta 2026-04-21 ráno.</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(245,158,11,.2);color:var(--c-amber)">▶</div>
+        <div class="wf-content">
+          <div class="wf-title">Správnost před rychlostí</div>
+          <div class="wf-desc">Žádné zkratky. Nová funkce neznamená přeskočit OIL registraci nebo CHANGELOG. Architektura musí být transparentní pro lidi, AI, adminy i uživatele.</div>
+        </div>
+      </li>
+      <li class="wf-item">
+        <div class="wf-step-num" style="background:rgba(96,165,250,.2);color:var(--c-blue)">▶</div>
+        <div class="wf-content">
+          <div class="wf-title">1 session = 1 téma</div>
+          <div class="wf-desc">Upozornit na restart session při: 60+ min, 3+ velké soubory, přechod mezi streamy (legacy/TechIQ), degradace kontextu. Budget managment — session přerušení = cache miss náklady.</div>
+        </div>
+      </li>
+    </ul>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({ section: {cs:'Metodika', en:'Methodology'}, backUrl: '../MANAGEMENT_COCKPIT.html', music: false });
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      const q  = s => document.querySelector(s);
+      const qa = s => [...document.querySelectorAll(s)];
+      q('.page-subtitle').textContent = 'AI rules · Model selection guide · Workflow conventions · Budget strategy';
+      const cards = qa('.c-card-title');
+      cards[0].textContent = 'Active rules'; cards[1].textContent = 'Workflow phases';
+      cards[2].textContent = 'AI models'; cards[3].textContent = 'Architecture layers';
+      // Model use rows
+      const useRows = qa('.model-use-row');
+      // Opus rows (0–4)
+      useRows[0].innerHTML = '<span class="model-use-icon">🏛️</span>Strategic architecture decisions';
+      useRows[1].innerHTML = '<span class="model-use-icon">💰</span>Investor materials and pitch deck';
+      useRows[2].innerHTML = '<span class="model-use-icon">📊</span>Complex analyses — market, competition';
+      useRows[3].innerHTML = '<span class="model-use-icon">🔍</span>Code review of entire modules';
+      useRows[4].innerHTML = '<span class="model-use-icon">🧩</span>New architecture patterns (first draft)';
+      // Sonnet rows (5–9)
+      useRows[5].innerHTML = '<span class="model-use-icon">💻</span>All development and coding';
+      useRows[6].innerHTML = '<span class="model-use-icon">📝</span>Documentation and OIL management';
+      useRows[7].innerHTML = '<span class="model-use-icon">🔧</span>Bug fixes and refactoring';
+      useRows[8].innerHTML = '<span class="model-use-icon">📋</span>Analysis and planning in session';
+      useRows[9].innerHTML = '<span class="model-use-icon">🗣️</span>Conversation and decision-making';
+      // Haiku rows (10–14)
+      useRows[10].innerHTML = '<span class="model-use-icon">💬</span>HOPIQ chatbot for end-users';
+      useRows[11].innerHTML = '<span class="model-use-icon">🌍</span>Auto-translations i18n in production';
+      useRows[12].innerHTML = '<span class="model-use-icon">📡</span>API batch operations (classification, tags)';
+      useRows[13].innerHTML = '<span class="model-use-icon">⚡</span>Real-time responses (<200ms latency)';
+      useRows[14].innerHTML = '<span class="model-use-icon">🔔</span>Automated notifications';
+      // Model footer
+      const footers = qa('.model-when');
+      footers[0].textContent = '⚠️ Use only when Sonnet is insufficient — budget impact!';
+      footers[1].textContent = '✅ Default choice — 95% of all tasks';
+      footers[2].textContent = '🚀 For scaling — user interactions';
+      // Budget matrix
+      [...qa('.bt-reason')].filter((e,i) => i > 0).forEach((e, i) => {
+        const reasons = ['Sufficient performance, 5× cheaper than Opus','Complex reasoning — Sonnet can make mistakes','Full quality, doesn\'t need Opus reasoning','Strategic output — no compromises','Speed + cost × user scaling','Real-time chat, cheap at scale'];
+        if (reasons[i]) e.textContent = reasons[i];
+      });
+      [...qa('h3')].filter(e => e.textContent.includes('který model')).forEach(e => {
+        e.textContent = 'Budget decision matrix — which model for which task?';
+      });
+      [...qa('.bt-task, .bt-model, .bt-reason')].filter(e => e.textContent === 'DŮVOD').forEach(e => e.textContent = 'REASON');
+      // Section titles
+      qa('h2.section-title').forEach(e => {
+        const t = e.textContent;
+        if (t.includes('OIL-first')) e.textContent = 'OIL-first workflow';
+        if (t.includes('Architekturní')) e.textContent = 'Architecture principles (5 mandatory rules)';
+        if (t.includes('Deployment')) e.textContent = 'Deployment rules';
+        if (t.includes('TOTAL AGILE')) e.textContent = 'TOTAL AGILE — Management principles';
+      });
+      // Workflow step titles
+      const wfTitles = qa('.wf-title');
+      const wfMap = {
+        'OIL-first': 'OIL-first convention',
+        'STOP pravidlo': 'STOP rule — organic tasks',
+        'DISCUSSION LOG': 'DISCUSSION LOG — total audit log',
+        'Brainstorming Capture': 'Brainstorming Capture rule',
+        'Správnost před rychlostí': 'Correctness before speed',
+        '1 session = 1 téma': '1 session = 1 topic'
+      };
+      wfTitles.forEach(e => {
+        const match = Object.keys(wfMap).find(k => e.textContent.includes(k));
+        if (match) e.textContent = wfMap[match];
+      });
+    })();
+  </script>
+</body>
+</html>
