@@ -7,10 +7,10 @@
   <meta property="og:type" content="website"/>
   <meta property="og:title" content="MANAGEMENT COCKPIT — HOPI AppIQ"/>
   <meta property="og:description" content="Řídící středisko projektu HOPI AppIQ. Live data z OIL/BOIL. Budget · Timeline · Team · Methodology."/>
-  <meta property="og:image" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/cockpit-og.png"/>
+  <meta property="og:image" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/cockpit-og.png?v=2"/>
   <meta property="og:url" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/MANAGEMENT_COCKPIT.html"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <meta name="twitter:image" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/cockpit-og.png"/>
+  <meta name="twitter:image" content="https://h-gr-fico.github.io/appiq/v7.27/HOPI_AppIQ_WebPage/Development/cockpit-og.png?v=2"/>
   <!-- Data bundles — file:// safe, no fetch() -->
   <script src="cockpit/oil-data.js"></script>
   <script src="cockpit/boil-data.js"></script>
@@ -112,6 +112,14 @@
     .hero-kpi-val.g  { color: var(--green); }
     .hero-kpi-val.b  { color: var(--blue); }
     .hero-kpi-val.a  { color: var(--amber); }
+    .hero-preview {
+      margin-top: 28px; display: inline-block;
+      border-radius: 12px; overflow: hidden;
+      border: 1px solid rgba(168,85,247,.3);
+      box-shadow: 0 4px 32px rgba(0,0,0,.5);
+      max-width: 520px; width: 100%; opacity: .82;
+    }
+    .hero-preview img { width: 100%; height: auto; display: block; }
 
     /* ── Phase indicator ──────────────────────────── */
     .phase-bar {
@@ -443,6 +451,9 @@
           <div class="hero-kpi-val" style="color:var(--pink)" id="kpi-commits">109+</div>
           <div class="hero-kpi-lbl">GIT COMMITS</div>
         </div>
+      </div>
+      <div class="hero-preview">
+        <img src="cockpit-og.png" alt="Management Cockpit Preview"/>
       </div>
     </div>
   </section>

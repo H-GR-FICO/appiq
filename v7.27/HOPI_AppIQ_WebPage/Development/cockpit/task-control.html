@@ -384,6 +384,8 @@
 
   </main>
 
+  <script src="oil-data.js"></script>
+  <script src="boil-data.js"></script>
   <script src="_shell.js"></script>
   <script>
     // ── Language ───────────────────────────────────
@@ -620,17 +622,11 @@
     }
 
     // ── Boot ───────────────────────────────────────
-    document.addEventListener('DOMContentLoaded', async () => {
+    // Uses inline bundles (oil-data.js / boil-data.js) — fetch() is blocked on file://
+    document.addEventListener('DOMContentLoaded', () => {
       try {
-        const [oilRes, boilRes] = await Promise.all([
-          fetch('../../OIL.json'),
-          fetch('../../BOIL.json')
-        ]);
-        const oil  = await oilRes.json();
-        const boil = await boilRes.json();
-
-        const oilTasks  = oil.tasks  || [];
-        const boilTasks = boil.tasks || [];
+        const oilTasks  = (window.OIL_DATA  && window.OIL_DATA.tasks)  || [];
+        const boilTasks = (window.BOIL_DATA && window.BOIL_DATA.tasks) || [];
 
         const oilOpen  = oilTasks.filter(t => t.status !== 'CLOSED' && t.status !== 'CANCELLED');
         const boilOpen = boilTasks.filter(t => t.status !== 'CLOSED' && t.status !== 'CANCELLED');
@@ -641,7 +637,7 @@
         renderCapacity(oilTasks, boilTasks);
       } catch(e) {
         console.error('Task Control: data load failed', e);
-        document.getElementById('kanban-grid').innerHTML = `<div class="empty" style="grid-column:1/-1">${lang === 'en' ? 'Cannot load OIL.json / BOIL.json' : 'Nelze načíst OIL.json / BOIL.json'}</div>`;
+        document.getElementById('kanban-grid').innerHTML = `<div class="empty" style="grid-column:1/-1">${lang === 'en' ? 'Cannot load task data' : 'Nelze načíst data tasků'}</div>`;
       }
 
       if (typeof Shell !== 'undefined') {

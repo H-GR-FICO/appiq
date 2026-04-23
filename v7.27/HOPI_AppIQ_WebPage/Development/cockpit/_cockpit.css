@@ -93,12 +93,12 @@ body {
   flex-wrap: wrap;
   letter-spacing: 0.5px;
 }
-.c-mottos-ribbon span:nth-child(1)  { color: var(--c-violet); font-weight: 700; }
-.c-mottos-ribbon span:nth-child(3)  { color: var(--c-green);  font-weight: 700; }
-.c-mottos-ribbon span:nth-child(5)  { color: var(--c-blue);   font-weight: 700; }
-.c-mottos-ribbon span:nth-child(7)  { color: var(--c-amber);  font-weight: 700; }
-.c-mottos-ribbon span:nth-child(9)  { color: var(--c-pink);   font-weight: 700; }
-.c-mottos-ribbon span:nth-child(even) { color: var(--c-border); }
+.c-mottos-ribbon .cm1 { color: var(--c-violet); font-weight: 700; }
+.c-mottos-ribbon .cm2 { color: var(--c-green);  font-weight: 700; }
+.c-mottos-ribbon .cm3 { color: var(--c-blue);   font-weight: 700; }
+.c-mottos-ribbon .cm4 { color: var(--c-amber);  font-weight: 700; }
+.c-mottos-ribbon .cm5 { color: var(--c-pink);   font-weight: 700; }
+.c-mottos-ribbon .cdot { color: var(--c-border); }
 
 /* ── Page layout ─────────────────────────────────── */
 .cockpit-page {

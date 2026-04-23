@@ -334,6 +334,8 @@
 
   </main>
 
+  <script src="oil-data.js"></script>
+  <script src="boil-data.js"></script>
   <script src="_shell.js"></script>
   <script>
     // ── Language helper — use Shell (correct key: hopi_lang) ─────────────────
@@ -345,17 +347,10 @@
     }
     function fmt(n) { return n.toLocaleString(getLang() === 'en' ? 'en-GB' : 'cs-CZ'); }
 
-    // ── Load OIL + BOIL ────────────────────────────
-    async function loadData() {
-      const [oilRes, boilRes] = await Promise.all([
-        fetch('../../OIL.json').catch(() => null),
-        fetch('../../BOIL.json').catch(() => null)
-      ]);
-      const oil  = oilRes  ? await oilRes.json()  : null;
-      const boil = boilRes ? await boilRes.json() : null;
-
-      const oilTasks  = oil?.tasks  || [];
-      const boilTasks = boil?.tasks || [];
+    // ── Load OIL + BOIL — from pre-bundled JS (file:// safe, no fetch) ────────
+    function loadData() {
+      const oilTasks  = (window.OIL_DATA  || {}).tasks || [];
+      const boilTasks = (window.BOIL_DATA || {}).tasks || [];
 
       const oilOpen   = oilTasks.filter(t => t.status !== 'CLOSED' && t.status !== 'CANCELLED');
       const boilOpen  = boilTasks.filter(t => t.status !== 'CLOSED' && t.status !== 'CANCELLED');
@@ -409,10 +404,10 @@
     }
 
     // ── Boot ───────────────────────────────────────
-    document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', () => {
       initDate();
       initCountdowns();
-      await loadData().catch(() => {});
+      try { loadData(); } catch(e) {}
       if (typeof Shell !== 'undefined') {
         Shell.init({ section: {cs:'Celkový přehled', en:'Executive Overview'}, backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
       }

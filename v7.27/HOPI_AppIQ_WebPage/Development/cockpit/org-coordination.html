@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Organization & Coordination — MNG Cockpit · HOPI AppIQ</title>
   <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="discussion-log.js"></script>
   <style>
     .oc-tag {
       display:inline-block; padding:4px 14px;
@@ -211,7 +212,7 @@
 <main class="cockpit-page">
 
   <div class="oc-tag">⬡ ORGANIZATION &amp; COORDINATION</div>
-  <h1 style="font-size:22px;font-weight:800;color:var(--c-white);margin-bottom:6px;">Discussion Log &amp; Coordination</h1>
+  <h1 style="font-size:22px;font-weight:800;color:var(--c-white);margin-bottom:6px;">Discussion Record &amp; Coordination</h1>
   <p style="font-size:14px;color:var(--c-muted);margin-bottom:24px;">
     Totální audit log — každé rozhodnutí, akce, riziko, otázka. Žádná diskuse nezůstane nezapsaná.
   </p>
@@ -291,6 +292,9 @@
     </select>
     <select class="log-sel" id="q-session" onchange="applyFilters()">
       <option value="">Session: Vše</option>
+      <option value="2026-04-23-s13">2026-04-23 Session 13</option>
+      <option value="2026-04-23-s12">2026-04-23 Session 12</option>
+      <option value="2026-04-23-s9">2026-04-23 Session 9</option>
       <option value="2026-04-22-s7">2026-04-22 Session 7</option>
       <option value="2026-04-22-s6">2026-04-22 Session 6</option>
       <option value="2026-04-21">2026-04-21 Session 5</option>
@@ -307,7 +311,7 @@
   <!-- Pending entries (localStorage, čeká na sync) -->
   <div id="pending-section" class="pending-section" style="display:none;">
     <div class="pending-header">
-      <span class="pending-title">⏳ Čekající záznamy — lokálně uloženo, čeká na append do DISCUSSION_LOG.md</span>
+      <span class="pending-title">⏳ Čekající záznamy — lokálně uloženo, čeká na append do DISCUSSION_RECORD.md</span>
       <button class="pending-act" onclick="exportPending()">📋 Export MD pro sync</button>
       <button class="pending-act del" onclick="clearPending()">🗑 Smazat vše</button>
     </div>
@@ -336,7 +340,7 @@
       <ul class="resp-items">
         <li>Full-stack development (HTML/CSS/JS)</li>
         <li>Architecture decisions &amp; OIL tracking</li>
-        <li>DISCUSSION_LOG &amp; BKONTEXT maintenance</li>
+        <li>DISCUSSION_RECORD &amp; BKONTEXT maintenance</li>
         <li>Deployment &amp; release management</li>
         <li>Session briefing &amp; context management</li>
       </ul>
@@ -368,7 +372,7 @@
     <div class="ef-modal" id="ef-modal">
 
       <div class="ef-title">
-        ➕ Přidat záznam do Discussion Log
+        ➕ Přidat záznam do Discussion Record
         <button class="ef-close" onclick="closeEntryForm()">✕</button>
       </div>
 
@@ -562,7 +566,7 @@ function clearPending() {
 
 function exportPending() {
   if (!pendingEntries.length) return;
-  let md = '<!-- Vložit do DISCUSSION_LOG.md -->\n\n';
+  let md = '<!-- Vložit do DISCUSSION_RECORD.md -->\n\n';
   pendingEntries.forEach(e => {
     md += `**${e.id}**\n`;
     md += `- datum: ${e.id.replace('DISC-','').slice(0,6).replace(/(\d{2})(\d{2})(\d{2})/,'20$1-$2-$3')} | čas: ${e.time}\n`;
@@ -780,7 +784,7 @@ function exportFiltered(fmt) {
     const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
     download(blob, `discussion-log-export-${date}.json`);
   } else {
-    let md = `# Discussion Log Export — ${date}\n\n`;
+    let md = `# Discussion Record Export — ${date}\n\n`;
     md += `Celkem záznamů: ${data.length}\n\n---\n\n`;
     data.forEach(d => {
       md += `## ${d.id}\n`;
@@ -804,19 +808,11 @@ function download(blob, name) {
   a.click();
 }
 
-// Init — fetch data from external JSON (requires webserver / GitHub Pages)
-document.getElementById('log-container').innerHTML =
-  '<p style="color:var(--c-muted);text-align:center;padding:40px;">⏳ Načítám záznamy...</p>';
-fetch('discussion-log.json')
-  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-  .then(data => { DECISIONS = data; loadPending(); applyFilters(); })
-  .catch(() => {
-    document.getElementById('log-container').innerHTML =
-      '<p style="color:var(--c-muted);text-align:center;padding:40px;">' +
-      '⚠️ Nelze načíst discussion-log.json.<br>' +
-      '<span style="font-size:11px;">Otevřete přes webserver (VS Code Live Server, GitHub Pages).</span></p>';
-    DECISIONS = []; loadPending(); applyFilters();
-  });
+// Init — load from pre-bundled JS (works on file:// and GitHub Pages)
+DECISIONS = window.DISC_LOG_DATA || [];
+loadPending();
+applyFilters();
 </script>
 </body>
 </html>
+

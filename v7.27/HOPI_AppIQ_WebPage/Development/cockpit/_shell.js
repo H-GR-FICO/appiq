@@ -22,56 +22,101 @@ const Shell = (() => {
   function setLang(l) { localStorage.setItem(LANG_KEY, l); location.reload(); }
 
   // ── Auth ──────────────────────────────────────────────────────────────────
+  // Sub-pages (cluster, sections) do NOT enforce auth independently.
+  // Auth lives only on MANAGEMENT_COCKPIT.html (overlay = music gesture trigger).
+  // On file:// protocol, storage is NOT shared across different-path pages,
+  // so any storage-based check here would fail and cause black screens.
   function checkAuth() {
-    if (localStorage.getItem(AUTH_KEY) === '1') return true;
-    const code = prompt(t('auth_prompt'));
-    if (code === PASS) { localStorage.setItem(AUTH_KEY, '1'); return true; }
-    alert(t('auth_err'));
-    location.href = '../MANAGEMENT_COCKPIT.html';
-    return false;
+    return true;
   }
 
   // ── Music ─────────────────────────────────────────────────────────────────
   let audioEl = null;
+  let _shPlaying = false;
+  let _shStarting = false;
+  let _shFadeId = null;
+
+  function _shFadeTo(vol, ms, cb) {
+    if (_shFadeId) { clearInterval(_shFadeId); _shFadeId = null; }
+    if (!audioEl) return;
+    let i = 0, n = Math.max(1, Math.round(ms / 40)), v0 = audioEl.volume;
+    _shFadeId = setInterval(() => {
+      i++; audioEl.volume = Math.min(1, Math.max(0, v0 + (vol - v0) * (i / n)));
+      if (i >= n) { clearInterval(_shFadeId); _shFadeId = null; if (cb) cb(); }
+    }, 40);
+  }
+
+  function _shIsOn() {
+    try { return localStorage.getItem(MUSIC_KEY) !== '0'; } catch(e) { return true; }
+  }
+
+  function _shTryPlay() {
+    if (_shPlaying || _shStarting || !audioEl) return;
+    _shStarting = true;
+    audioEl.volume = 0; audioEl.muted = true;
+    const pr = audioEl.play();
+    if (pr && pr.then) {
+      pr.then(() => {
+        _shStarting = false; audioEl.muted = false; _shPlaying = true;
+        try { localStorage.setItem(MUSIC_KEY, '1'); } catch(e) {}
+        const saved = parseFloat(sessionStorage.getItem(MUSIC_TIME_KEY) || '0');
+        if (saved > 0) audioEl.currentTime = saved;
+        _shFadeTo(0.7, 400);
+      }, () => {
+        _shStarting = false; audioEl.muted = false; _shPlaying = false;
+      });
+    } else {
+      _shStarting = false; _shPlaying = true;
+    }
+  }
+
   function initMusic(musicSrc) {
     if (!musicSrc) return;
     audioEl = document.createElement('audio');
     audioEl.src = musicSrc;
     audioEl.loop = true;
-    audioEl.volume = 0.18;
+    audioEl.preload = 'auto';
+    audioEl.volume = 0;
 
-    // Restore playback position from previous page navigation
-    const savedTime = parseFloat(sessionStorage.getItem(MUSIC_TIME_KEY) || '0');
-    audioEl.addEventListener('canplay', () => {
-      if (savedTime > 0) audioEl.currentTime = savedTime;
-    }, { once: true });
-    if (audioEl.readyState >= 3 && savedTime > 0) audioEl.currentTime = savedTime;
+    if (_shIsOn()) _shTryPlay();
 
-    const on = localStorage.getItem(MUSIC_KEY) !== '0';
-    if (on) {
-      audioEl.play().catch(() => {
-        // Autoplay blocked by browser policy — start on first user interaction
-        document.addEventListener('click', () => { audioEl.play().catch(() => {}); }, { once: true });
-      });
-    }
+    // permanent listeners — no { once:true }, no removeEventListener — capture phase (Studio pattern)
+    window.addEventListener('pointerdown', function(e) {
+      var btn = document.getElementById('c-music-btn');
+      if (btn && btn.contains(e.target)) return;
+      if (_shIsOn() && !_shPlaying && !_shStarting) _shTryPlay();
+    }, true);
+    window.addEventListener('click', function(e) {
+      var btn = document.getElementById('c-music-btn');
+      if (btn && btn.contains(e.target)) return;
+      if (_shIsOn() && !_shPlaying && !_shStarting) _shTryPlay();
+    }, true);
+    window.addEventListener('keydown', function() {
+      if (_shIsOn() && !_shPlaying && !_shStarting) _shTryPlay();
+    }, true);
 
-    // Save position when leaving page
     window.addEventListener('beforeunload', () => {
-      sessionStorage.setItem(MUSIC_TIME_KEY, String(audioEl.currentTime));
+      try { sessionStorage.setItem(MUSIC_TIME_KEY, String(audioEl.currentTime)); } catch(e) {}
     });
-
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) audioEl.pause();
-      else if (localStorage.getItem(MUSIC_KEY) !== '0') audioEl.play().catch(() => {});
+      if (!audioEl) return;
+      if (document.hidden) { _shFadeTo(0, 600); }
+      else if (_shPlaying) { _shFadeTo(0.7, 400); }
     });
     return audioEl;
   }
 
   function toggleMusic(btn) {
     if (!audioEl) return;
-    const on = localStorage.getItem(MUSIC_KEY) !== '0';
-    if (on) { audioEl.pause(); localStorage.setItem(MUSIC_KEY, '0'); btn.textContent = '♪'; btn.title = 'Zapnout hudbu'; }
-    else    { audioEl.play().catch(() => {}); localStorage.setItem(MUSIC_KEY, '1'); btn.textContent = '♬'; btn.title = 'Vypnout hudbu'; }
+    if (_shPlaying) {
+      _shFadeTo(0, 300, () => { audioEl.pause(); _shPlaying = false; btn.textContent = '♪'; btn.title = 'Zapnout hudbu'; });
+      localStorage.setItem(MUSIC_KEY, '0');
+      btn.textContent = '♪'; btn.title = 'Zapnout hudbu';
+    } else {
+      localStorage.setItem(MUSIC_KEY, '1');
+      btn.textContent = '♬'; btn.title = 'Vypnout hudbu';
+      _shTryPlay();
+    }
   }
 
   // ── Shell HTML ────────────────────────────────────────────────────────────
@@ -83,9 +128,12 @@ const Shell = (() => {
     const sectionTitle = typeof cfg.section === 'object'
       ? (cfg.section[lang] || cfg.section.en || '')
       : (cfg.section || '');
+    // ?back=<encoded-url> lets cluster.html pass the correct return destination
+    const urlBack = new URLSearchParams(location.search).get('back');
+    const backHref = urlBack ? decodeURIComponent(urlBack) : (cfg.backUrl || '../MANAGEMENT_COCKPIT.html');
     shell.innerHTML = `
       <div class="c-topbar">
-        <a class="c-back" href="${cfg.backUrl || '../MANAGEMENT_COCKPIT.html'}">${t('back')}</a>
+        <a class="c-back" href="${backHref}">${t('back')}</a>
         <span class="c-section-title">${sectionTitle}</span>
         <div class="c-controls">
           <button class="c-btn-icon" id="c-music-btn" title="${musicOn ? 'Vypnout hudbu' : 'Turn off music'}"
@@ -95,15 +143,15 @@ const Shell = (() => {
         </div>
       </div>
       <div class="c-mottos-ribbon">
-        <span class="lang-cs">💰 Budget je svatý</span><span class="lang-en">💰 Budget is Sacred</span>
-        <span>·</span>
-        <span>👑 Cash is King</span>
-        <span>·</span>
-        <span>🎯 All Actions Must Be Business Driven</span>
-        <span>·</span>
-        <span>🚀 Living Proof First</span>
-        <span>·</span>
-        <span>🤖 1 Person + AI = Team</span>
+        <span class="cm1"><span class="lang-cs">💰 Budget je svatý</span><span class="lang-en">💰 Budget is Sacred</span></span>
+        <span class="cdot">·</span>
+        <span class="cm2">👑 Cash is King</span>
+        <span class="cdot">·</span>
+        <span class="cm3">🎯 All Actions Must Be Business Driven</span>
+        <span class="cdot">·</span>
+        <span class="cm4">🚀 Living Proof First</span>
+        <span class="cdot">·</span>
+        <span class="cm5">🤖 1 Person + AI = Team</span>
       </div>
     `;
   }

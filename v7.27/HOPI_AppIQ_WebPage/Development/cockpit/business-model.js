@@ -1,4 +1,4 @@
-// Auto-generated from business-model.json — do not edit manually
+﻿// Auto-generated from business-model.json
 window.BUSINESS_MODEL_DATA = {
   "version": "1.0",
   "updated": "2026-04-22",
@@ -125,11 +125,41 @@ window.BUSINESS_MODEL_DATA = {
   ],
 
   "internal_billing": [
-    { "id": "hopi-supply-chain", "division": "Supply Chain", "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 30 },
-    { "id": "hopi-foods",        "division": "Foods",        "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 25 },
-    { "id": "hopi-agriculture",  "division": "Agriculture",  "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 20 },
-    { "id": "hopi-services",     "division": "Services",     "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 15 },
-    { "id": "hopi-holding",      "division": "Holding",      "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 10 }
+    {
+      "id": "hopi-supply-chain",
+      "division": "Supply Chain",
+      "transfer_price_per_user_eur": 3.00,
+      "method": "OECD cost-plus 5%",
+      "placeholder_users": 30
+    },
+    {
+      "id": "hopi-foods",
+      "division": "Foods",
+      "transfer_price_per_user_eur": 3.00,
+      "method": "OECD cost-plus 5%",
+      "placeholder_users": 25
+    },
+    {
+      "id": "hopi-agriculture",
+      "division": "Agriculture",
+      "transfer_price_per_user_eur": 3.00,
+      "method": "OECD cost-plus 5%",
+      "placeholder_users": 20
+    },
+    {
+      "id": "hopi-services",
+      "division": "Services",
+      "transfer_price_per_user_eur": 3.00,
+      "method": "OECD cost-plus 5%",
+      "placeholder_users": 15
+    },
+    {
+      "id": "hopi-holding",
+      "division": "Holding",
+      "transfer_price_per_user_eur": 3.00,
+      "method": "OECD cost-plus 5%",
+      "placeholder_users": 10
+    }
   ],
 
   "scenarios": [
@@ -138,7 +168,11 @@ window.BUSINESS_MODEL_DATA = {
       "name": { "cs": "Konzervativní", "en": "Conservative" },
       "color": "blue",
       "freemium_conversion_rate": 0.08,
-      "projections": { "y1_arr_eur": 150000, "y2_arr_eur": 700000, "y3_arr_eur": 1500000 }
+      "projections": {
+        "y1_arr_eur": 150000,
+        "y2_arr_eur": 700000,
+        "y3_arr_eur": 1500000
+      }
     },
     {
       "id": "middle",
@@ -146,14 +180,22 @@ window.BUSINESS_MODEL_DATA = {
       "color": "green",
       "is_anchor": true,
       "freemium_conversion_rate": 0.10,
-      "projections": { "y1_arr_eur": 500000, "y2_arr_eur": 2000000, "y3_arr_eur": 5000000 }
+      "projections": {
+        "y1_arr_eur": 500000,
+        "y2_arr_eur": 2000000,
+        "y3_arr_eur": 5000000
+      }
     },
     {
       "id": "ambitious",
       "name": { "cs": "Ambiciózní", "en": "Ambitious" },
       "color": "violet",
       "freemium_conversion_rate": 0.15,
-      "projections": { "y1_arr_eur": 1200000, "y2_arr_eur": 5000000, "y3_arr_eur": 15000000 }
+      "projections": {
+        "y1_arr_eur": 1200000,
+        "y2_arr_eur": 5000000,
+        "y3_arr_eur": 15000000
+      }
     },
     {
       "id": "dream",
@@ -161,15 +203,40 @@ window.BUSINESS_MODEL_DATA = {
       "color": "amber",
       "freemium_conversion_rate": 0.22,
       "note": "Po diskusi s majiteli HOPI Group — čísla TBD",
-      "projections": { "y1_arr_eur": null, "y2_arr_eur": null, "y3_arr_eur": 30000000 }
+      "projections": {
+        "y1_arr_eur": null,
+        "y2_arr_eur": null,
+        "y3_arr_eur": 30000000
+      }
     }
   ],
 
   "exit_paths": [
-    { "id": "acquisition", "name": { "cs": "Akvizice (SAP/MS/Anthropic)", "en": "Acquisition (SAP/MS/Anthropic)" }, "multiple_arr": 12, "is_baseline": false },
-    { "id": "pe_buyout",   "name": { "cs": "PE Buyout", "en": "PE Buyout" }, "multiple_arr": 6, "is_baseline": false },
-    { "id": "ipo",         "name": { "cs": "IPO", "en": "IPO" }, "multiple_arr": 25, "is_baseline": false },
-    { "id": "hopi_group",  "name": { "cs": "HOPI Group ∞", "en": "HOPI Group ∞" }, "multiple_arr": 10, "is_baseline": true, "note": "Vždy zobrazena — AppIQ vždy zvyšuje hodnotu skupiny" }
+    {
+      "id": "acquisition",
+      "name": { "cs": "Akvizice (SAP/MS/Anthropic)", "en": "Acquisition (SAP/MS/Anthropic)" },
+      "multiple_arr": 12,
+      "is_baseline": false
+    },
+    {
+      "id": "pe_buyout",
+      "name": { "cs": "PE Buyout", "en": "PE Buyout" },
+      "multiple_arr": 6,
+      "is_baseline": false
+    },
+    {
+      "id": "ipo",
+      "name": { "cs": "IPO", "en": "IPO" },
+      "multiple_arr": 25,
+      "is_baseline": false
+    },
+    {
+      "id": "hopi_group",
+      "name": { "cs": "HOPI Group ∞", "en": "HOPI Group ∞" },
+      "multiple_arr": 10,
+      "is_baseline": true,
+      "note": "Vždy zobrazena — AppIQ vždy zvyšuje hodnotu skupiny"
+    }
   ],
 
   "hopi_group_baseline": {
@@ -196,4 +263,5 @@ window.BUSINESS_MODEL_DATA = {
     "method": "OECD cost-plus",
     "formula": "reference_price × (1 − gross_margin) × (1 + markup)"
   }
-};
+}
+;

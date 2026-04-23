@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BOIL Task Board — MNG Cockpit · HOPI AppIQ</title>
   <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="boil-data.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <style>
     .summary-bar {
@@ -208,36 +209,29 @@
     const PRIO_ORDER   = { 'CRITICAL':0, 'HIGH':1, 'MEDIUM':2, 'LOW':3 };
     const STATUS_ORDER = { 'IN PROGRESS':0, 'REVIEW':1, 'OPEN':2, 'CANCELLED':3, 'CLOSED':4 };
 
-    fetch('../BOIL.json')
-      .then(r => r.json())
-      .then(data => {
-        ALL_TASKS = (data.tasks || []).map(t => ({
-          id:           t.id || '',
-          title:        t.title || (Shell.getLang() === 'en' ? '(no title)' : '(bez názvu)'),
-          status:       t.status || 'OPEN',
-          priority:     t.priority || 'MEDIUM',
-          effort:       t.effort || '—',
-          stream:       t.stream || t.bizType || '—',
-          area:         t.area || '',
-          taskType:     t.taskType || t.bizType || '',
-          assignee:     t.assignee || '—',
-          createdAt:    t.createdAt || '',
-          completedAt:  t.completedAt || '',
-          note:         t.note || '',
-          linkedTask:   t.linkedTask || '',
-          dependsOn:    t.dependsOn || [],
-          estimatedTime: t.estimatedTime || null,
-          actualTime:   t.actualTime || null,
-        }));
-        renderStats();
-        renderChart();
-        renderStreamFilters();
-        renderTable();
-      })
-      .catch(() => {
-        document.getElementById('task-tbody').innerHTML =
-          `<tr><td colspan="8" class="empty-state">${Shell.getLang()==='en' ? '⚠ Cannot load BOIL.json — check the file path.' : '⚠ Nelze načíst BOIL.json — zkontroluj cestu k souboru.'}</td></tr>`;
-      });
+    // ── Load — from pre-bundled JS (works on file:// and GitHub Pages)
+    ALL_TASKS = ((window.BOIL_DATA || {}).tasks || []).map(t => ({
+      id:           t.id || '',
+      title:        t.title || (Shell.getLang() === 'en' ? '(no title)' : '(bez názvu)'),
+      status:       t.status || 'OPEN',
+      priority:     t.priority || 'MEDIUM',
+      effort:       t.effort || '—',
+      stream:       t.stream || t.bizType || '—',
+      area:         t.area || '',
+      taskType:     t.taskType || t.bizType || '',
+      assignee:     t.assignee || '—',
+      createdAt:    t.createdAt || '',
+      completedAt:  t.completedAt || '',
+      note:         t.note || '',
+      linkedTask:   t.linkedTask || '',
+      dependsOn:    t.dependsOn || [],
+      estimatedTime: t.estimatedTime || null,
+      actualTime:   t.actualTime || null,
+    }));
+    renderStats();
+    renderChart();
+    renderStreamFilters();
+    renderTable();
 
     function renderStats() {
       const tasks  = ALL_TASKS;
@@ -270,6 +264,7 @@
     }
 
     function renderChart() {
+      if (typeof Chart === 'undefined') return;
       const open   = ALL_TASKS.filter(t => t.status === 'OPEN').length;
       const inprog = ALL_TASKS.filter(t => t.status === 'IN PROGRESS').length;
       const review = ALL_TASKS.filter(t => t.status === 'REVIEW').length;

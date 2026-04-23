@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
   <meta charset="UTF-8"/>
@@ -246,7 +246,7 @@
     // ════════════════════════════════════════════════
     // VERZE — AKTUALIZOVAT PŘI KAŽDÉM DEPLOYI
     // ════════════════════════════════════════════════
-    const BASE_VER = 'v7.27';
+    const BASE_VER = 'v7.26';
     const GH_ROOT  = 'https://h-gr-fico.github.io/appiq/' + BASE_VER;
     const WEB_BASE = GH_ROOT + '/HOPI_AppIQ_WebPage/Development';
     const APP_BASE = GH_ROOT + '/HOPI_AppIQ/Development';
@@ -402,7 +402,7 @@
             desc: 'Runtime aplikace — Finance modul pro HOPI Group Controlling. Calendar, Tracking, OrgChart, Reporting.',
             path: '/index.html',
             base: APP_BASE,
-            status: 'live',
+            status: 'dev',
             auth: true,
             tags: ['HOPI interní', 'SPA']
           }
@@ -413,9 +413,10 @@
         links: [
           {
             name: 'Management Cockpit — Hub',
-            desc: 'Hlavní rozcestník cockpitu — live data z OIL.json + BOIL.json, 15 sekcí',
-            path: null,
-            localPath: '../MANAGEMENT_COCKPIT.html',
+            desc: 'Hlavní rozcestník cockpitu — live data z OIL.json + BOIL.json, 6 clusterů, 20 sekcí',
+            path: '/MANAGEMENT_COCKPIT.html',
+            base: WEB_BASE,
+            openPath: '../MANAGEMENT_COCKPIT.html',
             status: 'dev',
             auth: true,
             tags: ['v8.0', 'nová']
@@ -582,8 +583,10 @@
         if (!container) return;
         container.innerHTML = cat.links.map((link, i) => {
           const url = buildUrl(link);
+          const openHref = link.openPath || url;  // openPath = local dev override for Open button
           const isLive = link.status === 'live';
           const hasUrl = !!url;
+          const hasOpen = !!openHref;
           const displayPath = url || (link.localPath || '—');
           const tagsHtml = [
             link.auth ? '<span class="tag-auth">🔒 HOPI2026</span>' : `<span class="tag-pub">${Shell.getLang() === 'en' ? 'public' : 'veřejná'}</span>`,
@@ -599,8 +602,8 @@
             </div>
             <div class="link-tags">${tagsHtml}</div>
             <div class="link-actions">
-              ${hasUrl
-                ? `<a class="btn-open" href="${url}" target="_blank" rel="noopener">${Shell.getLang() === 'en' ? 'Open →' : 'Otevřít →'}</a>`
+              ${hasOpen
+                ? `<a class="btn-open" href="${openHref}" target="_blank" rel="noopener">${Shell.getLang() === 'en' ? 'Open →' : 'Otevřít →'}</a>`
                 : `<span class="btn-open disabled">${statusLabel(link.status)}</span>`
               }
               <button class="btn-copy" onclick="copyLink('${url || ''}', '${displayPath}', this)">${Shell.getLang() === 'en' ? 'Copy' : 'Kopírovat'}</button>
