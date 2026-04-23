@@ -102,12 +102,12 @@
     @media (max-width: 900px) { .model-grid { grid-template-columns: 1fr; } }
 
     @media (max-width: 640px) {
-      .budget-rule { padding: 16px; }
+      .budget-rule { padding: 16px; overflow: hidden; }
       .budget-tier-row { flex-direction: column; gap: 2px; padding: 10px 0; align-items: flex-start; }
-      .budget-tier-row:first-child { display: none; }
+      .budget-tier-row:nth-child(2) { display: none; }
       .bt-task { flex: none; width: auto; font-size: 10px; color: var(--c-muted); text-transform: uppercase; letter-spacing: 1px; }
       .bt-model { flex: none; width: auto; font-size: 14px; }
-      .bt-reason { flex: none; width: auto; font-size: 11px; line-height: 1.5; }
+      .bt-reason { flex: none; width: 100%; font-size: 11px; line-height: 1.5; overflow-wrap: break-word; }
     }
   </style>
 </head>
