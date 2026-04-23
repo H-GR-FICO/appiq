@@ -854,8 +854,14 @@
         if (_bgIsOn() && !_bgPlaying && !_bgStarting) _bgTryPlay();
       }, true);
 
-      window.addEventListener('beforeunload', () => {
+      window.addEventListener('pagehide', () => {
         try { sessionStorage.setItem(MUS_TIME_KEY, String(_bgAudio.currentTime)); } catch(e) {}
+      });
+      window.addEventListener('pageshow', (e) => {
+        if (e.persisted && _bgAudio && _bgIsOn()) {
+          _bgAudio.play().then(() => { _bgPlaying = true; _bgFadeTo(0.7, 400); updateMusicBtn(); })
+                        .catch(() => { _bgPlaying = false; updateMusicBtn(); });
+        }
       });
       document.addEventListener('visibilitychange', () => {
         if (!_bgAudio) return;

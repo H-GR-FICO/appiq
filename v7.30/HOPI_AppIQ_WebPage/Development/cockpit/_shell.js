@@ -95,8 +95,14 @@ const Shell = (() => {
       if (_shIsOn() && !_shPlaying && !_shStarting) _shTryPlay();
     }, true);
 
-    window.addEventListener('beforeunload', () => {
+    window.addEventListener('pagehide', () => {
       try { sessionStorage.setItem(MUSIC_TIME_KEY, String(audioEl.currentTime)); } catch(e) {}
+    });
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted && audioEl && _shIsOn() && !_shPlaying) {
+        audioEl.play().then(() => { _shPlaying = true; _shFadeTo(0.7, 400); })
+                     .catch(() => { _shPlaying = false; });
+      }
     });
     document.addEventListener('visibilitychange', () => {
       if (!audioEl) return;
