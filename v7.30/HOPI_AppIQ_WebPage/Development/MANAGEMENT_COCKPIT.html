@@ -813,18 +813,18 @@
     function _bgTryPlay() {
       if (_bgPlaying || _bgStarting) return;
       _bgStarting = true;
-      _bgAudio.volume = 0; _bgAudio.muted = true;
+      _bgAudio.volume = 0;
       const pr = _bgAudio.play();
       if (pr && pr.then) {
         pr.then(() => {
-          _bgStarting = false; _bgAudio.muted = false; _bgPlaying = true;
+          _bgStarting = false; _bgPlaying = true;
           try { localStorage.setItem(MUS_KEY, '1'); } catch(e) {}
           const saved = parseFloat(sessionStorage.getItem(MUS_TIME_KEY) || '0');
           if (saved > 0) _bgAudio.currentTime = saved;
           updateMusicBtn();
           _bgFadeTo(0.7, 400);
         }, () => {
-          _bgStarting = false; _bgAudio.muted = false; _bgPlaying = false;
+          _bgStarting = false; _bgPlaying = false;
           updateMusicBtn();
         });
       } else {
@@ -866,7 +866,7 @@
       document.addEventListener('visibilitychange', () => {
         if (!_bgAudio) return;
         if (document.hidden) { _bgFadeTo(0, 600); }
-        else if (_bgPlaying) { _bgFadeTo(0.7, 400); }
+        else if (_bgPlaying) { _bgAudio.play().then(() => _bgFadeTo(0.7, 400)).catch(() => {}); }
       });
       updateMusicBtn();
     }

@@ -53,17 +53,17 @@ const Shell = (() => {
   function _shTryPlay() {
     if (_shPlaying || _shStarting || !audioEl) return;
     _shStarting = true;
-    audioEl.volume = 0; audioEl.muted = true;
+    audioEl.volume = 0;
     const pr = audioEl.play();
     if (pr && pr.then) {
       pr.then(() => {
-        _shStarting = false; audioEl.muted = false; _shPlaying = true;
+        _shStarting = false; _shPlaying = true;
         try { localStorage.setItem(MUSIC_KEY, '1'); } catch(e) {}
         const saved = parseFloat(sessionStorage.getItem(MUSIC_TIME_KEY) || '0');
         if (saved > 0) audioEl.currentTime = saved;
         _shFadeTo(0.7, 400);
       }, () => {
-        _shStarting = false; audioEl.muted = false; _shPlaying = false;
+        _shStarting = false; _shPlaying = false;
       });
     } else {
       _shStarting = false; _shPlaying = true;
@@ -107,7 +107,7 @@ const Shell = (() => {
     document.addEventListener('visibilitychange', () => {
       if (!audioEl) return;
       if (document.hidden) { _shFadeTo(0, 600); }
-      else if (_shPlaying) { _shFadeTo(0.7, 400); }
+      else if (_shPlaying) { audioEl.play().then(() => _shFadeTo(0.7, 400)).catch(() => {}); }
     });
     return audioEl;
   }
