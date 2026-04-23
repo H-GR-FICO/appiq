@@ -11012,7 +11012,41 @@ window.OIL_DATA = {
       "createdAt": "2026-04-24 00:15",
       "completedAt": "2026-04-24 00:20",
       "durationDays": 0,
-      "note": "Implementovan QUICK_REDEPLOY.ps1 v root projektu. Kroky: git pull → robocopy /MIR Development/ → repos/vX.XX/ → URL replacements (MC.html OG tagy, documentation.html BASE_VER) → regenerace data bundlu (oil/boil/disc/bm) → git add+commit+push → live URL v konzoli. Zadny PREFLIGHT, zadny Release/ mezikrok. Pouziti: 'powershell -ExecutionPolicy Bypass -File QUICK_REDEPLOY.ps1'"
+      "note": "Implementovan QUICK_REDEPLOY.ps1 v root projektu. Kroky: git pull → robocopy /MIR Development/ → repos/vX.XX/ → URL replacements (MC.html OG tagy, documentation.html BASE_VER) → regenerace data bundlu (oil/boil/disc/bm) → git add+commit+push → live URL v konzoli. Zadny PREFLIGHT, zadny Release/ mezikrok. Pouziti: 'powershell -ExecutionPolicy Bypass -File QUICK_REDEPLOY.ps1'. Oprava encoding: skript prepsan na ciste ASCII znaky (Unicode box-drawing a em-dash zpusobily parse error v PS 5.1 bez BOM)."
+    },
+    {
+      "id": "AIQ-00397",
+      "title": "FIX: hero-preview — bila plocha cca 25% (aspect-ratio + object-fit: cover + dark bg)",
+      "taskType": "fix",
+      "effort": "XS",
+      "estimatedTime": 10,
+      "actualTime": 5,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "domain": "Studio",
+      "module": "Hub",
+      "createdAt": "2026-04-23 21:10",
+      "completedAt": "2026-04-23 21:15",
+      "durationDays": 0,
+      "note": "hero-preview CSS: cockpit-og.png mel bilou plochu cca 25% na spodu obrazovky. Root cause: Chrome headless screenshot zachytil vetsi viewport nez SVG height 630px → PNG obsahuje bily prostor pod obsahem. Fix: (1) background: #060c18 na .hero-preview — tmave pozadi zakryje bile pixely pri render; (2) aspect-ratio: 1200/630 — enforces spravny pomer stran containeru; (3) height: 100% + object-fit: cover + object-position: top — PNG vyplni container seshora, bila spodni cast orizena pres overflow:hidden. David reportoval problem, fix nasazen pres QUICK_REDEPLOY do v7.28."
+    },
+    {
+      "id": "AIQ-00398",
+      "title": "DEPLOY: v7.28 — URL bump pro WhatsApp OG cache invalidaci + retroaktivni release notes",
+      "taskType": "release",
+      "effort": "XS",
+      "estimatedTime": 15,
+      "actualTime": 10,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "domain": "Platform",
+      "module": "ReleaseManager",
+      "createdAt": "2026-04-23 21:00",
+      "completedAt": "2026-04-23 21:30",
+      "durationDays": 0,
+      "note": "WhatsApp kešuje link preview podle URL stranky (ne og:image URL) — ?v=2 nestaci. Fix: bump _ver.js v7.27 → v7.28, QUICK_REDEPLOY vytvoril repos/appiq/v7.28/ — nova URL, WhatsApp re-scrape s korektnim cockpit-og.png. CHANGELOG.md v7.28 zapsan retroaktivne po Davidove upozorneni — Pravidlo 5 (release notes vzdy pred deployem) bylo preskoceno, David spravne zkorigoval."
     }
   ]
 };
