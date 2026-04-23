@@ -1,0 +1,3 @@
+﻿// HOPI AppIQ — stav release/deploy
+// Generovano: DO_DEPLOY.ps1 v7.26
+window._STUDIO_STATUS = {"version":"v7.26","archiveAt":"2026-04-22 13:59","archiveWeb":"v7.25-WebPage_20260422_1359","archiveApp":"v1.1-Phase0_20260422_1359","deployAt":"2026-04-23 02:15","deployCommit":"","deployBranch":"main","deployUrl":"https://h-gr-fico.github.io/appiq/","deployLatest":"https://h-gr-fico.github.io/appiq/v7.26/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html"};

@@ -1,6 +1,6 @@
 ﻿{
-  "latest": "v7.25",
-  "updatedAt": "2026-04-22",
+  "latest": "v7.26",
+  "updatedAt": "2026-04-23",
   "versions": [
     {
         "version":  "v7.20",
@@ -143,6 +143,25 @@
         "pitchUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.26",
+        "date":  "2026-04-23",
+        "session":  "session_20260422_1406",
+        "title":  "Cockpit: kompletní CS/EN překlad + bilingvní opravy · deploy",
+        "mainUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  {
+    
+                    },
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="cs" translate="no" class="">
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — AI-powered Enterprise Application Platform</title>
+<style>
+:root{
+  --hopi-green:#007d32;
+  --hopi-green-light:#e8f5ee;
+  --hopi-green-dark:#005522;
+  --orange:#E8750A;
+  --dark:#0D0D1E;
+  --dark2:#1A1A2E;
+  --grey:#4A4A6A;
+  --border:rgba(255,255,255,.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--dark);color:#fff;font-size:14px;line-height:1.6;}
+
+/* ── TOP NAV ── */
+.top-nav{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  height:56px;
+  background:rgba(13,13,30,.95);
+  backdrop-filter:blur(12px);
+  border-bottom:2px solid var(--hopi-green);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+}
+.nav-left{display:flex;align-items:center;gap:10px;}
+@keyframes hopiTechStamp{0%{opacity:0;transform:translateX(55px) scale(0.88);}65%{opacity:1;transform:translateX(-3px) scale(1.04);}82%{transform:translateX(1px) scale(0.99);}100%{opacity:1;transform:translateX(0) scale(1);}}
+.nav-logo-bar{width:3px;height:38px;background:var(--hopi-green);border-radius:2px;}
+.nav-logo-text{display:flex;flex-direction:column;gap:1px;}
+.nav-logo-hopi{font-size:22px;font-weight:900;color:#fff;letter-spacing:2px;line-height:1;}
+.nav-logo-appiq{display:flex;align-items:baseline;gap:3px;}
+.nav-logo-app{font-size:12px;font-weight:400;color:rgba(255,255,255,.6);}
+.nav-logo-iq{font-size:14px;font-weight:900;color:var(--hopi-green);}
+.nav-right{display:flex;align-items:center;gap:12px;}
+.nav-hopi-logo svg{height:26px;width:auto;}
+.lang-switch{display:flex;gap:2px;background:rgba(255,255,255,.08);border-radius:6px;padding:2px;}
+.lang-btn{padding:4px 12px;border-radius:4px;font-size:11px;font-weight:700;border:none;cursor:pointer;transition:all .2s;font-family:'Segoe UI',Arial,sans-serif;letter-spacing:.5px;}
+.lang-btn.active{background:var(--hopi-green);color:#fff;}
+.lang-btn:not(.active){background:transparent;color:rgba(255,255,255,.5);}
+.lang-btn:not(.active):hover{background:rgba(255,255,255,.1);color:#fff;}
+
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  background:linear-gradient(145deg,#050510 0%,#0D1A0D 40%,#0A0A1E 70%,#050510 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:100px 40px 60px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 40%, rgba(0,125,50,.08) 0%, transparent 70%);
+  pointer-events:none;
+}
+#hero-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;opacity:.55;z-index:0;}
+.hero>*:not(#hero-canvas){position:relative;z-index:1;}
+.hero-eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--hopi-green);margin-bottom:20px;font-weight:700;}
+.hero-title{font-size:64px;font-weight:900;line-height:1.05;margin-bottom:12px;}
+.hero-title .t-hopi{color:#fff;}
+.hero-title .t-app{color:#E8750A;font-weight:400;}
+.hero-title .t-iq{color:var(--hopi-green);}
+.hero-slogan{font-size:22px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:8px;}
+.hero-tagline{font-size:14px;color:rgba(255,255,255,.4);font-style:italic;margin-bottom:48px;}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{
+  padding:14px 32px;background:var(--hopi-green);color:#fff;
+  border:none;border-radius:8px;font-size:14px;font-weight:700;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:all .25s;font-family:'Segoe UI',Arial,sans-serif;letter-spacing:.3px;
+}
+.btn-primary:hover{background:var(--hopi-green-dark);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,125,50,.4);}
+.btn-secondary{
+  padding:14px 32px;background:transparent;color:rgba(255,255,255,.8);
+  border:1px solid rgba(255,255,255,.25);border-radius:8px;font-size:14px;font-weight:600;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;
+  transition:all .25s;font-family:'Segoe UI',Arial,sans-serif;
+}
+.btn-secondary:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.4);transform:translateY(-2px);}
+.btn-orange{background:var(--orange);border:none;color:#fff;}
+.btn-orange:hover{background:#C06000;box-shadow:0 8px 24px rgba(232,117,10,.4);}
+.hero-scroll{margin-top:60px;font-size:11px;color:rgba(255,255,255,.25);letter-spacing:2px;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.scroll-arrow{animation:bounce 2s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* ── SECTION BASE ── */
+.section{padding:80px 40px;max-width:1100px;margin:0 auto;}
+.section-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--hopi-green);font-weight:700;margin-bottom:8px;}
+.section-title{font-size:36px;font-weight:900;color:#fff;margin-bottom:12px;line-height:1.2;}
+.section-sub{font-size:15px;color:rgba(255,255,255,.5);margin-bottom:48px;max-width:640px;}
+hr.section-div{border:none;border-top:1px solid rgba(255,255,255,.07);margin:0;}
+
+/* ── PLATFORM VISION SECTION ── */
+.vision-wrap{background:linear-gradient(135deg,rgba(0,125,50,.08),rgba(0,60,20,.04));border:1px solid rgba(0,125,50,.2);border-radius:16px;padding:40px;margin-bottom:40px;}
+.vision-quote{font-size:17px;font-style:italic;color:rgba(255,255,255,.8);line-height:1.75;border-left:3px solid var(--hopi-green);padding-left:20px;margin-bottom:28px;}
+.vision-quote strong{color:var(--hopi-green);font-style:normal;}
+.pillars-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.pillar{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:24px;}
+.pillar-num{font-size:40px;font-weight:900;color:var(--hopi-green);opacity:.3;line-height:1;margin-bottom:8px;}
+.pillar-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;}
+.pillar-desc{font-size:12.5px;color:rgba(255,255,255,.55);line-height:1.7;}
+
+/* ── HOPIQ SECTION ── */
+.hopiq-section{background:linear-gradient(135deg,#050510,#0D1A0D);padding:80px 40px;border-top:1px solid rgba(0,125,50,.2);border-bottom:1px solid rgba(0,125,50,.2);}
+.hopiq-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.hopiq-badge{display:inline-flex;align-items:center;gap:12px;background:rgba(0,125,50,.12);border:1px solid rgba(0,125,50,.3);border-radius:12px;padding:8px 16px;margin-bottom:24px;}
+.hopiq-badge-icon{width:36px;height:36px;border-radius:50%;background:var(--hopi-green);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;}
+.hopiq-badge-label{font-size:16px;font-weight:700;color:var(--hopi-green);}
+.hopiq-title{font-size:36px;font-weight:900;color:#fff;margin-bottom:12px;line-height:1.2;}
+.hopiq-desc{font-size:14px;color:rgba(255,255,255,.6);line-height:1.8;margin-bottom:28px;}
+.hopiq-features{display:flex;flex-direction:column;gap:10px;}
+.hopiq-feat{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:14px;}
+.hopiq-feat-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.hopiq-feat-text h5{font-size:13px;font-weight:700;color:#fff;margin-bottom:3px;}
+.hopiq-feat-text p{font-size:11.5px;color:rgba(255,255,255,.5);margin:0;line-height:1.6;}
+.hopiq-visual{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;}
+.hopiq-circle{width:200px;height:200px;border-radius:50%;background:linear-gradient(135deg,var(--hopi-green),var(--hopi-green-dark));border:3px solid rgba(255,255,255,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(0,125,50,.25);animation:pulse 3s ease-in-out infinite;}
+.hopiq-circle-iq{font-size:56px;font-weight:900;color:#fff;line-height:1;}
+.hopiq-circle-name{font-size:12px;color:rgba(255,255,255,.7);letter-spacing:3px;text-transform:uppercase;margin-top:4px;}
+@keyframes pulse{0%,100%{box-shadow:0 0 60px rgba(0,125,50,.25);}50%{box-shadow:0 0 90px rgba(0,125,50,.45);}}
+.hopiq-ring{position:relative;width:280px;height:280px;margin:0 auto;}
+.hopiq-ring-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+.hopiq-orbit{position:absolute;top:0;left:0;right:0;bottom:0;border:1px dashed rgba(0,125,50,.2);border-radius:50%;animation:spin 20s linear infinite;}
+@keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+/* ── PRESENTATION PREVIEW ── */
+.preview-section{padding:80px 40px;max-width:1100px;margin:0 auto;}
+.preview-wrap{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:16px;overflow:hidden;}
+.preview-header{background:rgba(255,255,255,.05);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08);}
+.preview-title{font-size:13px;font-weight:700;color:rgba(255,255,255,.7);}
+.preview-highlights{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.ph{padding:28px 32px;border-right:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);}
+.ph:nth-child(3n){border-right:none;}
+.ph-num{font-size:32px;font-weight:900;color:var(--hopi-green);opacity:.7;}
+.ph-label{font-size:11px;color:rgba(255,255,255,.4);margin-top:2px;}
+.ph-title{font-size:13px;font-weight:700;color:#fff;margin-top:6px;}
+
+/* ── PORTAL LAUNCH SECTION ── */
+.launch-section{background:linear-gradient(135deg,rgba(0,125,50,.08),rgba(13,13,30,.5));padding:80px 40px;border-top:1px solid rgba(0,125,50,.15);border-bottom:1px solid rgba(0,125,50,.15);}
+.launch-inner{max-width:800px;margin:0 auto;text-align:center;}
+.launch-icon{font-size:48px;margin-bottom:20px;}
+.launch-title{font-size:36px;font-weight:900;color:#fff;margin-bottom:12px;}
+.launch-desc{font-size:15px;color:rgba(255,255,255,.55);margin-bottom:36px;line-height:1.75;}
+.launch-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+.launch-note{margin-top:20px;font-size:11px;color:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;gap:6px;}
+
+/* ── FOOTER ── */
+footer{background:#050510;border-top:1px solid rgba(0,125,50,.2);padding:40px;text-align:center;}
+.footer-logo{display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:16px;}
+.footer-logo-bar{width:3px;height:32px;background:var(--hopi-green);border-radius:2px;}
+.footer-hopi{font-size:18px;font-weight:900;color:#fff;letter-spacing:2px;}
+.footer-appiq{font-size:13px;color:rgba(255,255,255,.5);}
+.footer-tagline{font-size:12px;color:rgba(255,255,255,.3);margin-bottom:20px;font-style:italic;}
+.footer-links{display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+.footer-links a{font-size:12px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .2s;}
+.footer-links a:hover{color:var(--hopi-green);}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.2);}
+.powered-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 12px;font-size:11px;color:rgba(255,255,255,.4);margin-top:12px;}
+
+
+/* ── HOPIQ FLOATING BUTTON ── */
+#hopiq-fab{
+  position:fixed;bottom:28px;right:28px;z-index:9998;
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--hopi-green),var(--hopi-green-dark));
+  border:2px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  cursor:pointer;box-shadow:0 4px 20px rgba(0,125,50,.4);
+  transition:all .25s;text-decoration:none;
+}
+#hopiq-fab:hover{transform:scale(1.1);box-shadow:0 8px 32px rgba(0,125,50,.6);}
+#hopiq-fab .fab-iq{font-size:16px;font-weight:900;color:#fff;line-height:1;}
+#hopiq-fab .fab-label{font-size:7px;color:rgba(255,255,255,.7);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.fab-tooltip{
+  position:absolute;right:68px;bottom:0;
+  background:var(--dark2);color:#fff;
+  padding:8px 14px;border-radius:8px;
+  font-size:12px;font-weight:600;white-space:nowrap;
+  opacity:0;transition:opacity .2s;pointer-events:none;
+  border:1px solid var(--hopi-green);
+  box-shadow:0 4px 16px rgba(0,0,0,.4);
+}
+.fab-tooltip::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);border:6px solid transparent;border-right:none;border-left-color:var(--hopi-green);}
+#hopiq-fab:hover .fab-tooltip{opacity:1;}
+
+/* ── LANG — ovládáno JS, ne CSS kaskádou ── */
+.lang-en{display:none;}
+
+/* ── RESPONSIVE ── */
+
+/* ── LARGE (1920px+) — Full HD & large monitors ── */
+@media(min-width:1920px){
+  .hero-title{font-size:clamp(64px,3.5vw,100px);}
+  .hero-slogan{font-size:clamp(22px,1.4vw,34px);}
+  .section,.preview-section{max-width:1400px;padding:100px 60px;}
+  .hopiq-inner{max-width:1400px;}
+  .hopiq-section{padding:100px 60px;}
+  .launch-section{padding:100px 60px;}
+  .section-title,.hopiq-title,.launch-title{font-size:clamp(36px,2vw,52px);}
+  .section-sub{font-size:clamp(15px,.9vw,20px);max-width:800px;}
+  .pillars-grid{gap:28px;}
+}
+
+/* ── ULTRAWIDE (3200px+) — David's 3440×1440 ── */
+@media(min-width:3200px){
+  .hero-title{font-size:clamp(100px,3.8vw,140px);}
+  .hero-slogan{font-size:clamp(34px,1.7vw,52px);}
+  .hero-tagline{font-size:clamp(14px,.8vw,22px);}
+  .section,.preview-section{max-width:2000px;padding:120px 80px;}
+  .hopiq-inner{max-width:2000px;}
+  .hopiq-section{padding:120px 80px;}
+  .launch-section{padding:120px 80px;}
+  .launch-inner{max-width:1200px;}
+  .section-title,.hopiq-title,.launch-title{font-size:clamp(52px,2.4vw,72px);}
+  .section-sub{font-size:clamp(18px,1vw,26px);max-width:1100px;}
+  .top-nav{height:70px;}
+  .pillars-grid{gap:36px;}
+  .hopiq-inner{gap:80px;}
+}
+
+/* ── TABLET LANDSCAPE (max 1200px) ── */
+@media(max-width:1200px){
+  .section,.preview-section{padding:70px 32px;}
+  .hopiq-section{padding:70px 32px;}
+  .launch-section{padding:70px 32px;}
+  .hopiq-inner{gap:40px;}
+}
+
+/* ── TABLET (max 768px) ── */
+@media(max-width:768px){
+  .top-nav{padding:0 16px;}
+  .nav-hopi-logo{display:none;}
+  #idx-music-label{display:none;}
+
+  .hero-title{font-size:clamp(32px,8vw,56px);}
+  .hero-slogan{font-size:18px;}
+  .hero{padding:90px 24px 48px;}
+  .hero-cta{flex-direction:column;align-items:center;}
+  .btn-primary,.btn-secondary{width:100%;max-width:300px;justify-content:center;}
+
+  .section,.preview-section{padding:60px 24px;}
+  .hopiq-section{padding:60px 24px;}
+  .launch-section{padding:60px 24px;}
+  .section-title,.hopiq-title,.launch-title{font-size:28px;}
+  .section-sub{font-size:14px;}
+
+  .pillars-grid{grid-template-columns:1fr;}
+  .hopiq-inner{grid-template-columns:1fr;gap:32px;}
+  .preview-highlights{grid-template-columns:1fr;}
+  .ph{border-right:none;}
+
+  .launch-cta{flex-direction:column;align-items:center;}
+}
+
+/* ── MOBILE (max 480px) ── */
+@media(max-width:480px){
+  .top-nav{padding:0 12px;height:50px;}
+  .nav-right{gap:4px;}
+#nav-hopi-tech{display:none!important;}/* hide stamp animation on phones — nav overflow */
+
+  .hero-title{font-size:clamp(26px,7.5vw,40px);}
+  .hero-slogan{font-size:15px;}
+  .hero-tagline{font-size:12px;margin-bottom:32px;}
+  .hero{padding:72px 16px 36px;}
+  .hero-scroll{margin-top:36px;}
+
+  .section,.preview-section{padding:48px 16px;}
+  .hopiq-section{padding:48px 16px;}
+  .launch-section{padding:48px 16px;}
+  .section-title,.hopiq-title,.launch-title{font-size:22px;}
+  .section-sub{font-size:13px;}
+  .vision-wrap{padding:24px 16px;}
+  .vision-quote{font-size:14px;}
+
+  #hopiq-fab{bottom:16px;right:16px;width:48px;height:48px;}
+  .fab-tooltip{right:60px;}
+}
+
+#index-music-btn{
+  display:flex;align-items:center;gap:6px;
+  background:transparent;border:1px solid rgba(255,255,255,.22);
+  color:rgba(255,255,255,.7);border-radius:6px;
+  padding:4px 10px;font-size:11px;font-weight:700;
+  cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;
+  letter-spacing:.3px;transition:all .2s;white-space:nowrap;
+}
+#index-music-btn:hover{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.45);}
+#index-music-btn.playing{border-color:rgba(0,200,80,.5);color:#60D080;background:rgba(0,125,50,.12);}
+#index-music-btn .idx-waves{display:none;gap:2px;align-items:flex-end;height:12px;}
+#index-music-btn.playing .idx-waves{display:flex;}
+#index-music-btn.playing .idx-music-icon{display:none;}
+.idx-waves span{display:block;width:2px;background:#60D080;border-radius:1px;animation:idxWave 0.7s ease-in-out infinite;}
+.idx-waves span:nth-child(1){height:4px;animation-delay:0s;}
+.idx-waves span:nth-child(2){height:10px;animation-delay:.12s;}
+.idx-waves span:nth-child(3){height:6px;animation-delay:.24s;}
+.idx-waves span:nth-child(4){height:8px;animation-delay:.08s;}
+@keyframes idxWave{0%,100%{transform:scaleY(.4);}50%{transform:scaleY(1);}}
+
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="nav-left">
+    <!-- HOPI AppIQ LF2 + by HOPI TECHNOLOGY — stamp animation on load -->
+    <div id="nav-brand-wrap" style="position:relative;display:flex;align-items:center;gap:10px;">
+      <svg viewBox="0 0 1260 240.6796" height="34" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0;">
+        <rect width="30.1059" height="240.6796" fill="#007d32"/>
+        <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+        <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+      </svg>
+      <div id="nav-hopi-tech" style="display:flex;align-items:center;gap:8px;opacity:0;flex-shrink:0;">
+        <span style="font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:1px;font-family:'Segoe UI',Arial,sans-serif;font-style:italic;">by</span>
+        <svg viewBox="0 0 660 318" height="40" xmlns="http://www.w3.org/2000/svg" style="display:block;flex-shrink:0;">
+          <rect x="629.8941" width="30.1059" height="318" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
+        </svg>
+      </div>
+      <div id="nav-stamp-flash" style="position:absolute;inset:0;pointer-events:none;border-radius:6px;opacity:0;background:rgba(255,220,100,0.75);"></div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a href="../index.html" style="color:#7de8a0;font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(0,200,80,.3);border-radius:5px;padding:3px 10px;white-space:nowrap;flex-shrink:0;">&#8592; Studio Hub</a>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="lbtn-cz" onclick="setLang('cs')">CZ</button>
+      <button class="lang-btn" id="lbtn-en" onclick="setLang('en')">EN</button>
+    </div>
+<button id="index-music-btn" onclick="idxMusicToggle()" title="Battle Theme soundtrack">
+      <span id="idx-music-icon" class="idx-music-icon">🎵</span>
+      <span id="idx-music-label"><span class="lang-cz">Hudba</span><span class="lang-en" style="display:none;">Music</span></span>
+      <span class="idx-waves"><span></span><span></span><span></span><span></span></span>
+    </button>
+    <div class="nav-hopi-logo">
+      <!-- HOPI Holding Corporate Logo — real brand vectors -->
+      <svg viewBox="0 0 1668.3749 240.6796" height="26" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <rect width="30.1059" height="240.6796" fill="#007d32"/>
+        <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+        <path d="m1533.0877,143.2444v28.0389l-17.6297.8519c-12.8905,0-21.3865-3.3285-25.4924-9.9856-4.1106-6.6524-6.159-18.3-6.159-34.9427s1.0242-28.3927,3.0771-35.264c2.0532-6.8666,5.2746-11.5778,9.6645-14.1242,4.3899-2.5511,12.0061-3.8267,22.839-3.8267s24.7477.9264,41.7394,2.7606l.852-22.7272-7.6486-1.485c-15.2929-2.9747-29.5287-4.4644-42.6985-4.4644-21.1026,0-36.0414,5.8098-44.8214,17.4202-8.78,11.615-13.1699,30.5202-13.1699,56.7203s4.2132,45.3194,12.6393,57.3534c8.4261,12.0386,23.8957,18.058,46.4133,18.058,12.6066,0,29.0306-1.634,49.2858-4.8881v-74.9877h-42.0607v25.4925h13.1699Zm-197.5528,51.8322v-118.9571h2.1228l36.1113,118.9571h48.2244V50.627h-29.3193v118.9571h-2.1228l-34.8356-118.9571h-49.4953v144.4496h29.3145Zm-67.1249-144.4496h-29.3145v144.4496h29.3145V50.627Zm-99.4141,110.8848c-4.8136,5.3862-12.5322,8.0723-23.151,8.0723h-19.3334v-93.4646h19.3334c7.0762,0,12.709.7402,16.8849,2.2299,4.1758,1.485,7.3322,4.2131,9.455,8.1794,2.1228,3.9663,3.4682,8.3563,4.0362,13.1698.5632,4.8136.8473,11.224.8473,19.2218,0,8.0025-.1398,14.2685-.4236,18.8028-.9916,11.4707-3.5428,19.4033-7.6487,23.7886m8.2864,28.9979c8.212-3.0446,14.4779-7.928,18.7981-14.6596,4.3202-6.7223,7.2576-14.3709,8.8171-22.9414,1.5549-8.5658,2.337-19.3614,2.337-32.3963,0-13.0255-.8518-23.6117-2.5511-31.7539-1.6991-8.1421-4.7764-15.2228-9.2407-21.2422-4.4598-6.0193-10.7259-10.3394-18.7981-12.9604-8.0723-2.6163-18.3419-3.9291-30.7997-3.9291h-48.6479v144.4496h48.6479c12.7416,0,23.2207-1.5223,31.4374-4.5669m-104.5118-21.3493h-52.8936V50.627h-29.3145v144.4496h82.2081v-25.9161Zm-113.6454-45.6733c0-25.4878-4.497-44.4303-13.4864-56.8227-8.9941-12.3924-24.4684-18.5886-46.4181-18.5886s-37.4194,6.1962-46.4134,18.5886c-8.994,12.3924-13.4864,31.3349-13.4864,56.8227s4.4924,44.2208,13.4864,56.1896c8.9941,11.9688,24.4637,17.9509,46.4134,17.9509s37.424-5.9821,46.4181-17.9509c8.9894-11.9688,13.4864-30.6971,13.4864-56.1896m-89.6427.1071c0-17.49,2.1229-30.199,6.3731-38.1317,4.2503-7.928,12.034-11.8943,23.365-11.8943s19.1194,3.9663,23.3697,11.8943c4.2503,7.9327,6.3731,20.6417,6.3731,38.1317s-2.0903,29.9523-6.2661,37.3868c-4.1804,7.4345-12.0014,11.1541-23.4767,11.1541s-19.2962-3.7196-23.472-11.1541c-4.1758-7.4345-6.2661-19.8921-6.2661-37.3868m-61.599,71.4823V50.627h-29.3145v59.0526h-53.7455v-59.0526h-29.3145v144.4496h29.3145v-59.9045h53.7455v59.9045h29.3145Z" fill="#fff"/>
+        <rect x="1638.2689" width="30.1059" height="240.6796" fill="#007d32"/>
+      </svg>
+    </div>
+  </div>
+</nav>
+
+
+<!-- HOPIQ FLOATING BUTTON -->
+<a id="hopiq-fab" href="#s-hopiq">
+  <div class="fab-tooltip">HOPIQ — <span class="lang-cz">AI asistent platformy</span><span class="lang-en">Platform AI assistant</span></div>
+  <div class="fab-iq">IQ</div>
+  <div class="fab-label">HOPIQ</div>
+</a>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-eyebrow">HOPI Holding — Group Controlling</div>
+  <h1 class="hero-title">
+    <span class="t-hopi">HOPI </span><span class="t-app">App</span><span class="t-iq">IQ</span>
+  </h1>
+  <div class="hero-slogan">
+    "Build smart. Deploy fast. Scale everywhere."
+  </div>
+  <div class="hero-tagline">AI-powered enterprise application platform</div>
+  <div style="font-size:10px;letter-spacing:2.2px;color:rgba(232,117,10,0.55);font-weight:700;text-transform:uppercase;margin-top:6px;font-family:'Segoe UI',Arial,sans-serif;">a HOPI TECHNOLOGY platform</div>
+
+  <div class="hero-cta">
+    <a class="btn-primary btn-orange" href="../PORTAL_PRESENTATION.html" id="prez-link" target="_blank">
+      &#9654;
+      <span class="lang-cz">Otevřít prezentaci</span>
+      <span class="lang-en">Open Presentation</span>
+    </a>
+    <a class="btn-primary" href="#launch" id="portal-link">
+      &#9654;
+      <span class="lang-cz">Spustit portál</span>
+      <span class="lang-en">Launch Portal</span>
+    </a>
+    <a class="btn-secondary" href="#" id="portal-mobile-link" target="_blank" style="border-color:rgba(0,125,50,.5);color:#60D080;display:inline-flex;align-items:center;gap:6px;">
+      📱
+      <span class="lang-cz">Mobile <span style="font-size:9px;background:rgba(0,125,50,.3);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;">PREVIEW</span></span>
+      <span class="lang-en">Mobile <span style="font-size:9px;background:rgba(0,125,50,.3);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;">PREVIEW</span></span>
+    </a>
+    <button class="btn-secondary" onclick="window.open(window._prezUrl?window._prezUrl():'../PORTAL_PRESENTATION.html','_blank');setTimeout(()=>window.print(),800);">
+      &#128438;
+      <span class="lang-cz">Export PDF</span>
+      <span class="lang-en">Export PDF</span>
+    </button>
+  </div>
+
+  <div class="hero-scroll">
+    <span class="lang-cz">Scroll pro více</span>
+    <span class="lang-en">Scroll for more</span>
+    <div class="scroll-arrow">&#8595;</div>
+  </div>
+</section>
+
+<hr class="section-div">
+
+<!-- PLATFORM VISION -->
+<section class="section" id="s-vision">
+  <div class="section-label">
+    <span class="lang-cz">Filozofie platformy</span>
+    <span class="lang-en">Platform Philosophy</span>
+  </div>
+  <h2 class="section-title">
+    <span class="lang-cz">Proč vznikla HOPI AppIQ?</span>
+    <span class="lang-en">Why HOPI AppIQ exists?</span>
+  </h2>
+  <div class="section-sub">
+    <span class="lang-cz">Původní záměr, který prostupuje celou architekturou — kostra každého rozhodnutí.</span>
+    <span class="lang-en">The original intent running through the entire architecture — the backbone of every decision.</span>
+  </div>
+
+  <div class="vision-wrap">
+    <div class="vision-quote">
+      <span class="lang-cz"><strong>Původní záměr:</strong> Hledáme platformu pro rychlý vývoj, nasazení a distribuci aplikací vyvíjených firmou a jejími uživateli za pomoci umělé inteligence. Každé architektonické rozhodnutí se hodnotí prizmatem: <strong>„Umožňuje toto naší firmě rychleji stavět, nasazovat a sdílet aplikace s AI?"</strong></span>
+      <span class="lang-en"><strong>Original Intent:</strong> We are looking for a platform for rapid development, deployment and distribution of applications built by the company and its users with AI. Every architectural decision is evaluated through: <strong>"Does this enable our company to build, deploy and share applications with AI faster?"</strong></span>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-num">1</div>
+        <div class="pillar-title">
+          <span class="lang-cz">Tvorba</span>
+          <span class="lang-en">Build</span>
+        </div>
+        <div class="pillar-desc">
+          <span class="lang-cz">HOPIQ AI snižuje bariéru vstupu na minimum. Analytik navrhne aplikaci bez znalosti programování. AI Configurator převede zadání na funkční modul.</span>
+          <span class="lang-en">HOPIQ AI lowers the barrier to a minimum. An analyst can design an application without programming. AI Configurator converts requirements into a functional module.</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">2</div>
+        <div class="pillar-title">
+          <span class="lang-cz">Nasazení</span>
+          <span class="lang-en">Deploy</span>
+        </div>
+        <div class="pillar-desc">
+          <span class="lang-cz">CI/CD pipeline, Azure Static Web Apps, Entra ID SSO. Od kódu k produkci bez manuálního zásahu. Distribuce přes Teams, prohlížeč, SharePoint.</span>
+          <span class="lang-en">CI/CD pipeline, Azure Static Web Apps, Entra ID SSO. From code to production without manual intervention. Distribution via Teams, browser, SharePoint.</span>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">3</div>
+        <div class="pillar-title">
+          <span class="lang-cz">Škálování</span>
+          <span class="lang-en">Scale</span>
+        </div>
+        <div class="pillar-desc">
+          <span class="lang-cz">Jednou postavené jádro: Finance → Operations → Purchasing → HR → IT → celá skupina. Každá oblast dostane HOPI AppIQ | [Oblast]. Bez přepisu kódu.</span>
+          <span class="lang-en">Core built once: Finance → Operations → Purchasing → HR → IT → entire group. Each area gets HOPI AppIQ | [Area]. No code rewrite.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-div">
+
+<!-- HOPIQ SECTION -->
+<section class="hopiq-section" id="s-hopiq">
+  <div class="hopiq-inner">
+    <div>
+      <div class="hopiq-badge">
+        <div class="hopiq-badge-icon">IQ</div>
+        <div class="hopiq-badge-label">HOPIQ</div>
+      </div>
+      <h2 class="hopiq-title">
+        <span class="lang-cz">Váš AI asistent.<br>Zabudovaný v platformě.</span>
+        <span class="lang-en">Your AI Assistant.<br>Built into the Platform.</span>
+      </h2>
+      <p class="hopiq-desc">
+        <span class="lang-cz">HOPIQ není jen chatbot. Je to AI jádro celé platformy — průvodce vývojem, analytik dat, vypravěč příběhů z čísel, čtenář dokumentů. Jedno jméno, čtyři schopnosti.</span>
+        <span class="lang-en">HOPIQ is not just a chatbot. It is the AI core of the entire platform — development guide, data analyst, story teller from numbers, document reader. One name, four capabilities.</span>
+      </p>
+      <div class="hopiq-features">
+        <div class="hopiq-feat">
+          <div class="hopiq-feat-icon">💬</div>
+          <div class="hopiq-feat-text">
+            <h5>
+              <span class="lang-cz">AI Chatbot (HOPIQ Chat)</span>
+              <span class="lang-en">AI Chatbot (HOPIQ Chat)</span>
+            </h5>
+            <p>
+              <span class="lang-cz">Q&amp;A, postupy, vysvětlení metrik, citace zdrojů, historie konverzací.</span>
+              <span class="lang-en">Q&amp;A, procedures, metric explanations, source citations, conversation history.</span>
+            </p>
+          </div>
+        </div>
+        <div class="hopiq-feat">
+          <div class="hopiq-feat-icon">📊</div>
+          <div class="hopiq-feat-text">
+            <h5>PBI Designer / Analyser</h5>
+            <p>
+              <span class="lang-cz">Tvorba reportů, DAX generování, detekce anomálií, RLS-aware analýza.</span>
+              <span class="lang-en">Report creation, DAX generation, anomaly detection, RLS-aware analysis.</span>
+            </p>
+          </div>
+        </div>
+        <div class="hopiq-feat">
+          <div class="hopiq-feat-icon">📖</div>
+          <div class="hopiq-feat-text">
+            <h5>
+              <span class="lang-cz">Data Story Teller</span>
+              <span class="lang-en">Data Story Teller</span>
+            </h5>
+            <p>
+              <span class="lang-cz">Manažerská shrnutí z dat, export do Word/PPT, 9 jazyků automaticky.</span>
+              <span class="lang-en">Management summaries from data, export to Word/PPT, 9 languages automatically.</span>
+            </p>
+          </div>
+        </div>
+        <div class="hopiq-feat">
+          <div class="hopiq-feat-icon">📄</div>
+          <div class="hopiq-feat-text">
+            <h5>Document Reader</h5>
+            <p>
+              <span class="lang-cz">Extrakce z dokumentů (SharePoint/RAG), metodiky, políčky, security trimming.</span>
+              <span class="lang-en">Extraction from documents (SharePoint/RAG), policies, methodologies, security trimming.</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;">
+      <div class="hopiq-ring">
+        <div class="hopiq-orbit"></div>
+        <div class="hopiq-ring-inner">
+          <div class="hopiq-circle">
+            <div class="hopiq-circle-iq">IQ</div>
+            <div class="hopiq-circle-name">HOPIQ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-div">
+
+<!-- PRESENTATION PREVIEW -->
+<section class="preview-section" id="s-preview">
+  <div class="section-label">
+    <span class="lang-cz">Dokumentace platformy</span>
+    <span class="lang-en">Platform Documentation</span>
+  </div>
+  <h2 class="section-title">
+    <span class="lang-cz">Cílový koncept <span id="idx-prez-ver-h2">…</span></span>
+    <span class="lang-en">Target Concept <span id="idx-prez-ver-h2-en">…</span></span>
+  </h2>
+  <div class="section-sub">
+    <span class="lang-cz">Kompletní architektonický dokument — vize, architektura, fáze, tým, přijímací kritéria.</span>
+    <span class="lang-en">Complete architectural document — vision, architecture, phases, team, acceptance criteria.</span>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <span class="preview-title">HOPI AppIQ — <span class="lang-cz">Cílový koncept platformy</span><span class="lang-en">Platform Target Concept</span> <span id="idx-prez-ver">…</span></span>
+      <a class="btn-primary" href="../PORTAL_PRESENTATION.html" style="padding:7px 18px;font-size:12px;">
+        <span class="lang-cz">Otevřít</span><span class="lang-en">Open</span> &#8599;
+      </a>
+    </div>
+    <div class="preview-highlights">
+      <div class="ph"><div class="ph-num">3</div><div class="ph-label"><span class="lang-cz">Nové sekce</span><span class="lang-en">New sections</span></div><div class="ph-title"><span class="lang-cz">Vision, Group Portal, Dev/Deploy</span><span class="lang-en">Vision, Group Portal, Dev/Deploy</span></div></div>
+      <div class="ph"><div class="ph-num">27+</div><div class="ph-label"><span class="lang-cz">Kapitol dokumentu</span><span class="lang-en">Document chapters</span></div><div class="ph-title"><span class="lang-cz">Kompletní architektura a roadmapa</span><span class="lang-en">Complete architecture &amp; roadmap</span></div></div>
+      <div class="ph"><div class="ph-num">4</div><div class="ph-label"><span class="lang-cz">AI moduly v plánu</span><span class="lang-en">AI modules planned</span></div><div class="ph-title">HOPIQ Chat, PBI, Story Teller, Docs</div></div>
+      <div class="ph"><div class="ph-num">9</div><div class="ph-label"><span class="lang-cz">Jazyků UI</span><span class="lang-en">UI languages</span></div><div class="ph-title">CZ, SK, HU, PL, DE, RO, BG, HR, EN</div></div>
+      <div class="ph"><div class="ph-num">12</div><div class="ph-label"><span class="lang-cz">Platform Services</span><span class="lang-en">Platform Services</span></div><div class="ph-title"><span class="lang-cz">Sdílené přes všechny oblasti</span><span class="lang-en">Shared across all areas</span></div></div>
+      <div class="ph"><div class="ph-num">5</div><div class="ph-label"><span class="lang-cz">Sub-portálů v plánu</span><span class="lang-en">Sub-portals planned</span></div><div class="ph-title">Finance, Operations, Purchasing, HR, IT</div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-div">
+
+<!-- BRAND IDENTITY -->
+<section class="section" id="s-brand">
+  <div class="section-label">Brand Identity</div>
+  <h2 class="section-title">
+    <span class="lang-cz">Brand je první dojem produktu</span>
+    <span class="lang-en">Brand Is the First Impression</span>
+  </h2>
+  <div class="section-sub">
+    <span class="lang-cz">Vizuální identita HOPI AppIQ — od prvních nápadů po finální logotypy. LF3 je výsledná kombinace obou světů.</span>
+    <span class="lang-en">Visual identity of HOPI AppIQ — from early concepts to final logotypes. LF3 is the ultimate combination of both worlds.</span>
+  </div>
+
+  <!-- ── Brainstorming — small thumbnails ── -->
+  <div style="margin-bottom:48px;">
+    <div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-transform:uppercase;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:12px;">
+      <span class="lang-cz">Brainstorming — původní koncepty</span>
+      <span class="lang-en">Brainstorming — early concepts</span>
+      <span style="flex:1;height:1px;background:rgba(255,255,255,.07);display:inline-block;"></span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+      <!-- L1 -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 1450 240.6796" height="18" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="30.1059" height="240.6796" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><rect x="648" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/><text x="672" y="194" fill="rgba(255,255,255,.72)" font-family="'Segoe UI',Arial,sans-serif" font-size="192" font-weight="300">App</text><text x="1118" y="196" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L1</div>
+      </div>
+      <!-- L2 -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 1450 240.6796" height="18" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="30.1059" height="240.6796" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><rect x="640" y="20" width="3" height="200" fill="rgba(255,255,255,.15)" rx="1"/><text x="666" y="200" fill="#fff" font-family="'Segoe UI',Arial,sans-serif" font-size="168" font-weight="700">App</text><text x="1080" y="202" fill="#00cc55" font-family="'Segoe UI',Arial,sans-serif" font-size="208" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L2</div>
+      </div>
+      <!-- L3 Stacked -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 640 370" height="36" xmlns="http://www.w3.org/2000/svg" style="display:block"><rect width="30.1059" height="370" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><rect x="50" y="218" width="568" height="1.5" fill="rgba(255,255,255,.1)"/><text x="88" y="318" fill="rgba(255,255,255,.62)" font-family="'Segoe UI',Arial,sans-serif" font-size="88" font-weight="300">App</text><text x="336" y="320" fill="#007d32" font-family="'Segoe UI',Arial,sans-serif" font-size="100" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L3</div>
+      </div>
+      <!-- L4 IQ Mark -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:10px 14px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 860 240" height="24" xmlns="http://www.w3.org/2000/svg" style="display:block"><defs><linearGradient id="brl4" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00a03a"/><stop offset="100%" stop-color="#004d1f"/></linearGradient></defs><rect width="240" height="240" rx="18" fill="url(#brl4)"/><text x="120" y="165" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="116" font-weight="900">IQ</text><rect x="256" y="38" width="2" height="164" fill="rgba(255,255,255,.1)"/><text x="272" y="136" fill="#fff" font-family="'Segoe UI',Arial,sans-serif" font-size="86" font-weight="900" letter-spacing="5">HOPI</text><text x="274" y="196" fill="rgba(255,255,255,.52)" font-family="'Segoe UI',Arial,sans-serif" font-size="52" font-weight="300">App</text><text x="464" y="198" fill="#00cc55" font-family="'Segoe UI',Arial,sans-serif" font-size="56" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:5px;text-align:center;letter-spacing:.8px;">L4</div>
+      </div>
+      <!-- separator -->
+      <div style="width:1px;height:44px;background:rgba(255,255,255,.07);margin:0 2px;align-self:center;"></div>
+      <!-- B1 Hexagon -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><defs><linearGradient id="brb1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00b040"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs><polygon points="60,7 108,33.5 108,86.5 60,113 12,86.5 12,33.5" fill="url(#brb1)"/><text x="60" y="73" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="40" font-weight="900" letter-spacing="-2">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B1</div>
+      </div>
+      <!-- B2 Grid -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><rect x="8" y="8" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="45" y="8" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="82" y="8" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="8" y="45" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="45" y="45" width="30" height="30" rx="5" fill="#007d32"/><text x="60" y="66" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="13" font-weight="900">IQ</text><rect x="82" y="45" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="8" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="45" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/><rect x="82" y="82" width="30" height="30" rx="5" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.15)" stroke-width="1"/></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B2</div>
+      </div>
+      <!-- B3 Neural -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><line x1="60" y1="13" x2="60" y2="37" stroke="#007d32" stroke-width="1.5" opacity=".6"/><line x1="107" y1="37" x2="79" y2="50" stroke="#007d32" stroke-width="1.5" opacity=".5"/><line x1="94" y1="99" x2="73" y2="73" stroke="#007d32" stroke-width="1.5" opacity=".55"/><line x1="26" y1="99" x2="47" y2="73" stroke="#007d32" stroke-width="1.5" opacity=".55"/><line x1="13" y1="37" x2="41" y2="50" stroke="#007d32" stroke-width="1.5" opacity=".5"/><circle cx="60" cy="60" r="25" fill="#007d32"/><text x="60" y="68" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="22" font-weight="900">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B3</div>
+      </div>
+      <!-- B4 Circuit H -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><rect x="18" y="14" width="22" height="92" rx="4" fill="#007d32"/><rect x="80" y="14" width="22" height="92" rx="4" fill="#007d32"/><rect x="40" y="50" width="40" height="20" rx="3" fill="#007d32"/></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B4</div>
+      </div>
+      <!-- B5 Shield -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 130" width="37" height="40"><defs><linearGradient id="brb5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00aa44"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs><path d="M60,7 L113,27 L113,68 Q113,108 60,125 Q7,108 7,68 L7,27 Z" fill="url(#brb5)"/><text x="60" y="82" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="38" font-weight="900" letter-spacing="-1">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B5</div>
+      </div>
+      <!-- B6 Diamond -->
+      <div style="background:#0e0e24;border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:8px 12px;opacity:.55;transition:opacity .2s;" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='.55'">
+        <svg viewBox="0 0 120 120" width="40" height="40"><defs><linearGradient id="brb6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00aa44"/><stop offset="100%" stop-color="#005220"/></linearGradient></defs><rect x="23" y="23" width="74" height="74" rx="10" fill="url(#brb6)" transform="rotate(45 60 60)"/><text x="60" y="68" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="28" font-weight="900" letter-spacing="-1">IQ</text></svg>
+        <div style="font-size:7px;color:rgba(255,255,255,.22);margin-top:4px;text-align:center;letter-spacing:.8px;">B6</div>
+      </div>
+      <!-- link to brand concepts -->
+      <div style="margin-left:auto;align-self:center;">
+        <a href="BRAND_CONCEPTS.html" style="font-size:10px;color:rgba(0,125,50,.7);border:1px solid rgba(0,125,50,.25);border-radius:6px;padding:5px 12px;text-decoration:none;white-space:nowrap;transition:all .2s;" onmouseover="this.style.color='#00b040';this.style.borderColor='rgba(0,125,50,.5)'" onmouseout="this.style.color='rgba(0,125,50,.7)';this.style.borderColor='rgba(0,125,50,.25)'">
+          <span class="lang-cz">Všechny koncepty &#8599;</span>
+          <span class="lang-en">All concepts &#8599;</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Vývoj finální identity ── -->
+  <div>
+    <div style="font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.28);text-transform:uppercase;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px;">
+      <span class="lang-cz">Vývoj finální identity</span>
+      <span class="lang-en">Final Identity Evolution</span>
+      <span style="flex:1;height:1px;background:rgba(255,255,255,.07);display:inline-block;"></span>
+    </div>
+    <!-- LF1 + LF2 side by side -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <!-- LF1 -->
+      <div style="background:#111128;border:1px solid rgba(232,117,10,.3);border-radius:12px;padding:24px;position:relative;">
+        <div style="position:absolute;top:0;right:14px;background:#E8750A;color:#fff;font-size:8px;font-weight:800;letter-spacing:1.2px;padding:2px 9px;border-radius:0 0 6px 6px;">LF1</div>
+        <div style="display:flex;justify-content:center;align-items:center;padding:16px 8px;background:rgba(255,255,255,.02);border-radius:8px;margin-bottom:14px;min-height:90px;">
+          <svg viewBox="0 0 660 318" height="60" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;"><rect width="30.1059" height="318" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">HOPI TECHNOLOGY</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;">Identita nové 6. divize. HOPI brand path + "TECHNOLOGY" oranžová stacked pod HOPI.</div>
+      </div>
+      <!-- LF2 -->
+      <div style="background:#111128;border:1px solid rgba(232,117,10,.3);border-radius:12px;padding:24px;position:relative;">
+        <div style="position:absolute;top:0;right:14px;background:#E8750A;color:#fff;font-size:8px;font-weight:800;letter-spacing:1.2px;padding:2px 9px;border-radius:0 0 6px 6px;">LF2</div>
+        <div style="display:flex;justify-content:center;align-items:center;padding:16px 8px;background:rgba(255,255,255,.02);border-radius:8px;margin-bottom:14px;min-height:90px;">
+          <svg viewBox="0 0 1260 240.6796" height="46" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;"><rect width="30.1059" height="240.6796" fill="#007d32"/><path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/><text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text></svg>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;">HOPI AppIQ</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.6;">Platforma a produkt. "App" oranžová + "IQ" zelená — bez separátoru, jeden textový prvek.</div>
+      </div>
+    </div>
+    <!-- LF3 WINNER — full width -->
+    <div style="background:linear-gradient(135deg,#151005,#111128);border:1px solid rgba(255,185,0,.4);border-radius:14px;padding:30px 32px;position:relative;box-shadow:0 0 40px rgba(255,185,0,.06);">
+      <div style="position:absolute;top:0;right:16px;background:linear-gradient(135deg,#E8750A,#ffb830);color:#fff;font-size:9px;font-weight:800;letter-spacing:1.5px;padding:3px 12px;border-radius:0 0 8px 8px;">★ LF3 · FINÁLNÍ KOMBINACE</div>
+      <div style="display:flex;justify-content:center;align-items:center;padding:20px 12px;background:rgba(255,255,255,.02);border-radius:10px;margin-bottom:20px;min-height:80px;">
+        <svg viewBox="0 0 2032 318" height="52" xmlns="http://www.w3.org/2000/svg" style="display:block;max-width:100%;">
+          <rect width="30.1059" height="318" fill="#007d32"/>
+          <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+          <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+          <text x="1330" y="120" text-anchor="middle" dominant-baseline="central" fill="rgba(255,255,255,0.45)" font-family="'Segoe UI',Arial,sans-serif" font-size="90" font-style="italic">by</text>
+          <g transform="translate(1340,0)">
+            <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+            <text x="347" y="276" text-anchor="middle" fill="#E8750A" font-family="'Segoe UI',Arial,sans-serif" font-size="75" font-weight="700">TECHNOLOGY</text>
+            <rect x="660" width="30.1059" height="318" fill="#007d32"/>
+          </g>
+        </svg>
+      </div>
+      <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="flex:1;min-width:200px;">
+          <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:5px;">HOPI AppIQ · by · HOPI TECHNOLOGY</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.7;">LF2 + LF1 v jednom SVG. Zelená čára vlevo (AppIQ) + zelená čára vpravo (TECHNOLOGY) — logo se uzavírá. Jeden vizuální celek propojující platformu a divizi.</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <a href="BRAND_CONCEPTS.html" style="font-size:10px;color:rgba(255,185,0,.65);border:1px solid rgba(255,185,0,.2);border-radius:6px;padding:5px 12px;text-decoration:none;white-space:nowrap;transition:all .2s;" onmouseover="this.style.color='rgba(255,185,0,.9)';this.style.borderColor='rgba(255,185,0,.4)'" onmouseout="this.style.color='rgba(255,185,0,.65)';this.style.borderColor='rgba(255,185,0,.2)'">
+            <span class="lang-cz">Brand Concepts &#8599;</span>
+            <span class="lang-en">Brand Concepts &#8599;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-div">
+
+<!-- PORTAL LAUNCH -->
+<section class="launch-section" id="launch">
+  <div class="launch-inner">
+    <div class="launch-icon">&#9654;&#65039;</div>
+    <h2 class="launch-title">
+      <span class="lang-cz">Spustit HOPI AppIQ | Finance</span>
+      <span class="lang-en">Launch HOPI AppIQ | Finance</span>
+    </h2>
+    <p class="launch-desc">
+      <span class="lang-cz">První deployment platformy HOPI AppIQ — Group Controlling portal. Plně funkční prototyp (Fáze 0) s kalendářem uzávěrek, trackingem, org. strukturou, reportingem, kurzy měn a launchery pro SAP, BNS, Power BI a SharePoint.</span>
+      <span class="lang-en">First deployment of the HOPI AppIQ platform — Group Controlling portal. Fully functional prototype (Phase 0) with closing calendar, tracking, org chart, reporting, FX rates and launchers for SAP, BNS, Power BI and SharePoint.</span>
+    </p>
+    <div class="launch-cta">
+      <a class="btn-primary btn-orange" href="#" id="app-launch-btn" target="_blank">
+        🖥️
+        <span class="lang-cz">Desktop</span>
+        <span class="lang-en">Desktop</span>
+      </a>
+      <a class="btn-secondary" href="#" id="app-mobile-btn" target="_blank" style="border-color:rgba(0,125,50,.5);color:#2D8B3A;display:inline-flex;align-items:center;gap:6px;">
+        📱
+        <span class="lang-cz">Mobile <span style="font-size:9px;background:rgba(0,125,50,.2);border:1px solid rgba(0,125,50,.4);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;color:#60D080;">PREVIEW</span></span>
+        <span class="lang-en">Mobile <span style="font-size:9px;background:rgba(0,125,50,.2);border:1px solid rgba(0,125,50,.4);border-radius:4px;padding:1px 5px;margin-left:2px;letter-spacing:.5px;color:#60D080;">PREVIEW</span></span>
+      </a>
+      <a class="btn-secondary" href="../PORTAL_PRESENTATION.html">
+        &#128196;
+        <span class="lang-cz">Architektonická dokumentace</span>
+        <span class="lang-en">Architecture Documentation</span>
+      </a>
+    </div>
+    <div class="launch-note">
+      &#128274;
+      <span class="lang-cz">Přístup pouze pro interní uživatele HOPI Holding — SharePoint / M365</span>
+      <span class="lang-en">Access for internal HOPI Holding users only — SharePoint / M365</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">
+    <div class="footer-logo-bar"></div>
+    <span class="footer-hopi">HOPI</span>
+    <span class="footer-appiq"><span style="color:#E8750A;">App</span><strong style="color:var(--hopi-green);">IQ</strong></span>
+  </div>
+  <div class="footer-tagline">"Build smart. Deploy fast. Scale everywhere."</div>
+  <div class="footer-links">
+    <a href="#s-vision">
+      <span class="lang-cz">Filozofie</span><span class="lang-en">Philosophy</span>
+    </a>
+    <a href="#s-hopiq">HOPIQ</a>
+    <a href="#s-preview">
+      <span class="lang-cz">Dokumentace</span><span class="lang-en">Documentation</span>
+    </a>
+    <a href="#s-brand">
+      <span class="lang-cz">Brand Identity</span><span class="lang-en">Brand Identity</span>
+    </a>
+    <a href="#launch">
+      <span class="lang-cz">Spustit portál</span><span class="lang-en">Launch Portal</span>
+    </a>
+    <a href="../PORTAL_PRESENTATION.html">
+      <span class="lang-cz">Prezentace <span id="idx-prez-ver-footer">…</span></span><span class="lang-en">Presentation <span id="idx-prez-ver-footer-en">…</span></span>
+    </a>
+  </div>
+  <div class="footer-copy">
+    &copy; 2026 HOPI Holding a.s. — Group Controlling | David Gogela
+  </div>
+  <div>
+    <span class="powered-badge">Powered by Claude AI &#129302;</span>
+  </div>
+</footer>
+
+<script src="../../../_i18n.js"></script>
+<script src="../_ver.js"></script>
+<script>
+(function(){
+  var ids = ['idx-prez-ver','idx-prez-ver-footer','idx-prez-ver-footer-en','idx-prez-ver-h2','idx-prez-ver-h2-en'];
+  ids.forEach(function(id){ var e=document.getElementById(id); if(e) e.textContent=PREZ_VERSION; });
+})();
+
+// LANGUAGE SWITCHER — JS-driven, bez CSS kaskády
+var _INLINE = new Set(['SPAN','A','STRONG','EM','B','I','BUTTON','LABEL','CODE','TD','TH','LI']);
+function setLang(lang){
+  try { localStorage.setItem('hopi_lang', lang); } catch(e){}
+  document.querySelectorAll('.lang-cz,.lang-en').forEach(function(el){
+    var show = el.classList.contains(lang==='en' ? 'lang-en' : 'lang-cz');
+    el.style.display = show ? (_INLINE.has(el.tagName) ? 'inline' : 'block') : 'none';
+  });
+  var btnCz = document.getElementById('lbtn-cz');
+  var btnEn = document.getElementById('lbtn-en');
+  if(btnCz) btnCz.classList.toggle('active', lang!=='en');
+  if(btnEn) btnEn.classList.toggle('active', lang==='en');
+  // sync _i18n.js service (handles data-i18n attributes)
+  if(typeof I18n !== 'undefined') I18n.setLang(lang);
+}
+
+// PORTAL LAUNCH LINKS
+var _portalUrl       = '../../../HOPI_AppIQ/Release/index.html';
+var _portalMobileUrl = '../../../HOPI_AppIQ/Development/index.html?view=mobile';
+
+document.getElementById('app-launch-btn').href    = _portalUrl;
+document.getElementById('portal-link').href        = _portalUrl;
+document.getElementById('portal-link').target      = '_blank';
+
+document.getElementById('app-mobile-btn').href     = _portalMobileUrl;
+document.getElementById('portal-mobile-link').href = _portalMobileUrl;
+
+// PRESENTATION LINK - relativní cesta ke stejné složce (funguje v Development i Release)
+// target="_blank" = nová záložka = user-activated = AudioContext.resume() funguje bez gestikulace
+var prezPath = '../PORTAL_PRESENTATION.html';
+(function(){
+  var el = document.getElementById('prez-link');
+  if(el){ el.href = prezPath; el.target = '_blank'; }
+  document.querySelectorAll('a[href="../PORTAL_PRESENTATION.html"]').forEach(function(a){
+    a.target = '_blank';
+  });
+})();
+
+// PARTICLE NETWORK ANIMATION
+(function(){
+  var c=document.getElementById('hero-canvas');
+  if(!c)return;
+  var ctx=c.getContext('2d'),W,H,pts=[],raf;
+  var DIST=140,SPD=0.32,N=55;
+  function resize(){
+    W=c.width=c.parentElement.offsetWidth||window.innerWidth;
+    H=c.height=c.parentElement.offsetHeight||window.innerHeight;
+  }
+  function Pt(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*SPD;this.vy=(Math.random()-.5)*SPD;this.r=Math.random()*1.4+.6;}
+  function init(){resize();pts=[];for(var i=0;i<N;i++)pts.push(new Pt());}
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){
+      var p=pts[i];
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0){p.x=0;p.vx*=-1;}if(p.x>W){p.x=W;p.vx*=-1;}
+      if(p.y<0){p.y=0;p.vy*=-1;}if(p.y>H){p.y=H;p.vy*=-1;}
+      for(var j=i+1;j<pts.length;j++){
+        var q=pts[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy);
+        if(d<DIST){ctx.beginPath();ctx.strokeStyle='rgba(0,200,80,'+(1-d/DIST)*.22+')';ctx.lineWidth=.7;ctx.moveTo(p.x,p.y);ctx.lineTo(q.x,q.y);ctx.stroke();}
+      }
+    }
+    for(var i=0;i<pts.length;i++){var p=pts[i];ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,6.28);ctx.fillStyle='rgba(0,180,70,.7)';ctx.fill();}
+    raf=requestAnimationFrame(draw);
+  }
+  init();draw();
+  window.addEventListener('resize',function(){cancelAnimationFrame(raf);init();draw();});
+})();
+
+// INIT - vždy volat setLang při načtení
+document.addEventListener('DOMContentLoaded', function() {
+  var saved = 'cs';
+  try { saved = localStorage.getItem('hopi_lang') || 'cs'; } catch(e){}
+  setLang(saved);
+});
+
+// ══ STAMP SOUND + FLASH ══
+function playStampSound(){
+  try{
+    var ac=new(window.AudioContext||window.webkitAudioContext)();
+    var sr=ac.sampleRate,dur=0.13;
+    var buf=ac.createBuffer(1,Math.ceil(sr*dur),sr);
+    var d=buf.getChannelData(0);
+    for(var i=0;i<d.length;i++){
+      var t=i/sr;
+      var env=Math.pow(1-t/dur,2.5)*Math.exp(-t*28);
+      d[i]=(Math.random()*2-1)*env*0.85;
+    }
+    var src=ac.createBufferSource();src.buffer=buf;
+    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=650;
+    var g=ac.createGain();g.gain.value=0.7;
+    src.connect(lp);lp.connect(g);g.connect(ac.destination);
+    src.start();
+  }catch(e){}
+}
+function doStampFlash(id){
+  var f=document.getElementById(id);
+  if(!f)return;
+  f.style.transition='none';
+  f.style.opacity='0.6';
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    f.style.transition='opacity 0.5s ease-out';
+    f.style.opacity='0';
+  });});
+}
+
+// ══ HEADER STAMP ANIMATION — fires on every page load ══
+(function(){
+  window.addEventListener('DOMContentLoaded',function(){
+    setTimeout(function(){
+      var el=document.getElementById('nav-hopi-tech');
+      if(!el)return;
+      el.style.animation='hopiTechStamp 0.5s cubic-bezier(0.22,1,0.36,1) forwards';
+      el.addEventListener('animationend',function(){
+        el.style.opacity='1';
+        playStampSound();
+        doStampFlash('nav-stamp-flash');
+      },{once:true});
+    },900);
+  });
+})();
+
+// ── Hudební podkres ──
+(function(){
+  var _audio=null,_playing=false,_shouldPlay=false,_fadeId=null,_starting=false;
+
+  function audio(){
+    if(!_audio){
+      _audio=new Audio('../../../rubyzephyr-imperium-aeternum-v1-430851.mp3');
+      _audio.loop=true; _audio.preload='auto'; _audio.volume=0;
+    }
+    return _audio;
+  }
+
+  function fadeTo(vol,ms,cb){
+    if(_fadeId){clearInterval(_fadeId);_fadeId=null;}
+    var a=audio(),n=Math.max(1,Math.round(ms/40)),i=0,v0=a.volume;
+    _fadeId=setInterval(function(){
+      i++; a.volume=Math.min(1,Math.max(0,v0+(vol-v0)*(i/n)));
+      if(i>=n){clearInterval(_fadeId);_fadeId=null;if(cb)cb();}
+    },40);
+  }
+
+  function ui(on){
+    var btn=document.getElementById('index-music-btn');
+    var lbl=document.getElementById('idx-music-label');
+    var ico=document.getElementById('idx-music-icon');
+    if(btn)btn.classList[on?'add':'remove']('playing');
+    if(lbl){
+      var czEl=lbl.querySelector('.lang-cz'), enEl=lbl.querySelector('.lang-en');
+      if(czEl) czEl.textContent=on?'Ztlumit':'Hudba';
+      if(enEl) enEl.textContent=on?'Mute':'Music';
+    }
+    if(ico)ico.textContent=on?'':'🎵';
+    // Aktualizuj href všech odkazů na prezentaci — přidej ?m=1 pokud hudba hraje
+    var suffix=on?'?m=1':'';
+    document.querySelectorAll('a[href*="PORTAL_PRESENTATION"]').forEach(function(a){
+      a.href='../PORTAL_PRESENTATION.html'+suffix;
+    });
+    window._prezUrl=function(){ return '../PORTAL_PRESENTATION.html'+(on?'?m=1':''); };
+  }
+
+  function tryPlay(fast){
+    if(_playing||_starting)return;
+    _starting=true;
+    var a=audio(); a.volume=0; a.muted=true;
+    var pr=a.play();
+    if(pr&&pr.then){
+      pr.then(function(){
+        _starting=false; a.muted=false;
+        _playing=true; _shouldPlay=true;
+        ui(true);
+        try{localStorage.setItem('hopi_music_on','1');}catch(e){}
+        fadeTo(0.7,fast?250:600);
+      },function(){
+        _starting=false; a.muted=false;
+        _playing=false; ui(false);
+      });
+    } else {
+      _starting=false; a.muted=false; a.volume=0;
+      _playing=true; _shouldPlay=true;
+      ui(true);
+      try{localStorage.setItem('hopi_music_on','1');}catch(e){}
+      fadeTo(0.7,fast?250:600);
+    }
+  }
+
+  function stopPlay(){
+    _shouldPlay=false;
+    if(!_playing)return;
+    _playing=false;
+    fadeTo(0,1200,function(){if(_audio)_audio.pause();});
+    ui(false);
+    try{localStorage.setItem('hopi_music_on','0');}catch(e){}
+  }
+
+  window.idxMusicToggle=function(){
+    if(_playing)stopPlay();else{_shouldPlay=true;tryPlay(true);}
+  };
+
+  _shouldPlay=true; // každé nové načtení = click-to-start povoleno
+  var _wasOn=false; try{_wasOn=localStorage.getItem('hopi_music_on')==='1';}catch(e){}
+  if(_wasOn) tryPlay(true);
+
+  function _notMusicBtn(e){
+    var b=document.getElementById('index-music-btn');
+    return !b||!(e.target===b||b.contains(e.target));
+  }
+  window.addEventListener('pointerdown',function(e){ if(_notMusicBtn(e)&&_shouldPlay&&!_playing&&!_starting)tryPlay(true); },true);
+  window.addEventListener('click',function(e){ if(_notMusicBtn(e)&&_shouldPlay&&!_playing&&!_starting)tryPlay(true); },true);
+  window.addEventListener('keydown',function(){ if(_shouldPlay&&!_playing&&!_starting)tryPlay(true); },true);
+
+  document.addEventListener('visibilitychange',function(){
+    if(!_audio)return;
+    if(document.hidden){fadeTo(0,600);}
+    else if(_playing){fadeTo(0.7,400);}
+  });
+})();
+</script>
+<script src="../../../_hopiq.js"></script>
+</body>
+</html>
