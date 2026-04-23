@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motivation Chamber — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Hero quote ──────────────────────────────── */
+    .mot-hero {
+      text-align: center; padding: 48px 24px 40px;
+      background: radial-gradient(ellipse at 50% 60%, rgba(168,85,247,.12) 0%, transparent 70%);
+      border: 1px solid rgba(168,85,247,.2); border-radius: var(--c-radius);
+      margin-bottom: 36px; position: relative; overflow: hidden;
+    }
+    .mot-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(168,85,247,.015) 30px, rgba(168,85,247,.015) 31px);
+    }
+    .mot-logo { font-size: 48px; margin-bottom: 16px; display: block; position: relative; }
+    .mot-quote {
+      font-size: clamp(18px, 3vw, 28px); font-weight: 700; color: var(--c-white);
+      font-family: var(--c-font-sans);
+      line-height: 1.4; max-width: 720px; margin: 0 auto 20px;
+      position: relative;
+    }
+    .mot-quote em { color: var(--c-violet); font-style: normal; }
+    .mot-author {
+      font-size: 13px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 2px; position: relative;
+    }
+
+    /* ── Big numbers ─────────────────────────────── */
+    .big-num-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px; margin-bottom: 32px;
+    }
+    .big-num {
+      text-align: center; padding: 28px 20px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      transition: border-color .2s, transform .15s;
+    }
+    .big-num:hover { border-color: rgba(168,85,247,.4); transform: translateY(-2px); }
+    .big-num-val { font-size: clamp(36px, 5vw, 56px); font-weight: 900;
+                   font-family: var(--c-font-sans); line-height: 1; }
+    .big-num-lbl { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+                   letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; }
+    .big-num-sub { font-size: 12px; color: var(--c-text); margin-top: 6px; }
+
+    /* ── Phase exit map ──────────────────────────── */
+    .exit-map {
+      display: flex; align-items: center; gap: 0;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden;
+      margin-bottom: 32px;
+    }
+    .exit-step {
+      flex: 1; padding: 20px 16px; text-align: center;
+      border-right: 1px solid var(--c-border);
+      position: relative; transition: background .2s;
+    }
+    .exit-step:last-child { border-right: none; }
+    .exit-step.done  { background: rgba(34,197,94,.04); }
+    .exit-step.now   { background: rgba(168,85,247,.06); }
+    .exit-step:hover { background: rgba(168,85,247,.04); }
+    .exit-step-num { font-size: 9px; font-family: var(--c-font-sans); color: var(--c-muted); letter-spacing: 2px; }
+    .exit-step-val { font-size: 18px; font-weight: 900; font-family: var(--c-font-sans);
+                     line-height: 1; margin: 8px 0 4px; }
+    .exit-step-lbl { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 1px; }
+    .exit-arrow {
+      padding: 0 4px; font-size: 18px; color: var(--c-border);
+      display: flex; align-items: center; flex-shrink: 0;
+    }
+
+    /* ── Mottos wall ─────────────────────────────── */
+    .mottos-wall {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px; margin-bottom: 32px;
+    }
+    .motto-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 18px 20px;
+      display: flex; align-items: flex-start; gap: 12px;
+      transition: border-color .2s;
+    }
+    .motto-card:hover { border-color: rgba(168,85,247,.3); }
+    .motto-icon { font-size: 28px; flex-shrink: 0; }
+    .motto-text { font-size: 15px; font-weight: 700; color: var(--c-white); line-height: 1.4; }
+    .motto-sub  { font-size: 11px; color: var(--c-muted); margin-top: 4px; line-height: 1.5; }
+
+    /* ── TAM ─────────────────────────────────────── */
+    .tam-strip {
+      display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 32px;
+    }
+    .tam-card {
+      flex: 1; min-width: 160px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 16px 18px; text-align: center;
+    }
+    .tam-val { font-size: 26px; font-weight: 900; font-family: var(--c-font-sans); }
+    .tam-lbl { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+               letter-spacing: 1.5px; margin-top: 5px; }
+    .tam-sub { font-size: 11px; color: var(--c-text); margin-top: 4px; }
+
+    /* ── Scenario switcher for valuation ────────── */
+    .exit-scn-btn {
+      padding: 6px 14px; border-radius: 6px; cursor: pointer;
+      font-size: 12px; font-family: var(--c-font-sans); font-weight: 700;
+      border: 1px solid var(--c-border); background: var(--c-bg2);
+      color: var(--c-muted); letter-spacing: .5px; transition: all .15s;
+    }
+    .exit-scn-btn.active { border-color: var(--c-amber); color: var(--c-amber); background: rgba(245,158,11,.1); }
+    .val-card {
+      padding: 18px 16px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); transition: border-color .2s;
+    }
+    .val-card.baseline { border-color: rgba(34,197,94,.3); }
+    .val-card-name { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 1px; margin-bottom: 6px; text-transform: uppercase; }
+    .val-card-val  { font-size: clamp(22px, 3vw, 32px); font-weight: 900; font-family: var(--c-font-sans); line-height: 1; }
+    .val-card-mult { font-size: 11px; color: var(--c-muted); margin-top: 4px; }
+
+    @media (max-width: 768px) {
+      .exit-map { flex-direction: column; }
+      .exit-step { border-right: none; border-bottom: 1px solid var(--c-border); }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Motivation Chamber</h1>
+    <p class="page-subtitle">Proč to děláme · Kam jdeme · Jak velké to může být</p>
+
+    <!-- ── Hero quote ─────────────────────────────── -->
+    <div class="mot-hero">
+      <span class="mot-logo">⬡</span>
+      <div class="mot-quote">
+        "Nejde o to, co máme dnes.<br>
+        Jde o to, co <em>budujeme</em> —<br>
+        a kdo si vezme podíl na <em>zítřku</em>."
+      </div>
+      <div class="mot-author">— David Gogela · Founder, HOPI TechIQ s.r.o.</div>
+    </div>
+
+    <!-- ── Big numbers ────────────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— VELKÁ ČÍSLA</h2>
+    <div class="big-num-grid">
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-violet)" id="mn-aiq">—</div>
+        <div class="big-num-lbl">AIQ Tasků uzavřeno</div>
+        <div class="big-num-sub">Live z OIL.json</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-green)">109+</div>
+        <div class="big-num-lbl">Git Commits</div>
+        <div class="big-num-sub">h-gr-fico/appiq</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-blue)" id="mn-days">—</div>
+        <div class="big-num-lbl">Dní projektu</div>
+        <div class="big-num-sub">Od 01.02.2026</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-amber)" id="mn-b2c">—</div>
+        <div class="big-num-lbl">Dnů do B2C Launch</div>
+        <div class="big-num-sub">Cíl: 01.01.2027</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-green)">~$1,000</div>
+        <div class="big-num-lbl">Celková investice</div>
+        <div class="big-num-sub">8 týdnů → funkční platforma</div>
+      </div>
+      <div class="big-num">
+        <div class="big-num-val" style="color:var(--c-pink)">200–500×</div>
+        <div class="big-num-lbl">Odhadované ROI</div>
+        <div class="big-num-sub">$1K → €200–500K value</div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Phase → Exit map ───────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— PHASE → EXIT MAPA</h2>
+    <div class="exit-map">
+      <div class="exit-step done">
+        <div class="exit-step-num">PHASE 0</div>
+        <div class="exit-step-val" style="color:var(--c-green)">MVP</div>
+        <div class="exit-step-lbl">Platforma live</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step now">
+        <div class="exit-step-num">PHASE 1 · TEĎ</div>
+        <div class="exit-step-val" style="color:var(--c-violet)">B2C Launch</div>
+        <div class="exit-step-lbl">01.01.2027</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step">
+        <div class="exit-step-num">PHASE 2</div>
+        <div class="exit-step-val" style="color:var(--c-blue)">Enterprise</div>
+        <div class="exit-step-lbl">2028</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step">
+        <div class="exit-step-num">PHASE 3</div>
+        <div class="exit-step-val" style="color:var(--c-amber)">Marketplace</div>
+        <div class="exit-step-lbl">2029+</div>
+      </div>
+      <div class="exit-arrow">→</div>
+      <div class="exit-step" style="background:rgba(34,197,94,.05);border-color:rgba(34,197,94,.2)">
+        <div class="exit-step-num">EXIT</div>
+        <div class="exit-step-val" style="color:var(--c-green)">€5–20M</div>
+        <div class="exit-step-lbl">Acquisition / IPO</div>
+      </div>
+    </div>
+
+    <!-- ── TAM ────────────────────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— TRŽNÍ POTENCIÁL (TAM)</h2>
+    <div class="tam-strip">
+      <div class="tam-card" style="border-color:rgba(96,165,250,.2)">
+        <div class="tam-val" style="color:var(--c-blue)">$47B</div>
+        <div class="tam-lbl">TAM — No-Code/Low-Code</div>
+        <div class="tam-sub">Global market 2027</div>
+      </div>
+      <div class="tam-card" style="border-color:rgba(168,85,247,.2)">
+        <div class="tam-val" style="color:var(--c-violet)">$22B</div>
+        <div class="tam-lbl">SAM — AI Productivity Tools</div>
+        <div class="tam-sub">SMB + prosumer segment</div>
+      </div>
+      <div class="tam-card" style="border-color:rgba(34,197,94,.2)">
+        <div class="tam-val" style="color:var(--c-green)">$2B</div>
+        <div class="tam-lbl">SOM — Realistický cíl 3 roky</div>
+        <div class="tam-sub">CE + Western Europe</div>
+      </div>
+      <div class="tam-card" style="border-color:rgba(245,158,11,.2)">
+        <div class="tam-val" style="color:var(--c-amber)">30M+</div>
+        <div class="tam-lbl">Potenciální uživatelé HOME</div>
+        <div class="tam-sub">Jednotlivci + rodiny CZ/SK/PL/DE</div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Valuation — live from business-model.json ─ -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:12px">— VALUACE PO SCÉNÁŘI</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+      <span style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:1px">SCÉNÁŘ:</span>
+      <button class="exit-scn-btn active-middle" data-scn="conservative" onclick="setValScenario('conservative')">Conservative</button>
+      <button class="exit-scn-btn active-middle" data-scn="middle" onclick="setValScenario('middle')">Middle</button>
+      <button class="exit-scn-btn active-middle" data-scn="ambitious" onclick="setValScenario('ambitious')">Ambitious</button>
+      <button class="exit-scn-btn active-middle" data-scn="dream" onclick="setValScenario('dream')">Dream 🌟</button>
+    </div>
+    <div id="mot-val-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:28px">
+      <!-- populated by JS from business-model.json -->
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Mottos wall ────────────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— ŘÍDÍCÍ PRINCIPY</h2>
+    <div class="mottos-wall">
+      <div class="motto-card" style="border-color:rgba(168,85,247,.25)">
+        <div class="motto-icon">💰</div>
+        <div>
+          <div class="motto-text">Budget je svatý</div>
+          <div class="motto-sub">Každá koruna musí mít měřitelný výstup. Žádné výdaje bez business důvodu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(34,197,94,.2)">
+        <div class="motto-icon">👑</div>
+        <div>
+          <div class="motto-text">Cash is King</div>
+          <div class="motto-sub">Revenue a cash injection jsou základem přežití a růstu. Pipeline = životní pojistka.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(96,165,250,.2)">
+        <div class="motto-icon">🎯</div>
+        <div>
+          <div class="motto-text">All Actions Must Be Business Driven</div>
+          <div class="motto-sub">Žádná feature, žádný kód, žádné rozhodnutí bez jasného business dopadu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(245,158,11,.2)">
+        <div class="motto-icon">🚀</div>
+        <div>
+          <div class="motto-text">Living Proof First</div>
+          <div class="motto-sub">Stavíme to pro sebe. HOPI pilot = důkaz že to funguje. Pak prodáváme světu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(236,72,153,.2)">
+        <div class="motto-icon">🤖</div>
+        <div>
+          <div class="motto-text">1 Person + AI = Team</div>
+          <div class="motto-sub">Claude Code + David = rychlost development agentury při zlomku ceny. Proof of concept AI-first buildu.</div>
+        </div>
+      </div>
+      <div class="motto-card" style="border-color:rgba(168,85,247,.15)">
+        <div class="motto-icon">⬡</div>
+        <div>
+          <div class="motto-text">Built for the Universe. Starting with you.</div>
+          <div class="motto-sub">Od jednoho uživatele po celé odvětví. Architektura bez limitů — pokud si je sami nezvolíme.</div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({ section: {cs:'Motivační prostor', en:'Motivation Chamber'}, sectionNum: '01', backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      const q  = s => document.querySelector(s);
+      const qa = s => [...document.querySelectorAll(s)];
+      q('.page-subtitle').textContent = 'Why we build it · Where we go · How big this can be';
+      q('.mot-quote').innerHTML = '"It\'s not about what we have today.<br>It\'s about what we\'re <em>building</em> —<br>and who will own a share of <em>tomorrow</em>."';
+      const h2s = qa('h2');
+      h2s[0].textContent = '— BIG NUMBERS';
+      h2s[1].textContent = '— PHASE → EXIT MAP';
+      h2s[2].textContent = '— MARKET POTENTIAL (TAM)';
+      h2s[3].textContent = '— VALUATION BY SCENARIO';
+      h2s[4].textContent = '— GUIDING PRINCIPLES';
+      const lbl = qa('.big-num-lbl');
+      lbl[0].textContent = 'AIQ Tasks Closed'; lbl[2].textContent = 'Project Days';
+      lbl[3].textContent = 'Days to B2C Launch'; lbl[4].textContent = 'Total Investment'; lbl[5].textContent = 'Estimated ROI';
+      const sub = qa('.big-num-sub');
+      sub[0].textContent = 'Live from OIL.json'; sub[2].textContent = 'Since 01.02.2026';
+      sub[3].textContent = 'Target: 01.01.2027'; sub[4].textContent = '8 weeks → working platform';
+      qa('.exit-step-num')[1].textContent = 'PHASE 1 · NOW';
+      const tam = qa('.tam-lbl');
+      tam[2].textContent = 'SOM — Realistic 3-year target'; tam[3].textContent = 'Potential HOME users';
+      qa('.tam-sub')[3].textContent = 'Individuals + families CZ/SK/PL/DE';
+      [...qa('span')].filter(e => e.textContent.trim() === 'SCÉNÁŘ:').forEach(e => e.textContent = 'SCENARIO:');
+      qa('.motto-text')[0].textContent = 'Budget is Sacred';
+      const ms = qa('.motto-sub');
+      ms[0].textContent = 'Every crown must have measurable output. No spending without a business reason.';
+      ms[1].textContent = 'Revenue and cash injection are the foundation of survival and growth. Pipeline = life insurance.';
+      ms[2].textContent = 'No feature, no code, no decision without clear business impact.';
+      ms[3].textContent = 'We build it for ourselves. HOPI pilot = proof it works. Then we sell it to the world.';
+      ms[4].textContent = 'Claude Code + David = dev agency speed at a fraction of the cost. Proof of AI-first build.';
+      ms[5].textContent = 'From one user to an entire industry. Architecture without limits — unless we choose them.';
+    })();
+    const B2C = new Date('2027-01-01'), PROJ = new Date('2026-02-01');
+    function daysTo(d)   { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
+    function daysFrom(d) { return Math.ceil((new Date() - d) / 86400000); }
+    function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
+    function fmtEur(v) {
+      if (!v) return '—';
+      if (v >= 1e6) return '€' + (v/1e6).toFixed(0) + 'M';
+      if (v >= 1e3) return '€' + (v/1e3).toFixed(0) + 'K';
+      return '€' + v;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      setText('mn-days', daysFrom(PROJ));
+      setText('mn-b2c',  daysTo(B2C));
+    });
+    fetch('../OIL.json').then(r=>r.json()).then(d => {
+      const closed = (d.tasks||[]).filter(t=>t.status==='CLOSED').length;
+      setText('mn-aiq', closed);
+    }).catch(()=>{});
+
+    let BM_DATA = null;
+    let activeValScn = 'middle';
+
+    function setValScenario(id) {
+      activeValScn = id;
+      document.querySelectorAll('.exit-scn-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.scn === id);
+      });
+      if (BM_DATA) renderValuation();
+    }
+
+    function renderValuation() {
+      const scn = BM_DATA.scenarios.find(s => s.id === activeValScn);
+      if (!scn) return;
+      const y3 = scn.projections.y3_arr_eur;
+      const colorMap = { conservative:'var(--c-blue)', middle:'var(--c-green)', ambitious:'var(--c-violet)', dream:'var(--c-amber)' };
+      const col = colorMap[activeValScn] || 'var(--c-text)';
+      let html = '';
+      BM_DATA.exit_paths.forEach(ep => {
+        const val = y3 ? y3 * ep.multiple_arr : null;
+        html += `<div class="val-card${ep.is_baseline ? ' baseline' : ''}">
+          <div class="val-card-name">${ep.name[Shell.getLang()] || ep.name.cs}</div>
+          <div class="val-card-val" style="color:${ep.is_baseline ? 'var(--c-green)' : col}">${fmtEur(val)}</div>
+          <div class="val-card-mult">${ep.multiple_arr}× ARR${ep.is_baseline ? ' · BASELINE' : ''}</div>
+        </div>`;
+      });
+      document.getElementById('mot-val-grid').innerHTML = html;
+    }
+
+    fetch('business-model.json').then(r=>r.json()).then(d => {
+      BM_DATA = d;
+      setValScenario('middle');
+    }).catch(()=>{
+      document.getElementById('mot-val-grid').innerHTML =
+        '<span style="color:var(--c-muted);font-size:12px;font-family:var(--c-font-sans)">Načti business-model.json pro live valuaci</span>';
+    });
+  </script>
+</body>
+</html>

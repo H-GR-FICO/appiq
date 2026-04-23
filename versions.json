@@ -1,5 +1,5 @@
 ﻿{
-  "latest": "v7.27",
+  "latest": "v7.31",
   "updatedAt": "2026-04-23",
   "versions": [
     {
@@ -181,6 +181,25 @@
         "pitchUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.31",
+        "date":  "2026-04-23",
+        "session":  "v7.26-WebPage_20260423_0230",
+        "title":  "Hudba přežije back button · Budget Matrix čitelný na mobilu · 2026-04-24",
+        "mainUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  {
+    
+                    },
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

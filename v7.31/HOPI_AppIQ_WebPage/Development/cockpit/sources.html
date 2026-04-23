@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sources & Resources — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Resource category block ────────────────── */
+    .res-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); gap:16px; margin-bottom:32px; }
+    .res-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden;
+    }
+    .res-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 18px; border-bottom: 1px solid var(--c-border);
+    }
+    .res-icon { font-size: 22px; }
+    .res-title { font-size: 13px; font-weight: 700; color: var(--c-white); flex: 1; }
+    .res-total { font-family: var(--c-font-sans); font-size: 12px; }
+    .res-body { padding: 14px 18px; }
+    .res-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid rgba(26,42,74,.4);
+      font-size: 12px; color: var(--c-text);
+    }
+    .res-item:last-child { border-bottom: none; }
+    .res-item-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+    .res-item-main { flex: 1; }
+    .res-item-name { color: var(--c-white); font-weight: 600; margin-bottom: 2px; }
+    .res-item-desc { color: var(--c-muted); font-size: 11px; line-height: 1.5; }
+    .res-item-cost { font-family: var(--c-font-sans); font-size: 11px; text-align: right; white-space: nowrap; }
+
+    /* ── Budget overview table ───────────────────── */
+    .budget-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+    .budget-table th {
+      padding: 10px 14px; text-align: left;
+      font-size: 10px; font-family: var(--c-font-sans); letter-spacing: 1.2px;
+      color: var(--c-muted); border-bottom: 1px solid var(--c-border);
+    }
+    .budget-table td {
+      padding: 9px 14px; border-bottom: 1px solid rgba(26,42,74,.4);
+      font-size: 12px; color: var(--c-text);
+    }
+    .budget-table tr:last-child td { border-bottom: none; }
+    .budget-table tr.total-row td {
+      border-top: 1px solid var(--c-border);
+      font-weight: 700; color: var(--c-white);
+      font-family: var(--c-font-sans);
+    }
+    .budget-table td.num { text-align: right; font-family: var(--c-font-sans); }
+    .budget-table td.cat-name { color: var(--c-white); font-weight: 600; }
+
+    /* ── Category pill ───────────────────────────── */
+    .cat-pill {
+      display: inline-block; padding: 2px 8px; border-radius: 10px;
+      font-size: 10px; font-family: var(--c-font-sans); font-weight: 700;
+      letter-spacing: .5px; margin-bottom: 6px;
+    }
+
+    /* ── Section divider ─────────────────────────── */
+    .section-divider {
+      border: none; border-top: 1px solid var(--c-border);
+      margin: 32px 0;
+    }
+
+    /* ── Human work bar ──────────────────────────── */
+    .work-split {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
+      margin-bottom: 32px;
+    }
+    .work-side {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px;
+    }
+    .work-side-title { font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+                       letter-spacing: 1.5px; margin-bottom: 14px; }
+    .work-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 12px; }
+    .work-label { flex: 0 0 130px; color: var(--c-text); }
+    .work-bar-wrap { flex: 1; height: 6px; background: rgba(26,42,74,.6); border-radius: 3px; overflow: hidden; }
+    .work-bar-fill { height: 100%; border-radius: 3px; }
+    .work-pct { flex: 0 0 36px; text-align: right; font-family: var(--c-font-sans); font-size: 11px; color: var(--c-muted); }
+
+    @media (max-width: 700px) { .work-split { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Sources &amp; Resources</h1>
+    <p class="page-subtitle">Lidská práce · AI zdroje · Software &amp; technologie · Hardware · Marketing · Budget</p>
+
+    <!-- ── KPI strip ──────────────────────────────── -->
+    <div class="c-kpi-grid" style="margin-bottom:32px">
+      <div class="c-card">
+        <div class="c-card-title">Celkový budget / měsíc</div>
+        <div class="c-card-value" style="color:var(--c-amber)">~$250</div>
+        <div class="c-card-sub">Phase 1 · B2C launch</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">AI náklady / měsíc</div>
+        <div class="c-card-value" style="color:var(--c-violet)">~$100</div>
+        <div class="c-card-sub">Claude API + Haiku + Sonnet</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">Cloud infra / měsíc</div>
+        <div class="c-card-value" style="color:var(--c-blue)">~$30</div>
+        <div class="c-card-sub">GitHub Pages · Cloudflare · Render</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">AI credits pipeline</div>
+        <div class="c-card-value" style="color:var(--c-green)">$1K</div>
+        <div class="c-card-sub">AWS Activate Indie · BIZ-00107</div>
+      </div>
+    </div>
+
+    <!-- ── Budget přehled ─────────────────────────── -->
+    <h2 class="section-title">Budget přehled — Phase 1</h2>
+    <div style="background:var(--c-bg2);border:1px solid var(--c-border);border-radius:var(--c-radius);overflow:hidden;margin-bottom:32px">
+      <table class="budget-table">
+        <thead>
+          <tr>
+            <th>Kategorie</th>
+            <th class="num">Min / měsíc</th>
+            <th class="num">Max / měsíc</th>
+            <th class="num">Roční (max)</th>
+            <th>Zdroj</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cat-name">
+              <span class="cat-pill" style="background:rgba(168,85,247,.15);color:var(--c-violet)">AI</span><br>
+              Claude API · modely
+            </td>
+            <td class="num">$50</td>
+            <td class="num">$150</td>
+            <td class="num">$1 800</td>
+            <td><span style="color:var(--c-muted);font-size:11px">Anthropic credits + vlastní</span></td>
+          </tr>
+          <tr>
+            <td class="cat-name">
+              <span class="cat-pill" style="background:rgba(96,165,250,.15);color:var(--c-blue)">Cloud</span><br>
+              Hosting · CDN · Workers
+            </td>
+            <td class="num">$0</td>
+            <td class="num">$50</td>
+            <td class="num">$600</td>
+            <td><span style="color:var(--c-muted);font-size:11px">GitHub Pages zdarma + Cloudflare free</span></td>
+          </tr>
+          <tr>
+            <td class="cat-name">
+              <span class="cat-pill" style="background:rgba(34,197,94,.15);color:var(--c-green)">SW licence</span><br>
+              Claude Code · nástroje
+            </td>
+            <td class="num">$20</td>
+            <td class="num">$60</td>
+            <td class="num">$720</td>
+            <td><span style="color:var(--c-muted);font-size:11px">Claude Pro, domain, tools</span></td>
+          </tr>
+          <tr>
+            <td class="cat-name">
+              <span class="cat-pill" style="background:rgba(245,158,11,.15);color:var(--c-amber)">Marketing</span><br>
+              Ads · obsah · SEO
+            </td>
+            <td class="num">$0</td>
+            <td class="num">$200</td>
+            <td class="num">$2 400</td>
+            <td><span style="color:var(--c-muted);font-size:11px">Organické + placené po MVP</span></td>
+          </tr>
+          <tr>
+            <td class="cat-name">
+              <span class="cat-pill" style="background:rgba(236,72,153,.15);color:var(--c-pink)">HR</span><br>
+              Nábor · onboarding
+            </td>
+            <td class="num">$0</td>
+            <td class="num">$100</td>
+            <td class="num">$1 200</td>
+            <td><span style="color:var(--c-muted);font-size:11px">Phase 2+ · po Seed ronde</span></td>
+          </tr>
+          <tr class="total-row">
+            <td class="cat-name">CELKEM</td>
+            <td class="num" style="color:var(--c-green)">$70</td>
+            <td class="num" style="color:var(--c-amber)">$560</td>
+            <td class="num" style="color:var(--c-amber)">$6 720</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Lidská práce ───────────────────────────── -->
+    <h2 class="section-title">Lidská práce</h2>
+    <div class="work-split" style="margin-bottom:8px">
+      <div class="work-side">
+        <div class="work-side-title">DAVID GOGELA — týdenní kapacita</div>
+        <div class="work-row">
+          <span class="work-label">Strategie &amp; vision</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:90%;background:var(--c-violet)"></div></div>
+          <span class="work-pct">90%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Review &amp; approval</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:80%;background:var(--c-blue)"></div></div>
+          <span class="work-pct">80%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Business dev</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:60%;background:var(--c-green)"></div></div>
+          <span class="work-pct">60%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Testing &amp; UAT</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:70%;background:var(--c-amber)"></div></div>
+          <span class="work-pct">70%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Obsah &amp; texty</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:50%;background:var(--c-pink)"></div></div>
+          <span class="work-pct">50%</span>
+        </div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--c-border);font-size:11px;color:var(--c-muted)">
+          Dostupnost: ~8–12 hod/týden (paralelně s HOPI roli)
+        </div>
+      </div>
+      <div class="work-side">
+        <div class="work-side-title">CLAUDE (AI) — pokrytí rolí</div>
+        <div class="work-row">
+          <span class="work-label">Vývoj &amp; kód</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:95%;background:var(--c-violet)"></div></div>
+          <span class="work-pct">95%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Architektura</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:85%;background:var(--c-blue)"></div></div>
+          <span class="work-pct">85%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Dokumentace</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:90%;background:var(--c-green)"></div></div>
+          <span class="work-pct">90%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">Research &amp; analýza</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:80%;background:var(--c-amber)"></div></div>
+          <span class="work-pct">80%</span>
+        </div>
+        <div class="work-row">
+          <span class="work-label">OIL management</span>
+          <div class="work-bar-wrap"><div class="work-bar-fill" style="width:75%;background:var(--c-pink)"></div></div>
+          <span class="work-pct">75%</span>
+        </div>
+        <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--c-border);font-size:11px;color:var(--c-muted)">
+          Dostupnost: ~asynchronní · bez omezení pracovní doby
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ── Resource cards ────────────────────────── -->
+    <h2 class="section-title">AI zdroje</h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🧠</span>
+          <span class="res-title">Claude Sonnet 4.6</span>
+          <span class="res-total" style="color:var(--c-violet)">primary</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">⚡</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Hlavní pracovní model</div>
+              <div class="res-item-desc">Vývoj, architektura, dokumentace, analýza — aktivní v každé session</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-violet)">~$3/M tok</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🔧</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Claude Code CLI</div>
+              <div class="res-item-desc">Interaktivní vývojové prostředí s přístupem k souborům</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">includ.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🚀</span>
+          <span class="res-title">Claude Opus 4.7</span>
+          <span class="res-total" style="color:var(--c-amber)">strategic</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">🎯</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Strategická rozhodnutí</div>
+              <div class="res-item-desc">Architektonické review, investor materiály, složité analýzy</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-amber)">~$15/M tok</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">📊</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Použití: omezeně</div>
+              <div class="res-item-desc">Jen pro úkoly kde Sonnet nestačí — budget kontrola</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">on-demand</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">⚡</span>
+          <span class="res-title">Claude Haiku 4.5</span>
+          <span class="res-total" style="color:var(--c-green)">scale</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">🔄</span>
+            <div class="res-item-main">
+              <div class="res-item-name">HOPIQ chatbot users</div>
+              <div class="res-item-desc">Produkční uživatelé platformy — rychlý, levný, 24/7</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-green)">~$0.25/M</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">📡</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Auto-překlady i18n</div>
+              <div class="res-item-desc">Detekce chybějících klíčů a automatický překlad (budoucí)</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">planned</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <h2 class="section-title">Software &amp; Technologie</h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🌐</span>
+          <span class="res-title">GitHub Pages</span>
+          <span class="res-total" style="color:var(--c-green)">zdarma</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">📁</span>
+            <div class="res-item-main">
+              <div class="res-item-name">h-gr-fico.github.io/appiq/</div>
+              <div class="res-item-desc">Hosting prezentace a cockpitu — vždy živé, CDN zdarma, SSL</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-green)">$0/měs</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🔄</span>
+            <div class="res-item-main">
+              <div class="res-item-name">DO_DEPLOY.ps1 pipeline</div>
+              <div class="res-item-desc">Semautomatický deploy s verzováním a CHANGELOG gating</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">included</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🔶</span>
+          <span class="res-title">Cloudflare</span>
+          <span class="res-total" style="color:var(--c-green)">free tier</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">⚙️</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Workers (AI proxy)</div>
+              <div class="res-item-desc">Serverless funkcionalita — API proxy, auth, rate limiting</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-green)">100K req/den</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🛡️</span>
+            <div class="res-item-main">
+              <div class="res-item-name">CDN + DDoS ochrana</div>
+              <div class="res-item-desc">Globální CDN, SSL, WAF v základním plánu</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-green)">$0/měs</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🟠</span>
+          <span class="res-title">OneDrive</span>
+          <span class="res-total" style="color:var(--c-blue)">HOPI licence</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">📂</span>
+            <div class="res-item-main">
+              <div class="res-item-name">CO_PROJECT složka</div>
+              <div class="res-item-desc">Hlavní pracovní repozitář — zdrojové soubory, OIL.json, kontext</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">HOPI M365</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🔗</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Symlink → Claude Code</div>
+              <div class="res-item-desc">Přímý přístup Claude Code CLI k živým souborům bez kopírování</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">included</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">📊</span>
+          <span class="res-title">Chart.js v4</span>
+          <span class="res-total" style="color:var(--c-green)">OSS</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">🎨</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Vizualizace v cockpitu</div>
+              <div class="res-item-desc">Doughnut, bar, line, dual-axis — napříč všemi sekcemi</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-green)">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <h2 class="section-title">Hardware</h2>
+    <div class="res-grid" style="margin-bottom:32px">
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">💻</span>
+          <span class="res-title">David — workstation</span>
+          <span class="res-total" style="color:var(--c-muted)">HOPI HW</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">🖥️</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Windows 11 Pro</div>
+              <div class="res-item-desc">Firemní notebook HOPI — Claude Code CLI + VS Code + Edge</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">HOPI</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">📱</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Mobilní testování</div>
+              <div class="res-item-desc">PH-M, PH-S testování — klíčové pro B2C launch</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">osobní</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">☁️</span>
+          <span class="res-title">AWS (target)</span>
+          <span class="res-total" style="color:var(--c-amber)">BIZ-00107</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">🎁</span>
+            <div class="res-item-main">
+              <div class="res-item-name">AWS Activate Indie</div>
+              <div class="res-item-desc">$1 000 credits — žádost připravena, tento týden odeslat</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-amber)">pending</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🗄️</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Backend databáze (Phase 2)</div>
+              <div class="res-item-desc">RDS, S3, Lambda — přechod JSON→DB bez změny frontendu</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">2027+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <h2 class="section-title">Marketing zdroje</h2>
+    <div class="res-grid">
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🌍</span>
+          <span class="res-title">Organické kanály</span>
+          <span class="res-total" style="color:var(--c-green)">$0</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">📰</span>
+            <div class="res-item-main">
+              <div class="res-item-name">LinkedIn (David Gogela)</div>
+              <div class="res-item-desc">Osobní brand → AppIQ storytelling → B2B a investor dosah</div>
+            </div>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🌐</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Prezentace a CEO Brief</div>
+              <div class="res-item-desc">Živé URL — přeposílatelné jako living pitch deck</div>
+            </div>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🤝</span>
+            <div class="res-item-main">
+              <div class="res-item-name">HOPI referenční zákazník</div>
+              <div class="res-item-desc">Living proof — interní pilot jako social proof pro B2B</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <span class="res-icon">🎯</span>
+          <span class="res-title">Placené kanály (Phase 1+)</span>
+          <span class="res-total" style="color:var(--c-amber)">post-MVP</span>
+        </div>
+        <div class="res-body">
+          <div class="res-item">
+            <span class="res-item-icon">📣</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Meta Ads (HOME B2C)</div>
+              <div class="res-item-desc">Instagram/Facebook — targeting: rodiny, domácnosti</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-amber)">$50–200/měs</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">🔍</span>
+            <div class="res-item-main">
+              <div class="res-item-name">Google Ads (search)</div>
+              <div class="res-item-desc">Klíčová slova: rodinné finance, AI asistent, osobní plánování</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-amber)">$30–100/měs</span>
+          </div>
+          <div class="res-item">
+            <span class="res-item-icon">💼</span>
+            <div class="res-item-main">
+              <div class="res-item-name">LinkedIn Ads (B2B)</div>
+              <div class="res-item-desc">Phase 2 Enterprise — CFO, COO, IT Directors targeting</div>
+            </div>
+            <span class="res-item-cost" style="color:var(--c-muted)">2027+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({ section: {cs:'Zdroje & Prostředky', en:'Sources & Resources'}, backUrl: '../MANAGEMENT_COCKPIT.html', music: false });
+
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      var el = document.querySelector('.page-subtitle');
+      if (el) el.textContent = 'Human work · AI resources · Software & technology · Hardware · Marketing · Budget';
+      var cardTitles = document.querySelectorAll('.c-card-title');
+      var ctEn = ['Total budget / month', 'AI costs / month', 'Cloud infra / month', 'AI credits pipeline'];
+      cardTitles.forEach(function(e, i) { if (ctEn[i]) e.textContent = ctEn[i]; });
+      document.querySelectorAll('.c-card-sub').forEach(function(el) {
+        el.textContent = el.textContent.replace('Phase 1 · B2C launch','Phase 1 · B2C launch');
+      });
+      document.querySelectorAll('.section-title, h2.section-title').forEach(function(h) {
+        h.textContent = h.textContent
+          .replace('Budget přehled — Phase 1','Budget overview — Phase 1')
+          .replace('Lidská práce','Human work')
+          .replace('AI zdroje','AI resources')
+          .replace('SW licence & nástroje','SW licences & tools')
+          .replace('Hardware','Hardware')
+          .replace('Marketing','Marketing');
+      });
+      document.querySelectorAll('.budget-table th').forEach(function(th) {
+        th.textContent = th.textContent
+          .replace('Kategorie','Category').replace('Min / měsíc','Min / month')
+          .replace('Max / měsíc','Max / month').replace('Roční (max)','Annual (max)').replace('Zdroj','Source');
+      });
+      document.querySelectorAll('td.cat-name').forEach(function(td) {
+        td.innerHTML = td.innerHTML
+          .replace('Claude API · modely','Claude API · models')
+          .replace('Hosting · CDN · Workers','Hosting · CDN · Workers')
+          .replace('Claude Code · nástroje','Claude Code · tools')
+          .replace('Ads · obsah · SEO','Ads · content · SEO')
+          .replace('Nábor · onboarding','Recruiting · onboarding');
+        var pill = td.querySelector('.cat-pill');
+        if (pill && pill.textContent === 'SW licence') pill.textContent = 'SW licence';
+        if (pill && pill.textContent === 'Marketing') pill.textContent = 'Marketing';
+        if (pill && pill.textContent === 'HR') pill.textContent = 'HR';
+      });
+      document.querySelectorAll('td:last-child span[style]').forEach(function(s) {
+        s.textContent = s.textContent
+          .replace('Anthropic credits + vlastní','Anthropic credits + own')
+          .replace('GitHub Pages zdarma + Cloudflare free','GitHub Pages free + Cloudflare free')
+          .replace('Claude Pro, domain, tools','Claude Pro, domain, tools')
+          .replace('Organické + placené po MVP','Organic + paid after MVP')
+          .replace('Phase 2+ · po Seed ronde','Phase 2+ · after Seed round');
+      });
+      document.querySelectorAll('.total-row .cat-name').forEach(function(el) {
+        if (el.textContent === 'CELKEM') el.textContent = 'TOTAL';
+      });
+      var wsTitles = document.querySelectorAll('.work-side-title');
+      if (wsTitles[0]) wsTitles[0].textContent = 'DAVID GOGELA — weekly capacity';
+      if (wsTitles[1]) wsTitles[1].textContent = 'CLAUDE (AI) — role coverage';
+      document.querySelectorAll('.work-label').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Strategie & vision','Strategy & vision')
+          .replace('Review & approval','Review & approval')
+          .replace('Business dev','Business dev')
+          .replace('Testing & UAT','Testing & UAT')
+          .replace('Obsah & texty','Content & copy')
+          .replace('Vývoj & kód','Dev & code')
+          .replace('Architektura','Architecture')
+          .replace('Dokumentace','Documentation')
+          .replace('Research & analýza','Research & analysis')
+          .replace('OIL management','OIL management');
+      });
+      document.querySelectorAll('.work-side > div:last-child').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Dostupnost: ~8–12 hod/týden (paralelně s HOPI roli)','Availability: ~8–12 hrs/week (alongside HOPI role)')
+          .replace('Dostupnost: ~asynchronní · bez omezení pracovní doby','Availability: ~async · no working hours constraint');
+      });
+      document.querySelectorAll('.res-item-name').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Hlavní pracovní model','Primary working model')
+          .replace('Nejchytřejší model pro strategii','Smartest model for strategy')
+          .replace('Ultra-rychlý model pro produkci','Ultra-fast model for production')
+          .replace('Interaktivní vývojové prostředí s přístupem k souborům','Interactive dev environment with file access')
+          .replace('Vývojové prostředí s přístupem k souborům','Dev environment with file access');
+      });
+      document.querySelectorAll('.res-item-desc').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Vývoj, architektura, dokumentace, analýza — aktivní v každé session','Development, architecture, docs, analysis — active in every session')
+          .replace('Strategická rozhodnutí, architektura, investor materiály — složité problémy','Strategic decisions, architecture, investor materials — complex problems')
+          .replace('HOPIQ chatbot v produkci, quick queries — 10× levnější než Sonnet','HOPIQ chatbot in production, quick queries — 10× cheaper than Sonnet');
+      });
+    })();
+  </script>
+</body>
+</html>

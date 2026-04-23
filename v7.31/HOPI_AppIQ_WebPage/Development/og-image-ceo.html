@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:1200px;height:630px;overflow:hidden;}
+body{
+  font-family:'Segoe UI',Arial,sans-serif;
+  background:#04061A;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;text-align:center;
+}
+.bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 50% 50%, rgba(232,117,10,.22) 0%, transparent 70%);
+}
+.top-bar{position:absolute;top:0;left:0;right:0;height:8px;background:#E8750A;}
+.bottom-bar{position:absolute;bottom:0;left:0;right:0;height:8px;background:#E8750A;}
+.tag{
+  font-size:14px;font-weight:700;letter-spacing:6px;text-transform:uppercase;
+  color:rgba(232,117,10,.8);margin-bottom:24px;position:relative;z-index:2;
+}
+.headline{
+  font-size:140px;font-weight:900;line-height:.9;letter-spacing:-4px;
+  color:#fff;margin-bottom:24px;position:relative;z-index:2;
+}
+.headline em{color:#E8750A;font-style:normal;}
+.sub{
+  font-size:20px;color:rgba(255,255,255,.4);font-weight:400;
+  letter-spacing:3px;text-transform:uppercase;position:relative;z-index:2;
+}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="top-bar"></div>
+<div class="tag">HOPI AppIQ · David Gogela · 2026</div>
+<div class="headline">Business<br><em>Vision</em></div>
+<div class="sub">Built for the universe. Starting with you.</div>
+<div class="bottom-bar"></div>
+</body>
+</html>
