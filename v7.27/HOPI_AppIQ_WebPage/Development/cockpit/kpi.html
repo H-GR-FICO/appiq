@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Executive KPI Strip — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>
+    /* ── Big KPI grid ────────────────────────────── */
+    .kpi-big-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .kpi-big {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      padding: 22px 24px;
+      transition: border-color .2s, box-shadow .2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .kpi-big:hover { border-color: rgba(168,85,247,.4); box-shadow: 0 4px 24px rgba(168,85,247,.1); }
+    .kpi-big::before {
+      content: attr(data-icon);
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      font-size: 40px; opacity: .07; pointer-events: none;
+    }
+    .kpi-big-label { font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted);
+                     letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
+    .kpi-big-val   { font-size: 42px; font-weight: 900; font-family: var(--c-font-sans);
+                     line-height: 1; letter-spacing: -1px; }
+    .kpi-big-sub   { font-size: 12px; color: var(--c-muted); margin-top: 6px; }
+    .kpi-big-trend { font-size: 11px; font-family: var(--c-font-sans); margin-top: 4px; }
+    .trend-up   { color: var(--c-green); }
+    .trend-down { color: #EF4444; }
+
+    /* ── Split bar ───────────────────────────────── */
+    .split-bar-wrap { margin: 8px 0 4px; }
+    .split-bar { height: 6px; border-radius: 3px; background: var(--c-border); overflow: hidden; display: flex; }
+    .split-fill-v { height: 100%; background: var(--c-violet); border-radius: 3px 0 0 3px; transition: width .6s; }
+    .split-fill-b { height: 100%; background: var(--c-blue); border-radius: 0 3px 3px 0; transition: width .6s; }
+    .split-labels { display: flex; justify-content: space-between; font-size: 10px;
+                    font-family: var(--c-font-sans); color: var(--c-muted); margin-top: 4px; }
+
+    /* ── Chart section ───────────────────────────── */
+    .charts-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+      margin-bottom: 32px;
+    }
+    .chart-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px;
+    }
+    .chart-title { font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+                   letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+    .chart-wrap  { position: relative; height: 180px; }
+
+    /* ── Status breakdown table ──────────────────── */
+    .breakdown-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;
+      margin-bottom: 24px;
+    }
+    .breakdown-row {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 10px 14px;
+    }
+    .brd-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .brd-name { font-size: 12px; color: var(--c-text); flex: 1; }
+    .brd-val  { font-size: 16px; font-weight: 800; font-family: var(--c-font-sans); }
+    .brd-pct  { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); width: 36px; text-align: right; }
+
+    /* ── Effort distribution ─────────────────────── */
+    .effort-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 8px; }
+    .effort-box {
+      flex: 1; min-width: 80px; text-align: center;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 8px; padding: 12px 8px;
+    }
+    .effort-box-val { font-size: 22px; font-weight: 900; font-family: var(--c-font-sans); }
+    .effort-box-lbl { font-size: 9px; color: var(--c-muted); font-family: var(--c-font-sans);
+                      letter-spacing: 1px; margin-top: 4px; }
+
+    @media (max-width: 900px) { .charts-row { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .kpi-big-val { font-size: 32px; } }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Executive KPI Strip</h1>
+    <p class="page-subtitle" id="kpi-updated">Live data z OIL.json · BOIL.json · Aktualizováno: —</p>
+
+    <!-- ── Big KPIs ───────────────────────────────── -->
+    <div class="kpi-big-grid">
+
+      <div class="kpi-big" data-icon="📋" style="border-color:rgba(168,85,247,.25)">
+        <div class="kpi-big-label">AIQ Aktivní</div>
+        <div class="kpi-big-val" style="color:var(--c-violet)" id="k-active">—</div>
+        <div class="kpi-big-sub">Open + In Progress + Review</div>
+      </div>
+
+      <div class="kpi-big" data-icon="✅" style="border-color:rgba(34,197,94,.2)">
+        <div class="kpi-big-label">AIQ Closed</div>
+        <div class="kpi-big-val" style="color:var(--c-green)" id="k-closed">—</div>
+        <div class="kpi-big-sub" id="k-closed-pct">— % dokončeno</div>
+      </div>
+
+      <div class="kpi-big" data-icon="🚀" style="border-color:rgba(96,165,250,.2)">
+        <div class="kpi-big-label">Dnů do B2C Launch</div>
+        <div class="kpi-big-val" style="color:var(--c-blue)" id="k-b2c">—</div>
+        <div class="kpi-big-sub">Cíl: 01.01.2027</div>
+      </div>
+
+      <div class="kpi-big" data-icon="💼" style="border-color:rgba(245,158,11,.2)">
+        <div class="kpi-big-label">BIZ Aktivní</div>
+        <div class="kpi-big-val" style="color:var(--c-amber)" id="k-biz">—</div>
+        <div class="kpi-big-sub">Open + In Progress BOIL tasků</div>
+      </div>
+
+      <div class="kpi-big" data-icon="🔀" style="border-color:rgba(236,72,153,.2)">
+        <div class="kpi-big-label">Git Commits</div>
+        <div class="kpi-big-val" style="color:var(--c-pink)" id="k-commits">109+</div>
+        <div class="kpi-big-sub">GitHub h-gr-fico/appiq</div>
+      </div>
+
+      <div class="kpi-big" data-icon="📅" style="border-color:rgba(34,197,94,.15)">
+        <div class="kpi-big-label">Dnů projektu</div>
+        <div class="kpi-big-val" style="color:var(--c-green)" id="k-days">—</div>
+        <div class="kpi-big-sub">Od 01.02.2026</div>
+      </div>
+
+      <div class="kpi-big" data-icon="🤖" style="border-color:rgba(168,85,247,.15)">
+        <div class="kpi-big-label">Claude / David split</div>
+        <div class="kpi-big-val" style="font-size:28px;color:var(--c-white)" id="k-split">—/—</div>
+        <div class="split-bar-wrap">
+          <div class="split-bar">
+            <div class="split-fill-v" id="k-split-v" style="width:70%"></div>
+            <div class="split-fill-b" id="k-split-b" style="width:30%"></div>
+          </div>
+          <div class="split-labels">
+            <span style="color:var(--c-violet)">🤖 Claude</span>
+            <span style="color:var(--c-blue)">👤 David</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="kpi-big" data-icon="🔴" style="border-color:rgba(239,68,68,.2)">
+        <div class="kpi-big-label">High / Critical</div>
+        <div class="kpi-big-val" style="color:#EF4444" id="k-high">—</div>
+        <div class="kpi-big-sub">Aktivní HIGH+ priorita AIQ tasků</div>
+      </div>
+
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Charts ─────────────────────────────────── -->
+    <div class="charts-row">
+      <div class="chart-card">
+        <div class="chart-title">Rozložení statusů — AIQ tasky</div>
+        <div class="chart-wrap"><canvas id="chart-status"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Rozložení effort — AIQ tasky</div>
+        <div class="chart-wrap"><canvas id="chart-effort"></canvas></div>
+      </div>
+    </div>
+
+    <!-- ── Status breakdown ───────────────────────── -->
+    <h3 style="font-size:11px;font-family:var(--c-font-sans);color:var(--c-muted);letter-spacing:2px;margin-bottom:14px">— STATUS BREAKDOWN</h3>
+    <div class="breakdown-grid">
+      <div class="breakdown-row">
+        <div class="brd-dot" style="background:#60A5FA"></div>
+        <div class="brd-name">OPEN</div>
+        <div class="brd-val" style="color:#60A5FA" id="b-open">—</div>
+        <div class="brd-pct" id="b-open-pct">—%</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="brd-dot" style="background:#F97316"></div>
+        <div class="brd-name">IN PROGRESS</div>
+        <div class="brd-val" style="color:#F97316" id="b-inprog">—</div>
+        <div class="brd-pct" id="b-inprog-pct">—%</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="brd-dot" style="background:var(--c-violet)"></div>
+        <div class="brd-name">REVIEW (čeká David)</div>
+        <div class="brd-val" style="color:var(--c-violet)" id="b-review">—</div>
+        <div class="brd-pct" id="b-review-pct">—%</div>
+      </div>
+      <div class="breakdown-row">
+        <div class="brd-dot" style="background:var(--c-green)"></div>
+        <div class="brd-name">CLOSED</div>
+        <div class="brd-val" style="color:var(--c-green)" id="b-closed">—</div>
+        <div class="brd-pct" id="b-closed-pct">—%</div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Effort breakdown ───────────────────────── -->
+    <h3 style="font-size:11px;font-family:var(--c-font-sans);color:var(--c-muted);letter-spacing:2px;margin-bottom:14px">— EFFORT DISTRIBUCE (T-SHIRT)</h3>
+    <div class="effort-row" id="effort-row">
+      <div class="effort-box">
+        <div class="effort-box-val" style="color:var(--c-green)"  id="e-xs">—</div>
+        <div class="effort-box-lbl">XS &lt;30min</div>
+      </div>
+      <div class="effort-box">
+        <div class="effort-box-val" style="color:var(--c-blue)"   id="e-s">—</div>
+        <div class="effort-box-lbl">S 30–120min</div>
+      </div>
+      <div class="effort-box">
+        <div class="effort-box-val" style="color:var(--c-violet)" id="e-m">—</div>
+        <div class="effort-box-lbl">M 2–4h</div>
+      </div>
+      <div class="effort-box">
+        <div class="effort-box-val" style="color:var(--c-amber)"  id="e-l">—</div>
+        <div class="effort-box-lbl">L 4–8h</div>
+      </div>
+      <div class="effort-box">
+        <div class="effort-box-val" style="color:#EF4444"         id="e-xl">—</div>
+        <div class="effort-box-lbl">XL 8h+</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({ section: {cs:'KPI Přehled', en:'Executive KPI Strip'}, backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      const q  = s => document.querySelector(s);
+      const qa = s => [...document.querySelectorAll(s)];
+      q('.page-subtitle').textContent = 'Live data from OIL.json · BOIL.json · Updated: —';
+      const lbl = qa('.kpi-big-label');
+      lbl[0].textContent = 'AIQ Active'; lbl[2].textContent = 'Days to B2C Launch';
+      lbl[3].textContent = 'BIZ Active'; lbl[5].textContent = 'Project Days';
+      const sub = qa('.kpi-big-sub');
+      sub[2].textContent = 'Target: 01.01.2027'; sub[3].textContent = 'Open + In Progress BOIL tasks';
+      sub[5].textContent = 'Since 01.02.2026'; sub[7].textContent = 'Active HIGH+ priority AIQ tasks';
+      qa('.chart-title')[0].textContent = 'Status distribution — AIQ tasks';
+      qa('.chart-title')[1].textContent = 'Effort distribution — AIQ tasks';
+      qa('h3')[1].textContent = '— EFFORT DISTRIBUTION (T-SHIRT)';
+      [...qa('.brd-name')].filter(e => e.textContent.includes('čeká')).forEach(e => e.textContent = 'REVIEW (awaiting David)');
+    })();
+
+    const B2C_DATE  = new Date('2027-01-01');
+    const PROJ_DATE = new Date('2026-02-01');
+
+    function daysTo(d)   { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
+    function daysFrom(d) { return Math.ceil((new Date() - d) / 86400000); }
+    function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
+    function pct(n, t)   { return t ? Math.round(n / t * 100) + '%' : '0%'; }
+
+    let statusChart = null, effortChart = null;
+
+    // Load OIL
+    fetch('../OIL.json').then(r => r.json()).then(data => {
+      const tasks  = data.tasks || [];
+      const total  = tasks.length;
+      const open   = tasks.filter(t => t.status === 'OPEN').length;
+      const inprog = tasks.filter(t => t.status === 'IN PROGRESS').length;
+      const review = tasks.filter(t => t.status === 'REVIEW').length;
+      const closed = tasks.filter(t => t.status === 'CLOSED').length;
+      const active = open + inprog + review;
+      const high   = tasks.filter(t => (t.priority === 'HIGH' || t.priority === 'CRITICAL') &&
+                                        t.status !== 'CLOSED').length;
+
+      const claude = tasks.filter(t => t.assignee === 'Claude').length;
+      const david  = tasks.filter(t => (t.assignee || '').includes('David')).length;
+      const cvtotal = claude + david || 1;
+      const cvPct   = Math.round(claude / cvtotal * 100);
+
+      // Effort
+      const xs = tasks.filter(t => t.effort === 'XS').length;
+      const s  = tasks.filter(t => t.effort === 'S').length;
+      const m  = tasks.filter(t => t.effort === 'M').length;
+      const l  = tasks.filter(t => t.effort === 'L').length;
+      const xl = tasks.filter(t => t.effort === 'XL').length;
+
+      setText('k-active',     active);
+      setText('k-closed',     closed);
+      setText('k-closed-pct', pct(closed, total) + (Shell.getLang() === 'en' ? ' completed' : ' dokončeno'));
+      setText('k-high',       high);
+      setText('k-split',      cvPct + '% / ' + (100 - cvPct) + '%');
+      document.getElementById('k-split-v').style.width = cvPct + '%';
+      document.getElementById('k-split-b').style.width = (100 - cvPct) + '%';
+
+      setText('b-open',       open);   setText('b-open-pct',   pct(open, total));
+      setText('b-inprog',     inprog); setText('b-inprog-pct', pct(inprog, total));
+      setText('b-review',     review); setText('b-review-pct', pct(review, total));
+      setText('b-closed',     closed); setText('b-closed-pct', pct(closed, total));
+
+      setText('e-xs', xs); setText('e-s', s); setText('e-m', m);
+      setText('e-l',  l);  setText('e-xl', xl);
+
+      // Status chart
+      const ctx1 = document.getElementById('chart-status').getContext('2d');
+      new Chart(ctx1, {
+        type: 'doughnut',
+        data: {
+          labels: ['Open','In Progress','Review','Closed'],
+          datasets: [{ data: [open, inprog, review, closed],
+            backgroundColor: ['#60A5FA','#F97316','#A855F7','#22C55E'],
+            borderColor: '#0a1020', borderWidth: 3, hoverOffset: 6 }]
+        },
+        options: { responsive:true, maintainAspectRatio:false, cutout:'65%',
+          plugins: { legend: { display:true, position:'right',
+            labels: { color:'#cbd5e1', font:{size:11}, boxWidth:12, padding:12 } },
+            tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed} (${pct(c.parsed, total)})` } }
+          },
+          animation: { duration: 700 }
+        }
+      });
+
+      // Effort chart
+      const ctx2 = document.getElementById('chart-effort').getContext('2d');
+      new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: ['XS','S','M','L','XL'],
+          datasets: [{ label: Shell.getLang() === 'en' ? 'Task count' : 'Počet tasků', data: [xs, s, m, l, xl],
+            backgroundColor: ['#22C55E44','#60A5FA44','#A855F744','#F59E0B44','#EF444444'],
+            borderColor:     ['#22C55E',  '#60A5FA',  '#A855F7',  '#F59E0B',  '#EF4444'],
+            borderWidth: 1, borderRadius: 4 }]
+        },
+        options: { responsive:true, maintainAspectRatio:false,
+          plugins: { legend: { display:false } },
+          scales: {
+            x: { ticks: { color:'#6b7280' }, grid: { color:'rgba(26,42,74,.5)' } },
+            y: { ticks: { color:'#6b7280', stepSize:1 }, grid: { color:'rgba(26,42,74,.5)' }, beginAtZero:true }
+          },
+          animation: { duration: 700 }
+        }
+      });
+
+      const L  = Shell.getLang();
+      const ts = new Date().toLocaleString(L === 'en' ? 'en-GB' : 'cs-CZ', {hour:'2-digit', minute:'2-digit'});
+      setText('kpi-updated', L === 'en'
+        ? `Live from OIL.json · ${total} tasks total · Updated: ${ts}`
+        : `Live z OIL.json · ${total} tasků celkem · Aktualizováno: ${ts}`);
+    }).catch(() => {});
+
+    // Load BOIL
+    fetch('../BOIL.json').then(r => r.json()).then(data => {
+      const tasks = data.tasks || [];
+      const biz = tasks.filter(t => t.status === 'OPEN' || t.status === 'IN PROGRESS').length;
+      setText('k-biz', biz);
+    }).catch(() => {});
+
+    // Static
+    document.addEventListener('DOMContentLoaded', () => {
+      setText('k-b2c',  daysTo(B2C_DATE));
+      setText('k-days', daysFrom(PROJ_DATE));
+    });
+  </script>
+</body>
+</html>

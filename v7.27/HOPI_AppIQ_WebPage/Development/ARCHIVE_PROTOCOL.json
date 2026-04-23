@@ -1,0 +1,219 @@
+﻿{
+    "schemaVersion":  "1.0",
+    "status":  "OK",
+    "version":  "v7.26",
+    "session":  "v7.26-WebPage_20260423_0230",
+    "timestamp":  "2026-04-23 02:30",
+    "stats":  {
+                  "totalFiles":  85,
+                  "totalSizeKb":  57071,
+                  "byType":  {
+                                 "md":  8,
+                                 "mp3":  4,
+                                 "js":  4,
+                                 "txt":  1,
+                                 "json":  5,
+                                 "html":  41,
+                                 "png":  18,
+                                 "css":  1,
+                                 "other":  1,
+                                 "svg":  2
+                             },
+                  "previousTotal":  85
+              },
+    "verify":  {
+                   "passed":  46,
+                   "failed":  0,
+                   "checks":  [
+                                  {
+                                      "file":  "PERSONAL_PITCH.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_PRESENTATION.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_ver.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "RESPONSIVE_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP_DATA.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "docs/index.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/story_personal.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "_audio/rubyzephyr-imperium-aeternum-v1-430851.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "MANAGEMENT_COCKPIT.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit-music.mp3",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/_shell.js",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/_cockpit.css",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/overview.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/launch-plan.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/task-control.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/motivation.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/business-model.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/business-architecture.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/financial.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/budget-track.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/kpi.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/timeline.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/methodology.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/oil-board.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/boil-board.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/decisions.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/team.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/capacity.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/sources.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/documentation.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/org-coordination.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/meeting-room.html",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/business-model.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "cockpit/discussion-log.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "ARCH_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_CONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "OIL_MAP.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BOIL.json",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "BKONTEXT.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CHANGELOG.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "PORTAL_ARCHITECTURE.md",
+                                      "ok":  true
+                                  },
+                                  {
+                                      "file":  "CLAUDE.md",
+                                      "ok":  true
+                                  }
+                              ]
+               },
+    "diff":  {
+                 "previousSession":  "v7.26-WebPage_20260423_0215",
+                 "added":  [
+
+                           ],
+                 "removed":  [
+
+                             ],
+                 "changed":  [
+
+                             ]
+             },
+    "changelog":  "## v7.26 — Cockpit: kompletní CS/EN překlad + bilingvní opravy · deploy\n\n\u003e Datum: 2026-04-23 · Session: David Gogela + Claude · AIQ-00359, AIQ-00360\n\n### Přidáno / Opraveno\n\n**Cockpit sub-stránky — kompletní bilinguální CS/EN (AIQ-00359)**\n- Všech 20 cockpit sub-stránek plně bilingvních: Shell.init section={cs,en}, IIFE pro statický HTML, getLang() logika pro JS-rendered content\n- Pokryto: launch-plan, motivation, team, kpi, timeline, overview, methodology, financial, decisions, capacity, budget-track, documentation, sources, business-architecture, business-model, meeting-room, org-coordination, oil-board, boil-board, task-control\n- Bug fix: `task-control.html` četl `appiq_lang` místo `hopi_lang` — překlady tam vůbec nefungovaly\n\n**MANAGEMENT COCKPIT — bilingvní opravy (AIQ-00360)**\n- Sekce labely: \"SEKCE / SECTIONS\" a \"COCKPIT STORY / PŘÍBĚH COCKPITU\" → dynamický single-language text\n- Story strip CSS: text nebyl viditelný — opraveny barvy, velikosti, opacity šipek a písmen"
+}

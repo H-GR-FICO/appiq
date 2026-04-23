@@ -1,0 +1,853 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MANAGEMENT COCKPIT · HOPI AppIQ</title>
+  <meta property="og:title" content="MANAGEMENT COCKPIT — HOPI AppIQ"/>
+  <meta property="og:image" content="cockpit-og.svg"/>
+  <meta property="og:description" content="Řídící středisko projektu HOPI AppIQ. Live data z OIL/BOIL. Budget · Timeline · Team · Methodology."/>
+  <style>
+    /* ── Reset & Base ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #060c18; --bg2: #0a1020; --bg3: #0f1a2e;
+      --border:  #1a2a4a;
+      --violet:  #A855F7; --green: #22C55E; --blue: #60A5FA;
+      --amber:   #F59E0B; --pink:  #EC4899;
+      --white:   #f0f4ff; --muted: #94a3b8; --text: #cbd5e1;
+      --radius:  14px;
+      --mono:    'Segoe UI', system-ui, sans-serif;
+      --sans:    'Segoe UI', system-ui, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+    a { text-decoration: none; }
+
+    /* ── Auth overlay ──────────────────────────────── */
+    #auth-overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(6,12,24,0.97);
+      display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+    }
+    #auth-overlay h2 { color: var(--violet); font-size: 24px; letter-spacing: 3px; }
+    #auth-input {
+      padding: 10px 20px; font-size: 18px; letter-spacing: 4px; text-align: center;
+      background: var(--bg2); border: 1px solid var(--violet); border-radius: 8px;
+      color: var(--white); outline: none; width: 220px;
+    }
+    #auth-btn {
+      padding: 10px 32px; background: var(--violet); color: white;
+      border: none; border-radius: 8px; font-size: 14px; cursor: pointer; letter-spacing: 2px;
+    }
+    #auth-err { color: #ef4444; font-size: 13px; display: none; }
+
+    /* ── Mottos Ribbon ─────────────────────────────── */
+    .mottos {
+      display: flex; align-items: center; justify-content: center;
+      gap: 14px; padding: 8px 24px; flex-wrap: wrap;
+      background: linear-gradient(90deg, rgba(168,85,247,.08), rgba(34,197,94,.06), rgba(96,165,250,.08));
+      border-bottom: 1px solid rgba(168,85,247,.2);
+      font-size: 11px; font-family: var(--sans); letter-spacing: .5px;
+    }
+    .mottos .m1 { color: var(--violet); font-weight: 700; }
+    .mottos .m2 { color: var(--green);  font-weight: 700; }
+    .mottos .m3 { color: var(--blue);   font-weight: 700; }
+    .mottos .m4 { color: var(--amber);  font-weight: 700; }
+    .mottos .m5 { color: var(--pink);   font-weight: 700; }
+    .mottos .dot { color: var(--border); }
+
+    /* ── Top nav ───────────────────────────────────── */
+    .topnav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .topnav-logo { font-size: 13px; font-family: var(--sans); color: var(--violet); font-weight: 700; letter-spacing: 2px; }
+    .topnav-links { display: flex; gap: 20px; }
+    .topnav-links a { font-size: 12px; color: var(--muted); transition: color .2s; }
+    .topnav-links a:hover { color: var(--violet); }
+    .topnav-links a.active { color: var(--white); }
+    .topnav-controls { display: flex; gap: 8px; }
+    .ctrl-btn {
+      padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border);
+      background: var(--bg2); color: var(--text); font-size: 13px; cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .ctrl-btn:hover { border-color: var(--violet); color: var(--violet); }
+
+    /* ── Hero ──────────────────────────────────────── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 48px 32px 40px;
+      border-bottom: 1px solid var(--border);
+      background: radial-gradient(ellipse at 50% 60%, rgba(168,85,247,.07) 0%, transparent 70%);
+    }
+    .hero-img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; opacity: .08; pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; text-align: center; }
+    .hero-label { font-size: 11px; font-family: var(--sans); color: var(--violet); letter-spacing: 4px; margin-bottom: 12px; }
+    .hero-title {
+      font-size: clamp(36px, 5vw, 64px); font-weight: 900; color: var(--white);
+      letter-spacing: 6px; line-height: 1.05; margin-bottom: 12px;
+    }
+    .hero-title em { color: var(--violet); font-style: normal; }
+    .hero-sub { font-size: 14px; color: var(--muted); font-family: var(--sans); letter-spacing: 1px; margin-bottom: 28px; }
+    .hero-kpis { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; }
+    .hero-kpi { text-align: center; }
+    .hero-kpi-val { font-size: 28px; font-weight: 800; color: var(--white); font-family: var(--sans); line-height: 1; }
+    .hero-kpi-lbl { font-size: 11px; color: var(--muted); font-family: var(--sans); letter-spacing: 1px; margin-top: 4px; }
+    .hero-kpi-val.v  { color: var(--violet); }
+    .hero-kpi-val.g  { color: var(--green); }
+    .hero-kpi-val.b  { color: var(--blue); }
+    .hero-kpi-val.a  { color: var(--amber); }
+
+    /* ── Phase indicator ──────────────────────────── */
+    .phase-bar {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; padding: 0 32px; overflow-x: auto;
+      border-bottom: 1px solid var(--border); background: var(--bg2);
+    }
+    .phase-step {
+      display: flex; align-items: center; gap: 0;
+      padding: 12px 20px; font-size: 12px; font-family: var(--sans);
+      white-space: nowrap; color: var(--muted); border-right: 1px solid var(--border);
+    }
+    .phase-step:last-child { border-right: none; }
+    .phase-step.done  { color: var(--green); }
+    .phase-step.now   { color: var(--white); font-weight: 700; background: rgba(168,85,247,.08); }
+    .phase-step.next  { color: var(--muted); }
+    .phase-dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; }
+    .phase-step.done .phase-dot  { background: var(--green); }
+    .phase-step.now  .phase-dot  { background: var(--violet); box-shadow: 0 0 8px var(--violet); }
+    .phase-step.next .phase-dot  { background: var(--border); }
+
+    /* ── Section grid ─────────────────────────────── */
+    .sections-wrap { max-width: 1400px; margin: 0 auto; padding: 36px 24px 64px; }
+    .sections-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .sections-header h2 { font-size: 16px; color: var(--muted); font-family: var(--sans); letter-spacing: 1px; }
+    .sections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── Section card ─────────────────────────────── */
+    .sec-card {
+      display: flex; flex-direction: column;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color .2s, transform .15s, box-shadow .2s;
+      cursor: pointer;
+    }
+    .sec-card:hover {
+      border-color: var(--violet); transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(168,85,247,.15);
+    }
+    .sec-card-header {
+      padding: 20px 20px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sec-num { font-size: 12px; font-family: var(--sans); color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; }
+    .sec-icon { font-size: 30px; margin-bottom: 8px; display: block; }
+    .sec-name { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+    .sec-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+    .sec-card-kpis {
+      padding: 14px 20px;
+      display: flex; gap: 20px; flex-wrap: wrap;
+    }
+    .sec-kpi { }
+    .sec-kpi-val { font-size: 20px; font-weight: 800; font-family: var(--sans); line-height: 1; }
+    .sec-kpi-lbl { font-size: 11px; color: var(--muted); font-family: var(--sans); margin-top: 2px; }
+
+    .sec-card-footer {
+      margin-top: auto;
+      padding: 12px 20px;
+      background: rgba(168,85,247,.04);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sec-open-btn {
+      font-size: 12px; font-family: var(--sans); color: var(--violet);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .sec-tag { font-size: 11px; color: var(--muted); font-family: var(--sans); }
+
+    /* Color accents per card -->
+    .sec-card[data-color="violet"] { border-color: rgba(168,85,247,.3); }
+    .sec-card[data-color="violet"]:hover { border-color: var(--violet); }
+    .sec-card[data-color="green"]  { border-color: rgba(34,197,94,.2); }
+    .sec-card[data-color="green"]:hover  { border-color: var(--green); }
+    .sec-card[data-color="blue"]   { border-color: rgba(96,165,250,.2); }
+    .sec-card[data-color="blue"]:hover   { border-color: var(--blue); box-shadow: 0 8px 32px rgba(96,165,250,.12); }
+    .sec-card[data-color="amber"]  { border-color: rgba(249,115,22,.2); }
+    .sec-card[data-color="amber"]:hover  { border-color: var(--amber); box-shadow: 0 8px 32px rgba(249,115,22,.12); }
+
+    .sec-kpi-val.v { color: var(--violet); }
+    .sec-kpi-val.g { color: var(--green); }
+    .sec-kpi-val.b { color: var(--blue); }
+    .sec-kpi-val.a { color: var(--amber); }
+    .sec-kpi-val.p { color: var(--pink); }
+
+    /* ── B2C Launch Banner ────────────────────────── */
+    .b2c-banner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 32px; flex-wrap: wrap;
+      padding: 18px 32px;
+      background: linear-gradient(90deg, rgba(96,165,250,.06) 0%, rgba(168,85,247,.10) 50%, rgba(96,165,250,.06) 100%);
+      border-bottom: 1px solid rgba(96,165,250,.25);
+      border-top: 1px solid rgba(96,165,250,.12);
+      position: relative; overflow: hidden;
+    }
+    .b2c-banner::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(96,165,250,.025) 40px, rgba(96,165,250,.025) 41px);
+      pointer-events: none;
+    }
+    .b2c-countdown-num {
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 900;
+      font-family: var(--sans);
+      color: var(--blue);
+      line-height: 1;
+      letter-spacing: -2px;
+      text-shadow: 0 0 40px rgba(96,165,250,.4);
+    }
+    .b2c-countdown-label {
+      font-size: 11px; font-family: var(--sans);
+      color: var(--muted); letter-spacing: 1px; text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .b2c-launch-info { text-align: center; }
+    .b2c-launch-date {
+      font-size: 22px; font-weight: 800; color: var(--white);
+      font-family: var(--sans); letter-spacing: 4px;
+    }
+    .b2c-launch-sublabel {
+      font-size: 11px; color: var(--muted); font-family: var(--sans);
+      letter-spacing: 0.5px; margin-top: 4px;
+    }
+    .b2c-milestones { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; }
+    .b2c-ms {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; font-family: var(--sans); color: var(--muted);
+    }
+    .b2c-ms-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+    .b2c-ms.active .b2c-ms-dot { background: var(--blue); box-shadow: 0 0 6px var(--blue); }
+    .b2c-ms.active { color: var(--blue); }
+    .b2c-ms.done .b2c-ms-dot { background: var(--green); }
+    .b2c-ms.done { color: var(--green); }
+    .b2c-plan-link {
+      padding: 8px 20px; border-radius: 20px;
+      border: 1px solid rgba(96,165,250,.4);
+      background: rgba(96,165,250,.08);
+      color: var(--blue); font-size: 12px; font-family: var(--sans);
+      cursor: pointer; transition: all .2s; text-decoration: none;
+      white-space: nowrap;
+    }
+    .b2c-plan-link:hover {
+      background: rgba(96,165,250,.18); border-color: var(--blue);
+      box-shadow: 0 0 20px rgba(96,165,250,.2);
+    }
+
+    /* ── Footer ────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; font-family: var(--sans); color: var(--muted);
+    }
+
+    /* ── Cockpit Story Strip ───────────────────────── */
+    .story-strip {
+      margin-bottom: 24px;
+      padding: 12px 18px 14px;
+      background: rgba(10,16,32,0.8);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+    .story-strip-label {
+      font-size: 11px; font-family: var(--sans); color: var(--text);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 9px;
+    }
+    .story-flow {
+      display: flex; align-items: center; gap: 3px; white-space: nowrap;
+    }
+    .story-step {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 11px; border-radius: 20px;
+      font-size: 13px; font-family: var(--sans); font-weight: 600;
+      letter-spacing: 0.2px; white-space: nowrap;
+    }
+    .story-step .sn { font-size: 10px; opacity: 0.85; margin-right: 1px; }
+    .story-arrow { color: var(--muted); font-size: 12px; flex-shrink: 0; padding: 0 1px; }
+    .story-step.v { background: rgba(168,85,247,0.18); color: var(--violet); border: 1px solid rgba(168,85,247,0.40); }
+    .story-step.b { background: rgba(96,165,250,0.18);  color: var(--blue);   border: 1px solid rgba(96,165,250,0.40); }
+    .story-step.a { background: rgba(245,158,11,0.18);  color: var(--amber);  border: 1px solid rgba(245,158,11,0.40); }
+    .story-step.g { background: rgba(34,197,94,0.18);   color: var(--green);  border: 1px solid rgba(34,197,94,0.40); }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .sections-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+    }
+    @media (max-width: 768px) {
+      .topnav-links { display: none; }
+      .hero-title { letter-spacing: 3px; }
+      .hero-kpis { gap: 20px; }
+      .sections-grid { grid-template-columns: 1fr 1fr; }
+      .phase-bar { justify-content: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .sections-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ AUTH OVERLAY ══════════════════════════════════════ -->
+  <div id="auth-overlay">
+    <img src="cockpit-og.svg" style="width:320px;border-radius:12px;opacity:.7;margin-bottom:8px;" alt="MNG Cockpit"/>
+    <h2>MANAGEMENT COCKPIT</h2>
+    <p style="font-size:12px;color:#94a3b8;font-family:'Segoe UI',system-ui,sans-serif;letter-spacing:2px;">HOPI AppIQ · PROJECT CONTROL CENTER</p>
+    <input id="auth-input" type="password" placeholder="· · · · · · · ·" maxlength="16"
+           onkeydown="if(event.key==='Enter')checkAuth()"/>
+    <button id="auth-btn" onclick="checkAuth()">VSTOUPIT</button>
+    <span id="auth-err">✕ Nesprávný přístupový kód</span>
+  </div>
+
+  <!-- ══ MOTTOS RIBBON ════════════════════════════════════ -->
+  <div class="mottos" style="display:none" id="main-ui">
+    <span class="m1">💰 Budget je svatý</span><span class="dot">·</span>
+    <span class="m2">👑 Cash is King</span><span class="dot">·</span>
+    <span class="m3">🎯 All Actions Must Be Business Driven</span><span class="dot">·</span>
+    <span class="m4">🚀 Living Proof First</span><span class="dot">·</span>
+    <span class="m5">🤖 1 Person + AI = Team</span>
+  </div>
+
+  <!-- ══ TOP NAV ══════════════════════════════════════════ -->
+  <nav class="topnav" style="display:none" id="topnav">
+    <div class="topnav-logo">⬡ MANAGEMENT COCKPIT</div>
+    <div class="topnav-links">
+      <a href="BUSINESS_BRIEF.html">Brief</a>
+      <a href="BUSINESS_VISION.html">Vision</a>
+      <a href="BUSINESS_CASE.html">Case</a>
+      <a href="MANAGEMENT_COCKPIT.html" class="active">Cockpit</a>
+      <a href="ANTHROPIC_JOURNEY.html">Journey</a>
+    </div>
+    <div class="topnav-controls">
+      <button class="ctrl-btn" id="music-btn" onclick="toggleMusic()" title="Hudba">♬</button>
+      <button class="ctrl-btn" id="lang-btn" onclick="toggleLang()">EN</button>
+    </div>
+  </nav>
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="hero" style="display:none" id="hero">
+    <img src="cockpit-og.svg" class="hero-img" alt=""/>
+    <div class="hero-content">
+      <div class="hero-label" id="hero-label">PROJEKT · FÁZE 1 · PHASE 1</div>
+      <h1 class="hero-title">MANAGEMENT <em>COCKPIT</em></h1>
+      <p class="hero-sub" id="hero-sub">HOPI AppIQ · Project Control Center · Live Data</p>
+      <div class="hero-kpis">
+        <div class="hero-kpi">
+          <div class="hero-kpi-val v" id="kpi-open">—</div>
+          <div class="hero-kpi-lbl">OPEN TASKS</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-val g" id="kpi-closed">—</div>
+          <div class="hero-kpi-lbl">CLOSED</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-val b" id="kpi-countdown">—</div>
+          <div class="hero-kpi-lbl">DNŮ DO B2C</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-val a" id="kpi-biz">—</div>
+          <div class="hero-kpi-lbl">BIZ OPEN</div>
+        </div>
+        <div class="hero-kpi">
+          <div class="hero-kpi-val" style="color:var(--pink)" id="kpi-commits">109+</div>
+          <div class="hero-kpi-lbl">GIT COMMITS</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ PHASE BAR ════════════════════════════════════════ -->
+  <div class="phase-bar" style="display:none" id="phase-bar">
+    <div class="phase-step done"><span class="phase-dot"></span>MVP (8 týdnů · $1K)</div>
+    <div class="phase-step done"><span class="phase-dot"></span>v7.24 Live</div>
+    <div class="phase-step now"><span class="phase-dot"></span>Fáze 0 — Anthropic</div>
+    <div class="phase-step next"><span class="phase-dot"></span>HOPI TechIQ s.r.o.</div>
+    <div class="phase-step next"><span class="phase-dot"></span>B2C Beta Q4 2026</div>
+    <div class="phase-step next"><span class="phase-dot"></span>B2C Launch 01.01.2027</div>
+    <div class="phase-step next"><span class="phase-dot"></span>Enterprise 2028</div>
+  </div>
+
+  <!-- ══ B2C LAUNCH BANNER ════════════════════════════════ -->
+  <div class="b2c-banner" style="display:none" id="b2c-banner">
+    <div style="text-align:center">
+      <div class="b2c-countdown-num" id="b2c-days">—</div>
+      <div class="b2c-countdown-label" id="b2c-days-lbl">DNŮ DO B2C LAUNCH</div>
+    </div>
+    <div class="b2c-launch-info">
+      <div class="b2c-launch-date">01.01.2027</div>
+      <div class="b2c-launch-sublabel" id="b2c-sublbl">AppIQ HOME · Veřejný launch</div>
+    </div>
+    <div class="b2c-milestones" id="b2c-milestones">
+      <div class="b2c-ms done"><span class="b2c-ms-dot"></span>Foundation</div>
+      <div class="b2c-ms active"><span class="b2c-ms-dot"></span>MVP Build</div>
+      <div class="b2c-ms"><span class="b2c-ms-dot"></span>Beta Q4 2026</div>
+      <div class="b2c-ms"><span class="b2c-ms-dot"></span>Launch 🚀</div>
+    </div>
+    <a href="cockpit/timeline.html" class="b2c-plan-link" id="b2c-link">🗺️ Plán →</a>
+  </div>
+
+  <!-- ══ SECTIONS GRID ════════════════════════════════════ -->
+  <div class="sections-wrap" style="display:none" id="sections-wrap">
+    <div class="sections-header">
+      <h2 id="sections-heading">— SEKCE</h2>
+      <span style="font-size:12px;font-family:var(--sans);color:var(--muted)" id="last-updated"></span>
+    </div>
+
+    <div class="story-strip">
+      <div class="story-strip-label" id="cockpit-story-label">PŘÍBĚH COCKPITU</div>
+      <div class="story-flow">
+        <span class="story-step v"><span class="sn">01</span>Proč</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step b"><span class="sn">02</span>Kdy</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step a"><span class="sn">03–04</span>Jak</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step v"><span class="sn">05</span>Kde jsme</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step b"><span class="sn">06</span>Čísla</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step g"><span class="sn">07–08</span>Peníze</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step b"><span class="sn">09</span>Milníky</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step a"><span class="sn">10–12</span>Práce</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step v"><span class="sn">13–15</span>Koordinace</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step b"><span class="sn">16–17</span>Tým</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step v"><span class="sn">18–19</span>Metodika</span>
+        <span class="story-arrow">→</span>
+        <span class="story-step g"><span class="sn">20</span>Dokumenty</span>
+      </div>
+    </div>
+
+    <div class="sections-grid" id="sections-grid">
+      <!-- Cards rendered by JS -->
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══════════════════════════════════════════ -->
+  <footer style="display:none" id="footer">
+    <span>HOPI AppIQ · Management Cockpit · <span id="footer-date"></span></span>
+    <span style="color:var(--violet)">💰 Budget je svatý</span>
+    <span>v8.0 · AIQ-00309</span>
+  </footer>
+
+  <!-- ══ AUDIO ════════════════════════════════════════════ -->
+  <audio id="bg-music" loop>
+    <source src="cockpit-music.mp3" type="audio/mpeg"/>
+  </audio>
+
+  <script>
+    // ── Config ─────────────────────────────────────────────
+    const PASS     = 'HOPI2026';
+    const AUTH_KEY = 'cockpit_unlocked';
+    const LANG_KEY = 'hopi_lang';
+    const MUS_KEY  = 'hopi_audio_on';
+    const B2C_DATE = new Date('2027-01-01');
+
+    // ── Section definitions ────────────────────────────────
+    const SECTIONS = [
+      { num:'01', icon:'🌟', name:{cs:'Motivační prostor', en:'Motivation Chamber'},
+        desc:{cs:'Loga, velká čísla, Phase mapa, citáty — WOW pro majitele.',
+              en:'Logos, big numbers, phase map, quotes — WOW for owners.'},
+        url:'cockpit/motivation.html', color:'violet',
+        kpis:[{id:'mc-val',  lbl:{cs:'Valuace',en:'Valuation'}, color:'v'},
+              {id:'mc-exit', lbl:{cs:'Exit cíl',en:'Exit target'},color:'a'}] },
+
+      { num:'02', icon:'🚀', name:{cs:'Plán startu · Odpočítávání', en:'Launch Plan · Countdown'},
+        desc:{cs:'KDY SE TO STANE · 3 tracky: HOPI GROUP · B2C HOME (01.01.2027) · B2B Enterprise (01.01.2028).',
+              en:'WHEN IT HAPPENS · 3 tracks: HOPI GROUP · B2C HOME (01.01.2027) · B2B Enterprise (01.01.2028).'},
+        url:'cockpit/launch-plan.html', color:'blue',
+        kpis:[{id:'lp-b2c', lbl:{cs:'Dnů do B2C',en:'Days to B2C'}, color:'b'},
+              {id:'lp-b2b', lbl:{cs:'Dnů do B2B',en:'Days to B2B'}, color:'g'}] },
+
+      { num:'03', icon:'💰', name:{cs:'Obchodní model prodeje', en:'Business Sales Model'},
+        desc:{cs:'JAK TAM PŘIJDEME · Ceník · ARR projekce · Exit valuace · Transfer pricing · 4 scénáře.',
+              en:'HOW WE GET THERE · Pricing · ARR projections · Exit valuations · Transfer pricing · 4 scenarios.'},
+        url:'cockpit/business-model.html', color:'amber',
+        kpis:[{id:'bm-y3arr', lbl:{cs:'Y3 ARR',       en:'Y3 ARR'},      color:'a'},
+              {id:'bm-exit',  lbl:{cs:'Exit (Middle)', en:'Exit (Middle)'},color:'v'}] },
+
+      { num:'04', icon:'🏛️', name:{cs:'Byznys architektura', en:'Business Architecture'},
+        desc:{cs:'PROČ TO FUNGUJE · 9D model · Platformová strategie · Tech vrstvy · Fázový plán · Diferenciace.',
+              en:'WHY IT WORKS · 9D model · Platform strategy · Tech layers · Phase plan · Differentiation.'},
+        url:'cockpit/business-architecture.html', color:'violet',
+        kpis:[{id:'ba-dims',   lbl:{cs:'Dimenze',   en:'Dimensions'}, color:'v'},
+              {id:'ba-phases', lbl:{cs:'Fáze',      en:'Phases'},     color:'b'}] },
+
+      { num:'05', icon:'📈', name:{cs:'Celkový přehled', en:'Executive Overview'},
+        desc:{cs:'KDE JSME TEĎ · Ranní briefing — agregát KPIs. Realita vs. model. Jeden pohled na celý stav.',
+              en:'WHERE WE ARE · Morning briefing — KPI aggregate. Reality vs. model. One view on full state.'},
+        url:'cockpit/overview.html', color:'violet',
+        kpis:[{id:'ov-open', lbl:{cs:'Open tasks',en:'Open tasks'}, color:'v'},
+              {id:'ov-days', lbl:{cs:'Dnů do B2C', en:'Days to B2C'},color:'b'}] },
+
+      { num:'06', icon:'📊', name:{cs:'KPI přehled', en:'Executive KPI Strip'},
+        desc:{cs:'8 karet — open tasks, closed, countdown B2C, git commits, měsíční cost.',
+              en:'8 cards — open tasks, closed, B2C countdown, git commits, monthly cost.'},
+        url:'cockpit/kpi.html', color:'blue',
+        kpis:[{id:'kpi-open2', lbl:{cs:'Open AIQ',en:'Open AIQ'}, color:'v'},
+              {id:'kpi-cls2',  lbl:{cs:'Closed',  en:'Closed'},   color:'g'}] },
+
+      { num:'07', icon:'🏦', name:{cs:'Finanční přehled', en:'Financial Cockpit'},
+        desc:{cs:'Monthly cost tracker, cash injection pipeline ($200k+), ROI argument.',
+              en:'Monthly cost tracker, cash injection pipeline ($200k+), ROI.'},
+        url:'cockpit/financial.html', color:'green',
+        kpis:[{id:'fin-pipeline', lbl:{cs:'Pipeline',   en:'Pipeline'},  color:'g'},
+              {id:'fin-monthly',  lbl:{cs:'Měsíčně',    en:'Monthly'},   color:'a'}] },
+
+      { num:'08', icon:'💸', name:{cs:'Sledování rozpočtu', en:'Budget Track'},
+        desc:{cs:'Milestone price tags, value delivery chart, cash back / návratnost.',
+              en:'Milestone price tags, value delivery chart, cash back / ROI.'},
+        url:'cockpit/budget-track.html', color:'amber',
+        kpis:[{id:'bt-invest', lbl:{cs:'Investice',en:'Investment'},color:'a'},
+              {id:'bt-val',    lbl:{cs:'Hodnota',  en:'Value'},     color:'g'}] },
+
+      { num:'09', icon:'🗺️', name:{cs:'Milníkový plán', en:'Milestone Timeline'},
+        desc:{cs:'Fáze 0 → s.r.o. → B2C Beta → Launch → Enterprise.',
+              en:'Phase 0 → LLC → B2C Beta → Launch → Enterprise.'},
+        url:'cockpit/timeline.html', color:'blue',
+        kpis:[{id:'tl-done', lbl:{cs:'Splněno',en:'Done'},color:'g'},
+              {id:'tl-days', lbl:{cs:'Dnů do B2C',en:'Days to B2C'},color:'b'}] },
+
+      { num:'10', icon:'🎯', name:{cs:'Centrum řízení úkolů', en:'Task Control Center'},
+        desc:{cs:'OIL + BOIL unified — Priority Board (S1–S4), BIZ↔TECH Linked View, Capacity Split.',
+              en:'OIL + BOIL unified — Priority Board (S1–S4), BIZ↔TECH Linked View, Capacity Split.'},
+        url:'cockpit/task-control.html', color:'amber',
+        kpis:[{id:'tc-s1',    lbl:{cs:'S1 Kritické',en:'S1 Critical'}, color:'r'},
+              {id:'tc-review', lbl:{cs:'Review',    en:'Review'},       color:'a'}] },
+
+      { num:'11', icon:'📋', name:{cs:'TECH Task Board (OIL)', en:'TECH Task Board (OIL)'},
+        desc:{cs:'Všechny AIQ tasky — filtry, expand → OIL_CONTEXT detail. Burndown chart.',
+              en:'All AIQ tasks — filters, expand → OIL_CONTEXT detail. Burndown chart.'},
+        url:'cockpit/oil-board.html', color:'violet',
+        kpis:[{id:'oil-open',   lbl:{cs:'Open',    en:'Open'},   color:'v'},
+              {id:'oil-review', lbl:{cs:'Review',  en:'Review'}, color:'a'},
+              {id:'oil-closed', lbl:{cs:'Closed',  en:'Closed'}, color:'g'}] },
+
+      { num:'12', icon:'💼', name:{cs:'BIZ Task Board (BOIL)', en:'BIZ Task Board (BOIL)'},
+        desc:{cs:'Všechny BIZ tasky — filtry stream/oblast/typ, expand → BKONTEXT detail.',
+              en:'All BIZ tasks — filters stream/area/type, expand → BKONTEXT detail.'},
+        url:'cockpit/boil-board.html', color:'amber',
+        kpis:[{id:'boil-open',   lbl:{cs:'Open',   en:'Open'},   color:'a'},
+              {id:'boil-closed', lbl:{cs:'Closed', en:'Closed'}, color:'g'}] },
+
+      { num:'13', icon:'🏛', name:{cs:'Organizace a koordinace', en:'Organization & Coordination'},
+        desc:{cs:'Discussion Log — živý záznam strategických rozhodnutí. Odpovědnosti, kontakty, přehled meetingů.',
+              en:'Discussion Log — live record of strategic decisions. Responsibilities, contacts, meeting overview.'},
+        url:'cockpit/org-coordination.html', color:'violet',
+        kpis:[{id:'disc-decisions', lbl:{cs:'Rozhodnutí',  en:'Decisions'},  color:'v'},
+              {id:'disc-sessions',  lbl:{cs:'Sessions',     en:'Sessions'},   color:'b'}] },
+
+      { num:'14', icon:'🪄', name:{cs:'Jednací místnost', en:'Meeting Room'},
+        desc:{cs:'Digitální flipchart + discussion board. Strategická místnost pro real-time spolupráci a rozhodování.',
+              en:'Digital flipchart + discussion board. Strategic room for real-time collaboration and decisions.'},
+        url:'cockpit/meeting-room.html', color:'orange',
+        kpis:[{id:'mr-notes',   lbl:{cs:'Sticky notes',  en:'Sticky notes'}, color:'y'},
+              {id:'mr-threads', lbl:{cs:'Diskuse',        en:'Discussions'},  color:'g'}] },
+
+      { num:'15', icon:'📜', name:{cs:'Záznam rozhodnutí', en:'Decision Log'},
+        desc:{cs:'Klíčová rozhodnutí — datum, kdo rozhodl, dopad, linked task.',
+              en:'Key decisions — date, who decided, impact, linked task.'},
+        url:'cockpit/decisions.html', color:'amber',
+        kpis:[{id:'dec-total',  lbl:{cs:'Rozhodnutí', en:'Decisions'}, color:'a'},
+              {id:'dec-recent', lbl:{cs:'Tento týden', en:'This week'}, color:'g'}] },
+
+      { num:'16', icon:'⚖️', name:{cs:'Kapacita a odpovědnost', en:'Capacity & Responsibility'},
+        desc:{cs:'Claude vs David split, odpovědnostní matice, bottleneck (REVIEW tasky).',
+              en:'Claude vs David split, responsibility matrix, bottleneck (REVIEW tasks).'},
+        url:'cockpit/capacity.html', color:'violet',
+        kpis:[{id:'cap-claude', lbl:{cs:'Claude %', en:'Claude %'}, color:'v'},
+              {id:'cap-david',  lbl:{cs:'David %',  en:'David %'},  color:'b'}] },
+
+      { num:'17', icon:'👥', name:{cs:'Projektový tým', en:'Project Team'},
+        desc:{cs:'Aktuální tým, stakeholders, target partneři (Anthropic, AWS, MS).',
+              en:'Current team, stakeholders, target partners (Anthropic, AWS, MS).'},
+        url:'cockpit/team.html', color:'blue',
+        kpis:[{id:'team-now',    lbl:{cs:'Nyní',    en:'Now'},    color:'b'},
+              {id:'team-phase2', lbl:{cs:'Phase 2', en:'Phase 2'},color:'a'}] },
+
+      { num:'18', icon:'🔧', name:{cs:'Zdroje a náklady', en:'Sources'},
+        desc:{cs:'Lidská práce + AI Resources + SW & Tech + HW + Marketing + Budget per kategorie.',
+              en:'Human work + AI Resources + SW & Tech + HW + Marketing + Budget per category.'},
+        url:'cockpit/sources.html', color:'green',
+        kpis:[{id:'src-positions', lbl:{cs:'Pozice Phase 1-3', en:'Positions Ph1-3'}, color:'g'},
+              {id:'src-ai',        lbl:{cs:'AI modely',        en:'AI models'},       color:'v'}] },
+
+      { num:'19', icon:'🧭', name:{cs:'Metodika', en:'Methodology'},
+        desc:{cs:'AI pravidla, model selection guide (Opus/Sonnet/Haiku), budget strategie, workflow.',
+              en:'AI rules, model selection guide (Opus/Sonnet/Haiku), budget strategy, workflow.'},
+        url:'cockpit/methodology.html', color:'violet',
+        kpis:[{id:'meth-rules', lbl:{cs:'Pravidel',  en:'Rules'},  color:'v'},
+              {id:'meth-model', lbl:{cs:'Modely',    en:'Models'}, color:'b'}] },
+
+      { num:'20', icon:'🔗', name:{cs:'Dokumentace a odkazy', en:'Documentation & Links'},
+        desc:{cs:'Centrální správa linků — vždy nejnovější verze. Copy link per stránku. Jedno místo pro sdílení.',
+              en:'Central link manager — always latest version. Copy link per page. One place to share.'},
+        url:'cockpit/documentation.html', color:'green',
+        kpis:[{id:'doc-live',  lbl:{cs:'LIVE linků',  en:'LIVE links'},  color:'g'},
+              {id:'doc-total', lbl:{cs:'Celkem stran', en:'Total pages'}, color:'b'}] },
+    ];
+
+    // ── Auth ───────────────────────────────────────────────
+    function checkAuth() {
+      const val = document.getElementById('auth-input').value;
+      if (val === PASS) {
+        localStorage.setItem(AUTH_KEY, '1');
+        document.getElementById('auth-overlay').style.display = 'none';
+        showUI();
+      } else {
+        document.getElementById('auth-err').style.display = 'block';
+        document.getElementById('auth-input').style.borderColor = '#ef4444';
+      }
+    }
+
+    // ── Show UI ────────────────────────────────────────────
+    function showUI() {
+      ['main-ui','topnav','hero','phase-bar','b2c-banner','sections-wrap','footer'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = '';
+      });
+      loadData();
+      renderSections();
+      updateFooter();
+      initMusic();
+      updateLangBtn();
+    }
+
+    // ── Lang ───────────────────────────────────────────────
+    function getLang() { return localStorage.getItem(LANG_KEY) || 'cs'; }
+    function toggleLang() {
+      localStorage.setItem(LANG_KEY, getLang() === 'cs' ? 'en' : 'cs');
+      location.reload();
+    }
+    function updateLangBtn() {
+      const btn = document.getElementById('lang-btn');
+      if (btn) btn.textContent = getLang() === 'cs' ? 'EN' : 'CZ';
+    }
+
+    // ── Music ──────────────────────────────────────────────
+    const MUS_TIME_KEY = 'hopi_audio_time';
+    function initMusic() {
+      const audio = document.getElementById('bg-music');
+
+      // Restore playback position from previous page navigation
+      const savedTime = parseFloat(sessionStorage.getItem(MUS_TIME_KEY) || '0');
+      audio.addEventListener('canplay', () => {
+        if (savedTime > 0) audio.currentTime = savedTime;
+      }, { once: true });
+      if (audio.readyState >= 3 && savedTime > 0) audio.currentTime = savedTime;
+
+      const on = localStorage.getItem(MUS_KEY) !== '0';
+      if (on) {
+        audio.play().catch(() => {
+          // Autoplay blocked — start on first user interaction
+          document.addEventListener('click', () => { audio.play().catch(() => {}); }, { once: true });
+        });
+      }
+      updateMusicBtn();
+
+      // Save position when leaving page
+      window.addEventListener('beforeunload', () => {
+        sessionStorage.setItem(MUS_TIME_KEY, String(audio.currentTime));
+      });
+    }
+    function toggleMusic() {
+      const audio = document.getElementById('bg-music');
+      const on = localStorage.getItem(MUS_KEY) !== '0';
+      if (on) { audio.pause(); localStorage.setItem(MUS_KEY, '0'); }
+      else    { audio.play().catch(()=>{}); localStorage.setItem(MUS_KEY, '1'); }
+      updateMusicBtn();
+    }
+    function updateMusicBtn() {
+      const btn = document.getElementById('music-btn');
+      if (!btn) return;
+      btn.textContent = localStorage.getItem(MUS_KEY) !== '0' ? '♬' : '♪';
+    }
+
+    // ── Countdown ─────────────────────────────────────────
+    function daysTo(d) { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
+
+    // ── Render sections ────────────────────────────────────
+    function renderSections() {
+      const lang = getLang();
+      const sh = document.getElementById('sections-heading');
+      if (sh) sh.textContent = lang === 'en' ? '— SECTIONS' : '— SEKCE';
+      const sl = document.getElementById('cockpit-story-label');
+      if (sl) sl.textContent = lang === 'en' ? 'COCKPIT STORY' : 'PŘÍBĚH COCKPITU';
+      const grid = document.getElementById('sections-grid');
+      grid.innerHTML = SECTIONS.map(s => `
+        <a href="${s.url}" class="sec-card" data-color="${s.color}">
+          <div class="sec-card-header">
+            <div class="sec-num">${lang === 'cs' ? 'SEKCE' : 'SECTION'} ${s.num}</div>
+            <span class="sec-icon">${s.icon}</span>
+            <div class="sec-name">${s.name[lang]}</div>
+            <div class="sec-desc">${s.desc[lang]}</div>
+          </div>
+          <div class="sec-card-kpis">
+            ${s.kpis.map(k => `
+              <div class="sec-kpi">
+                <div class="sec-kpi-val ${k.color}" id="${k.id}">—</div>
+                <div class="sec-kpi-lbl">${k.lbl[lang]}</div>
+              </div>`).join('')}
+          </div>
+          <div class="sec-card-footer">
+            <span class="sec-open-btn">${lang === 'cs' ? 'Otevřít →' : 'Open →'}</span>
+            <span class="sec-tag">AIQ-00309</span>
+          </div>
+        </a>`).join('');
+    }
+
+    // ── Load live data ─────────────────────────────────────
+    function loadData() {
+      // OIL.json
+      fetch('OIL.json').then(r => r.json()).then(data => {
+        const tasks = data.tasks || [];
+        const open   = tasks.filter(t => t.status === 'OPEN').length;
+        const review = tasks.filter(t => t.status === 'REVIEW').length;
+        const inprog = tasks.filter(t => t.status === 'IN PROGRESS').length;
+        const closed = tasks.filter(t => t.status === 'CLOSED').length;
+
+        setText('kpi-open',   open + review + inprog);
+        setText('kpi-closed', closed);
+        setText('oil-open',   open);
+        setText('oil-review', review);
+        setText('oil-closed', closed);
+        setText('kpi-open2',  open);
+        setText('kpi-cls2',   closed);
+
+        // Capacity estimate
+        const claudeTasks = tasks.filter(t => t.assignee === 'Claude').length;
+        const davidTasks  = tasks.filter(t => t.assignee === 'David Gogela').length;
+        const total = claudeTasks + davidTasks || 1;
+        setText('cap-claude', Math.round(claudeTasks/total*100) + '%');
+        setText('cap-david',  Math.round(davidTasks/total*100) + '%');
+      }).catch(() => {});
+
+      // BOIL.json
+      fetch('BOIL.json').then(r => r.json()).then(data => {
+        const tasks = data.tasks || [];
+        const open   = tasks.filter(t => t.status === 'OPEN' || t.status === 'IN PROGRESS').length;
+        const closed = tasks.filter(t => t.status === 'CLOSED').length;
+        setText('kpi-biz',    open);
+        setText('boil-open',  open);
+        setText('boil-closed',closed);
+      }).catch(() => {});
+
+      // Countdown — hero + banner + timeline card
+      const days = daysTo(B2C_DATE);
+      setText('kpi-countdown', days);
+      setText('tl-days',       days);
+      setText('b2c-days',      days);
+      setText('b2c-days2',    days);
+      setText('b2c-members',  '50+');
+      setText('doc-live',  '19');
+      setText('doc-total', '25');
+      setText('disc-decisions', '40');
+      setText('disc-sessions',  '7');
+      setText('mr-notes',   '0');
+      setText('mr-threads', '0');
+
+      // B2C banner i18n
+      const lang = getLang();
+      setText('b2c-days-lbl', lang === 'cs' ? 'DNŮ DO B2C LAUNCH' : 'DAYS TO B2C LAUNCH');
+      setText('b2c-sublbl',   lang === 'cs' ? 'AppIQ HOME · Veřejný launch' : 'AppIQ HOME · Public Launch');
+      const lnk = document.getElementById('b2c-link');
+      if (lnk) lnk.textContent = lang === 'cs' ? '🗺️ Plán →' : '🗺️ Plan →';
+      setText('tl-done',       '5');
+
+      // Static values (updated by business-model.json fetch below)
+      setText('mc-val',  '€500K ARR');
+      setText('bt-invest','~$1,000');
+      setText('bt-val',  '€200K+');
+      setText('fin-pipeline','$200K+');
+      setText('fin-monthly','~$50–150');
+      setText('team-now',    '2');
+      setText('team-phase2', '+4');
+      setText('src-positions','7');
+      setText('src-ai',      '3');
+      setText('meth-rules',  '7');
+      setText('meth-model',  '3');
+      setText('dec-total',   '12+');
+      setText('dec-recent',  '5');
+      setText('mot-tam',     '30M+');
+      setText('mot-d', Math.ceil((new Date() - new Date('2026-02-01'))/86400000));
+
+      // Business model — live from JSON
+      fetch('cockpit/business-model.json').then(r => r.json()).then(bm => {
+        const mid = (bm.scenarios || []).find(s => s.id === 'middle');
+        if (mid) {
+          const y3 = mid.projections && mid.projections.y3_arr_eur;
+          const exitAcq = (bm.exit_paths || []).find(e => e.id === 'acquisition');
+          if (y3) {
+            const y3fmt = y3 >= 1e6 ? '€' + (y3/1e6).toFixed(0) + 'M ARR' : '€' + (y3/1e3).toFixed(0) + 'K ARR';
+            setText('mc-val',   y3fmt);
+            setText('bm-y3arr', y3fmt);
+            if (exitAcq) setText('mc-exit', '€' + ((y3 * exitAcq.multiple_arr)/1e6).toFixed(0) + 'M');
+            setText('bm-exit', exitAcq ? '€' + ((y3 * exitAcq.multiple_arr)/1e6).toFixed(0) + 'M' : '—');
+          }
+        }
+        // doc-total = page count, managed by static below
+      }).catch(() => {});
+
+      // Last updated
+      const now = new Date();
+      const ts = now.toLocaleDateString('cs-CZ') + ' ' + now.toLocaleTimeString('cs-CZ',{hour:'2-digit',minute:'2-digit'});
+      setText('last-updated', 'Live · ' + ts);
+      setText('footer-date', now.toLocaleDateString('cs-CZ'));
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    }
+
+    function updateFooter() {
+      const d = new Date();
+      setText('footer-date', d.toLocaleDateString('cs-CZ'));
+    }
+
+    // ── Boot ───────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem(AUTH_KEY) === '1') {
+        document.getElementById('auth-overlay').style.display = 'none';
+        showUI();
+      }
+      document.getElementById('auth-input').addEventListener('keydown', e => {
+        if (e.key === 'Enter') checkAuth();
+      });
+    });
+  </script>
+</body>
+</html>

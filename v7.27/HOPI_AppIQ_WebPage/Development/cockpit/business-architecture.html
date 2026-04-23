@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Architecture — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Narrative tag ───────────────────────────── */
+    .why-tag {
+      display: inline-block; padding: 4px 14px;
+      background: rgba(168,85,247,.12); border: 1px solid rgba(168,85,247,.3);
+      border-radius: 20px; font-size: 11px; font-family: var(--c-font-sans);
+      color: var(--c-violet); letter-spacing: 2px; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    /* ── 9D model grid ───────────────────────────── */
+    .dim-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px; margin-bottom: 32px;
+    }
+    .dim-card {
+      padding: 16px 18px; background: var(--c-bg2);
+      border: 1px solid var(--c-border); border-radius: var(--c-radius);
+      transition: border-color .2s;
+    }
+    .dim-card:hover { border-color: rgba(168,85,247,.35); }
+    .dim-num   { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 2px; margin-bottom: 4px; }
+    .dim-name  { font-size: 14px; font-weight: 700; color: var(--c-white); margin-bottom: 6px; }
+    .dim-vals  { font-size: 11px; color: var(--c-text); font-family: var(--c-font-sans); line-height: 1.7; }
+    .dim-key   { color: var(--c-violet); font-weight: 700; }
+
+    /* ── Phase plan ──────────────────────────────── */
+    .phase-flow {
+      display: flex; gap: 0; margin-bottom: 32px; flex-wrap: wrap;
+    }
+    .phase-block {
+      flex: 1; min-width: 160px; padding: 20px 16px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-right: none; position: relative;
+    }
+    .phase-block:last-child { border-right: 1px solid var(--c-border); border-radius: 0 var(--c-radius) var(--c-radius) 0; }
+    .phase-block:first-child { border-radius: var(--c-radius) 0 0 var(--c-radius); }
+    .phase-block.active { background: rgba(168,85,247,.06); border-color: rgba(168,85,247,.3); }
+    .phase-num  { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 2px; margin-bottom: 6px; }
+    .phase-name { font-size: 15px; font-weight: 700; color: var(--c-white); margin-bottom: 4px; }
+    .phase-date { font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); margin-bottom: 8px; }
+    .phase-items { font-size: 11px; color: var(--c-text); line-height: 1.7; }
+    .phase-now  { position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+                  background: var(--c-violet); color: white; font-size: 9px;
+                  padding: 2px 8px; border-radius: 10px; font-family: var(--c-font-sans); letter-spacing: 1px; }
+
+    /* ── Tech layer stack ────────────────────────── */
+    .layer-stack { margin-bottom: 32px; }
+    .layer-row {
+      display: flex; align-items: stretch; gap: 0; margin-bottom: 2px;
+    }
+    .layer-num {
+      width: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+      background: var(--c-bg3); border: 1px solid var(--c-border);
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+      border-right: none;
+    }
+    .layer-name {
+      width: 200px; flex-shrink: 0; padding: 12px 16px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      font-size: 13px; font-weight: 700; color: var(--c-white);
+      border-right: none; display: flex; align-items: center;
+    }
+    .layer-detail {
+      flex: 1; padding: 12px 16px; background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      font-size: 12px; color: var(--c-text); font-family: var(--c-font-sans);
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    }
+    .layer-tag {
+      padding: 2px 8px; border-radius: 4px; font-size: 10px; letter-spacing: .5px;
+    }
+    .layer-when {
+      margin-left: auto; font-size: 10px; color: var(--c-muted);
+      white-space: nowrap; letter-spacing: 1px;
+    }
+    .layer-arrow {
+      text-align: center; color: var(--c-border); font-size: 12px;
+      padding: 2px 0; font-family: var(--c-font-sans);
+    }
+
+    /* ── 5 laws ──────────────────────────────────── */
+    .laws-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 10px; margin-bottom: 32px;
+    }
+    .law-card {
+      padding: 16px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); display: flex; gap: 14px; align-items: flex-start;
+    }
+    .law-num  { font-size: 28px; font-weight: 900; font-family: var(--c-font-sans);
+                color: rgba(168,85,247,.3); line-height: 1; flex-shrink: 0; }
+    .law-name { font-size: 13px; font-weight: 700; color: var(--c-white); margin-bottom: 4px; }
+    .law-desc { font-size: 11px; color: var(--c-muted); line-height: 1.5; }
+
+    /* ── Differentiation ─────────────────────────── */
+    .diff-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px; margin-bottom: 32px;
+    }
+    .diff-card {
+      padding: 14px 16px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+    }
+    .diff-icon { font-size: 22px; margin-bottom: 6px; }
+    .diff-title { font-size: 13px; font-weight: 700; color: var(--c-white); margin-bottom: 4px; }
+    .diff-desc  { font-size: 11px; color: var(--c-muted); line-height: 1.5; }
+
+    /* ── Docs links ──────────────────────────────── */
+    .doc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .doc-item {
+      display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 8px; transition: border-color .2s;
+    }
+    .doc-item:hover { border-color: rgba(168,85,247,.3); }
+    .doc-icon  { font-size: 16px; flex-shrink: 0; }
+    .doc-name  { font-size: 13px; font-weight: 600; color: var(--c-white); }
+    .doc-desc  { font-size: 11px; color: var(--c-muted); }
+    .doc-badge { margin-left: auto; font-size: 10px; font-family: var(--c-font-sans);
+                 color: var(--c-violet); background: rgba(168,85,247,.1);
+                 border: 1px solid rgba(168,85,247,.2); padding: 2px 8px; border-radius: 4px;
+                 white-space: nowrap; }
+
+    .ba-divider { border: none; border-top: 1px solid var(--c-border); margin: 28px 0; }
+    .ba-section-title {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .phase-flow { flex-direction: column; }
+      .phase-block { border-right: 1px solid var(--c-border); border-bottom: none; }
+      .phase-block:last-child { border-bottom: 1px solid var(--c-border); border-radius: 0 0 var(--c-radius) var(--c-radius); }
+      .phase-block:first-child { border-radius: var(--c-radius) var(--c-radius) 0 0; }
+      .layer-row { flex-wrap: wrap; }
+      .layer-name { width: auto; border-right: 1px solid var(--c-border); border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cockpit-shell"></div>
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>🏛️</span> Business Architecture</h1>
+    <p class="page-subtitle">Proč to funguje · Platformová strategie · 9D model · Tech vrstvy · Fázový plán</p>
+    <div class="why-tag">⬡ PROČ TO FUNGUJE</div>
+
+    <!-- ── 9D Produktový model ───────────────────────────── -->
+    <h2 class="ba-section-title">— 9D PRODUKTOVÝ MODEL</h2>
+    <div class="dim-grid">
+      <div class="dim-card">
+        <div class="dim-num">DIM 1</div>
+        <div class="dim-name">Svět</div>
+        <div class="dim-vals"><span class="dim-key">Enterprise</span> · <span class="dim-key">Home</span></div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 2</div>
+        <div class="dim-name">Sektor</div>
+        <div class="dim-vals"><span class="dim-key">Private</span> · Public · State</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 3</div>
+        <div class="dim-name">Industry</div>
+        <div class="dim-vals">20+ odvětví: Finance · Healthcare · IT · Logistics · Defense · Education...</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 4</div>
+        <div class="dim-name">Scale</div>
+        <div class="dim-vals">Enterprise: <span class="dim-key">L1 Jednotlivec → L6 Holding</span><br>Home: <span class="dim-key">L0a Dítě → L5 Rodina</span></div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 5</div>
+        <div class="dim-name">Doménová funkce</div>
+        <div class="dim-vals">13+ Enterprise domén · 12 Home domén<br><span class="dim-key">Finance · HR · Health · Education · Operations...</span></div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 6</div>
+        <div class="dim-name">Mód</div>
+        <div class="dim-vals"><span class="dim-key">Assemble</span> (No-Code) · <span class="dim-key">Template</span> (Low-Code) · <span class="dim-key">Custom</span> (Pro-Code)</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 7</div>
+        <div class="dim-name">AI Maturita</div>
+        <div class="dim-vals"><span class="dim-key">S0</span> Manuální → <span class="dim-key">S1</span> Přehledy → <span class="dim-key">S2</span> Asistovaný → <span class="dim-key">S3</span> Automatizovaný → <span class="dim-key">S4</span> Autonomní</div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 8</div>
+        <div class="dim-name">Platformová Zóna</div>
+        <div class="dim-vals">Studio · Publish · <span class="dim-key">Marketplace</span> · Use · Market · <span class="dim-key">Invest</span></div>
+      </div>
+      <div class="dim-card">
+        <div class="dim-num">DIM 9</div>
+        <div class="dim-name">Obchodní model</div>
+        <div class="dim-vals"><span class="dim-key">B2B</span> · B2B2C · <span class="dim-key">B2C</span> · Marketplace · White-label · Reseller</div>
+      </div>
+    </div>
+    <div style="padding:12px 16px;background:rgba(168,85,247,.06);border:1px solid rgba(168,85,247,.2);border-radius:8px;font-size:12px;font-family:var(--c-font-sans);color:var(--c-text);margin-bottom:28px">
+      <span style="color:var(--c-violet);font-weight:700">Klíčový princip:</span>
+      Přidání nové industry/domény = přidání <code style="color:var(--c-amber)">manifest.json</code>. Nula řádků platformového kódu.
+      Vertikály jsou data, ne kód.
+    </div>
+
+    <hr class="ba-divider"/>
+
+    <!-- ── Fázový plán ────────────────────────────────────── -->
+    <h2 class="ba-section-title">— FÁZOVÝ PLÁN (GO-TO-MARKET)</h2>
+    <div class="phase-flow">
+      <div class="phase-block active">
+        <span class="phase-now">TEĎ</span>
+        <div class="phase-num">PHASE 1 · 2026–2027</div>
+        <div class="phase-name" style="color:var(--c-violet)">HOME B2C + HOPI Pilot</div>
+        <div class="phase-date">Launch: 01.01.2027</div>
+        <div class="phase-items">
+          · Freemium → Premium (PLG)<br>
+          · Individual · Pár · Rodina<br>
+          · HOPI pilot = Living Proof
+        </div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-num">PHASE 2 · 2027–2028</div>
+        <div class="phase-name" style="color:var(--c-blue)">Enterprise B2B</div>
+        <div class="phase-date">Launch: 01.01.2028</div>
+        <div class="phase-items">
+          · HOPI = referenční zákazník<br>
+          · Velká firma · Střední · Instituce<br>
+          · B2B sales motion
+        </div>
+      </div>
+      <div class="phase-block">
+        <div class="phase-num">PHASE 3 · 2028+</div>
+        <div class="phase-name" style="color:var(--c-amber)">Marketplace &amp; Scale</div>
+        <div class="phase-date">2028+</div>
+        <div class="phase-items">
+          · Marketplace · White-label<br>
+          · Reseller · B2B2C<br>
+          · Platform exit
+        </div>
+      </div>
+    </div>
+
+    <hr class="ba-divider"/>
+
+    <!-- ── Tech architektura (vrstvy) ────────────────────── -->
+    <h2 class="ba-section-title">— TECHNICKÁ ARCHITEKTURA (5 VRSTEV)</h2>
+    <div class="layer-stack">
+      <div class="layer-row">
+        <div class="layer-num">1</div>
+        <div class="layer-name" style="color:var(--c-violet)">Visual Layer</div>
+        <div class="layer-detail">
+          <span class="layer-tag" style="background:rgba(168,85,247,.1);color:var(--c-violet);border:1px solid rgba(168,85,247,.2)">HTML</span>
+          <span class="layer-tag" style="background:rgba(168,85,247,.1);color:var(--c-violet);border:1px solid rgba(168,85,247,.2)">_modules/</span>
+          <span class="layer-tag" style="background:rgba(168,85,247,.1);color:var(--c-violet);border:1px solid rgba(168,85,247,.2)">_core/</span>
+          <span class="layer-when">✅ v8.x — teď</span>
+        </div>
+      </div>
+      <div class="layer-arrow">↓ jediný kontakt = _data.js</div>
+      <div class="layer-row">
+        <div class="layer-num">2</div>
+        <div class="layer-name" style="color:var(--c-green)">Data Layer</div>
+        <div class="layer-detail">
+          <span class="layer-tag" style="background:rgba(34,197,94,.1);color:var(--c-green);border:1px solid rgba(34,197,94,.2)">_data.js</span>
+          <span style="color:var(--c-muted)">→ JSON / REST / SQL</span>
+          <span class="layer-when">✅ v8.x — teď</span>
+        </div>
+      </div>
+      <div class="layer-arrow">↓</div>
+      <div class="layer-row">
+        <div class="layer-num">3</div>
+        <div class="layer-name" style="color:var(--c-blue)">Workflow Layer</div>
+        <div class="layer-detail">
+          <span class="layer-tag" style="background:rgba(96,165,250,.1);color:var(--c-blue);border:1px solid rgba(96,165,250,.2)">_workflow.js</span>
+          <span style="color:var(--c-muted)">state machine, persistentní procesy</span>
+          <span class="layer-when">🔜 v9.x</span>
+        </div>
+      </div>
+      <div class="layer-arrow">↓</div>
+      <div class="layer-row">
+        <div class="layer-num">4</div>
+        <div class="layer-name" style="color:var(--c-amber)">Integration Layer</div>
+        <div class="layer-detail">
+          <span class="layer-tag" style="background:rgba(245,158,11,.1);color:var(--c-amber);border:1px solid rgba(245,158,11,.2)">SAP</span>
+          <span class="layer-tag" style="background:rgba(245,158,11,.1);color:var(--c-amber);border:1px solid rgba(245,158,11,.2)">SharePoint</span>
+          <span class="layer-tag" style="background:rgba(245,158,11,.1);color:var(--c-amber);border:1px solid rgba(245,158,11,.2)">Teams</span>
+          <span class="layer-tag" style="background:rgba(245,158,11,.1);color:var(--c-amber);border:1px solid rgba(245,158,11,.2)">Monday</span>
+          <span class="layer-when">🔜 v10.x</span>
+        </div>
+      </div>
+      <div class="layer-arrow">↓ MCP (Model Context Protocol)</div>
+      <div class="layer-row">
+        <div class="layer-num">5</div>
+        <div class="layer-name" style="color:var(--c-pink)">AI Agent Layer</div>
+        <div class="layer-detail">
+          <span class="layer-tag" style="background:rgba(236,72,153,.1);color:var(--c-pink);border:1px solid rgba(236,72,153,.2)">_agent.js</span>
+          <span style="color:var(--c-muted)">7 AI agentů orchestrují přes všechny vrstvy</span>
+          <span class="layer-when">🔜 v11.x</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="ba-divider"/>
+
+    <!-- ── 5 zákonů platformy ─────────────────────────────── -->
+    <h2 class="ba-section-title">— 5 ZÁKONŮ PLATFORMY</h2>
+    <div class="laws-grid">
+      <div class="law-card">
+        <div class="law-num">1</div>
+        <div>
+          <div class="law-name">Single Responsibility</div>
+          <div class="law-desc">Každý modul dělá JEDNU věc. Nikdy víc.</div>
+        </div>
+      </div>
+      <div class="law-card">
+        <div class="law-num">2</div>
+        <div>
+          <div class="law-name">Event Bus</div>
+          <div class="law-desc">Moduly komunikují POUZE přes AppIQ.emit/on. Žádné přímé volání.</div>
+        </div>
+      </div>
+      <div class="law-card">
+        <div class="law-num">3</div>
+        <div>
+          <div class="law-name">Data Layer</div>
+          <div class="law-desc">Veškerý přístup k datům jde přes _data.js. Nikdy fetch() přímo v HTML.</div>
+        </div>
+      </div>
+      <div class="law-card">
+        <div class="law-num">4</div>
+        <div>
+          <div class="law-name">DRY</div>
+          <div class="law-desc">Stejný kód na dvou místech patří do modulu. Žádná duplicita.</div>
+        </div>
+      </div>
+      <div class="law-card">
+        <div class="law-num">5</div>
+        <div>
+          <div class="law-name">Backend-Ready</div>
+          <div class="law-desc">Swap JSON → REST API → SQL = změna POUZE v _data.js.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="ba-divider"/>
+
+    <!-- ── Diferenciace ───────────────────────────────────── -->
+    <h2 class="ba-section-title">— TRŽNÍ DIFERENCIACE</h2>
+    <div class="diff-grid">
+      <div class="diff-card">
+        <div class="diff-icon">⬡</div>
+        <div class="diff-title">AI-First od základů</div>
+        <div class="diff-desc">AI není feature — je to páteř každé vrstvy. S0→S4 AI Maturity progression = retention mechanismus.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🧩</div>
+        <div class="diff-title">Vertikály = Data, ne kód</div>
+        <div class="diff-desc">Přidání nové industrie = manifest.json. Konkurenti přidávají kód. My přidáváme data.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🌍</div>
+        <div class="diff-title">Universal scale</div>
+        <div class="diff-desc">Jeden kód: dítě → rodina → startup → holding → stát. Žádná platforma to nedělá takto.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🤖</div>
+        <div class="diff-title">1 Person + AI = Team</div>
+        <div class="diff-desc">Claude Code + David = rychlost dev agentury při zlomku ceny. Living Proof AI-first buildu.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🏠</div>
+        <div class="diff-title">HOME first</div>
+        <div class="diff-desc">Phase 1 = B2C. Nikdo z enterprise hráčů (SAP, MS) nesestoupí k jednotlivci a rodině.</div>
+      </div>
+      <div class="diff-card">
+        <div class="diff-icon">🔄</div>
+        <div class="diff-title">Backend-Ready</div>
+        <div class="diff-desc">JSON dnes → REST API zítra → SQL pozítří. Frontend se nikdy nemění.</div>
+      </div>
+    </div>
+
+    <hr class="ba-divider"/>
+
+    <!-- ── Klíčové dokumenty ──────────────────────────────── -->
+    <h2 class="ba-section-title">— KLÍČOVÉ ARCHITEKTONICKÉ DOKUMENTY</h2>
+    <div class="doc-list">
+      <div class="doc-item">
+        <div class="doc-icon">📐</div>
+        <div>
+          <div class="doc-name">PRODUCT_MODEL.md</div>
+          <div class="doc-desc">9D model, taxonomie, manifest schema — referenční model pro veškerá rozhodnutí</div>
+        </div>
+        <div class="doc-badge">AIQ-00196</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">🗂️</div>
+        <div>
+          <div class="doc-name">REPO_STRUCTURE.md</div>
+          <div class="doc-desc">Folder architektura + dimension mapping — kde co žije a proč</div>
+        </div>
+        <div class="doc-badge">AIQ-00197</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">🌐</div>
+        <div>
+          <div class="doc-name">PLATFORM_OVERVIEW.md</div>
+          <div class="doc-desc">Co platforma je, pro koho, jak funguje — onboarding dokument</div>
+        </div>
+        <div class="doc-badge">AIQ-00198</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">🔌</div>
+        <div>
+          <div class="doc-name">INTEGRATION_ARCHITECTURE.md</div>
+          <div class="doc-desc">API Gateway, Connector Layer, MCP — fázový integrační plán</div>
+        </div>
+        <div class="doc-badge">AIQ-00188</div>
+      </div>
+      <div class="doc-item">
+        <div class="doc-icon">👩‍💻</div>
+        <div>
+          <div class="doc-name">DEV_GUIDE.md</div>
+          <div class="doc-desc">Developer onboarding — jak začít, konvence, příkazy, CI/CD</div>
+        </div>
+        <div class="doc-badge">AIQ-00187</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: {cs:'Business architektura', en:'Business Architecture'},
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music: '../cockpit-music.mp3'
+    });
+
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      var el = document.querySelector('.page-subtitle');
+      if (el) el.textContent = 'Why it works · Platform strategy · 9D model · Tech layers · Roadmap';
+      var whyTag = document.querySelector('.why-tag');
+      if (whyTag) whyTag.textContent = '⬡ WHY IT WORKS';
+      document.querySelectorAll('.ba-section-title').forEach(function(h) {
+        h.textContent = h.textContent
+          .replace('— 9D PRODUKTOVÝ MODEL','— 9D PRODUCT MODEL')
+          .replace('— FÁZOVÝ PLÁN (GO-TO-MARKET)','— GO-TO-MARKET ROADMAP')
+          .replace('— TECHNICKÁ ARCHITEKTURA (5 VRSTEV)','— TECHNICAL ARCHITECTURE (5 LAYERS)')
+          .replace('— 5 ZÁKONŮ PLATFORMY','— 5 PLATFORM LAWS')
+          .replace('— TRŽNÍ DIFERENCIACE','— MARKET DIFFERENTIATION')
+          .replace('— KLÍČOVÉ ARCHITEKTONICKÉ DOKUMENTY','— KEY ARCHITECTURE DOCUMENTS');
+      });
+      document.querySelectorAll('.dim-name').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Svět','World').replace('Sektor','Sector')
+          .replace('Doménová funkce','Domain function').replace('Mód','Mode')
+          .replace('AI Maturita','AI Maturity').replace('Platformová Zóna','Platform Zone')
+          .replace('Obchodní model','Business model');
+      });
+      document.querySelectorAll('.dim-vals').forEach(function(el) {
+        el.innerHTML = el.innerHTML
+          .replace('20+ odvětví:','20+ industries:')
+          .replace('L1 Jednotlivec','L1 Individual').replace('Dítě','Child').replace('Rodina','Family')
+          .replace('13+ Enterprise domén · 12 Home domén','13+ Enterprise domains · 12 Home domains')
+          .replace('Manuální','Manual').replace('Přehledy','Overviews').replace('Asistovaný','Assisted')
+          .replace('Automatizovaný','Automated').replace('Autonomní','Autonomous');
+      });
+      var kp = document.querySelector('[style*="rgba(168,85,247,.06)"]');
+      if (kp) kp.innerHTML = '<span style="color:var(--c-violet);font-weight:700">Key principle:</span> Adding a new industry/domain = adding <code style="color:var(--c-amber)">manifest.json</code>. Zero lines of platform code. Verticals are data, not code.';
+      var phaseNow = document.querySelector('.phase-now');
+      if (phaseNow) phaseNow.textContent = 'NOW';
+      document.querySelectorAll('.phase-items').forEach(function(el) {
+        el.innerHTML = el.innerHTML
+          .replace('Individual · Pár · Rodina','Individual · Couple · Family')
+          .replace('HOPI pilot = Living Proof','HOPI pilot = Living Proof')
+          .replace('HOPI = referenční zákazník','HOPI = reference customer')
+          .replace('Velká firma · Střední · Instituce','Large corp · Mid · Institution')
+          .replace('Reseller · B2B2C','Reseller · B2B2C');
+      });
+      document.querySelectorAll('.layer-arrow').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('↓ jediný kontakt = _data.js','↓ single contact point = _data.js')
+          .replace('↓ MCP (Model Context Protocol)','↓ MCP (Model Context Protocol)');
+      });
+      document.querySelectorAll('.layer-detail span[style*="color:var(--c-muted)"]').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('state machine, persistentní procesy','state machine, persistent processes')
+          .replace('7 AI agentů orchestrují přes všechny vrstvy','7 AI agents orchestrate across all layers');
+      });
+      document.querySelectorAll('.layer-when').forEach(function(el) {
+        el.textContent = el.textContent.replace('teď','now');
+      });
+      document.querySelectorAll('.law-desc').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Každý modul dělá JEDNU věc. Nikdy víc.','Each module does ONE thing. Never more.')
+          .replace('Moduly komunikují POUZE přes AppIQ.emit/on. Žádné přímé volání.','Modules communicate ONLY via AppIQ.emit/on. No direct calls.')
+          .replace('Veškerý přístup k datům jde přes _data.js. Nikdy fetch() přímo v HTML.','All data access goes through _data.js. Never fetch() directly in HTML.')
+          .replace('Stejný kód na dvou místech patří do modulu. Žádná duplicita.','Same code in two places belongs in a module. No duplication.')
+          .replace('Swap JSON → REST API → SQL = změna POUZE v _data.js.','Swap JSON → REST API → SQL = change ONLY in _data.js.');
+      });
+      document.querySelectorAll('.diff-title').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('AI-First od základů','AI-First from the ground up')
+          .replace('Vertikály = Data, ne kód','Verticals = Data, not code')
+          .replace('Universal scale','Universal scale');
+      });
+      document.querySelectorAll('.diff-desc').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('AI není feature — je to páteř každé vrstvy. S0→S4 AI Maturity progression = retention mechanismus.','AI is not a feature — it\'s the backbone of every layer. S0→S4 AI Maturity progression = retention mechanism.')
+          .replace('Přidání nové industrie = manifest.json. Konkurenti přidávají kód. My přidáváme data.','Adding a new industry = manifest.json. Competitors add code. We add data.')
+          .replace('Jeden kód: dítě → rodina → startup → holding → stát. Žádná platforma to nedělá takto.','One codebase: child → family → startup → holding → state. No platform does this.')
+          .replace('Claude Code + David = rychlost dev agentury při zlomku ceny. Living Proof AI-first buildu.','Claude Code + David = dev agency speed at a fraction of the cost. Living Proof of AI-first build.')
+          .replace('Phase 1 = B2C. Nikdo z enterprise hráčů (SAP, MS) nesestoupí k jednotlivci a rodině.','Phase 1 = B2C. No enterprise player (SAP, MS) will descend to individuals and families.')
+          .replace('JSON dnes → REST API zítra → SQL pozítří. Frontend se nikdy nemění.','JSON today → REST API tomorrow → SQL the day after. Frontend never changes.');
+      });
+      document.querySelectorAll('.doc-desc').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('9D model, taxonomie, manifest schema — referenční model pro veškerá rozhodnutí','9D model, taxonomy, manifest schema — reference model for all decisions')
+          .replace('Folder architektura + dimension mapping — kde co žije a proč','Folder architecture + dimension mapping — where everything lives and why')
+          .replace('Co platforma je, pro koho, jak funguje — onboarding dokument','What the platform is, for whom, how it works — onboarding document')
+          .replace('API Gateway, Connector Layer, MCP — fázový integrační plán','API Gateway, Connector Layer, MCP — phased integration plan')
+          .replace('Developer onboarding — jak začít, konvence, příkazy, CI/CD','Developer onboarding — how to start, conventions, commands, CI/CD');
+      });
+    })();
+    // Static values for parent cockpit KPIs
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.parent && window.parent.setText) {
+        window.parent.setText('ba-dims',   '9');
+        window.parent.setText('ba-phases', '3');
+      }
+    });
+  </script>
+</body>
+</html>

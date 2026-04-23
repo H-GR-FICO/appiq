@@ -1,5 +1,5 @@
 ﻿{
-  "latest": "v7.26",
+  "latest": "v7.27",
   "updatedAt": "2026-04-23",
   "versions": [
     {
@@ -162,6 +162,25 @@
         "pitchUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.27",
+        "date":  "2026-04-23",
+        "session":  "v7.26-WebPage_20260423_0230",
+        "title":  "Cluster navigace · Auth redesign · Music fix · OG image · deploy",
+        "mainUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  {
+    
+                    },
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }
