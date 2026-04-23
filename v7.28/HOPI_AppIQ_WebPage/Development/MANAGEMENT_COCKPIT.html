@@ -16,6 +16,7 @@
   <script src="cockpit/boil-data.js"></script>
   <script src="cockpit/business-model.js"></script>
   <script src="cockpit/cockpit-data.js"></script>
+  <script src="cockpit/kb.js"></script>
   <style>
     /* ── Reset & Base ──────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1146,7 +1147,8 @@
       + 'Supply Chain: HOPI Logistics, HOPI Global, CEE Fish HUB\n'
       + 'Foods: Hollandia (mlékárna), Eat Smart, Cibule Bistro, AD Fine Dine, HOPI Food Broker\n'
       + 'Agriculture: Farma Otročín (největší bio mléko ČR), Farma Malonty\n'
-      + 'Services: HOPI Jobs, HOPI Academy | Holding: IT, Finance, Group Management';
+      + 'Services: HOPI Jobs, HOPI Academy | Holding: IT, Finance, Group Management\n\n'
+      + (window.HOPIQ_KB ? '---\n\n# ZNALOSTNÍ BÁZE PLATFORMY\n\n' + window.HOPIQ_KB : '');
   }
 
   function hopiqToggle() {
