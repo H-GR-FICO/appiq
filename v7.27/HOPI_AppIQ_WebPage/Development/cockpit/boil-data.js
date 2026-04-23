@@ -1,4 +1,4 @@
-﻿// Auto-generated from BOIL.json
+﻿// Auto-generated from BOIL.json — do not edit manually
 window.BOIL_DATA = {
     "version":  "1.0",
     "lastUpdated":  "2026-04-23",
