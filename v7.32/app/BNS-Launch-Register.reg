@@ -1,0 +1,18 @@
+Windows Registry Editor Version 5.00
+
+; BNS Planning System – custom URL protocol handler (bez admin práv)
+; Double-click this file once to register.
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\bns-launch]
+@="BNS Planning System"
+"URL Protocol"=""
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\bns-launch\DefaultIcon]
+@="\"C:\\Program Files (x86)\\Inekon Systems\\BNS\\Bns.DesktopClient.exe\",0"
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\bns-launch\shell]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\bns-launch\shell\open]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\bns-launch\shell\open\command]
+@="\"C:\\Program Files (x86)\\Inekon Systems\\BNS\\Bns.DesktopClient.exe\""

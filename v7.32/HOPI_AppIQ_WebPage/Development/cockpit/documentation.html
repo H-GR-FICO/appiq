@@ -391,6 +391,15 @@
             status: 'live',
             auth: false,
             tags: ['AI', 'chatbot']
+          },
+          {
+            name: 'Release Selector',
+            desc: 'Přehled všech nasazených verzí AppIQ — výběr verze ke spuštění',
+            path: '/selector.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: false,
+            tags: ['release', 'versions']
           }
         ]
       },
@@ -639,6 +648,8 @@
     // ── Version display ────────────────────────────
     function initVersionDisplay() {
       document.getElementById('ver-badge').textContent = BASE_VER;
+      var corner = document.getElementById('ver-corner');
+      if (corner) corner.textContent = 'HOPI AppIQ · ' + BASE_VER;
       document.getElementById('base-url-display').textContent = WEB_BASE + '/';
     }
 
@@ -648,6 +659,6 @@
       renderLinks();
     });
   </script>
-<div id="ver-badge" style="position:fixed;bottom:8px;right:14px;z-index:100001;font-size:10px;color:rgba(148,163,184,0.5);font-family:'Segoe UI',system-ui,sans-serif;pointer-events:none;user-select:none;letter-spacing:.3px;line-height:1">HOPI AppIQ · v7.31</div>
+<div id="ver-corner" style="position:fixed;bottom:8px;right:14px;z-index:100001;font-size:10px;color:rgba(148,163,184,0.5);font-family:'Segoe UI',system-ui,sans-serif;pointer-events:none;user-select:none;letter-spacing:.3px;line-height:1">HOPI AppIQ · v7.32</div>
 </body>
 </html>
