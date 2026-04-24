@@ -102,6 +102,11 @@ window.COCKPIT_SECTIONS = [
     desc:{cs:'Centrální správa linků — vždy nejnovější verze. Copy link per stránku. Jedno místo pro sdílení.',
           en:'Central link manager — always latest version. Copy link per page. One sharing hub.'},
     url:'documentation.html', color:'green' },
+
+  { num:'21', icon:'🔀', name:{cs:'Release Selector',            en:'Release Selector'},
+    desc:{cs:'Přehled všech nasazených verzí AppIQ — výběr verze ke spuštění.',
+          en:'All deployed AppIQ versions — select a version to launch.'},
+    url:'../selector.html', color:'blue' },
 ];
 
 window.COCKPIT_CLUSTERS = [
@@ -151,6 +156,6 @@ window.COCKPIT_CLUSTERS = [
     color: 'blue',
     name: { cs: 'Znalosti',       en: 'Knowledge' },
     desc: { cs: 'Metodika · dokumentace a klíčové odkazy', en: 'Methodology · documentation & key links' },
-    sections: ['19', '20']
+    sections: ['19', '20', '21']
   },
 ];
