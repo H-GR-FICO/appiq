@@ -183,13 +183,22 @@ const Shell = (() => {
   }
 
   // ── Version badge ─────────────────────────────────────────────────────────
-  function injectVersionBadge() {
+  function _doInjectBadge() {
     if (document.getElementById('ver-badge')) return;
+    var v = (typeof PREZ_VERSION !== 'undefined') ? PREZ_VERSION : SHELL_VER;
     var el = document.createElement('div');
     el.id = 'ver-badge';
-    el.textContent = 'HOPI AppIQ · ' + SHELL_VER;
+    el.textContent = 'HOPI AppIQ · ' + v;
     el.style.cssText = 'position:fixed;bottom:8px;right:14px;z-index:100001;font-size:10px;color:rgba(148,163,184,0.5);font-family:\'Segoe UI\',system-ui,sans-serif;pointer-events:none;user-select:none;letter-spacing:.3px;line-height:1';
     document.body.appendChild(el);
+  }
+  function injectVersionBadge() {
+    if (typeof PREZ_VERSION !== 'undefined') { _doInjectBadge(); return; }
+    var s = document.createElement('script');
+    s.src = '../_ver.js';
+    s.onload = _doInjectBadge;
+    s.onerror = _doInjectBadge; // fallback to SHELL_VER on load failure
+    document.head.appendChild(s);
   }
 
   // ── Inject HOPIQ floating agent ───────────────────────────────────────────
