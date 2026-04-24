@@ -493,8 +493,11 @@
     if(latest){
       if(latest.changes&&latest.changes.length) _changesData[latest.version]=latest.changes;
       html+='<div class="section-label">'+t('vs.current','Aktuální verze')+'</div>';
-      html+='<div class="latest-card"><div class="latest-badge">LATEST</div>';
-      html+='<div class="latest-ver">'+esc(latest.version)+'</div>';
+      html+='<div class="latest-card">';
+      html+='<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">';
+      html+='<div class="latest-ver" style="margin-bottom:0">'+esc(latest.version)+'</div>';
+      html+='<div class="latest-badge" style="margin-bottom:0">NEJNOVĚJŠÍ</div>';
+      html+='</div>';
       var m=latest.date||'';
       if(latest.session) m+=(m?'  ·  ':'')+esc(latest.session);
       if(m) html+='<div class="latest-meta">'+m+'</div>';
