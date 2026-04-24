@@ -106,7 +106,7 @@ window.COCKPIT_SECTIONS = [
   { num:'21', icon:'🔀', name:{cs:'Release Selector',            en:'Release Selector'},
     desc:{cs:'Přehled všech nasazených verzí AppIQ — výběr verze ke spuštění.',
           en:'All deployed AppIQ versions — select a version to launch.'},
-    url:'../../../../selector.html', color:'blue' },
+    url:'release-selector.html', color:'blue' },
 ];
 
 window.COCKPIT_CLUSTERS = [

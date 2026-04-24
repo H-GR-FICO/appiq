@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Release Selector · Management Cockpit</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="cockpit-data.js"></script>
+  <style>
+    #rs-main { max-width: 960px; padding: 24px 0 60px; }
+
+    .rs-step  { display: none; }
+    .rs-step.active { display: block; }
+
+    .rs-label {
+      font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--c-muted); font-family: var(--c-font-sans); margin-bottom: 20px;
+    }
+
+    /* ── Step 1: version cards ── */
+    .ver-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .ver-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 18px 20px;
+      cursor: pointer; transition: border-color .18s, transform .15s, box-shadow .18s;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .ver-card:hover { border-color: var(--c-violet); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(168,85,247,.15); }
+    .ver-card.latest { border-color: rgba(34,197,94,.35); }
+    .ver-card.latest:hover { border-color: var(--c-green); box-shadow: 0 8px 24px rgba(34,197,94,.12); }
+
+    .ver-latest-badge {
+      display: inline-block; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      background: rgba(34,197,94,.12); color: var(--c-green);
+      border: 1px solid rgba(34,197,94,.3); border-radius: 4px;
+      padding: 2px 7px; font-family: var(--c-font-sans); align-self: flex-start; margin-bottom: 4px;
+    }
+    .ver-num {
+      font-size: 26px; font-weight: 900; color: var(--c-white); font-family: var(--c-font-sans); line-height: 1;
+    }
+    .ver-card.latest .ver-num { color: var(--c-green); }
+    .ver-date { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .ver-title { font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); line-height: 1.45; margin-top: 2px; }
+
+    /* ── Step 2: destination cards ── */
+    .rs-back {
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+      background: none; border: 1px solid var(--c-border); border-radius: 6px;
+      padding: 6px 14px; margin-bottom: 24px;
+      transition: color .15s, border-color .15s;
+    }
+    .rs-back:hover { color: var(--c-white); border-color: var(--c-muted); }
+
+    .rs-sel-ver {
+      font-size: 34px; font-weight: 900; color: var(--c-white);
+      font-family: var(--c-font-sans); line-height: 1; margin-bottom: 6px;
+    }
+    .rs-sel-title {
+      font-size: 13px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.5; margin-bottom: 28px;
+    }
+
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .dest-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 18px 18px 16px;
+      text-decoration: none; transition: border-color .18s, transform .15s, box-shadow .18s;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .dest-card:hover { transform: translateY(-2px); }
+    .dest-card[data-color="violet"]:hover { border-color: var(--c-violet); box-shadow: 0 8px 20px rgba(168,85,247,.15); }
+    .dest-card[data-color="blue"]:hover   { border-color: var(--c-blue);   box-shadow: 0 8px 20px rgba(96,165,250,.12); }
+    .dest-card[data-color="green"]:hover  { border-color: var(--c-green);  box-shadow: 0 8px 20px rgba(34,197,94,.10); }
+    .dest-card[data-color="amber"]:hover  { border-color: var(--c-amber);  box-shadow: 0 8px 20px rgba(245,158,11,.10); }
+    .dest-card[data-color="pink"]:hover   { border-color: var(--c-pink);   box-shadow: 0 8px 20px rgba(236,72,153,.10); }
+
+    .dest-icon { font-size: 24px; line-height: 1; margin-bottom: 8px; }
+    .dest-name { font-size: 13px; font-weight: 700; color: var(--c-white); font-family: var(--c-font-sans); }
+    .dest-desc { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); line-height: 1.4; margin-top: 2px; }
+
+    .rs-msg {
+      color: var(--c-muted); font-family: var(--c-font-sans); font-size: 13px;
+      padding: 48px 0; text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<main id="rs-main">
+
+  <!-- ── STEP 1: Výběr verze ── -->
+  <div class="rs-step active" id="step-1">
+    <div class="rs-label">— 1 / 2 &nbsp;·&nbsp; VYBERTE VERZI</div>
+    <div class="ver-grid" id="ver-grid">
+      <div class="rs-msg">Načítám verze…</div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: Výběr destinace ── -->
+  <div class="rs-step" id="step-2">
+    <button class="rs-back" onclick="goBack()">← Zpět</button>
+    <div class="rs-sel-ver" id="sel-ver"></div>
+    <div class="rs-sel-title" id="sel-title"></div>
+    <div class="rs-label">— 2 / 2 &nbsp;·&nbsp; KAM JÍT</div>
+    <div class="dest-grid" id="dest-grid"></div>
+  </div>
+
+</main>
+
+<script src="_shell.js"></script>
+<script>
+Shell.init({ section: 'Release Selector', backUrl: '../MANAGEMENT_COCKPIT.html' });
+
+const GH_BASE = 'https://h-gr-fico.github.io/appiq';
+
+function destinations(ver) {
+  const w = GH_BASE + '/' + ver + '/HOPI_AppIQ_WebPage/Development';
+  const a = GH_BASE + '/' + ver + '/app';
+  return [
+    { icon:'🏠', name:'Studio Hub',         desc:'Hlavní rozcestník AppIQ Studia',              url: w + '/index.html',               color:'violet' },
+    { icon:'🎯', name:'Management Cockpit', desc:'Řídicí panel — KPIs, sekce, clusters',         url: w + '/MANAGEMENT_COCKPIT.html',   color:'violet' },
+    { icon:'📊', name:'Prezentace',         desc:'Kompletní prezentace platformy',               url: w + '/PORTAL_PRESENTATION.html', color:'blue'   },
+    { icon:'🎤', name:'Personal Pitch',     desc:'Bilingvní pitch — Story Behind',               url: w + '/PERSONAL_PITCH.html',      color:'blue'   },
+    { icon:'📰', name:'CEO Brief',          desc:'Strategický brief pro vedení',                 url: w + '/CEO_BRIEF.html',           color:'amber'  },
+    { icon:'📚', name:'Docs',               desc:'Technická dokumentace platformy',              url: w + '/docs/index.html',          color:'green'  },
+    { icon:'📣', name:'Promo',              desc:'Propagační stránka',                           url: w + '/promo/index.html',         color:'green'  },
+    { icon:'🤖', name:'HOPIQ',              desc:'AI asistent — standalone demo',                url: w + '/hopiq/index.html',         color:'pink'   },
+    { icon:'💼', name:'Finance Portal',     desc:'Group Controlling SPA — runtime aplikace',     url: a + '/index.html?welcome=1',     color:'amber'  },
+  ];
+}
+
+function renderStep1(versions) {
+  const latest = versions[0] ? versions[0].version : null;
+  document.getElementById('ver-grid').innerHTML = versions.map(v => {
+    const isLatest = v.version === latest;
+    const payload = encodeURIComponent(JSON.stringify(v));
+    return `<div class="ver-card${isLatest ? ' latest' : ''}" onclick="selectVersion(decodeURIComponent('${payload}'))">
+      ${isLatest ? '<span class="ver-latest-badge">LATEST</span>' : ''}
+      <div class="ver-num">${v.version}</div>
+      <div class="ver-date">${v.date || ''}</div>
+      <div class="ver-title">${v.title || ''}</div>
+    </div>`;
+  }).join('');
+}
+
+function selectVersion(raw) {
+  const v = typeof raw === 'string' ? JSON.parse(raw) : raw;
+  document.getElementById('sel-ver').textContent = v.version;
+  document.getElementById('sel-title').textContent = v.title || '';
+  document.getElementById('dest-grid').innerHTML = destinations(v.version).map(d =>
+    `<a href="${d.url}" target="_blank" class="dest-card" data-color="${d.color}">
+      <div class="dest-icon">${d.icon}</div>
+      <div class="dest-name">${d.name}</div>
+      <div class="dest-desc">${d.desc}</div>
+    </a>`
+  ).join('');
+  document.getElementById('step-1').classList.remove('active');
+  document.getElementById('step-2').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goBack() {
+  document.getElementById('step-2').classList.remove('active');
+  document.getElementById('step-1').classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+fetch(GH_BASE + '/versions.json')
+  .then(r => r.json())
+  .then(data => {
+    const versions = (data.versions || []).slice().reverse();
+    if (!versions.length) throw new Error('empty');
+    renderStep1(versions);
+  })
+  .catch(() => {
+    document.getElementById('ver-grid').innerHTML =
+      '<div class="rs-msg">Verze nelze načíst — stránka funguje pouze na GitHub Pages.</div>';
+  });
+</script>
+</body>
+</html>
