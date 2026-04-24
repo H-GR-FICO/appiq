@@ -251,13 +251,15 @@
         "version":  "v7.33",
         "date":  "2026-04-25",
         "session":  "",
-        "title":  "Cockpit: Music back-nav fix · Phase-bar removed · Clean main page · 2026-04-24",
+        "title":  "Cockpit: Brand identity · Visual enhancements · Navigation fixes",
         "mainUrl":  "v7.33/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
         "changes":  [
-                        "Hudba — přerušení při back navigation na desktopu (AIQ-00435)",
-                        "Čistší hlavní stránka cockpitu (AIQ-00436, AIQ-00439)",
-                        "Phase-bar — scrollovatelný strip fází projektu (AIQ-00438)"
+                        "[Brand] P6 kompozice na password overlay + LF2 SVG logo v topnav + shell (AIQ-00410)",
+                        "[Shell] Animovaný gradient accent bar — purple→green→orange, glow (AIQ-00441)",
+                        "[Shell] Section hero strip + c-live pulse dot + c-glow KPI třídy (AIQ-00442)",
+                        "[Cockpit] Topnav 404 fix — Brief/Vision/Case/Journey → správné soubory (AIQ-00443)",
+                        "[Cockpit] Back navigation — ⬡ Cockpit link na CEO_BRIEF, INVESTOR_BRIEF, INVESTOR_ENTRY, ANTHROPIC_ONEPAGER (AIQ-00444)"
                     ],
         "promoLevel":  null,
         "promoText":  null,
