@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="_cockpit.css"/>
   <script src="cockpit-data.js"></script>
   <style>
-    #rs-main { max-width: 960px; padding: 24px 0 60px; }
+    #rs-main { max-width: 960px; }
 
     .rs-step  { display: none; }
     .rs-step.active { display: block; }
@@ -122,7 +122,9 @@
 </head>
 <body>
 
-<main id="rs-main">
+<div id="cockpit-shell"></div>
+
+<main id="rs-main" class="cockpit-page">
 
   <!-- ── STEP 1: Výběr verze ── -->
   <div class="rs-step active" id="step-1">
