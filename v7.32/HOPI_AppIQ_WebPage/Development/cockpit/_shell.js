@@ -99,8 +99,8 @@ const Shell = (() => {
     window.addEventListener('pagehide', () => {
       try { sessionStorage.setItem(MUSIC_TIME_KEY, String(audioEl.currentTime)); } catch(e) {}
     });
-    window.addEventListener('pageshow', (e) => {
-      if (e.persisted && audioEl && _shIsOn() && !_shPlaying) {
+    window.addEventListener('pageshow', () => {
+      if (audioEl && _shIsOn() && !_shPlaying && !_shStarting) {
         audioEl.play().then(() => { _shPlaying = true; _shFadeTo(0.7, 400); })
                      .catch(() => { _shPlaying = false; });
       }

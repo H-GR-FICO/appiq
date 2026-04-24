@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 19:40",
+  "lastUpdated": "2026-04-24 20:20",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,23 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00434",
+      "title": "RULE: AGENT + BADGE POZICE STANDARD — fixní pozice version badge a AI agent buttonu ve všech vrstvách",
+      "taskType": "docs",
+      "effort": "XS",
+      "estimatedTime": 10,
+      "actualTime": 10,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "MEDIUM",
+      "stream": "Platform",
+      "department": "IT_DEV",
+      "createdAt": "2026-04-24 20:00",
+      "completedAt": "2026-04-24 20:05",
+      "durationDays": 0,
+      "note": "DONE. Pravidlo AGENT + BADGE POZICE STANDARD přidáno do CLAUDE.md za VERSION BADGE PRAVIDLO. Fixní hodnoty: badge bottom:8px right:14px; agent button bottom:32px right:24px (mobile right:16px); agent panel bottom:100px right:24px. Povinnost: @media override musí použít stejné bottom hodnoty jako základ — nikdy nižší. Root cause AIQ-00420 série: MANAGEMENT_COCKPIT.html měl vlastní @media (max-width:480px) s bottom:16px který přepisoval základ."
+    },
     {
       "id": "AIQ-00433",
       "title": "RULE: STANDARD OVERLAY PATTERN — 3 typy overlayů, závazný vzor bez probliku",
@@ -323,14 +340,14 @@ window.OIL_DATA = {
       "estimatedTime": 45,
       "actualTime": null,
       "assignee": "Claude",
-      "status": "OPEN",
+      "status": "CLOSED",
       "priority": "MEDIUM",
       "domain": "Studio",
       "module": "Hub",
       "createdAt": "2026-04-24 14:45",
-      "completedAt": null,
-      "durationDays": null,
-      "note": "Desktop web — při stisku tlačítka Zpět v prohlížeči (browser back) dochází k page navigation a hudba se zastaví. Pravděpodobný root cause: browser back = full page unload (audio objekt zanikne). Možné řešení: History API (popstate event) + session persistence hudebního stavu."
+      "completedAt": "2026-04-24 20:20",
+      "durationDays": 0,
+      "note": "DONE. Root cause: pageshow handler měl podmínku e.persisted — hudba se obnovila jen při bfcache restore. Při full reload (back bez bfcache) podmínka selhal a hudba nenaběhla. Fix: odstraněna podmínka e.persisted z pageshow listeneru v obou souborech (_shell.js + MANAGEMENT_COCKPIT.html). Nová logika: pageshow vždy zkusí play() když je hudba zapnutá a ještě nehraje (!_playing && !_starting). .catch() gracefully řeší autoplay block — poté nastupují stávající pointerdown/click listenery."
     },
     {
       "id": "AIQ-00420",
