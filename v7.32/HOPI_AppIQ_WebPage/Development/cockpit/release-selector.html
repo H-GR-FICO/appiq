@@ -128,18 +128,26 @@
 
   <!-- ── STEP 1: Výběr verze ── -->
   <div class="rs-step active" id="step-1">
-    <div class="rs-label">— 1 / 2 &nbsp;·&nbsp; VYBERTE VERZI</div>
+    <div class="rs-label">
+      <span class="lang-cs">— 1 / 2 &nbsp;·&nbsp; VYBERTE VERZI</span>
+      <span class="lang-en">— 1 / 2 &nbsp;·&nbsp; SELECT VERSION</span>
+    </div>
     <div class="ver-grid" id="ver-grid">
-      <div class="rs-msg">Načítám verze…</div>
+      <div class="rs-msg"><span class="lang-cs">Načítám verze…</span><span class="lang-en">Loading versions…</span></div>
     </div>
   </div>
 
   <!-- ── STEP 2: Výběr destinace ── -->
   <div class="rs-step" id="step-2">
-    <button class="rs-back" onclick="goBack()">← Zpět</button>
+    <button class="rs-back" onclick="goBack()">
+      <span class="lang-cs">← Zpět</span><span class="lang-en">← Back</span>
+    </button>
     <div class="rs-sel-ver" id="sel-ver"></div>
     <div class="rs-sel-title" id="sel-title"></div>
-    <div class="rs-label">— 2 / 2 &nbsp;·&nbsp; KAM JÍT</div>
+    <div class="rs-label">
+      <span class="lang-cs">— 2 / 2 &nbsp;·&nbsp; KAM JÍT</span>
+      <span class="lang-en">— 2 / 2 &nbsp;·&nbsp; WHERE TO GO</span>
+    </div>
     <div class="dest-grid" id="dest-grid"></div>
   </div>
 
@@ -147,47 +155,73 @@
 
 <script src="_shell.js"></script>
 <script>
-Shell.init({ section: 'Release Selector', backUrl: '../MANAGEMENT_COCKPIT.html' });
+Shell.init({ section: { cs: 'Výběr verze', en: 'Release Selector' }, backUrl: '../MANAGEMENT_COCKPIT.html' });
 
 const GH_BASE = 'https://h-gr-fico.github.io/appiq';
 
+function _lang() { return Shell.getLang(); }
+
 function destinations(ver) {
+  const en = _lang() === 'en';
   const w = GH_BASE + '/' + ver + '/HOPI_AppIQ_WebPage/Development';
   const a = GH_BASE + '/' + ver + '/app';
   return [
-    { icon:'🏠', name:'Studio Hub',         desc:'Hlavní rozcestník AppIQ Studia',              url: w + '/index.html',               color:'violet' },
-    { icon:'🎯', name:'Management Cockpit', desc:'Řídicí panel — KPIs, sekce, clusters',         url: w + '/MANAGEMENT_COCKPIT.html',   color:'violet' },
-    { icon:'📊', name:'Prezentace',         desc:'Kompletní prezentace platformy',               url: w + '/PORTAL_PRESENTATION.html', color:'blue'   },
-    { icon:'🎤', name:'Personal Pitch',     desc:'Bilingvní pitch — Story Behind',               url: w + '/PERSONAL_PITCH.html',      color:'blue'   },
-    { icon:'📰', name:'CEO Brief',          desc:'Strategický brief pro vedení',                 url: w + '/CEO_BRIEF.html',           color:'amber'  },
-    { icon:'📚', name:'Docs',               desc:'Technická dokumentace platformy',              url: w + '/docs/index.html',          color:'green'  },
-    { icon:'📣', name:'Promo',              desc:'Propagační stránka',                           url: w + '/promo/index.html',         color:'green'  },
-    { icon:'🤖', name:'HOPIQ',              desc:'AI asistent — standalone demo',                url: w + '/hopiq/index.html',         color:'pink'   },
-    { icon:'💼', name:'Finance Portal',     desc:'Group Controlling SPA — runtime aplikace',     url: a + '/index.html?welcome=1',     color:'amber'  },
+    { icon:'🏠', name:'Studio Hub',
+      desc: en ? 'Main AppIQ Studio hub'                    : 'Hlavní rozcestník AppIQ Studia',
+      url: w + '/index.html',               color:'violet' },
+    { icon:'🎯', name:'Management Cockpit',
+      desc: en ? 'Control panel — KPIs, sections, clusters' : 'Řídicí panel — KPIs, sekce, clusters',
+      url: w + '/MANAGEMENT_COCKPIT.html',   color:'violet' },
+    { icon:'📊', name: en ? 'Presentation' : 'Prezentace',
+      desc: en ? 'Full platform presentation'               : 'Kompletní prezentace platformy',
+      url: w + '/PORTAL_PRESENTATION.html', color:'blue'   },
+    { icon:'🎤', name:'Personal Pitch',
+      desc: en ? 'Bilingual pitch — Story Behind'           : 'Bilingvní pitch — Story Behind',
+      url: w + '/PERSONAL_PITCH.html',      color:'blue'   },
+    { icon:'📰', name:'CEO Brief',
+      desc: en ? 'Strategic brief for leadership'           : 'Strategický brief pro vedení',
+      url: w + '/CEO_BRIEF.html',           color:'amber'  },
+    { icon:'📚', name:'Docs',
+      desc: en ? 'Technical platform documentation'         : 'Technická dokumentace platformy',
+      url: w + '/docs/index.html',          color:'green'  },
+    { icon:'📣', name:'Promo',
+      desc: en ? 'Promotional landing page'                 : 'Propagační stránka',
+      url: w + '/promo/index.html',         color:'green'  },
+    { icon:'🤖', name:'HOPIQ',
+      desc: en ? 'AI assistant — standalone demo'           : 'AI asistent — standalone demo',
+      url: w + '/hopiq/index.html',         color:'pink'   },
+    { icon:'💼', name:'Finance Portal',
+      desc: en ? 'Group Controlling SPA — runtime app'      : 'Group Controlling SPA — runtime aplikace',
+      url: a + '/index.html?welcome=1',     color:'amber'  },
   ];
 }
 
 function chgLabel(n) {
+  if (_lang() === 'en') return n + (n === 1 ? ' change' : ' changes');
   return n === 1 ? '1 změna' : n < 5 ? n + ' změny' : n + ' změn';
 }
 
 function renderStep1(versions) {
+  const en = _lang() === 'en';
   const latest = versions[0] ? versions[0].version : null;
   document.getElementById('ver-grid').innerHTML = versions.map(v => {
     const isLatest = v.version === latest;
     const payload = encodeURIComponent(JSON.stringify(v));
-    const changes = Array.isArray(v.changes) ? v.changes : [];
-    const detailHtml = changes.length ? `
-      <button class="ver-detail-btn" onclick="toggleDetail(event,'${v.version}',${changes.length})">▾ ${chgLabel(changes.length)}</button>
-      <ul class="ver-changes" id="chg-${v.version}">${changes.map(c => `<li>${c}</li>`).join('')}</ul>` : '';
+    const chgArr = en && Array.isArray(v.changes_en) && v.changes_en.length
+      ? v.changes_en
+      : (Array.isArray(v.changes) ? v.changes : []);
+    const detailHtml = chgArr.length ? `
+      <button class="ver-detail-btn" onclick="toggleDetail(event,'${v.version}',${chgArr.length})">▾ ${chgLabel(chgArr.length)}</button>
+      <ul class="ver-changes" id="chg-${v.version}">${chgArr.map(c => `<li>${c}</li>`).join('')}</ul>` : '';
     return `<div class="ver-card${isLatest ? ' latest' : ''}" onclick="selectVersion(decodeURIComponent('${payload}'))">
-      ${isLatest ? '<span class="ver-latest-badge">LATEST</span>' : ''}
+      ${isLatest ? `<span class="ver-latest-badge">${en ? 'LATEST' : 'NEJNOVĚJŠÍ'}</span>` : ''}
       <div class="ver-num">${v.version}</div>
       <div class="ver-date">${v.date || ''}</div>
       <div class="ver-title">${v.title || ''}</div>
       ${detailHtml}
     </div>`;
   }).join('');
+  Shell.applyI18n();
 }
 
 function selectVersion(raw) {
@@ -203,15 +237,16 @@ function selectVersion(raw) {
   ).join('');
   document.getElementById('step-1').classList.remove('active');
   document.getElementById('step-2').classList.add('active');
+  Shell.applyI18n();
   window.scrollTo(0, 0);
 }
 
 function toggleDetail(e, ver, count) {
   e.stopPropagation();
   const panel = document.getElementById('chg-' + ver);
-  const btn = e.currentTarget;
-  const open = panel.classList.toggle('open');
-  btn.textContent = (open ? '▴ ' : '▾ ') + chgLabel(count);
+  const btn = e.target.closest('.ver-detail-btn');
+  const isOpen = panel.classList.toggle('open');
+  if (btn) btn.textContent = (isOpen ? '▴ ' : '▾ ') + chgLabel(count);
 }
 
 function goBack() {
@@ -228,8 +263,9 @@ fetch(GH_BASE + '/versions.json')
     renderStep1(versions);
   })
   .catch(() => {
+    const en = _lang() === 'en';
     document.getElementById('ver-grid').innerHTML =
-      '<div class="rs-msg">Verze nelze načíst — stránka funguje pouze na GitHub Pages.</div>';
+      `<div class="rs-msg">${en ? 'Cannot load versions — page only works on GitHub Pages.' : 'Verze nelze načíst — stránka funguje pouze na GitHub Pages.'}</div>`;
   });
 </script>
 </body>
