@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 19:20",
+  "lastUpdated": "2026-04-24 19:30",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,24 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00433",
+      "title": "RULE: STANDARD OVERLAY PATTERN — 3 typy overlayů, závazný vzor bez probliku",
+      "taskType": "docs",
+      "effort": "XS",
+      "estimatedTime": 10,
+      "actualTime": 10,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "MEDIUM",
+      "stream": "Platform",
+      "department": "IT_DEV",
+      "createdAt": "2026-04-24 19:25",
+      "completedAt": "2026-04-24 19:30",
+      "durationDays": 0,
+      "note": "DONE. Pravidlo STANDARD OVERLAY PATTERN přidáno do CLAUDE.md. Tři typy: (A) page-load always = CSS display:flex, žádný inline style; (B) page-load conditional = CSS display:flex + early script html.[hide-class]; (C) action modal = CSS display:none OK. Zakázáno pro page-load overlay: inline style='display:none' v HTML.",
+      "linkedTask": "AIQ-00432"
+    },
     {
       "id": "AIQ-00432",
       "title": "FIX: Finance Portal — problik portálu před zobrazením výběru jazyka",
