@@ -1,6 +1,6 @@
-// HOPI AppIQ — Platform version badge (auto-injected on all pages)
+﻿// HOPI AppIQ — Platform version badge (auto-injected on all pages)
 // Version string auto-updated by DO_DEPLOY.ps1 — do not edit manually
-const PLATFORM_VER = 'v7.31';
+const PLATFORM_VER = 'v7.32';
 (function(){
   var v = (typeof PREZ_VERSION !== 'undefined') ? PREZ_VERSION : PLATFORM_VER;
   var el = document.createElement('div');
