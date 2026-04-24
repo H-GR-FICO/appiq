@@ -1,6 +1,6 @@
-{
+﻿{
   "latest": "v7.33",
-  "updatedAt": "2026-04-24",
+  "updatedAt": "2026-04-25",
   "versions": [
     {
         "version":  "v7.20",
@@ -249,16 +249,15 @@
     },
     {
         "version":  "v7.33",
-        "date":  "2026-04-24",
-        "session":  "session_20260423_2351",
+        "date":  "2026-04-25",
+        "session":  "",
         "title":  "Cockpit: Music back-nav fix · Phase-bar removed · Clean main page · 2026-04-24",
         "mainUrl":  "v7.33/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
         "changes":  [
-                        "[Shell] Fix: Hudba — back navigation na desktopu nepřeruší přehrávání (audioEl.paused DOM check místo _bgPlaying flagu)",
-                        "[Cockpit] Odstraněn phase-bar — scrollovatelná lišta bez interakce způsobovala scrollbar na zúžených oknech",
-                        "[Cockpit] Odstraněn zastaralý footer element s textem v8.0 · AIQ-00309 z hlavní stránky cockpitu",
-                        "[Platform] Obnoven version badge (HOPI AppIQ · vX.XX) pod agentem na hlavní stránce cockpitu"
+                        "Hudba — přerušení při back navigation na desktopu (AIQ-00435)",
+                        "Čistší hlavní stránka cockpitu (AIQ-00436, AIQ-00439)",
+                        "Phase-bar — scrollovatelný strip fází projektu (AIQ-00438)"
                     ],
         "promoLevel":  null,
         "promoText":  null,

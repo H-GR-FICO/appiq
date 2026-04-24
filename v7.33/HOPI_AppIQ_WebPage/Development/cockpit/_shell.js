@@ -143,9 +143,34 @@ const Shell = (() => {
     // ?back=<encoded-url> lets cluster.html pass the correct return destination
     const urlBack = new URLSearchParams(location.search).get('back');
     const backHref = urlBack ? decodeURIComponent(urlBack) : (cfg.backUrl || '../MANAGEMENT_COCKPIT.html');
+    if (!document.getElementById('sh-styles')) {
+      const s = document.createElement('style');
+      s.id = 'sh-styles';
+      s.textContent = `
+        @keyframes sh-bar { 0%,100%{background-position:0% 50%} 50%{background-position:200% 50%} }
+        @keyframes sh-pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+        .c-live::before { content:''; display:inline-block; width:7px; height:7px; background:#22C55E; border-radius:50%; margin-right:8px; vertical-align:middle; animation:sh-pulse 2s ease infinite; box-shadow:0 0 8px rgba(34,197,94,.8); }
+        .c-glow-green  { color:#22C55E !important; text-shadow:0 0 16px rgba(34,197,94,.6); }
+        .c-glow-red    { color:#ef4444 !important; text-shadow:0 0 16px rgba(239,68,68,.6); }
+        .c-glow-amber  { color:#F59E0B !important; text-shadow:0 0 16px rgba(245,158,11,.6); }
+        .c-glow-violet { color:#A855F7 !important; text-shadow:0 0 16px rgba(168,85,247,.6); }
+        .c-section-hero { padding:14px 32px; background:linear-gradient(90deg,rgba(168,85,247,.06) 0%,transparent 70%); border-bottom:1px solid rgba(168,85,247,.12); display:flex; align-items:center; gap:14px; }
+        .c-section-hero::before { content:''; width:3px; height:26px; background:linear-gradient(180deg,#A855F7,#22C55E); border-radius:2px; flex-shrink:0; }
+        .c-section-hero-name { font-size:18px; font-weight:700; color:rgba(240,244,255,.55); letter-spacing:3px; font-family:'Segoe UI',system-ui,sans-serif; text-transform:uppercase; }
+      `;
+      document.head.appendChild(s);
+    }
+
     shell.innerHTML = `
       <div class="c-topbar">
-        <a class="c-back" href="${backHref}">${t('back')}</a>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <a class="c-back" href="${backHref}">${t('back')}</a>
+          <svg viewBox="0 0 1260 240.6796" height="18" xmlns="http://www.w3.org/2000/svg" style="display:block;opacity:.85;" aria-label="HOPI AppIQ">
+            <rect width="30.1059" height="240.6796" fill="#007d32"/>
+            <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+            <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648"><tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan></text>
+          </svg>
+        </div>
         <span class="c-section-title">${sectionTitle}</span>
         <div class="c-controls">
           <button class="c-btn-icon" id="c-music-btn" title="${musicOn ? 'Vypnout hudbu' : 'Turn off music'}"
@@ -153,6 +178,9 @@ const Shell = (() => {
           <button class="c-btn-icon" id="c-lang-btn" title="${lang === 'cs' ? 'Switch to English' : 'Přepnout do češtiny'}"
                   onclick="Shell.setLang('${lang === 'cs' ? 'en' : 'cs'}')">${t('lang')}</button>
         </div>
+      </div>
+      <div class="c-section-hero">
+        <div class="c-section-hero-name">${sectionTitle}</div>
       </div>
       <div class="c-mottos-ribbon">
         <span class="cm1"><span class="lang-cs">💰 Budget je svatý</span><span class="lang-en">💰 Budget is Sacred</span></span>
@@ -166,6 +194,19 @@ const Shell = (() => {
         <span class="cm5">🤖 1 Person + AI = Team</span>
       </div>
     `;
+
+    if (!document.getElementById('sh-accent')) {
+      const bar = document.createElement('div');
+      bar.id = 'sh-accent';
+      bar.style.cssText = 'position:fixed;top:0;left:0;right:0;height:2px;z-index:9999;pointer-events:none;background:linear-gradient(90deg,#A855F7,#22C55E,#E8750A,#A855F7);background-size:300% 100%;animation:sh-bar 6s ease infinite;box-shadow:0 0 16px 6px rgba(168,85,247,.6),0 0 40px 10px rgba(34,197,94,.3);height:5px;';
+      document.body.prepend(bar);
+    }
+    if (!document.getElementById('sh-watermark')) {
+      const wm = document.createElement('div');
+      wm.id = 'sh-watermark';
+      wm.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;background:url(../cockpit-og.svg) center/55% no-repeat;opacity:0.04;';
+      document.body.appendChild(wm);
+    }
   }
 
   // ── i18n — apply translations to page ────────────────────────────────────
