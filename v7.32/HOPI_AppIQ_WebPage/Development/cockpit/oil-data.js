@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 19:05",
+  "lastUpdated": "2026-04-24 19:20",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,24 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00432",
+      "title": "FIX: Finance Portal — problik portálu před zobrazením výběru jazyka",
+      "taskType": "fix",
+      "effort": "XS",
+      "estimatedTime": 15,
+      "actualTime": 10,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "stream": "APP",
+      "department": "IT_DEV",
+      "createdAt": "2026-04-24 19:15",
+      "completedAt": "2026-04-24 19:20",
+      "durationDays": 0,
+      "note": "DONE. Root cause: #wov měl inline style='display:none' takže se skryl hned při parsování. Stránka se pak plně vykreslila a teprve showWelcome() (volaná na konci skriptů) ho zviditelnila — výsledkem byl problik portálu. Fix: odstraněn inline style='display:none' z #wov divu. CSS na řádku 349 nastavuje display:flex jako výchozí stav. Early inline script v <head> (ř.375) synchronně přidá _wov_hide na <html> před prvním vykreslením pokud je jazyk zvolen. Pokud jazyk není zvolen — overlay je viditelný od prvního vykreslení, žádný flash. Opraveno v Development/index.html + Release/index.html.",
+      "linkedTask": null
+    },
     {
       "id": "AIQ-00431",
       "title": "FIX + RULE: Bilingvní obsah — cs/en objekty vždy přeloženy do obou jazyků bez ohledu na jazyk zadání",
