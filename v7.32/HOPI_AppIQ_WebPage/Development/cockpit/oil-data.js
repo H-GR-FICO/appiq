@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 19:30",
+  "lastUpdated": "2026-04-24 19:40",
   "audits": [
     {
       "id": "AUD-00001",
@@ -338,16 +338,18 @@ window.OIL_DATA = {
       "taskType": "fix",
       "effort": "S",
       "estimatedTime": 30,
-      "actualTime": null,
+      "actualTime": 10,
       "assignee": "Claude",
-      "status": "OPEN",
+      "status": "CLOSED",
       "priority": "HIGH",
       "domain": "Platform",
       "module": "Brand",
       "createdAt": "2026-04-24 14:45",
       "completedAt": null,
       "durationDays": null,
-      "note": "Version badge (AIQ-00418) implementován pro desktop i mobile. Na cockpit stránkách na mobilu badge není vidět — prověřit: z-index conflict, bottom safe-area, font-size příliš malý, nebo _shell.js injectVersionBadge() nefunguje na mobile. Fix dle root cause."
+      "note": "DONE. Root cause: badge (bottom:8px) byl zakryt HOPIQ agent buttonem (bottom:24px; height:56px → dosahuje do bottom:80px). Fix: přidán @media (max-width:768px) override v _shell.js → #ver-badge bottom:88px na mobilu, čímž se badge zobrazí nad agent buttonem.",
+      "completedAt": "2026-04-24 19:40",
+      "durationDays": 0
     },
     {
       "id": "AIQ-00419",
