@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOPI AppIQ · Management Cockpit</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0f1a;
+      color: rgba(240,244,255,.6);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 20px;
+    }
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .brand-app { color: #E8750A; font-weight: 300; }
+    .brand-iq  { color: #007d32; font-weight: 900; }
+    .label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(240,244,255,.3);
+    }
+    .spinner {
+      width: 24px; height: 24px;
+      border: 2px solid rgba(168,85,247,.2);
+      border-top-color: #A855F7;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fallback { font-size: 12px; color: rgba(240,244,255,.25); margin-top: 8px; }
+    .fallback a { color: #A855F7; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="brand">
+    <span class="brand-app">App</span><span class="brand-iq">IQ</span>
+  </div>
+  <div class="label">Management Cockpit</div>
+  <div class="spinner"></div>
+  <div class="fallback" id="fb" style="display:none">
+    Přesměrování selhalo — <a href="/appiq/">otevřít version selector</a>
+  </div>
+  <script>
+    var BASE = '/appiq/';
+    var COCKPIT = 'HOPI_AppIQ_WebPage/Development/MANAGEMENT_COCKPIT.html';
+    var FALLBACK = BASE + 'v7.33/' + COCKPIT;
+
+    fetch(BASE + 'versions.json?_=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var latest = d.latest || 'v7.33';
+        window.location.replace(BASE + latest + '/' + COCKPIT);
+      })
+      .catch(function() {
+        window.location.replace(FALLBACK);
+      });
+
+    setTimeout(function() {
+      document.getElementById('fb').style.display = 'block';
+    }, 4000);
+  </script>
+</body>
+</html>
