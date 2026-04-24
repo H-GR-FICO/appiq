@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 18:35",
+  "lastUpdated": "2026-04-24 19:05",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,24 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00431",
+      "title": "FIX + RULE: Bilingvní obsah — cs/en objekty vždy přeloženy do obou jazyků bez ohledu na jazyk zadání",
+      "taskType": "fix",
+      "effort": "XS",
+      "estimatedTime": 20,
+      "actualTime": null,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "stream": "Platform",
+      "department": "IT_DEV",
+      "createdAt": "2026-04-24 19:00",
+      "completedAt": "2026-04-24 19:05",
+      "durationDays": 0,
+      "note": "DONE. (1) cockpit-data.js ř.106: name.cs opraveno z 'Release Selector' na 'Výběr verze'. (2) CLAUDE.md: přidána sekce BILINGUAL CONTENT PRAVIDLO (mezi PRODUCT LAYOUT STANDARD a VERSION BADGE PRAVIDLO) — jazyk zadání úkolu NIKDY neurčuje jazyk UI textů. (3) DISC-260424-016 zapsáno.",
+      "linkedTask": null
+    },
     {
       "id": "AIQ-00430",
       "title": "FIX: QUICK_REDEPLOY — versions.json root-level file nebyl nikdy stagován do gitu",

@@ -103,7 +103,7 @@ window.COCKPIT_SECTIONS = [
           en:'Central link manager — always latest version. Copy link per page. One sharing hub.'},
     url:'documentation.html', color:'green' },
 
-  { num:'21', icon:'🔀', name:{cs:'Release Selector',            en:'Release Selector'},
+  { num:'21', icon:'🔀', name:{cs:'Výběr verze',                  en:'Release Selector'},
     desc:{cs:'Přehled všech nasazených verzí AppIQ — výběr verze ke spuštění.',
           en:'All deployed AppIQ versions — select a version to launch.'},
     url:'release-selector.html', color:'blue' },
