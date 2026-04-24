@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 20:20",
+  "lastUpdated": "2026-04-24 20:35",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,23 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00435",
+      "title": "FIX: Hudba back button v2 — pageshow kontroluje audioEl.paused místo _bgPlaying flagu",
+      "taskType": "fix",
+      "effort": "XS",
+      "estimatedTime": 20,
+      "actualTime": null,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "domain": "Platform",
+      "module": "Music",
+      "createdAt": "2026-04-24 20:30",
+      "completedAt": "2026-04-24 20:35",
+      "durationDays": 0,
+      "note": "Root cause: _bgPlaying flag = true ale audio.paused = true (browser pauzoval v bfcache). pageshow handler checkoval flag místo skutečného DOM stavu. Fix: pageshow nyní kontroluje audioEl.paused (skutečný DOM stav) — pokud paused→play+fadeTo(0.7), pokud playing ale volume=0→fadeTo(0.7). Také clearuje _bgFadeId před fade-in. Aplikováno v MANAGEMENT_COCKPIT.html i _shell.js."
+    },
     {
       "id": "AIQ-00434",
       "title": "RULE: AGENT + BADGE POZICE STANDARD — fixní pozice version badge a AI agent buttonu ve všech vrstvách",

@@ -100,9 +100,14 @@ const Shell = (() => {
       try { sessionStorage.setItem(MUSIC_TIME_KEY, String(audioEl.currentTime)); } catch(e) {}
     });
     window.addEventListener('pageshow', () => {
-      if (audioEl && _shIsOn() && !_shPlaying && !_shStarting) {
+      if (!audioEl || !_shIsOn()) return;
+      if (_shFadeId) { clearInterval(_shFadeId); _shFadeId = null; }
+      if (audioEl.paused) {
+        audioEl.volume = 0;
         audioEl.play().then(() => { _shPlaying = true; _shFadeTo(0.7, 400); })
                      .catch(() => { _shPlaying = false; });
+      } else {
+        _shFadeTo(0.7, 400);
       }
     });
     document.addEventListener('visibilitychange', () => {

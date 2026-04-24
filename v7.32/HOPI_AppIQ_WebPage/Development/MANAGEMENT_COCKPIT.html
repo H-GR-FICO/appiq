@@ -858,9 +858,14 @@
         try { sessionStorage.setItem(MUS_TIME_KEY, String(_bgAudio.currentTime)); } catch(e) {}
       });
       window.addEventListener('pageshow', () => {
-        if (_bgAudio && _bgIsOn() && !_bgPlaying && !_bgStarting) {
+        if (!_bgAudio || !_bgIsOn()) return;
+        if (_bgFadeId) { clearInterval(_bgFadeId); _bgFadeId = null; }
+        if (_bgAudio.paused) {
+          _bgAudio.volume = 0;
           _bgAudio.play().then(() => { _bgPlaying = true; _bgFadeTo(0.7, 400); updateMusicBtn(); })
                         .catch(() => { _bgPlaying = false; updateMusicBtn(); });
+        } else {
+          _bgFadeTo(0.7, 400);
         }
       });
       document.addEventListener('visibilitychange', () => {
