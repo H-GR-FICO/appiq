@@ -20,12 +20,12 @@
   // ── Inject CSS ────────────────────────────────────────────────────────────
   var css = document.createElement('style');
   css.textContent = [
-    '#hopiq-btn{position:fixed;bottom:24px;right:24px;z-index:800;width:56px;height:56px;',
+    '#hopiq-btn{position:fixed;bottom:32px;right:24px;z-index:800;width:56px;height:56px;',
     'border-radius:50%;background:linear-gradient(135deg,#a855f7,#7c3aed);border:none;',
     'font-size:1.5rem;cursor:pointer;display:flex;align-items:center;justify-content:center;',
     'box-shadow:0 4px 20px rgba(168,85,247,.5);transition:transform .2s,box-shadow .2s;}',
     '#hopiq-btn:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(168,85,247,.8);}',
-    '#hopiq-panel{position:fixed;bottom:92px;right:24px;z-index:800;width:380px;max-height:520px;',
+    '#hopiq-panel{position:fixed;bottom:100px;right:24px;z-index:800;width:380px;max-height:520px;',
     'background:#0d1117;border:1px solid rgba(168,85,247,.35);border-radius:16px;',
     'display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.7);overflow:hidden;}',
     '#hopiq-panel-hdr{display:flex;align-items:center;justify-content:space-between;',
@@ -61,8 +61,8 @@
     'display:flex;align-items:center;justify-content:center;flex-shrink:0;}',
     '#hopiq-send:disabled{opacity:.4;}',
     '@media(max-width:480px){',
-    '#hopiq-panel{width:calc(100vw - 24px);right:12px;bottom:88px;}',
-    '#hopiq-btn{right:16px;bottom:16px;}}'
+    '#hopiq-panel{width:calc(100vw - 24px);right:12px;bottom:100px;}',
+    '#hopiq-btn{right:16px;bottom:32px;}}'
   ].join('');
   document.head.appendChild(css);
 
