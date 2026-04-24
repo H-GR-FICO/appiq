@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 20:35",
+  "lastUpdated": "2026-04-24 20:45",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,23 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00436",
+      "title": "FIX: Smazání zastaralého footeru s v8.0 · AIQ-00309 z MANAGEMENT_COCKPIT.html",
+      "taskType": "fix",
+      "effort": "XS",
+      "estimatedTime": 5,
+      "actualTime": 5,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "LOW",
+      "domain": "Platform",
+      "module": "Management Cockpit",
+      "createdAt": "2026-04-24 20:40",
+      "completedAt": "2026-04-24 20:40",
+      "durationDays": 0,
+      "note": "[~RETRO] Footer <footer style=display:none> obsahoval hardcoded text v8.0 · AIQ-00309. CSS selector footer{display:flex} mohl přebít inline display:none a footer zobrazit. Smazán kompletně: HTML element, CSS, JS funkce updateFooter() a volání z init sekvence."
+    },
     {
       "id": "AIQ-00435",
       "title": "FIX: Hudba back button v2 — pageshow kontroluje audioEl.paused místo _bgPlaying flagu",
