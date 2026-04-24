@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Budget Track — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>
+    /* ── ROI hero ────────────────────────────────── */
+    .roi-hero {
+      display: flex; align-items: center; justify-content: center;
+      gap: 32px; flex-wrap: wrap;
+      background: linear-gradient(135deg, rgba(245,158,11,.07), rgba(34,197,94,.06));
+      border: 1px solid rgba(245,158,11,.2);
+      border-radius: var(--c-radius);
+      padding: 28px 32px; margin-bottom: 32px;
+    }
+    .roi-item { text-align: center; }
+    .roi-val  { font-size: clamp(28px, 4vw, 48px); font-weight: 900; font-family: var(--c-font-sans); line-height: 1; }
+    .roi-lbl  { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+                letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+    .roi-arrow { font-size: 32px; color: var(--c-border); }
+    .roi-multiplier {
+      font-size: 18px; font-weight: 900; font-family: var(--c-font-sans);
+      color: var(--c-green);
+      background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3);
+      border-radius: 8px; padding: 6px 18px; white-space: nowrap;
+    }
+
+    /* ── Milestone cards ─────────────────────────── */
+    .milestone-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;
+      margin-bottom: 32px;
+    }
+    .ms-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden;
+      transition: border-color .2s;
+    }
+    .ms-card:hover { border-color: rgba(245,158,11,.4); }
+    .ms-card-header {
+      padding: 14px 18px 12px;
+      border-bottom: 1px solid var(--c-border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .ms-num  { font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted); letter-spacing: 2px; }
+    .ms-name { font-size: 14px; font-weight: 700; color: var(--c-white); }
+    .ms-date { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); margin-left: auto; }
+    .ms-body { padding: 14px 18px; }
+    .ms-cost-row {
+      display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;
+    }
+    .ms-cost { font-size: 22px; font-weight: 900; font-family: var(--c-font-sans); }
+    .ms-cost-lbl { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .ms-value-row {
+      display: flex; align-items: baseline; gap: 8px;
+      padding-top: 8px; border-top: 1px solid var(--c-border);
+    }
+    .ms-value { font-size: 18px; font-weight: 800; font-family: var(--c-font-sans); color: var(--c-green); }
+    .ms-items { font-size: 12px; color: var(--c-text); line-height: 1.7; margin: 8px 0; }
+    .ms-status { display: inline-flex; align-items: center; gap: 4px; margin-bottom: 6px; }
+
+    /* ── Chart section ───────────────────────────── */
+    .chart-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px; margin-bottom: 24px;
+    }
+    .chart-title { font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+                   letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+    .chart-wrap  { position: relative; height: 220px; }
+
+    /* ── Cash return table ───────────────────────── */
+    .return-table { width: 100%; border-collapse: collapse; }
+    .return-table th {
+      font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 12px;
+      border-bottom: 1px solid var(--c-border); text-align: left;
+    }
+    .return-table td { padding: 10px 12px; border-bottom: 1px solid rgba(26,42,74,.5); font-size: 13px; }
+    .return-table tr:hover td { background: rgba(245,158,11,.03); }
+    .ret-source { color: var(--c-text); }
+    .ret-amount { font-family: var(--c-font-sans); font-weight: 700; }
+    .ret-timing { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .ret-status { }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Budget Track</h1>
+    <p class="page-subtitle">Milestone price tags · Value delivery · ROI argument · AIQ-00309</p>
+
+    <!-- ── ROI Hero ───────────────────────────────── -->
+    <div class="roi-hero">
+      <div class="roi-item">
+        <div class="roi-val" style="color:var(--c-amber)">~$1,000</div>
+        <div class="roi-lbl">Celková investice do dnes</div>
+      </div>
+      <div class="roi-arrow">→</div>
+      <div class="roi-item">
+        <div class="roi-val" style="color:var(--c-green)">€200–500K</div>
+        <div class="roi-lbl">Platform value (odhadovaná)</div>
+      </div>
+      <div class="roi-multiplier">200–500× ROI</div>
+      <div class="roi-item">
+        <div class="roi-val" style="color:var(--c-blue)">€5–20M</div>
+        <div class="roi-lbl">Exit cíl (Phase 3)</div>
+      </div>
+    </div>
+
+    <!-- ── Milestone cards ───────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— MILESTONES: CO TO STÁLO / CO JSME DOSTALI</h2>
+    <div class="milestone-grid">
+
+      <div class="ms-card" style="border-color:rgba(34,197,94,.2)">
+        <div class="ms-card-header">
+          <div>
+            <div class="ms-num">MS-01</div>
+            <div class="ms-name">MVP — Platforma spuštěna</div>
+          </div>
+          <div class="ms-date">Únor 2026</div>
+          <span class="badge badge-closed" style="margin-left:auto">DONE</span>
+        </div>
+        <div class="ms-body">
+          <div class="ms-cost-row">
+            <div class="ms-cost" style="color:var(--c-amber)">~$1,000</div>
+            <div class="ms-cost-lbl">Claude Code plan · 8 týdnů</div>
+          </div>
+          <div class="ms-items">
+            · Finance Portal SPA (Group Controlling)<br>
+            · Studio Hub + Dev/Test/Admin/Docs Center<br>
+            · PORTAL_PRESENTATION (CZ/EN, 20+ slidů)<br>
+            · HOPIQ AI chatbot<br>
+            · 250+ AIQ tasků, 109+ git commits
+          </div>
+          <div class="ms-value-row">
+            <div class="ms-value">€50–100K</div>
+            <div class="ms-cost-lbl">ekvivalent dev agentury</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-card" style="border-color:rgba(34,197,94,.2)">
+        <div class="ms-card-header">
+          <div>
+            <div class="ms-num">MS-02</div>
+            <div class="ms-name">v7.24 — Investor Readiness</div>
+          </div>
+          <div class="ms-date">Duben 2026</div>
+          <span class="badge badge-closed" style="margin-left:auto">DONE</span>
+        </div>
+        <div class="ms-body">
+          <div class="ms-cost-row">
+            <div class="ms-cost" style="color:var(--c-amber)">~$0</div>
+            <div class="ms-cost-lbl">V rámci stávajícího plánu</div>
+          </div>
+          <div class="ms-items">
+            · Investor Brief + Personal Pitch<br>
+            · CEO Brief (denní update)<br>
+            · Anthropic One Pager v1 + v2<br>
+            · ANTHROPIC_JOURNEY stránka<br>
+            · Management Cockpit v8.0 (in progress)
+          </div>
+          <div class="ms-value-row">
+            <div class="ms-value">€100–200K</div>
+            <div class="ms-cost-lbl">investor readiness hodnota</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-card" style="border-color:rgba(168,85,247,.25)">
+        <div class="ms-card-header">
+          <div>
+            <div class="ms-num">MS-03</div>
+            <div class="ms-name">Fáze 0 — Anthropic + s.r.o.</div>
+          </div>
+          <div class="ms-date">Duben–Červen 2026</div>
+          <span class="badge badge-progress" style="margin-left:auto">NOW</span>
+        </div>
+        <div class="ms-body">
+          <div class="ms-cost-row">
+            <div class="ms-cost" style="color:var(--c-amber)">CZK 5–15K</div>
+            <div class="ms-cost-lbl">registrace s.r.o. + poplatky</div>
+          </div>
+          <div class="ms-items">
+            · HOPI TechIQ s.r.o. registrace<br>
+            · Anthropic Startup Program aplikace<br>
+            · AWS Activate Indie ($1K kredity)<br>
+            · MS Founders Hub ($150K Azure)<br>
+            · Management Cockpit v8.0 live
+          </div>
+          <div class="ms-value-row">
+            <div class="ms-value">$151K+ kredity</div>
+            <div class="ms-cost-lbl">cloud + AI runway cíl</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-card" style="border-color:rgba(96,165,250,.2)">
+        <div class="ms-card-header">
+          <div>
+            <div class="ms-num">MS-04</div>
+            <div class="ms-name">HOME Platform Core + Content</div>
+          </div>
+          <div class="ms-date">Červenec–Říjen 2026</div>
+          <span class="badge badge-open" style="margin-left:auto">PLÁN</span>
+        </div>
+        <div class="ms-body">
+          <div class="ms-cost-row">
+            <div class="ms-cost" style="color:var(--c-amber)">CZK 30–75K/měs</div>
+            <div class="ms-cost-lbl">Phase 1 burn rate</div>
+          </div>
+          <div class="ms-items">
+            · Platform Core v8.0 (4 měsíce)<br>
+            · 3 vertikály: Finance, Zdraví, Vzdělávání<br>
+            · Waitlist + Founding Members (50× CZK 2,990)
+          </div>
+          <div class="ms-value-row">
+            <div class="ms-value">CZK 150K ARR</div>
+            <div class="ms-cost-lbl">Founding Members revenue</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-card" style="border-color:rgba(96,165,250,.15)">
+        <div class="ms-card-header">
+          <div>
+            <div class="ms-num">MS-05</div>
+            <div class="ms-name">B2C Launch</div>
+          </div>
+          <div class="ms-date">01.01.2027</div>
+          <span class="badge badge-open" style="margin-left:auto">CÍLE</span>
+        </div>
+        <div class="ms-body">
+          <div class="ms-cost-row">
+            <div class="ms-cost" style="color:var(--c-amber)" id="bt-countdown">— dní</div>
+            <div class="ms-cost-lbl">do launche</div>
+          </div>
+          <div class="ms-items">
+            · Veřejná platforma live<br>
+            · Stripe/GoPay platby<br>
+            · Press kit + LinkedIn launch
+          </div>
+          <div class="ms-value-row">
+            <div class="ms-value">€200–500K</div>
+            <div class="ms-cost-lbl">platform valuation cíl</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ms-card" style="border-color:rgba(107,114,128,.1);opacity:.6">
+        <div class="ms-card-header">
+          <div>
+            <div class="ms-num">MS-06</div>
+            <div class="ms-name">Enterprise + Seed Round</div>
+          </div>
+          <div class="ms-date">2027–2028</div>
+          <span class="badge badge-low" style="margin-left:auto">BUDOUCNOST</span>
+        </div>
+        <div class="ms-body">
+          <div class="ms-cost-row">
+            <div class="ms-cost" style="color:var(--c-muted)">CZK 260–380K/měs</div>
+            <div class="ms-cost-lbl">Phase 2 burn rate</div>
+          </div>
+          <div class="ms-items">
+            · Seed round €300K–1M<br>
+            · Enterprise B2B features<br>
+            · Tým 4–8 lidí
+          </div>
+          <div class="ms-value-row">
+            <div class="ms-value">€5–20M</div>
+            <div class="ms-cost-lbl">exit valuation cíl</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Cost vs Value chart ────────────────────── -->
+    <div class="chart-card">
+      <div class="chart-title">Investice vs. Hodnota platformy — per milestone</div>
+      <div class="chart-wrap">
+        <canvas id="chart-roi"></canvas>
+      </div>
+    </div>
+
+    <!-- ── Cash return table ──────────────────────── -->
+    <h2 style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— CASH INJECTION PIPELINE (ZDROJE KRYTÍ)</h2>
+    <table class="return-table">
+      <thead>
+        <tr>
+          <th>Zdroj</th>
+          <th>Výše</th>
+          <th>Typ</th>
+          <th>Timing</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="ret-source">AWS Activate Indie (BIZ-00107)</td>
+          <td class="ret-amount" style="color:var(--c-green)">$1,000</td>
+          <td><span class="badge badge-open">kredity</span></td>
+          <td class="ret-timing">Tento týden · 30 min</td>
+          <td><span class="badge badge-open">OPEN</span></td>
+        </tr>
+        <tr>
+          <td class="ret-source">Anthropic Startup Program (BIZ-00105)</td>
+          <td class="ret-amount" style="color:var(--c-green)">TBD</td>
+          <td><span class="badge badge-open">kredity + podpora</span></td>
+          <td class="ret-timing">Fáze 0 · aplikace odeslána</td>
+          <td><span class="badge badge-progress">IN PROGRESS</span></td>
+        </tr>
+        <tr>
+          <td class="ret-source">MS Founders Hub (BIZ-00109)</td>
+          <td class="ret-amount" style="color:var(--c-green)">$150,000</td>
+          <td><span class="badge badge-open">Azure kredity</span></td>
+          <td class="ret-timing">Po s.r.o. registraci</td>
+          <td><span class="badge badge-open">OPEN</span></td>
+        </tr>
+        <tr>
+          <td class="ret-source">AWS Activate Founders (BIZ-00108)</td>
+          <td class="ret-amount" style="color:var(--c-green)">$25,000</td>
+          <td><span class="badge badge-open">kredity</span></td>
+          <td class="ret-timing">Po s.r.o. + akcelerátor</td>
+          <td><span class="badge badge-open">OPEN</span></td>
+        </tr>
+        <tr>
+          <td class="ret-source">Founding Members (BIZ-00112)</td>
+          <td class="ret-amount" style="color:var(--c-amber)">CZK 150K</td>
+          <td><span class="badge badge-review">revenue</span></td>
+          <td class="ret-timing">Q4 2026 · 50× CZK 2,990</td>
+          <td><span class="badge badge-open">OPEN</span></td>
+        </tr>
+        <tr>
+          <td class="ret-source">HOPI IT Budget (BIZ-00111)</td>
+          <td class="ret-amount" style="color:var(--c-amber)">CZK 50–200K/rok</td>
+          <td><span class="badge badge-review">interní</span></td>
+          <td class="ret-timing">Po Business Case prezentaci</td>
+          <td><span class="badge badge-open">OPEN</span></td>
+        </tr>
+        <tr>
+          <td class="ret-source">EU Dotace OP TAK (BIZ-00113)</td>
+          <td class="ret-amount" style="color:var(--c-muted)">CZK 0,5–3M</td>
+          <td><span class="badge badge-low">grant</span></td>
+          <td class="ret-timing">Výzkum · podmínky</td>
+          <td><span class="badge badge-open">OPEN</span></td>
+        </tr>
+        <tr style="font-weight:700">
+          <td style="color:var(--c-white)">CELKOVÁ PIPELINE</td>
+          <td class="ret-amount" style="color:var(--c-green);font-size:16px">$200K+</td>
+          <td>—</td>
+          <td class="ret-timing">Phase 1–2 runway</td>
+          <td><span class="badge badge-review">IN PIPELINE</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: {cs:'Sledování rozpočtu', en:'Budget Track'},
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music:   '../cockpit-music.mp3'
+    });
+
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      document.querySelectorAll('.roi-lbl').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Celková investice do dnes','Total investment to date')
+          .replace('Platform value (odhadovaná)','Platform value (estimated)')
+          .replace('Exit cíl (Phase 3)','Exit goal (Phase 3)');
+      });
+      var h2s = document.querySelectorAll('h2');
+      h2s.forEach(function(h) {
+        h.textContent = h.textContent
+          .replace('— MILESTONES: CO TO STÁLO / CO JSME DOSTALI','— MILESTONES: WHAT IT COST / WHAT WE GOT')
+          .replace('— CASH INJECTION PIPELINE (ZDROJE KRYTÍ)','— CASH INJECTION PIPELINE (FUNDING SOURCES)');
+      });
+      document.querySelectorAll('.ms-cost-lbl').forEach(function(el) {
+        el.textContent = el.textContent
+          .replace('Claude Code plan · 8 týdnů','Claude Code plan · 8 weeks')
+          .replace('ekvivalent dev agentury','dev agency equivalent')
+          .replace('V rámci stávajícího plánu','Within existing plan')
+          .replace('investor readiness hodnota','investor readiness value')
+          .replace('registrace s.r.o. + poplatky','s.r.o. registration + fees')
+          .replace('cloud + AI runway cíl','cloud + AI runway goal')
+          .replace('Phase 1 burn rate','Phase 1 burn rate')
+          .replace('Founding Members revenue','Founding Members revenue')
+          .replace('do launche','to launch')
+          .replace('platform valuation cíl','platform valuation goal')
+          .replace('Phase 2 burn rate','Phase 2 burn rate')
+          .replace('exit valuation cíl','exit valuation goal');
+      });
+      document.querySelectorAll('.ms-items').forEach(function(el) {
+        el.innerHTML = el.innerHTML.replace('8 týdnů','8 weeks').replace('4 měsíce','4 months').replace('Tým 4–8 lidí','Team 4–8 people');
+      });
+      var budgetBadges = document.querySelectorAll('.badge');
+      budgetBadges.forEach(function(b) {
+        if (b.textContent === 'BUDOUCNOST') b.textContent = 'FUTURE';
+        if (b.textContent === 'CÍLE') b.textContent = 'TARGETS';
+        if (b.textContent === 'PLÁN') b.textContent = 'PLAN';
+      });
+      document.querySelectorAll('.return-table th').forEach(function(th) {
+        th.textContent = th.textContent.replace('Zdroj','Source').replace('Výše','Amount').replace('Typ','Type');
+      });
+      var pipelineRow = document.querySelector('.return-table tr[style*="font-weight"] td:first-child');
+      if (pipelineRow) pipelineRow.textContent = 'TOTAL PIPELINE';
+      var chartTitle = document.querySelector('.chart-title');
+      if (chartTitle) chartTitle.textContent = 'Investment vs. Platform Value — per milestone';
+    })();
+
+    const B2C_DATE = new Date('2027-01-01');
+    function daysTo(d) { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
+    function setText(id, v) { const e = document.getElementById(id); if (e) e.textContent = v; }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setText('bt-countdown', daysTo(B2C_DATE) + (Shell.getLang() === 'en' ? ' days' : ' dní'));
+
+      // ROI chart
+      const ctx = document.getElementById('chart-roi').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['MS-01 MVP', 'MS-02 Investor', 'MS-03 Fáze 0', 'MS-04 HOME', 'MS-05 Launch', 'MS-06 Enterprise'],
+          datasets: [
+            {
+              label: Shell.getLang() === 'en' ? 'Investment (K USD)' : 'Investice (tis. USD)',
+              data: [1, 0, 5, 25, 50, 200],
+              backgroundColor: 'rgba(245,158,11,.3)',
+              borderColor: '#F59E0B',
+              borderWidth: 1, borderRadius: 4, yAxisID: 'y'
+            },
+            {
+              label: Shell.getLang() === 'en' ? 'Platform value (K EUR)' : 'Hodnota platformy (tis. EUR)',
+              data: [75, 150, 250, 350, 400, 12000],
+              backgroundColor: 'rgba(34,197,94,.15)',
+              borderColor: '#22C55E',
+              borderWidth: 1, borderRadius: 4, yAxisID: 'y1', type: 'line',
+              pointBackgroundColor: '#22C55E', tension: 0.3
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { size: 11 } } }
+          },
+          scales: {
+            x:  { ticks: { color: '#6b7280' }, grid: { color: 'rgba(26,42,74,.5)' } },
+            y:  { ticks: { color: '#F59E0B' }, grid: { color: 'rgba(26,42,74,.5)' },
+                  beginAtZero: true, title: { display: true, text: Shell.getLang() === 'en' ? 'Investment (K USD)' : 'Investice (tis. USD)', color: '#F59E0B', font: { size: 10 } } },
+            y1: { ticks: { color: '#22C55E' }, grid: { display: false }, position: 'right',
+                  beginAtZero: true, title: { display: true, text: Shell.getLang() === 'en' ? 'Value (K EUR)' : 'Hodnota (tis. EUR)', color: '#22C55E', font: { size: 10 } } }
+          },
+          animation: { duration: 700 }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

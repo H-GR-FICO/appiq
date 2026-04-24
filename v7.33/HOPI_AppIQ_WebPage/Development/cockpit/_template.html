@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SEKCE NÁZEV — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <!-- Chart.js — uncomment if this section needs charts -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script> -->
+</head>
+<body>
+
+  <!-- Shell injects: topbar (breadcrumb + lang + music) + mottos ribbon -->
+  <div id="cockpit-shell"></div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION CONTENT — edit below this line only
+       ════════════════════════════════════════════════ -->
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> SEKCE NÁZEV</h1>
+    <p class="page-subtitle">Popis sekce · Zdroj dat: OIL.json / BOIL.json / COST_TRACKING.json</p>
+
+    <!-- ── KPI Strip (optional) ───────────────────── -->
+    <div class="c-kpi-grid" id="kpi-strip">
+      <div class="c-card">
+        <div class="c-card-title">Metrika 1</div>
+        <div class="c-card-value" id="kpi-1">—</div>
+        <div class="c-card-sub">popis</div>
+      </div>
+      <!-- Add more c-card blocks as needed -->
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Main content ────────────────────────────── -->
+    <!-- ADD SECTION-SPECIFIC HTML HERE -->
+
+  </main>
+  <!-- ════════════════════════════════════════════════ -->
+
+  <script src="_shell.js"></script>
+  <script>
+    // ── Shell init (required on every page) ──────────
+    Shell.init({
+      section: 'SEKCE NÁZEV',          // shown in topbar breadcrumb
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music:   '../cockpit-music.mp3'  // motivační hudba (David dodá)
+    });
+
+    // ── Page-specific data loading ────────────────────
+    // Example: fetch OIL.json
+    /*
+    fetch('../OIL.json')
+      .then(r => r.json())
+      .then(data => {
+        const tasks = data.tasks || [];
+        document.getElementById('kpi-1').textContent = tasks.length;
+        // ... render logic
+      });
+    */
+  </script>
+</body>
+</html>
