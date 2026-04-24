@@ -1,205 +1,226 @@
 ﻿{
-  "latest": "v7.31",
-  "updatedAt": "2026-04-23",
-  "versions": [
-    {
-        "version":  "v7.20",
-        "date":  "2026-04-19",
-        "session":  "v7.20-WebPage_20260419_0148",
-        "title":  "i18n opravy — prezentace + Personal Pitch",
-        "mainUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  [
-                        "Fix: _i18n.js — lang-cz vs lang-cs třída (prázdná místa v CS módu)",
-                        "Fix: _i18n.js — _hasKey() guard v _applyDOM() chrání 252 prezentačních klíčů",
-                        "Fix: PERSONAL_PITCH.html — CSS-based přepínač jazyka (body.lang-en + !important)"
-                    ],
-        "presentationUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/docs/index.html"
-    },
-    {
-        "version":  "v7.12",
-        "date":  "2026-04-18",
-        "session":  "v7.12-WebPage_20260418_0502",
-        "title":  "Studio Architecture — snapshot před i18n (legacy)",
-        "mainUrl":  "PORTAL_PRESENTATION.html",
-        "mainLabel":  "Prezentace",
-        "changes":  [
-                        "Studio Hub — rozcestník center (Dev, Test, Admin, Promo)",
-                        "PORTAL_PRESENTATION.html — kompletní prezentace AppIQ platformy",
-                        "PERSONAL_PITCH.html — bilingvní pitch se Story Behind",
-                        "Studio Architecture — Dev, Test, Admin Center základ"
-                    ],
-        "presentationUrl":  "PORTAL_PRESENTATION.html",
-        "pitchUrl":  "PERSONAL_PITCH.html"
-    },
-    {
-        "version":  "v7.21",
-        "date":  "2026-04-20",
-        "session":  "v7.21-WebPage_20260419_2341",
-        "title":  "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
-        "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  [
-                        "Nový: HOPIQ chatbot — Claude API integrace přes Cloudflare Worker proxy",
-                        "Nový: _hopiq.js + _hopiq.css — floating chat widget na všech stránkách AppIQ Studia",
-                        "Nový: HOPIQ systémový prompt — kompletní znalost platformy (8 domén: archivace, OIL, centra, chatboti...)",
-                        "Nový: _status.js pattern — inline JS fallback, funguje na file://, Release i GitHub Pages",
-                        "Fix: Admin Center Release záložka — _status.js fallback místo fetch() pro file:// protokol",
-                        "Version Selector 2.0 — hero CTA tlačítko, inline seznam změn, modal Detailní změny",
-                        "Version Selector 2.0 — CS/EN přepínač, plná podpora v7.12 legacy záznamu",
-                        "Plán: Training Centre (FC-8) + 4 AI specialisté: PBI Designer, PBI Analyser, Data Story Teller, Document Reader"
-                    ],
-        "promoLevel":  4,
-        "promoText":  "Tohle HOPI ještě nevidělo. Claude AI je živý v AppIQ. Teď hned. Zeptej se.",
-        "promoTextEn":  "HOPI has never seen this. Claude AI is live in AppIQ. Right now. Ask it.",
-        "presentationUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.22",
-        "date":  "2026-04-21",
-        "session":  "session_20260420_2107",
-        "title":  "CEO Brief, MIND-SET REVOLUTION, page split + music",
-        "mainUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  [
-                        "Nový: CEO Brief — slide MIND-SET REVOLUTION (8 předpokladů projektu, K/O body)",
-                        "Nový: selector.html — oddělená stránka výběru verzí (music button jen zde)",
-                        "Fix: index.html = welcome+bomba pouze — žádný music button na prvních obrazovkách",
-                        "Fix: Gladiator spouštění — bomba (L5) → redirect selector.html?music=1 → auto-start",
-                        "Fix: CEO Brief — hudba se spustí po odemčení heslem",
-                        "Obsah: CEO Brief — partner karty Artin + Intecs (přesný text + pilot AI v PBI)"
-                    ],
-        "promoLevel":  5,
-        "promoText":  "Svět se zatřásl. CEO Brief, MIND-SET REVOLUTION a živá bomba jsou tady.",
-        "promoTextEn":  "The world shook. CEO Brief, MIND-SET REVOLUTION and the live bomb are here.",
-        "presentationUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.23",
-        "date":  "2026-04-22",
-        "session":  "session_20260421_2057",
-        "title":  "Navigation propojení stránek + OG images v2 + music tab-pause",
-        "mainUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  [
-                        "[Vývoj] Navigace — kompletní propojení PITCH ↔ CEO ↔ ENTRY ↔ BRIEF (karty + nav tlačítka)",
-                        "[Design] OG Images v2 — centrovaný layout, 3 PNG (Business Vision / Business Case / Investor Gateway)",
-                        "[Oprava] Music tab-pause — auto-stop při přepnutí záložky na všech 3 stránkách"
-                    ],
-        "promoLevel":  null,
-        "promoText":  null,
-        "promoTextEn":  null,
-        "presentationUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.24",
-        "date":  "2026-04-22",
-        "session":  "session_20260421_2057",
-        "title":  "Anthropic Journey + David vs Goliáš",
-        "mainUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  {
-    
-                    },
-        "promoLevel":  null,
-        "promoText":  null,
-        "promoTextEn":  null,
-        "presentationUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.25",
-        "date":  "2026-04-22",
-        "session":  "v7.25-WebPage_20260422_1359",
-        "title":  "MANAGEMENT COCKPIT: 3 nové sekce + Compliance opravy",
-        "mainUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  {
-    
-                    },
-        "promoLevel":  null,
-        "promoText":  null,
-        "promoTextEn":  null,
-        "presentationUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.26",
-        "date":  "2026-04-23",
-        "session":  "session_20260422_1406",
-        "title":  "Cockpit: kompletní CS/EN překlad + bilingvní opravy · deploy",
-        "mainUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  {
-    
-                    },
-        "promoLevel":  null,
-        "promoText":  null,
-        "promoTextEn":  null,
-        "presentationUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.27",
-        "date":  "2026-04-23",
-        "session":  "v7.26-WebPage_20260423_0230",
-        "title":  "Cluster navigace · Auth redesign · Music fix · OG image · deploy",
-        "mainUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  {
-    
-                    },
-        "promoLevel":  null,
-        "promoText":  null,
-        "promoTextEn":  null,
-        "presentationUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    },
-    {
-        "version":  "v7.31",
-        "date":  "2026-04-23",
-        "session":  "v7.26-WebPage_20260423_0230",
-        "title":  "Hudba přežije back button · Budget Matrix čitelný na mobilu · 2026-04-24",
-        "mainUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
-        "mainLabel":  "Studio Hub",
-        "changes":  {
-    
-                    },
-        "promoLevel":  null,
-        "promoText":  null,
-        "promoTextEn":  null,
-        "presentationUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
-        "hubUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
-        "pitchUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
-        "docsUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/docs/index.html",
-        "protocolUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
-    }
-  ]
+    "latest":  "v7.32",
+    "updatedAt":  "2026-04-24",
+    "versions":  [
+                     {
+                         "version":  "v7.20",
+                         "date":  "2026-04-19",
+                         "session":  "v7.20-WebPage_20260419_0148",
+                         "title":  "i18n opravy — prezentace + Personal Pitch",
+                         "mainUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  [
+                                         "Fix: _i18n.js — lang-cz vs lang-cs třída (prázdná místa v CS módu)",
+                                         "Fix: _i18n.js — _hasKey() guard v _applyDOM() chrání 252 prezentačních klíčů",
+                                         "Fix: PERSONAL_PITCH.html — CSS-based přepínač jazyka (body.lang-en + !important)"
+                                     ],
+                         "presentationUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.20/HOPI_AppIQ_WebPage/Development/docs/index.html"
+                     },
+                     {
+                         "version":  "v7.12",
+                         "date":  "2026-04-18",
+                         "session":  "v7.12-WebPage_20260418_0502",
+                         "title":  "Studio Architecture — snapshot před i18n (legacy)",
+                         "mainUrl":  "PORTAL_PRESENTATION.html",
+                         "mainLabel":  "Prezentace",
+                         "changes":  [
+                                         "Studio Hub — rozcestník center (Dev, Test, Admin, Promo)",
+                                         "PORTAL_PRESENTATION.html — kompletní prezentace AppIQ platformy",
+                                         "PERSONAL_PITCH.html — bilingvní pitch se Story Behind",
+                                         "Studio Architecture — Dev, Test, Admin Center základ"
+                                     ],
+                         "presentationUrl":  "PORTAL_PRESENTATION.html",
+                         "pitchUrl":  "PERSONAL_PITCH.html"
+                     },
+                     {
+                         "version":  "v7.21",
+                         "date":  "2026-04-20",
+                         "session":  "v7.21-WebPage_20260419_2341",
+                         "title":  "HOPIQ AI Chatbot + Version Selector 2.0 + Admin Release fix",
+                         "mainUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  [
+                                         "Nový: HOPIQ chatbot — Claude API integrace přes Cloudflare Worker proxy",
+                                         "Nový: _hopiq.js + _hopiq.css — floating chat widget na všech stránkách AppIQ Studia",
+                                         "Nový: HOPIQ systémový prompt — kompletní znalost platformy (8 domén: archivace, OIL, centra, chatboti...)",
+                                         "Nový: _status.js pattern — inline JS fallback, funguje na file://, Release i GitHub Pages",
+                                         "Fix: Admin Center Release záložka — _status.js fallback místo fetch() pro file:// protokol",
+                                         "Version Selector 2.0 — hero CTA tlačítko, inline seznam změn, modal Detailní změny",
+                                         "Version Selector 2.0 — CS/EN přepínač, plná podpora v7.12 legacy záznamu",
+                                         "Plán: Training Centre (FC-8) + 4 AI specialisté: PBI Designer, PBI Analyser, Data Story Teller, Document Reader"
+                                     ],
+                         "promoLevel":  4,
+                         "promoText":  "Tohle HOPI ještě nevidělo. Claude AI je živý v AppIQ. Teď hned. Zeptej se.",
+                         "promoTextEn":  "HOPI has never seen this. Claude AI is live in AppIQ. Right now. Ask it.",
+                         "presentationUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.21/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.22",
+                         "date":  "2026-04-21",
+                         "session":  "session_20260420_2107",
+                         "title":  "CEO Brief, MIND-SET REVOLUTION, page split + music",
+                         "mainUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  [
+                                         "Nový: CEO Brief — slide MIND-SET REVOLUTION (8 předpokladů projektu, K/O body)",
+                                         "Nový: selector.html — oddělená stránka výběru verzí (music button jen zde)",
+                                         "Fix: index.html = welcome+bomba pouze — žádný music button na prvních obrazovkách",
+                                         "Fix: Gladiator spouštění — bomba (L5) → redirect selector.html?music=1 → auto-start",
+                                         "Fix: CEO Brief — hudba se spustí po odemčení heslem",
+                                         "Obsah: CEO Brief — partner karty Artin + Intecs (přesný text + pilot AI v PBI)"
+                                     ],
+                         "promoLevel":  5,
+                         "promoText":  "Svět se zatřásl. CEO Brief, MIND-SET REVOLUTION a živá bomba jsou tady.",
+                         "promoTextEn":  "The world shook. CEO Brief, MIND-SET REVOLUTION and the live bomb are here.",
+                         "presentationUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.22/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.23",
+                         "date":  "2026-04-22",
+                         "session":  "session_20260421_2057",
+                         "title":  "Navigation propojení stránek + OG images v2 + music tab-pause",
+                         "mainUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  [
+                                         "[Vývoj] Navigace — kompletní propojení PITCH ↔ CEO ↔ ENTRY ↔ BRIEF (karty + nav tlačítka)",
+                                         "[Design] OG Images v2 — centrovaný layout, 3 PNG (Business Vision / Business Case / Investor Gateway)",
+                                         "[Oprava] Music tab-pause — auto-stop při přepnutí záložky na všech 3 stránkách"
+                                     ],
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.23/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.24",
+                         "date":  "2026-04-22",
+                         "session":  "session_20260421_2057",
+                         "title":  "Anthropic Journey + David vs Goliáš",
+                         "mainUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  {
+
+                                     },
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.25",
+                         "date":  "2026-04-22",
+                         "session":  "v7.25-WebPage_20260422_1359",
+                         "title":  "MANAGEMENT COCKPIT: 3 nové sekce + Compliance opravy",
+                         "mainUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  {
+
+                                     },
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.26",
+                         "date":  "2026-04-23",
+                         "session":  "session_20260422_1406",
+                         "title":  "Cockpit: kompletní CS/EN překlad + bilingvní opravy · deploy",
+                         "mainUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  {
+
+                                     },
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.27",
+                         "date":  "2026-04-23",
+                         "session":  "v7.26-WebPage_20260423_0230",
+                         "title":  "Cluster navigace · Auth redesign · Music fix · OG image · deploy",
+                         "mainUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  {
+
+                                     },
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.31",
+                         "date":  "2026-04-23",
+                         "session":  "v7.26-WebPage_20260423_0230",
+                         "title":  "Hudba přežije back button · Budget Matrix čitelný na mobilu · 2026-04-24",
+                         "mainUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  {
+
+                                     },
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/docs/index.html",
+                         "protocolUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+                     },
+                     {
+                         "version":  "v7.32",
+                         "date":  "2026-04-24",
+                         "session":  "session_20260424",
+                         "title":  "Cockpit Stream+Dept sloupce · Mojibake fix · Mobile scroll · 2026-04-24",
+                         "mainUrl":  "v7.32/HOPI_AppIQ_WebPage/Development/index.html",
+                         "mainLabel":  "Studio Hub",
+                         "changes":  [
+                                         "Cockpit TECH+BIZ: nové sloupce Stream a Dept, klikatelné řazení Effort/Stream/Dept/Assignee",
+                                         "Oprava: 9 315 diakritika CP1250 Mojibake v OIL.json a BOIL.json",
+                                         "Oprava: mobile cockpit horizontální scroll — body overflow-x fix",
+                                         "Oprava: FICO Portál odkaz z mobilu (page not found — isLocal guard)"
+                                     ],
+                         "promoLevel":  null,
+                         "promoText":  null,
+                         "promoTextEn":  null,
+                         "presentationUrl":  "v7.32/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+                         "hubUrl":  "v7.32/HOPI_AppIQ_WebPage/Development/index.html",
+                         "pitchUrl":  "v7.32/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+                         "docsUrl":  "v7.32/HOPI_AppIQ_WebPage/Development/docs/index.html"
+                     }
+                 ]
 }
