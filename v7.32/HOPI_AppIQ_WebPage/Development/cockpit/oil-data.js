@@ -1,7 +1,7 @@
 ﻿// Auto-generated from OIL.json
 window.OIL_DATA = {
   "version": "3.0",
-  "lastUpdated": "2026-04-24 14:50",
+  "lastUpdated": "2026-04-24 18:35",
   "audits": [
     {
       "id": "AUD-00001",
@@ -108,6 +108,40 @@ window.OIL_DATA = {
     }
   ],
   "tasks": [
+    {
+      "id": "AIQ-00430",
+      "title": "FIX: QUICK_REDEPLOY — versions.json root-level file nebyl nikdy stagován do gitu",
+      "taskType": "fix",
+      "effort": "XS",
+      "estimatedTime": 15,
+      "actualTime": 15,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "stream": "Platform",
+      "department": "IT_DEV",
+      "createdAt": "2026-04-24 18:30",
+      "completedAt": "2026-04-24 18:30",
+      "durationDays": 0,
+      "note": "DONE. Root cause: QUICK_REDEPLOY.ps1 řádek 155 dělal pouze `git add \"$VER_FOLDER/\"` — root-level versions.json byl mimo scope a nikdy se nestagoval. Výsledek: všechny editace versions.json (changes arrays pro v7.24-v7.31, changes_en pro v7.32) existovaly lokálně ale nikdy nedorazily na GitHub Pages. Fix: přidán blok `if (Test-Path versions.json) { git add versions.json }` za stávající git add. Manuální fix: git add versions.json + commit + push proveden ručně."
+    },
+    {
+      "id": "AIQ-00429",
+      "title": "FIX: release-selector — lang toggle ztratí step 2 stav, cache-bust versions.json, richer popisy destinací",
+      "taskType": "fix",
+      "effort": "S",
+      "estimatedTime": 30,
+      "actualTime": 35,
+      "assignee": "Claude",
+      "status": "CLOSED",
+      "priority": "HIGH",
+      "stream": "Platform",
+      "department": "IT_DEV",
+      "createdAt": "2026-04-24 18:15",
+      "completedAt": "2026-04-24 18:30",
+      "durationDays": 0,
+      "note": "DONE. (1) Lang toggle reset: Shell.setLang() volá location.reload() — stránka startuje na step 1. Fix: pagehide listener uloží selected version do sessionStorage; po rerenderStep1 se obnoví selectVersion(). (2) Cache-bust: fetch versions.json?_=Date.now() zajistí čerstvá data po každém reload. (3) Richer descriptions: každá destinace má 1-2 větné popisy co tam uživatel najde (CS+EN)."
+    },
     {
       "id": "AIQ-00428",
       "title": "DEV: Release Selector — cockpit sub-stránka s dvoustupňovým flow (verze → destinace)",
