@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HOPI AppIQ — 2-Pager for Anthropic</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    font-family:'Inter',sans-serif;
+    background:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(232,117,10,.18) 0%,transparent 60%),
+               radial-gradient(ellipse 60% 40% at 100% 80%,rgba(168,85,247,.1) 0%,transparent 60%),
+               #07070f;
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+
+  .page{
+    width:100%;
+    max-width:720px;
+    background:linear-gradient(160deg,#10101e 0%,#0c0b18 60%,#0a0d16 100%);
+    border:1px solid rgba(255,255,255,.12);
+    border-top:3px solid #E8750A;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 0 60px rgba(232,117,10,.15), 0 32px 64px rgba(0,0,0,.6);
+  }
+
+  /* ── HEADER ── */
+  .hdr{
+    padding:32px 40px 28px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    background:linear-gradient(135deg,rgba(232,117,10,.14) 0%,rgba(168,85,247,.08) 100%);
+  }
+  .hdr-brand{display:flex;align-items:baseline;gap:3px;line-height:1;}
+  .hdr-brand .app{font-size:28px;font-weight:300;color:#E8750A;}
+  .hdr-brand .iq{font-size:32px;font-weight:900;color:#1DB954;}
+  .hdr-powered{display:flex;align-items:center;gap:8px;}
+  .hdr-powered span{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;}
+  .hdr-powered strong{font-size:14px;font-weight:700;color:#CC785C;}
+  .hdr-tag{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#E8750A;background:rgba(232,117,10,.15);border:1px solid rgba(232,117,10,.45);border-radius:100px;padding:4px 12px;}
+
+  /* ── HOOK ── */
+  .hook{
+    padding:36px 40px 28px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(180deg,rgba(168,85,247,.05) 0%,transparent 100%);
+  }
+  .hook-main{
+    font-size:clamp(28px,5vw,46px);
+    font-weight:900;
+    line-height:1.1;
+    margin-bottom:12px;
+    text-shadow:0 0 40px rgba(232,117,10,.3);
+  }
+  .hook-main em{color:#E8750A;font-style:normal;}
+  .hook-sub{font-size:14px;color:rgba(255,255,255,.65);line-height:1.7;max-width:520px;}
+  .hook-sub strong{color:#fff;}
+
+  /* ── PRODUCT ── */
+  .product{
+    padding:28px 40px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .section-label{
+    font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+    color:rgba(255,255,255,.3);margin-bottom:14px;
+  }
+  .product-desc{font-size:13px;color:rgba(255,255,255,.7);line-height:1.8;margin-bottom:18px;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;}
+  .chip{
+    font-size:10px;font-weight:600;
+    border-radius:100px;padding:5px 13px;
+    border:1px solid;
+  }
+  .chip-ent{color:rgba(232,117,10,.9);background:rgba(232,117,10,.08);border-color:rgba(232,117,10,.2);}
+  .chip-home{color:rgba(29,185,84,.9);background:rgba(29,185,84,.07);border-color:rgba(29,185,84,.18);}
+  .chip-ai{color:rgba(204,120,92,.9);background:rgba(204,120,92,.07);border-color:rgba(204,120,92,.2);}
+
+  /* ── STUDIO ── */
+  .studio{
+    padding:24px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(135deg,rgba(168,85,247,.06) 0%,transparent 60%);
+  }
+  .studio-tagline{
+    font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;
+    margin-bottom:16px;max-width:560px;
+  }
+  .studio-tagline strong{color:#fff;}
+  .studio-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .st-item{
+    display:flex;align-items:flex-start;gap:10px;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:8px;
+    padding:10px 12px;
+  }
+  .st-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
+  .st-text{}
+  .st-name{font-size:11px;font-weight:700;color:#fff;margin-bottom:2px;}
+  .st-desc{font-size:10px;color:rgba(255,255,255,.45);line-height:1.5;}
+  .st-ai-badge{
+    display:inline-block;margin-top:4px;
+    font-size:8px;font-weight:700;letter-spacing:.8px;
+    padding:1px 6px;border-radius:100px;
+    background:rgba(204,120,92,.12);color:#CC785C;
+    border:1px solid rgba(204,120,92,.2);
+  }
+  @media(max-width:520px){
+    .studio-grid{grid-template-columns:1fr;}
+    .studio{padding-left:20px;padding-right:20px;}
+  }
+
+  /* ── PULL QUOTE ── */
+  .pullquote{
+    padding:22px 40px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+    background:linear-gradient(180deg,rgba(232,117,10,.05) 0%,transparent 100%);
+  }
+  .pq-body{
+    border-left:3px solid #E8750A;
+    padding:4px 0 4px 18px;
+  }
+  .pq-text{
+    font-size:clamp(14px,2.2vw,18px);
+    font-weight:600;
+    font-style:italic;
+    color:rgba(255,255,255,.9);
+    line-height:1.6;
+    margin-bottom:10px;
+  }
+  .pq-text em{color:#E8750A;font-style:normal;}
+  .pq-attr{display:flex;align-items:center;gap:10px;}
+  .pq-avatar{
+    width:30px;height:30px;border-radius:50%;
+    background:linear-gradient(135deg,#E8750A,#A855F7);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:800;color:#fff;flex-shrink:0;
+  }
+  .pq-name{font-size:11px;font-weight:700;color:rgba(255,255,255,.7);}
+  .pq-role{font-size:9px;color:rgba(255,255,255,.35);margin-top:1px;}
+
+  /* ── SHOCK TABLE ── */
+  .shock{
+    padding:24px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .shock-table{width:100%;border-collapse:collapse;margin-top:14px;}
+  .shock-table th{
+    padding:8px 14px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+    font-weight:700;border-bottom:1px solid rgba(255,255,255,.1);text-align:left;
+  }
+  .shock-table th.col-old{color:rgba(255,255,255,.3);}
+  .shock-table th.col-new{color:#E8750A;text-align:right;}
+  .shock-table td{
+    padding:9px 14px;border-bottom:1px solid rgba(255,255,255,.05);
+    font-size:12px;vertical-align:middle;
+  }
+  .shock-table td.row-label{color:rgba(255,255,255,.5);font-size:11px;}
+  .shock-table td.val-old{color:rgba(255,255,255,.3);font-family:monospace;}
+  .shock-table td.val-new{
+    text-align:right;font-weight:800;font-size:14px;
+    color:#1DB954;text-shadow:0 0 16px rgba(29,185,84,.35);
+  }
+  .shock-table td.val-new.amber{color:#F59E0B;text-shadow:0 0 16px rgba(245,158,11,.35);}
+  .shock-table tr:last-child td{border-bottom:none;}
+  .shock-note{
+    margin-top:12px;font-size:10px;color:rgba(255,255,255,.3);
+    font-style:italic;text-align:right;
+  }
+  @media(max-width:520px){
+    .pullquote,.shock{padding-left:20px;padding-right:20px;}
+  }
+
+  /* ── CONTRAST ── */
+  .contrast{
+    padding:28px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(135deg,rgba(204,120,92,.08) 0%,rgba(232,117,10,.06) 100%);
+  }
+  .contrast-grid{
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:0;
+    align-items:center;
+  }
+  .col-anth{padding:16px 20px;background:rgba(204,120,92,.12);border:1px solid rgba(204,120,92,.35);border-radius:10px 0 0 10px;}
+  .col-vs{padding:0 14px;text-align:center;font-size:13px;font-weight:900;color:rgba(255,255,255,.4);}
+  .col-hopi{padding:16px 20px;background:rgba(232,117,10,.12);border:1px solid rgba(232,117,10,.35);border-radius:0 10px 10px 0;}
+  .col-name{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .col-name.anth{color:#CC785C;}
+  .col-name.hopi{color:#E8750A;}
+  .stat-row{display:flex;flex-direction:column;gap:7px;}
+  .stat-item{display:flex;flex-direction:column;gap:1px;}
+  .stat-val{font-size:clamp(14px,2.5vw,20px);font-weight:800;line-height:1;}
+  .stat-val.anth{color:#CC785C;}
+  .stat-val.hopi{color:#F59E0B;}
+  .stat-lbl{font-size:9px;color:rgba(255,255,255,.45);}
+  .punchline{
+    margin-top:18px;text-align:center;
+    font-size:14px;font-weight:700;color:rgba(255,255,255,.85);
+    font-style:italic;
+    text-shadow:0 0 24px rgba(232,117,10,.25);
+  }
+  .punchline span.a{color:#CC785C;}
+  .punchline span.b{color:#F59E0B;}
+
+  /* ── TRACTION ── */
+  .traction{
+    padding:24px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(135deg,rgba(29,185,84,.04) 0%,transparent 60%);
+  }
+  .traction-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;}
+  .tr-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:14px 16px;}
+  .tr-val{font-size:clamp(20px,3vw,28px);font-weight:900;color:#1DB954;line-height:1;margin-bottom:4px;text-shadow:0 0 20px rgba(29,185,84,.4);}
+  .tr-lbl{font-size:9px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:.5px;}
+  .tr-item.live .tr-val{color:#F59E0B;text-shadow:0 0 20px rgba(245,158,11,.4);}
+  .tr-item.next .tr-val{color:#A855F7;font-size:clamp(13px,2vw,17px);text-shadow:0 0 20px rgba(168,85,247,.4);}
+
+  /* ── AI MATURITY ── */
+  .maturity{
+    padding:24px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .mat-tagline{font-size:12px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:16px;}
+  .mat-tagline strong{color:#fff;}
+  .mat-track{
+    display:flex;align-items:stretch;gap:0;
+    position:relative;
+  }
+  .mat-step{
+    flex:1;
+    display:flex;flex-direction:column;
+    align-items:center;
+    padding:12px 6px 10px;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.03);
+    position:relative;
+  }
+  .mat-step:first-child{border-radius:8px 0 0 8px;}
+  .mat-step:last-child{border-radius:0 8px 8px 0;}
+  .mat-step + .mat-step{border-left:none;}
+  .mat-step.now{
+    background:rgba(232,117,10,.1);
+    border-color:rgba(232,117,10,.35);
+    z-index:1;
+  }
+  .mat-step.future{opacity:.5;}
+  .mat-level{font-size:9px;font-weight:800;letter-spacing:1.5px;color:rgba(255,255,255,.3);margin-bottom:4px;}
+  .mat-step.now .mat-level{color:#E8750A;}
+  .mat-name{font-size:10px;font-weight:700;color:rgba(255,255,255,.7);text-align:center;margin-bottom:4px;line-height:1.3;}
+  .mat-step.now .mat-name{color:#fff;}
+  .mat-desc{font-size:8px;color:rgba(255,255,255,.35);text-align:center;line-height:1.4;}
+  .mat-now-badge{
+    position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+    font-size:7px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+    padding:2px 7px;border-radius:100px;white-space:nowrap;
+    background:#E8750A;color:#000;
+  }
+  @media(max-width:520px){
+    .maturity{padding-left:20px;padding-right:20px;}
+    .mat-track{flex-direction:column;gap:4px;}
+    .mat-step{flex-direction:row;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:8px!important;border:1px solid rgba(255,255,255,.07)!important;}
+    .mat-step+.mat-step{border-left:1px solid rgba(255,255,255,.07)!important;}
+    .mat-level{min-width:28px;margin-bottom:0;}
+    .mat-now-badge{top:50%;left:auto;right:8px;transform:translateY(-50%);}
+    .mat-desc{text-align:left;}
+    .mat-name{text-align:left;}
+  }
+
+  /* ── THE ASK ── */
+  .the-ask{
+    padding:24px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    background:linear-gradient(135deg,rgba(232,117,10,.1) 0%,rgba(168,85,247,.06) 100%);
+  }
+  .ask-intro{font-size:13px;color:rgba(255,255,255,.65);line-height:1.7;margin-bottom:16px;}
+  .ask-intro strong{color:#fff;}
+  .ask-items{display:flex;flex-direction:column;gap:8px;}
+  .ask-item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:12px 16px;
+    background:rgba(0,0,0,.25);
+    border:1px solid rgba(232,117,10,.2);
+    border-left:3px solid #E8750A;
+    border-radius:0 8px 8px 0;
+  }
+  .ask-num{
+    flex-shrink:0;width:22px;height:22px;border-radius:50%;
+    background:#E8750A;color:#000;
+    font-size:10px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+    margin-top:1px;
+  }
+  .ask-body{}
+  .ask-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:3px;}
+  .ask-detail{font-size:10px;color:rgba(255,255,255,.5);line-height:1.6;}
+  .ask-detail strong{color:rgba(232,117,10,.9);}
+  @media(max-width:520px){
+    .the-ask{padding-left:20px;padding-right:20px;}
+  }
+
+  /* ── SCREENS ── */
+  .screens{
+    padding:24px 40px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  .screens-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:14px;
+  }
+  .sc-frame{
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:10px;
+    overflow:hidden;
+    cursor:default;
+    transition:border-color .2s, box-shadow .2s;
+  }
+  .sc-frame:hover{
+    border-color:rgba(232,117,10,.4);
+    box-shadow:0 4px 20px rgba(232,117,10,.08);
+  }
+  .sc-topbar{
+    display:flex;align-items:center;gap:5px;
+    padding:6px 10px;
+    background:rgba(255,255,255,.04);
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .sc-dot{width:5px;height:5px;border-radius:50%;}
+  .sc-dot.r{background:#ff5f57;}
+  .sc-dot.y{background:#febc2e;}
+  .sc-dot.g{background:#28c840;}
+  .sc-url{font-size:8px;color:rgba(255,255,255,.25);font-family:monospace;margin-left:4px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .sc-body{
+    height:110px;
+    background:linear-gradient(160deg,#0d0d1e 0%,#0a0b15 100%);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    gap:6px;padding:12px;
+    position:relative;
+  }
+  .sc-icon{font-size:26px;opacity:.85;}
+  .sc-name{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.6);text-align:center;}
+  .sc-badge{
+    position:absolute;top:7px;right:7px;
+    font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    padding:2px 6px;border-radius:100px;
+  }
+  .sc-badge.live{background:rgba(29,185,84,.15);color:#1DB954;border:1px solid rgba(29,185,84,.3);}
+  .sc-badge.preview{background:rgba(168,85,247,.12);color:#A855F7;border:1px solid rgba(168,85,247,.25);}
+  .sc-footer-bar{
+    padding:5px 10px;
+    background:rgba(255,255,255,.03);
+    border-top:1px solid rgba(255,255,255,.06);
+    font-size:8px;color:rgba(255,255,255,.3);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .sc-footer-bar a{color:rgba(232,117,10,.6);text-decoration:none;font-weight:600;}
+  .sc-footer-bar a:hover{color:#E8750A;}
+
+  @media(max-width:520px){
+    .screens-grid{grid-template-columns:1fr;}
+  }
+
+  /* ── FOOTER ── */
+  .footer{
+    padding:22px 40px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+    background:linear-gradient(135deg,rgba(232,117,10,.08) 0%,rgba(168,85,247,.05) 100%);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .footer-person{display:flex;flex-direction:column;gap:2px;}
+  .footer-name{font-size:13px;font-weight:700;color:#fff;}
+  .footer-role{font-size:10px;color:rgba(255,255,255,.4);}
+  .footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+  .footer-url{font-size:10px;color:rgba(204,120,92,.8);font-weight:600;letter-spacing:.3px;}
+  .footer-pw{font-size:9px;color:rgba(255,255,255,.25);}
+  .footer-badge{
+    font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    color:rgba(168,85,247,.7);background:rgba(168,85,247,.08);
+    border:1px solid rgba(168,85,247,.2);border-radius:100px;padding:3px 10px;
+  }
+
+  /* ── PRINT / A4 ── */
+  @media print{
+    body{background:#09090f;padding:0;}
+    .page{max-width:100%;border-radius:0;border:none;}
+  }
+  @media(max-width:520px){
+    .hdr,.hook,.product,.contrast,.traction,.footer{padding-left:20px;padding-right:20px;}
+    .contrast-grid{grid-template-columns:1fr;gap:8px;}
+    .col-anth{border-radius:8px;}
+    .col-vs{padding:6px 0;}
+    .col-hopi{border-radius:8px;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="hdr">
+    <!-- P6 lockup -->
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:4px;">
+      <div style="display:flex;align-items:center;gap:3px;">
+        <span style="font-size:11px;font-weight:700;color:#fff;letter-spacing:.5px;">HOPI</span>
+        <span style="font-size:11px;font-weight:900;color:#A855F7;letter-spacing:.3px;">Tech</span><span style="font-size:11px;font-weight:900;color:#007d32;letter-spacing:.3px;">IQ</span>
+      </div>
+      <div style="font-size:8px;color:rgba(255,255,255,.2);letter-spacing:2.5px;font-style:italic;">presents</div>
+      <div style="display:flex;align-items:baseline;gap:2px;">
+        <span style="font-size:36px;font-weight:300;color:#E8750A;line-height:1;">App</span><span style="font-size:40px;font-weight:900;color:#007d32;line-height:1;">IQ</span>
+      </div>
+      <div style="width:60px;height:1px;background:rgba(255,255,255,.08);"></div>
+      <div style="display:flex;align-items:baseline;gap:5px;">
+        <span style="font-size:8px;color:rgba(255,255,255,.28);letter-spacing:1px;">AI by</span>
+        <span style="font-size:12px;font-weight:700;color:#CC785C;">Claude</span>
+        <span style="font-size:8px;color:rgba(255,255,255,.2);">·</span>
+        <span style="font-size:9px;font-weight:300;color:rgba(255,255,255,.32);letter-spacing:2px;">Anthropic</span>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+      <div class="hdr-tag">CEE · Enterprise + B2C</div>
+      <div class="footer-badge">HOPI TechIQ s.r.o.</div>
+    </div>
+  </div>
+
+  <!-- HOOK -->
+  <div class="hook">
+    <div class="hook-main">
+      <em>1 person. 1 AI.</em><br>
+      8 weeks. Live.
+    </div>
+    <div class="hook-sub">
+      We built an <strong>AI-powered enterprise application platform</strong> from scratch — fully functional and deployed, built for a real €0.5B Central European holding company. Not a static deck. Not a mockup. <strong>A working platform.</strong>
+    </div>
+  </div>
+
+  <!-- PULL QUOTE -->
+  <div class="pullquote">
+    <div class="pq-body">
+      <div class="pq-text">
+        "I'm not a developer. <em>Claude is my engineering team.</em> HOPI is my proof of concept. CEE is my market."
+      </div>
+      <div class="pq-attr">
+        <div class="pq-avatar">DG</div>
+        <div>
+          <div class="pq-name">David Gogela</div>
+          <div class="pq-role">Head of Group Controlling · HOPI Holding · Founder, HOPI TechIQ s.r.o.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRODUCT -->
+  <div class="product">
+    <div class="section-label">What is HOPI AppIQ</div>
+    <div class="product-desc">
+      A modular platform that lets any business deploy AI-powered applications — <strong>without an engineering team.</strong> Each domain is a manifest file, not a codebase. Built on Claude API from day one.
+    </div>
+    <div class="chips">
+      <span class="chip chip-ent">🏢 Group Controlling</span>
+      <span class="chip chip-ent">📊 Finance & Reporting</span>
+      <span class="chip chip-ent">🔗 SAP · SharePoint · Teams</span>
+      <span class="chip chip-home">🏠 Home Finance</span>
+      <span class="chip chip-home">❤️ Health & Wellness</span>
+      <span class="chip chip-home">📚 Education</span>
+      <span class="chip chip-ai">🤖 HOPIQ AI Assistant</span>
+      <span class="chip chip-ai">📄 Smart Document Hub</span>
+      <span class="chip chip-ai">⚡ AI Workflow Engine</span>
+    </div>
+  </div>
+
+  <!-- SHOCK TABLE -->
+  <div class="shock">
+    <div class="section-label">What Claude changes — the numbers</div>
+    <table class="shock-table">
+      <thead>
+        <tr>
+          <th style="width:36%"></th>
+          <th class="col-old">Traditional approach</th>
+          <th class="col-new">AppIQ + Claude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-label">Time to production</td>
+          <td class="val-old">18 months</td>
+          <td class="val-new">8 weeks</td>
+        </tr>
+        <tr>
+          <td class="row-label">Team size</td>
+          <td class="val-old">10+ engineers</td>
+          <td class="val-new">1 + AI</td>
+        </tr>
+        <tr>
+          <td class="row-label">Total cost to date</td>
+          <td class="val-old">€500 000+</td>
+          <td class="val-new amber">~$1 000</td>
+        </tr>
+        <tr>
+          <td class="row-label">Status today</td>
+          <td class="val-old">prototype</td>
+          <td class="val-new">live · production</td>
+        </tr>
+        <tr>
+          <td class="row-label">Markets covered</td>
+          <td class="val-old">1 country</td>
+          <td class="val-new">8 CEE countries</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="shock-note">Same output. 1/500th of the cost. 1/9th of the time. This is what Claude enables.</div>
+  </div>
+
+  <!-- STUDIO -->
+  <div class="studio">
+    <div class="section-label">AppIQ Studio — build with Claude</div>
+    <div class="studio-tagline">
+      Studio is the <strong>builder layer</strong> of AppIQ — where Claude is not a feature, but the <strong>intelligence behind every tool.</strong>
+    </div>
+    <div class="studio-grid">
+      <div class="st-item">
+        <span class="st-icon">🤖</span>
+        <div class="st-text">
+          <div class="st-name">HOPIQ AI Assistant</div>
+          <div class="st-desc">Claude-powered chatbot embedded on every page. Knows the platform, guides users, answers in context.</div>
+          <span class="st-ai-badge">Claude API · live</span>
+        </div>
+      </div>
+      <div class="st-item">
+        <span class="st-icon">🎨</span>
+        <div class="st-text">
+          <div class="st-name">Design Lab</div>
+          <div class="st-desc">Live preview + Inspector overlay. AI generates component variants, detects accessibility issues, suggests CSS fixes.</div>
+          <span class="st-ai-badge">Claude · generative UI</span>
+        </div>
+      </div>
+      <div class="st-item">
+        <span class="st-icon">⚡</span>
+        <div class="st-text">
+          <div class="st-name">Workflow Designer</div>
+          <div class="st-desc">Text-to-flow: describe a process in plain language → Claude generates the workflow diagram and manifest.</div>
+          <span class="st-ai-badge">Claude · text-to-flow</span>
+        </div>
+      </div>
+      <div class="st-item">
+        <span class="st-icon">📄</span>
+        <div class="st-text">
+          <div class="st-name">Smart Document Hub</div>
+          <div class="st-desc">Upload any document — Claude reads, classifies, summarizes, sets reminders. Finance, health, legal, HR.</div>
+          <span class="st-ai-badge">Claude · RAG · extraction</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRAST -->
+  <div class="contrast">
+    <div class="section-label" style="margin-bottom:16px;">The contrast — intentional</div>
+    <div class="contrast-grid">
+      <div class="col-anth">
+        <div class="col-name anth">Anthropic</div>
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="stat-val anth">$61.5B</div>
+            <div class="stat-lbl">valuation</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val anth">$7.3B</div>
+            <div class="stat-lbl">raised (Amazon, Google)</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val anth">1,500+</div>
+            <div class="stat-lbl">employees · global</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-vs">vs</div>
+      <div class="col-hopi">
+        <div class="col-name hopi">HOPI AppIQ</div>
+        <div class="stat-row">
+          <div class="stat-item">
+            <div class="stat-val hopi">€0.5B</div>
+            <div class="stat-lbl">HOPI Group valuation</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val hopi">~$1,000</div>
+            <div class="stat-lbl">total API cost to date</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-val hopi">1 + AI</div>
+            <div class="stat-lbl">person + Claude · CEE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="punchline">
+      <span class="a">You build the engine.</span> We build the car. <span class="b">And we're driving.</span>
+    </div>
+
+    <!-- P3 lockup -->
+    <div style="margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div style="display:flex;align-items:center;gap:20px;justify-content:center;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:rgba(255,255,255,.3);letter-spacing:2px;margin-bottom:4px;">HOPI AppIQ</div>
+          <div style="display:flex;align-items:center;gap:3px;">
+            <span style="font-size:20px;font-weight:300;color:#E8750A;">App</span><span style="font-size:22px;font-weight:900;color:#007d32;">IQ</span>
+          </div>
+        </div>
+        <div style="font-size:18px;color:rgba(255,255,255,.2);font-weight:300;">&amp;</div>
+        <div style="text-align:center;">
+          <div style="font-size:9px;color:rgba(204,120,92,.5);letter-spacing:2px;margin-bottom:4px;">AI PARTNER</div>
+          <div style="font-size:20px;font-weight:700;color:#CC785C;letter-spacing:.3px;">Claude</div>
+          <div style="font-size:8px;font-weight:300;color:rgba(255,255,255,.4);letter-spacing:3px;margin-top:2px;">ANTHROPIC</div>
+        </div>
+      </div>
+      <div style="font-size:9px;color:rgba(255,255,255,.18);letter-spacing:1.5px;text-transform:uppercase;">Strategic Technology Partnership</div>
+    </div>
+  </div>
+
+  <!-- TRACTION -->
+  <div class="traction">
+    <div class="section-label" style="margin-bottom:14px;">Where we are now</div>
+    <div class="traction-grid">
+      <div class="tr-item live">
+        <div class="tr-val">v7.24</div>
+        <div class="tr-lbl">Live on GitHub Pages</div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-val">109</div>
+        <div class="tr-lbl">git commits · 8 weeks</div>
+      </div>
+      <div class="tr-item">
+        <div class="tr-val">8</div>
+        <div class="tr-lbl">CEE countries · HOPI pilot</div>
+      </div>
+      <div class="tr-item next">
+        <div class="tr-val">B2C<br>01.01.2027</div>
+        <div class="tr-lbl">SaaS launch · HOME + Enterprise</div>
+      </div>
+      <div class="tr-item next" style="border-color:rgba(168,85,247,.25);background:rgba(168,85,247,.06);">
+        <div class="tr-val" style="color:#A855F7;text-shadow:0 0 20px rgba(168,85,247,.4);">CEE #1</div>
+        <div class="tr-lbl">First AI platform · 100M market · zero local competition</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI MATURITY -->
+  <div class="maturity">
+    <div class="section-label">AI maturity — where we are, where we're going</div>
+    <div class="mat-tagline">Every customer starts at S0. <strong>AppIQ is the platform that walks them to S4</strong> — with Claude as the engine at every step.</div>
+    <div class="mat-track">
+      <div class="mat-step">
+        <div class="mat-level">S0</div>
+        <div class="mat-name">Manual</div>
+        <div class="mat-desc">No AI. Data entry, spreadsheets, human decisions.</div>
+      </div>
+      <div class="mat-step">
+        <div class="mat-level">S1</div>
+        <div class="mat-name">Insights</div>
+        <div class="mat-desc">Claude analyses and visualises. Dashboards, reports.</div>
+      </div>
+      <div class="mat-step now">
+        <div class="mat-now-badge">we are here</div>
+        <div class="mat-level">S2</div>
+        <div class="mat-name">Assisted</div>
+        <div class="mat-desc">Claude proposes. Human decides. HOPIQ live today.</div>
+      </div>
+      <div class="mat-step future">
+        <div class="mat-level">S3</div>
+        <div class="mat-name">Automated</div>
+        <div class="mat-desc">Claude decides within defined workflows. No human step.</div>
+      </div>
+      <div class="mat-step future">
+        <div class="mat-level">S4</div>
+        <div class="mat-name">Autonomous</div>
+        <div class="mat-desc">AI agents operate independently across the platform.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE ASK -->
+  <div class="the-ask">
+    <div class="section-label">The opportunity — for both of us</div>
+    <div class="ask-intro">We are not asking for charity. We are offering Anthropic <strong>a return on a $25K bet</strong> — in a market of 100M people where Claude does not yet exist at scale.</div>
+    <div class="ask-items">
+      <div class="ask-item">
+        <div class="ask-num">1</div>
+        <div class="ask-body">
+          <div class="ask-title">Startup Program credits — your API revenue multiplier</div>
+          <div class="ask-detail"><strong>$25K–$100K credits</strong> → AppIQ B2C launches 01.01.2027 → 10 000+ users, each generating Claude API calls → your recurring revenue from CEE. <strong>Conservative estimate: credits pay back within 6 months as pure API ARR.</strong> We are already in production. This is not a bet on a demo.</div>
+        </div>
+      </div>
+      <div class="ask-item">
+        <div class="ask-num">2</div>
+        <div class="ask-body">
+          <div class="ask-title">CEE market entry — through a proven local partner</div>
+          <div class="ask-detail">Central & Eastern Europe: <strong>10 countries, 100M people, zero enterprise AI platforms built locally.</strong> HOPI Group covers 8 of those countries already. We are the fastest path for Anthropic into this market — with a reference customer that is a €0.5B holding, not a startup.</div>
+        </div>
+      </div>
+      <div class="ask-item">
+        <div class="ask-num">3</div>
+        <div class="ask-body">
+          <div class="ask-title">Your story — 1 person + Claude = enterprise software company</div>
+          <div class="ask-detail">This is the case study Anthropic needs: a non-developer, 8 weeks, ~$1K — a working platform deployed and accessible today, built inside a real company for real enterprise use cases. <strong>That story sells Claude to 10 000 other potential builders.</strong> We are happy to be your reference — publicly, on stage, anywhere.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="screens">
+    <div class="section-label">The platform — live & deployed</div>
+    <div class="screens-grid">
+
+      <!-- Finance Portal -->
+      <div class="sc-frame">
+        <div class="sc-topbar">
+          <div class="sc-dot r"></div><div class="sc-dot y"></div><div class="sc-dot g"></div>
+          <span class="sc-url">appiq / finance-portal</span>
+        </div>
+        <div class="sc-body">
+          <span class="sc-badge live">LIVE</span>
+          <div class="sc-icon">📊</div>
+          <div class="sc-name">Group Controlling<br>Finance Portal</div>
+        </div>
+        <div class="sc-footer-bar">
+          <span>HOPI pilot · 8 CEE countries</span>
+          <a href="https://h-gr-fico.github.io/appiq/v7.24/HOPI_AppIQ/Development/index.html" target="_blank">open →</a>
+        </div>
+      </div>
+
+      <!-- Management Cockpit -->
+      <div class="sc-frame">
+        <div class="sc-topbar">
+          <div class="sc-dot r"></div><div class="sc-dot y"></div><div class="sc-dot g"></div>
+          <span class="sc-url">appiq / management-cockpit</span>
+        </div>
+        <div class="sc-body">
+          <span class="sc-badge preview">NEW</span>
+          <div class="sc-icon">🎛️</div>
+          <div class="sc-name">Management Cockpit<br>14 live sections</div>
+        </div>
+        <div class="sc-footer-bar">
+          <span>OIL · KPI · Budget · Team</span>
+          <a href="https://h-gr-fico.github.io/appiq/v7.25/HOPI_AppIQ_WebPage/Development/MANAGEMENT_COCKPIT.html" target="_blank">open →</a>
+        </div>
+      </div>
+
+      <!-- Investor Brief -->
+      <div class="sc-frame">
+        <div class="sc-topbar">
+          <div class="sc-dot r"></div><div class="sc-dot y"></div><div class="sc-dot g"></div>
+          <span class="sc-url">appiq / investor-brief</span>
+        </div>
+        <div class="sc-body">
+          <span class="sc-badge live">LIVE</span>
+          <div class="sc-icon">💼</div>
+          <div class="sc-name">Investor Brief<br>+ Anthropic Journey</div>
+        </div>
+        <div class="sc-footer-bar">
+          <span>pw: HOPI2026</span>
+          <a href="https://h-gr-fico.github.io/appiq/v7.24/HOPI_AppIQ_WebPage/Development/INVESTOR_BRIEF.html?lang=en" target="_blank">open →</a>
+        </div>
+      </div>
+
+      <!-- Studio — HOPIQ Center -->
+      <div class="sc-frame">
+        <div class="sc-topbar">
+          <div class="sc-dot r"></div><div class="sc-dot y"></div><div class="sc-dot g"></div>
+          <span class="sc-url">appiq / studio / hopiq</span>
+        </div>
+        <div class="sc-body" style="background:linear-gradient(160deg,#0d0b1e 0%,#0a0a15 100%);">
+          <span class="sc-badge" style="background:rgba(204,120,92,.15);color:#CC785C;border-color:rgba(204,120,92,.3);">Claude API</span>
+          <div class="sc-icon">🤖</div>
+          <div class="sc-name">HOPIQ AI Studio<br>Chatbot · Knowledge · Agents</div>
+        </div>
+        <div class="sc-footer-bar">
+          <span>live chat console · Claude inside</span>
+          <a href="https://h-gr-fico.github.io/appiq/v7.21/HOPI_AppIQ_WebPage/Development/hopiq/index.html" target="_blank">open →</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-person">
+      <div class="footer-name">David Gogela</div>
+      <div class="footer-role">Head of Group Controlling · HOPI Holding<br>Founder · HOPI TechIQ s.r.o.</div>
+    </div>
+    <div class="footer-right">
+      <div class="footer-url">h-gr-fico.github.io/appiq/v7.25/<br>HOPI_AppIQ_WebPage/Development/INVESTOR_BRIEF.html?lang=en</div>
+      <div class="footer-pw">password: HOPI2026</div>
+    </div>
+  </div>
+
+</div>
+<script src="_ver-badge.js"></script>
+</body>
+</html>

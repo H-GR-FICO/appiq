@@ -1,0 +1,818 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Organization & Coordination — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="discussion-log.js"></script>
+  <style>
+    .oc-tag {
+      display:inline-block; padding:4px 14px;
+      background:rgba(168,85,247,.12); border:1px solid rgba(168,85,247,.3);
+      border-radius:20px; font-size:11px; font-family:var(--c-font-sans);
+      color:var(--c-violet); letter-spacing:2px; text-transform:uppercase; margin-bottom:24px;
+    }
+
+    /* Stats */
+    .log-stats { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:24px; }
+    .log-stat {
+      flex:1; min-width:100px; padding:14px 16px;
+      background:var(--c-bg2); border:1px solid var(--c-border); border-radius:var(--c-radius); text-align:center;
+    }
+    .log-stat-num { font-size:26px; font-weight:800; color:var(--c-violet); line-height:1; }
+    .log-stat-lbl { font-size:10px; color:var(--c-muted); margin-top:4px; font-family:var(--c-font-sans); text-transform:uppercase; letter-spacing:1px; }
+
+    /* Toolbar */
+    .log-toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
+    .log-search {
+      flex:1; min-width:180px; padding:8px 12px;
+      background:var(--c-bg2); border:1px solid var(--c-border);
+      border-radius:var(--c-radius); color:var(--c-white); font-size:12px; outline:none;
+    }
+    .log-search:focus { border-color:var(--c-violet); }
+    .log-search::placeholder { color:var(--c-muted); }
+    .log-sel {
+      padding:8px 10px; background:var(--c-bg2); border:1px solid var(--c-border);
+      border-radius:var(--c-radius); color:var(--c-white); font-size:12px; outline:none; cursor:pointer;
+    }
+    .log-sel:focus { border-color:var(--c-violet); }
+    .log-btn {
+      padding:8px 14px; background:var(--c-bg2); border:1px solid var(--c-border);
+      border-radius:var(--c-radius); color:var(--c-text); font-size:12px; cursor:pointer; white-space:nowrap;
+    }
+    .log-btn:hover { border-color:var(--c-violet); color:var(--c-white); }
+    .log-btn.export { border-color:var(--c-green); color:var(--c-green); }
+    .log-btn.export:hover { background:rgba(74,222,128,.08); }
+
+    /* Preset report buttons */
+    .presets { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+    .preset-btn {
+      padding:5px 12px; background:transparent; border:1px solid var(--c-border);
+      border-radius:20px; font-size:11px; color:var(--c-muted); cursor:pointer;
+      font-family:var(--c-font-sans); transition:all .15s;
+    }
+    .preset-btn:hover { border-color:var(--c-violet); color:var(--c-violet); }
+    .preset-btn.active { background:rgba(168,85,247,.12); border-color:var(--c-violet); color:var(--c-violet); }
+
+    /* Session groups */
+    .session-block { margin-bottom:24px; }
+    .session-header {
+      display:flex; align-items:center; gap:10px; padding:9px 14px;
+      background:var(--c-bg2); border:1px solid var(--c-border); border-radius:var(--c-radius);
+      margin-bottom:8px; cursor:pointer; user-select:none;
+    }
+    .session-header:hover { border-color:rgba(168,85,247,.3); }
+    .session-date  { font-size:12px; font-weight:700; color:var(--c-white); font-family:var(--c-font-sans); }
+    .session-label { font-size:11px; color:var(--c-muted); flex:1; }
+    .session-count {
+      padding:2px 8px; background:rgba(168,85,247,.1); border:1px solid rgba(168,85,247,.2);
+      border-radius:10px; font-size:10px; color:var(--c-violet); font-family:var(--c-font-sans);
+    }
+    .session-toggle { font-size:10px; color:var(--c-muted); }
+    .session-body.collapsed { display:none; }
+    .dec-list { display:flex; flex-direction:column; gap:6px; }
+
+    /* Decision card */
+    .dec-card {
+      background:var(--c-bg2); border:1px solid var(--c-border); border-radius:var(--c-radius);
+      padding:12px 14px; transition:border-color .15s;
+    }
+    .dec-card:hover { border-color:rgba(168,85,247,.25); }
+    .dec-card.hidden { display:none; }
+
+    .dec-meta {
+      display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-bottom:8px;
+    }
+    .dec-id   { font-size:10px; font-family:var(--c-font-sans); color:var(--c-violet); font-weight:700; }
+    .dec-time { font-size:10px; font-family:var(--c-font-sans); color:var(--c-muted); }
+    .badge {
+      font-size:10px; padding:2px 7px; border-radius:4px; font-family:var(--c-font-sans); font-weight:600;
+    }
+    .b-decision   { background:rgba(168,85,247,.15); color:#c084fc; }
+    .b-action     { background:rgba(245,158,11,.15);  color:#f59e0b; }
+    .b-insight    { background:rgba(96,165,250,.15);  color:#60a5fa; }
+    .b-risk       { background:rgba(239,68,68,.15);   color:#f87171; }
+    .b-question   { background:rgba(251,191,36,.15);  color:#fbbf24; }
+    .b-note       { background:rgba(156,163,175,.15); color:#9ca3af; }
+    .b-critical   { background:rgba(239,68,68,.15);   color:#f87171; }
+    .b-high       { background:rgba(245,158,11,.15);  color:#f59e0b; }
+    .b-medium     { background:rgba(96,165,250,.15);  color:#60a5fa; }
+    .b-low        { background:rgba(107,114,128,.15); color:#9ca3af; }
+    .b-confirmed  { background:rgba(74,222,128,.12);  color:#4ade80; }
+    .b-open       { background:rgba(251,191,36,.12);  color:#fbbf24; }
+    .b-superseded { background:rgba(107,114,128,.12); color:#6b7280; }
+    .b-done       { background:rgba(74,222,128,.08);  color:#86efac; }
+    .b-cancelled  { background:rgba(107,114,128,.08); color:#6b7280; }
+
+    .dec-text { font-size:13px; color:var(--c-white); line-height:1.55; margin-bottom:8px; }
+    .dec-text strong { color:var(--c-violet); }
+
+    .dec-footer { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .dec-participants { font-size:11px; color:var(--c-muted); font-family:var(--c-font-sans); }
+    .dec-outputs { display:flex; gap:4px; flex-wrap:wrap; }
+    .out-tag {
+      font-size:10px; padding:1px 6px; border-radius:3px; font-family:var(--c-font-sans);
+      border:1px solid; cursor:default;
+    }
+    .out-INVESTOR   { border-color:rgba(245,158,11,.4); color:#f59e0b; }
+    .out-ANTHROPIC  { border-color:rgba(168,85,247,.4); color:#c084fc; }
+    .out-CEO_BRIEF  { border-color:rgba(96,165,250,.4); color:#60a5fa; }
+    .out-HOPI_MGMT  { border-color:rgba(74,222,128,.4); color:#4ade80; }
+    .out-INTERNAL   { border-color:rgba(107,114,128,.3); color:#9ca3af; }
+    .out-PUBLIC     { border-color:rgba(251,191,36,.4); color:#fbbf24; }
+    .dec-where { flex:1; text-align:right; font-size:10px; color:var(--c-muted); font-family:var(--c-font-sans); }
+    .dec-where span {
+      display:inline-block; padding:1px 5px; background:rgba(255,255,255,.03);
+      border:1px solid var(--c-border); border-radius:3px; margin-left:3px;
+    }
+
+    /* Assignee + superseded */
+    .dec-assignee { font-size:11px; color:#f59e0b; font-family:var(--c-font-sans); }
+    .dec-superseded { font-size:11px; color:#6b7280; font-style:italic; }
+
+    /* Responsibilities */
+    .resp-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px, 1fr)); gap:12px; margin-bottom:32px; }
+    .resp-card { padding:16px 18px; background:var(--c-bg2); border:1px solid var(--c-border); border-radius:var(--c-radius); }
+    .resp-name  { font-size:14px; font-weight:700; color:var(--c-white); margin-bottom:2px; }
+    .resp-code  { font-size:10px; color:var(--c-violet); font-family:var(--c-font-sans); letter-spacing:1px; margin-bottom:10px; }
+    .resp-items { list-style:none; padding:0; margin:0; }
+    .resp-items li { font-size:12px; color:var(--c-text); padding:3px 0; border-bottom:1px solid var(--c-border); }
+    .resp-items li:last-child { border:none; }
+    .resp-items li::before { content:'▸ '; color:var(--c-violet); }
+
+    /* ══ Entry Form Modal ════════════════════════ */
+    .ef-overlay { position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:1000; display:flex; align-items:center; justify-content:center; padding:16px; }
+    .ef-overlay.hidden { display:none; }
+    .ef-modal { background:#16162a; border:1px solid rgba(168,85,247,.3); border-radius:12px; padding:28px; width:min(700px,96vw); max-height:90vh; overflow-y:auto; }
+    .ef-title { font-size:16px; font-weight:800; color:var(--c-white); margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; }
+    .ef-close { background:none; border:none; color:var(--c-muted); font-size:20px; cursor:pointer; line-height:1; }
+    .ef-close:hover { color:var(--c-white); }
+    .ef-label { font-size:11px; color:var(--c-muted); font-family:var(--c-font-sans); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; margin-top:16px; }
+    .ef-chips { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:4px; }
+    .ef-chip {
+      padding:6px 14px; border:1px solid var(--c-border); border-radius:20px;
+      font-size:12px; font-family:var(--c-font-sans); color:var(--c-muted);
+      cursor:pointer; transition:all .15s; user-select:none;
+    }
+    .ef-chip:hover { border-color:rgba(168,85,247,.5); color:var(--c-violet); }
+    .ef-chip.active { background:rgba(168,85,247,.15); border-color:var(--c-violet); color:#c084fc; }
+    .ef-chip.facilitator::after { content:' ★'; color:#fbbf24; font-size:10px; }
+    /* Type chip colours when active */
+    .ef-chip[data-type="ACTION"].active   { background:rgba(245,158,11,.15);  border-color:#f59e0b; color:#f59e0b; }
+    .ef-chip[data-type="RISK"].active     { background:rgba(239,68,68,.15);   border-color:#f87171; color:#f87171; }
+    .ef-chip[data-type="INSIGHT"].active  { background:rgba(96,165,250,.15);  border-color:#60a5fa; color:#60a5fa; }
+    .ef-chip[data-type="QUESTION"].active { background:rgba(251,191,36,.15);  border-color:#fbbf24; color:#fbbf24; }
+    .ef-chip[data-type="NOTE"].active     { background:rgba(156,163,175,.12); border-color:#9ca3af; color:#9ca3af; }
+    /* Output chip colours */
+    .ef-chip[data-out="INVESTOR"].active  { background:rgba(245,158,11,.12);  border-color:#f59e0b; color:#f59e0b; }
+    .ef-chip[data-out="ANTHROPIC"].active { background:rgba(168,85,247,.15);  border-color:var(--c-violet); color:#c084fc; }
+    .ef-chip[data-out="CEO_BRIEF"].active { background:rgba(96,165,250,.12);  border-color:#60a5fa; color:#60a5fa; }
+    .ef-chip[data-out="HOPI_MGMT"].active { background:rgba(74,222,128,.10);  border-color:#4ade80; color:#4ade80; }
+    .ef-chip[data-out="PUBLIC"].active    { background:rgba(251,191,36,.10);  border-color:#fbbf24; color:#fbbf24; }
+
+    .ef-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .ef-sel, .ef-input {
+      width:100%; padding:10px 12px; background:var(--c-bg2);
+      border:1px solid var(--c-border); border-radius:var(--c-radius);
+      color:var(--c-white); font-size:12px; outline:none; box-sizing:border-box;
+    }
+    .ef-sel:focus, .ef-input:focus { border-color:var(--c-violet); }
+    .ef-textarea {
+      width:100%; padding:10px 14px; background:var(--c-bg2);
+      border:1px solid var(--c-border); border-radius:var(--c-radius);
+      color:var(--c-white); font-size:13px; outline:none; resize:vertical;
+      min-height:80px; font-family:inherit; box-sizing:border-box; line-height:1.5;
+    }
+    .ef-textarea:focus { border-color:var(--c-violet); }
+    .ef-textarea::placeholder, .ef-input::placeholder { color:var(--c-muted); }
+    .ef-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:22px; }
+    .ef-btn-cancel { padding:10px 20px; background:transparent; border:1px solid var(--c-border); border-radius:var(--c-radius); color:var(--c-muted); font-size:13px; cursor:pointer; }
+    .ef-btn-cancel:hover { border-color:#f87171; color:#f87171; }
+    .ef-btn-add { padding:10px 22px; background:var(--c-violet); border:none; border-radius:var(--c-radius); color:#fff; font-size:13px; font-weight:700; cursor:pointer; }
+    .ef-btn-add:hover { opacity:.88; }
+
+    /* ══ Pending entries ═════════════════════════ */
+    .pending-section { margin-bottom:20px; padding:14px 16px; background:rgba(251,191,36,.04); border:1px solid rgba(251,191,36,.2); border-radius:var(--c-radius); }
+    .pending-header { display:flex; align-items:center; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
+    .pending-title { font-size:13px; font-weight:700; color:#fbbf24; flex:1; }
+    .pending-act { padding:4px 12px; background:transparent; border:1px solid rgba(251,191,36,.3); border-radius:20px; font-size:11px; color:#fbbf24; cursor:pointer; font-family:var(--c-font-sans); transition:all .15s; }
+    .pending-act:hover { background:rgba(251,191,36,.08); }
+    .pending-act.del { border-color:rgba(239,68,68,.3); color:#f87171; }
+    .pending-act.del:hover { background:rgba(239,68,68,.06); }
+    .pending-item { background:var(--c-bg2); border:1px solid rgba(251,191,36,.12); border-radius:var(--c-radius); padding:10px 36px 10px 12px; margin-bottom:6px; position:relative; }
+    .pending-badge { display:inline-block; padding:1px 7px; background:rgba(251,191,36,.12); border:1px solid rgba(251,191,36,.3); border-radius:3px; font-size:10px; color:#fbbf24; font-family:var(--c-font-sans); margin-right:6px; }
+    .pending-del { position:absolute; top:8px; right:10px; background:none; border:none; color:var(--c-muted); cursor:pointer; font-size:14px; }
+    .pending-del:hover { color:#f87171; }
+  </style>
+</head>
+<body>
+<div id="cockpit-shell"></div>
+
+<main class="cockpit-page">
+
+  <div class="oc-tag">⬡ ORGANIZATION &amp; COORDINATION</div>
+  <h1 style="font-size:22px;font-weight:800;color:var(--c-white);margin-bottom:6px;">Discussion Record &amp; Coordination</h1>
+  <p style="font-size:14px;color:var(--c-muted);margin-bottom:24px;">
+    Totální audit log — každé rozhodnutí, akce, riziko, otázka. Žádná diskuse nezůstane nezapsaná.
+  </p>
+
+  <!-- Stats -->
+  <div class="log-stats">
+    <div class="log-stat"><div class="log-stat-num" id="s-total">0</div><div class="log-stat-lbl">Záznamy</div></div>
+    <div class="log-stat"><div class="log-stat-num" id="s-decisions" style="color:#c084fc;">0</div><div class="log-stat-lbl">Rozhodnutí</div></div>
+    <div class="log-stat"><div class="log-stat-num" id="s-actions" style="color:#f59e0b;">0</div><div class="log-stat-lbl">Akce</div></div>
+    <div class="log-stat"><div class="log-stat-num" id="s-open" style="color:#fbbf24;">0</div><div class="log-stat-lbl">Otevřené</div></div>
+    <div class="log-stat"><div class="log-stat-num" id="s-critical" style="color:#f87171;">0</div><div class="log-stat-lbl">Kritické</div></div>
+    <div class="log-stat"><div class="log-stat-num" id="s-sessions">7</div><div class="log-stat-lbl">Sessions</div></div>
+  </div>
+
+  <!-- Preset reports -->
+  <div style="font-size:11px;color:var(--c-muted);margin-bottom:6px;font-family:var(--c-font-sans);">RYCHLÉ FILTRY / VÝSTUPY:</div>
+  <div class="presets" id="presets">
+    <button class="preset-btn active" onclick="applyPreset('all',this)">Vše</button>
+    <button class="preset-btn" onclick="applyPreset('meeting',this)">📋 Zápis z meetingu</button>
+    <button class="preset-btn" onclick="applyPreset('investor',this)">💼 Investor report</button>
+    <button class="preset-btn" onclick="applyPreset('anthropic',this)">🤝 Anthropic deck</button>
+    <button class="preset-btn" onclick="applyPreset('ceo',this)">📊 CEO Brief</button>
+    <button class="preset-btn" onclick="applyPreset('actions',this)">⚡ Open actions</button>
+    <button class="preset-btn" onclick="applyPreset('risks',this)">⚠️ Open risks</button>
+    <button class="preset-btn" onclick="applyPreset('business',this)">💶 Business decisions</button>
+    <button class="preset-btn" onclick="applyPreset('arch',this)">🏗 Architecture decisions</button>
+    <button class="preset-btn" onclick="applyPreset('superseded',this)">🔄 Přepsáno</button>
+    <button class="preset-btn" onclick="applyPreset('hopi',this)">🏢 HOPI Management</button>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="log-toolbar">
+    <input class="log-search" id="q-search" type="text" placeholder="🔍  Hledat v záznamu..." oninput="applyFilters()"/>
+    <select class="log-sel" id="q-type" onchange="applyFilters()">
+      <option value="">Typ: Vše</option>
+      <option value="DECISION">DECISION</option>
+      <option value="ACTION">ACTION</option>
+      <option value="INSIGHT">INSIGHT</option>
+      <option value="RISK">RISK</option>
+      <option value="QUESTION">QUESTION</option>
+      <option value="NOTE">NOTE</option>
+    </select>
+    <select class="log-sel" id="q-domain" onchange="applyFilters()">
+      <option value="">Oblast: Vše</option>
+      <option value="PRODUCT">PRODUCT</option>
+      <option value="ARCHITECTURE">ARCHITECTURE</option>
+      <option value="BUSINESS">BUSINESS</option>
+      <option value="STRATEGY">STRATEGY</option>
+      <option value="PROCESS">PROCESS</option>
+      <option value="BRAND">BRAND</option>
+      <option value="DEPLOY">DEPLOY</option>
+      <option value="TEAM">TEAM</option>
+    </select>
+    <select class="log-sel" id="q-priority" onchange="applyFilters()">
+      <option value="">Priorita: Vše</option>
+      <option value="CRITICAL">CRITICAL</option>
+      <option value="HIGH">HIGH</option>
+      <option value="MEDIUM">MEDIUM</option>
+      <option value="LOW">LOW</option>
+    </select>
+    <select class="log-sel" id="q-status" onchange="applyFilters()">
+      <option value="">Status: Vše</option>
+      <option value="CONFIRMED">CONFIRMED</option>
+      <option value="OPEN">OPEN</option>
+      <option value="DONE">DONE</option>
+      <option value="SUPERSEDED">SUPERSEDED</option>
+      <option value="CANCELLED">CANCELLED</option>
+    </select>
+    <select class="log-sel" id="q-output" onchange="applyFilters()">
+      <option value="">Output: Vše</option>
+      <option value="INVESTOR">INVESTOR</option>
+      <option value="ANTHROPIC">ANTHROPIC</option>
+      <option value="CEO_BRIEF">CEO_BRIEF</option>
+      <option value="HOPI_MGMT">HOPI_MGMT</option>
+      <option value="INTERNAL">INTERNAL</option>
+      <option value="PUBLIC">PUBLIC</option>
+    </select>
+    <select class="log-sel" id="q-session" onchange="applyFilters()">
+      <option value="">Session: Vše</option>
+      <option value="2026-04-23-s13">2026-04-23 Session 13</option>
+      <option value="2026-04-23-s12">2026-04-23 Session 12</option>
+      <option value="2026-04-23-s9">2026-04-23 Session 9</option>
+      <option value="2026-04-22-s7">2026-04-22 Session 7</option>
+      <option value="2026-04-22-s6">2026-04-22 Session 6</option>
+      <option value="2026-04-21">2026-04-21 Session 5</option>
+      <option value="2026-04-20">2026-04-20 Sessions 3-4</option>
+      <option value="2026-04-18">2026-04-18 Sessions 1-2</option>
+    </select>
+    <button class="log-btn export" onclick="exportFiltered('json')">⬇ JSON</button>
+    <button class="log-btn export" onclick="exportFiltered('md')">⬇ MD</button>
+    <button class="log-btn" onclick="openEntryForm()" style="border-color:var(--c-violet);color:var(--c-violet);">➕ Přidat záznam</button>
+  </div>
+
+  <div id="result-count" style="font-size:11px;color:var(--c-muted);margin-bottom:12px;font-family:var(--c-font-sans);"></div>
+
+  <!-- Pending entries (localStorage, čeká na sync) -->
+  <div id="pending-section" class="pending-section" style="display:none;">
+    <div class="pending-header">
+      <span class="pending-title">⏳ Čekající záznamy — lokálně uloženo, čeká na append do DISCUSSION_RECORD.md</span>
+      <button class="pending-act" onclick="exportPending()">📋 Export MD pro sync</button>
+      <button class="pending-act del" onclick="clearPending()">🗑 Smazat vše</button>
+    </div>
+    <div id="pending-list"></div>
+  </div>
+
+  <div id="log-container"></div>
+
+  <!-- Responsibilities -->
+  <h2 style="font-size:16px;font-weight:700;color:var(--c-white);margin:40px 0 14px;">Odpovědnosti &amp; Účastníci</h2>
+  <div class="resp-grid">
+    <div class="resp-card">
+      <div class="resp-name">David Gogela</div>
+      <div class="resp-code">DG · Product Owner · Rozhodovatel</div>
+      <ul class="resp-items">
+        <li>Všechna strategická rozhodnutí (CONFIRMED)</li>
+        <li>HOPI Group relationship management</li>
+        <li>Business model &amp; pricing &amp; ceník</li>
+        <li>Investor &amp; Anthropic outreach</li>
+        <li>UAT acceptance (REVIEW → CLOSED)</li>
+      </ul>
+    </div>
+    <div class="resp-card">
+      <div class="resp-name">Claude (claude-sonnet-4-6)</div>
+      <div class="resp-code">AI · Lead Developer &amp; Architect</div>
+      <ul class="resp-items">
+        <li>Full-stack development (HTML/CSS/JS)</li>
+        <li>Architecture decisions &amp; OIL tracking</li>
+        <li>DISCUSSION_RECORD &amp; BKONTEXT maintenance</li>
+        <li>Deployment &amp; release management</li>
+        <li>Session briefing &amp; context management</li>
+      </ul>
+    </div>
+    <div class="resp-card">
+      <div class="resp-name">ARTIN s.r.o.</div>
+      <div class="resp-code">ARTIN · Technology Partner P2</div>
+      <ul class="resp-items">
+        <li>Backend infrastructure (Phase 2)</li>
+        <li>SAP connector (Phase 2)</li>
+        <li>Database migration support</li>
+      </ul>
+    </div>
+    <div class="resp-card">
+      <div class="resp-name">INTECS</div>
+      <div class="resp-code">INTECS · Technology Partner P2</div>
+      <ul class="resp-items">
+        <li>IT infrastructure</li>
+        <li>Security &amp; compliance support</li>
+        <li>SharePoint integration (Phase 2)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       ENTRY FORM MODAL
+  ═══════════════════════════════════════════ -->
+  <div id="ef-overlay" class="ef-overlay hidden" onclick="closeIfOutside(event)">
+    <div class="ef-modal" id="ef-modal">
+
+      <div class="ef-title">
+        ➕ Přidat záznam do Discussion Record
+        <button class="ef-close" onclick="closeEntryForm()">✕</button>
+      </div>
+
+      <div class="ef-label">👤 Účastníci &nbsp;<span style="color:var(--c-muted);font-size:10px;font-weight:400;">(první vybraný = facilitátor ★, min. 1)</span></div>
+      <div class="ef-chips" id="ef-participants">
+        <div class="ef-chip active facilitator" data-code="DG" onclick="toggleParticipant(this)">DG · David Gogela</div>
+        <div class="ef-chip" data-code="AI" onclick="toggleParticipant(this)">AI · Claude</div>
+        <div class="ef-chip" data-code="ARTIN" onclick="toggleParticipant(this)">ARTIN</div>
+        <div class="ef-chip" data-code="INTECS" onclick="toggleParticipant(this)">INTECS</div>
+        <div class="ef-chip" data-code="HOPI-MGMT" onclick="toggleParticipant(this)">HOPI-MGMT</div>
+        <div class="ef-chip" data-code="HOPI-IT" onclick="toggleParticipant(this)">HOPI-IT</div>
+        <div class="ef-chip" data-code="ANTHROPIC" onclick="toggleParticipant(this)">ANTHROPIC</div>
+      </div>
+
+      <div class="ef-label">Typ záznamu</div>
+      <div class="ef-chips" id="ef-type-chips">
+        <div class="ef-chip active" data-type="DECISION" onclick="selectType(this)">DECISION</div>
+        <div class="ef-chip" data-type="ACTION" onclick="selectType(this)">ACTION</div>
+        <div class="ef-chip" data-type="INSIGHT" onclick="selectType(this)">INSIGHT</div>
+        <div class="ef-chip" data-type="RISK" onclick="selectType(this)">RISK</div>
+        <div class="ef-chip" data-type="QUESTION" onclick="selectType(this)">QUESTION</div>
+        <div class="ef-chip" data-type="NOTE" onclick="selectType(this)">NOTE</div>
+      </div>
+
+      <div class="ef-row" style="margin-top:4px;">
+        <div>
+          <div class="ef-label" style="margin-top:12px;">Doména</div>
+          <select class="ef-sel" id="ef-domain">
+            <option value="PRODUCT">PRODUCT</option>
+            <option value="ARCHITECTURE">ARCHITECTURE</option>
+            <option value="BUSINESS">BUSINESS</option>
+            <option value="STRATEGY">STRATEGY</option>
+            <option value="PROCESS">PROCESS</option>
+            <option value="BRAND">BRAND</option>
+            <option value="DEPLOY">DEPLOY</option>
+            <option value="TEAM">TEAM</option>
+          </select>
+        </div>
+        <div>
+          <div class="ef-label" style="margin-top:12px;">Priorita</div>
+          <select class="ef-sel" id="ef-priority">
+            <option value="HIGH">HIGH</option>
+            <option value="CRITICAL">CRITICAL</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="LOW">LOW</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ef-label">Output — pro koho je záznam</div>
+      <div class="ef-chips" id="ef-output-chips">
+        <div class="ef-chip" data-out="INVESTOR" onclick="toggleOutput(this)">INVESTOR</div>
+        <div class="ef-chip" data-out="ANTHROPIC" onclick="toggleOutput(this)">ANTHROPIC</div>
+        <div class="ef-chip" data-out="CEO_BRIEF" onclick="toggleOutput(this)">CEO_BRIEF</div>
+        <div class="ef-chip" data-out="HOPI_MGMT" onclick="toggleOutput(this)">HOPI_MGMT</div>
+        <div class="ef-chip active" data-out="INTERNAL" onclick="toggleOutput(this)">INTERNAL</div>
+        <div class="ef-chip" data-out="PUBLIC" onclick="toggleOutput(this)">PUBLIC</div>
+      </div>
+
+      <div style="margin-top:4px;">
+        <div class="ef-label">Text — popis rozhodnutí / akce / poznatku *</div>
+        <textarea class="ef-textarea" id="ef-text" rows="3" placeholder="Popište rozhodnutí, akci nebo poznatek..."></textarea>
+      </div>
+
+      <div class="ef-row">
+        <div>
+          <div class="ef-label">Kde (AIQ-XXXXX, BIZ-XXXXX, soubor...)</div>
+          <input class="ef-input" id="ef-kde" type="text" placeholder="AIQ-00341, CLAUDE.md"/>
+        </div>
+        <div id="ef-assignee-row" style="opacity:.4;transition:opacity .2s;">
+          <div class="ef-label">Assignee (vyžadováno pro ACTION)</div>
+          <input class="ef-input" id="ef-assignee" type="text" placeholder="DG nebo AI"/>
+        </div>
+      </div>
+
+      <div class="ef-actions">
+        <button class="ef-btn-cancel" onclick="closeEntryForm()">Zrušit</button>
+        <button class="ef-btn-add" onclick="submitEntry()">Přidat záznam ➕</button>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script src="_shell.js"></script>
+<script>
+Shell.init({ section:{cs:'Organizace & Koordinace', en:'Organization & Coordination'}, sectionNum:'13', backUrl:'../MANAGEMENT_COCKPIT.html', music:'../cockpit-music.mp3' });
+
+(function() {
+  if (Shell.getLang() !== 'en') return;
+  var sub = document.querySelector('p[style*="14px"][style*="color:var(--c-muted)"]');
+  if (sub) sub.textContent = 'Total audit log — every decision, action, risk, question. No discussion goes unrecorded.';
+  var statLbls = document.querySelectorAll('.log-stat-lbl');
+  var lblEn = ['Records', 'Decisions', 'Actions', 'Open', 'Critical', 'Sessions'];
+  statLbls.forEach(function(el, i) { if (lblEn[i]) el.textContent = lblEn[i]; });
+  var filterHeader = document.querySelector('[style*="RYCHLÉ FILTRY"]') || document.querySelector('div[style*="font-size:11px"][style*="color:var(--c-muted)"]');
+  if (filterHeader && filterHeader.textContent.includes('RYCHLÉ')) filterHeader.textContent = 'QUICK FILTERS / REPORTS:';
+  document.querySelectorAll('.preset-btn').forEach(function(b) {
+    b.textContent = b.textContent
+      .replace('Vše','All').replace('📋 Zápis z meetingu','📋 Meeting notes')
+      .replace('🔄 Přepsáno','🔄 Superseded').replace('🏢 HOPI Management','🏢 HOPI Management');
+  });
+  var si = document.getElementById('q-search');
+  if (si) si.placeholder = '🔍  Search records...';
+  var typeSel = document.getElementById('q-type');
+  if (typeSel && typeSel.options[0]) typeSel.options[0].textContent = 'Type: All';
+  var domainSel = document.getElementById('q-domain');
+  if (domainSel && domainSel.options[0]) domainSel.options[0].textContent = 'Domain: All';
+})();
+
+/* DECISIONS array loaded from external JSON — see discussion-log.json */
+let DECISIONS = [];
+
+/* ── Preset configs ──────────────────────────── */
+const PRESETS = {
+  all:       {},
+  meeting:   {sessionKey:'today'},
+  investor:  {output:'INVESTOR', priority:['CRITICAL','HIGH']},
+  anthropic: {output:'ANTHROPIC'},
+  ceo:       {output:'CEO_BRIEF'},
+  actions:   {type:'ACTION',  status:'OPEN'},
+  risks:     {type:'RISK',    status:'OPEN'},
+  business:  {type:'DECISION',domain:'BUSINESS'},
+  arch:      {type:'DECISION',domain:'ARCHITECTURE'},
+  superseded:{status:'SUPERSEDED'},
+  hopi:      {output:'HOPI_MGMT'}
+};
+
+let currentPreset = {};
+
+function applyPreset(name, el) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentPreset = PRESETS[name] || {};
+  // Push preset values into selects
+  const setVal = (id, val) => { const el2 = document.getElementById(id); if(el2) el2.value = val || ''; };
+  setVal('q-type',     currentPreset.type || '');
+  setVal('q-domain',   currentPreset.domain || '');
+  setVal('q-status',   currentPreset.status || '');
+  setVal('q-output',   currentPreset.output || '');
+  setVal('q-priority', '');
+  setVal('q-session',  '');
+  document.getElementById('q-search').value = '';
+  applyFilters();
+}
+
+/* ── Pending entries (localStorage) ─────────── */
+const PENDING_KEY = 'disc_pending_entries';
+let pendingEntries = [];
+
+function loadPending() {
+  try { pendingEntries = JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); }
+  catch(e) { pendingEntries = []; }
+  renderPending();
+}
+
+function savePending() {
+  localStorage.setItem(PENDING_KEY, JSON.stringify(pendingEntries));
+}
+
+function getAllEntries() {
+  return [...pendingEntries, ...DECISIONS];
+}
+
+function renderPending() {
+  const section = document.getElementById('pending-section');
+  const list    = document.getElementById('pending-list');
+  if (!pendingEntries.length) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  list.innerHTML = pendingEntries.map(e => `
+    <div class="pending-item">
+      <span class="pending-badge">PENDING</span>
+      <strong style="font-size:12px;color:var(--c-white);">${e.id}</strong>
+      <span style="font-size:11px;color:var(--c-muted);margin-left:8px;">${e.type} · ${e.domain} · 👤 ${e.participants.join(', ')}</span>
+      <div style="font-size:12px;color:var(--c-text);margin-top:6px;line-height:1.5;">${e.text}</div>
+      <button class="pending-del" onclick="deletePending('${e.id}')">✕</button>
+    </div>`).join('');
+}
+
+function deletePending(id) {
+  pendingEntries = pendingEntries.filter(e => e.id !== id);
+  savePending(); renderPending(); applyFilters();
+}
+
+function clearPending() {
+  if (!confirm(`Smazat ${pendingEntries.length} čekajících záznamů?`)) return;
+  pendingEntries = [];
+  savePending(); renderPending(); applyFilters();
+}
+
+function exportPending() {
+  if (!pendingEntries.length) return;
+  let md = '<!-- Vložit do DISCUSSION_RECORD.md -->\n\n';
+  pendingEntries.forEach(e => {
+    md += `**${e.id}**\n`;
+    md += `- datum: ${e.id.replace('DISC-','').slice(0,6).replace(/(\d{2})(\d{2})(\d{2})/,'20$1-$2-$3')} | čas: ${e.time}\n`;
+    md += `- type: ${e.type} | domain: ${e.domain} | priority: ${e.priority} | status: ${e.status}\n`;
+    md += `- participants: [${e.participants.join(', ')}] | output: [${e.output.join(', ')}]\n`;
+    if (e.assignee) md += `- assignee: ${e.assignee}\n`;
+    md += `- text: ${e.text.replace(/<[^>]+>/g,'')}\n`;
+    md += `- kde: ${e.kde.join(', ')}\n\n`;
+  });
+  const blob = new Blob([md], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'pending-disc-' + new Date().toISOString().slice(0,10) + '.md';
+  a.click();
+}
+
+/* ── Entry Form ──────────────────────────────── */
+function openEntryForm() {
+  document.getElementById('ef-overlay').classList.remove('hidden');
+  setTimeout(() => document.getElementById('ef-text').focus(), 100);
+}
+function closeEntryForm() {
+  document.getElementById('ef-overlay').classList.add('hidden');
+}
+function closeIfOutside(e) {
+  if (e.target.id === 'ef-overlay') closeEntryForm();
+}
+
+function toggleParticipant(el) {
+  const hasOthers = [...document.querySelectorAll('#ef-participants .ef-chip.active')].filter(c=>c!==el).length > 0;
+  if (el.classList.contains('active') && !hasOthers) return; // keep at least 1
+  el.classList.toggle('active');
+  // Recompute facilitator = first active chip
+  document.querySelectorAll('#ef-participants .ef-chip').forEach(c => c.classList.remove('facilitator'));
+  const first = document.querySelector('#ef-participants .ef-chip.active');
+  if (first) first.classList.add('facilitator');
+}
+
+function selectType(el) {
+  document.querySelectorAll('#ef-type-chips .ef-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('ef-assignee-row').style.opacity = el.dataset.type === 'ACTION' ? '1' : '.4';
+}
+
+function toggleOutput(el) { el.classList.toggle('active'); }
+
+function generateDiscId() {
+  const now = new Date();
+  const yy  = String(now.getFullYear()).slice(2);
+  const mm  = String(now.getMonth()+1).padStart(2,'0');
+  const dd  = String(now.getDate()).padStart(2,'0');
+  const prefix = `DISC-${yy}${mm}${dd}-`;
+  const n = getAllEntries().filter(d => d.id.startsWith(prefix)).length + 1;
+  return prefix + String(n).padStart(3,'0');
+}
+
+function submitEntry() {
+  const text = document.getElementById('ef-text').value.trim();
+  if (!text) { alert('Zadejte text záznamu.'); return; }
+
+  const participants = [...document.querySelectorAll('#ef-participants .ef-chip.active')].map(c => c.dataset.code);
+  const type       = (document.querySelector('#ef-type-chips .ef-chip.active') || {}).dataset?.type || 'NOTE';
+  const domain     = document.getElementById('ef-domain').value;
+  const priority   = document.getElementById('ef-priority').value;
+  const output     = [...document.querySelectorAll('#ef-output-chips .ef-chip.active')].map(c => c.dataset.out);
+  const kde        = document.getElementById('ef-kde').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const assignee   = document.getElementById('ef-assignee').value.trim();
+
+  const now = new Date();
+  const hh  = String(now.getHours()).padStart(2,'0');
+  const min = String(now.getMinutes()).padStart(2,'0');
+  const dateStr = now.toISOString().slice(0,10);
+
+  const statusMap = {DECISION:'CONFIRMED', ACTION:'OPEN', RISK:'OPEN', QUESTION:'OPEN', INSIGHT:'CONFIRMED', NOTE:'CONFIRMED'};
+
+  const entry = {
+    id: generateDiscId(), time: `${hh}:${min}`,
+    session: dateStr + '-live',
+    sessionLabel: dateStr + ' — Live Entry (čeká na sync)',
+    type, domain, priority, status: statusMap[type] || 'CONFIRMED',
+    participants, output,
+    text: text.replace(/</g,'&lt;').replace(/>/g,'&gt;'),
+    kde: kde.length ? kde : ['—'],
+    pending: true
+  };
+  if (assignee && type === 'ACTION') entry.assignee = assignee;
+
+  pendingEntries.unshift(entry);
+  savePending(); renderPending(); applyFilters(); closeEntryForm();
+
+  // Reset form for next use
+  document.getElementById('ef-text').value    = '';
+  document.getElementById('ef-kde').value     = '';
+  document.getElementById('ef-assignee').value= '';
+  document.querySelectorAll('#ef-output-chips .ef-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('#ef-output-chips .ef-chip[data-out="INTERNAL"]').classList.add('active');
+  document.querySelectorAll('#ef-type-chips .ef-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('#ef-type-chips .ef-chip[data-type="DECISION"]').classList.add('active');
+  document.getElementById('ef-assignee-row').style.opacity = '.4';
+}
+
+/* ── Filter & render ─────────────────────────── */
+let lastFiltered = DECISIONS;
+
+function applyFilters() {
+  const q        = document.getElementById('q-search').value.toLowerCase();
+  const type     = document.getElementById('q-type').value;
+  const domain   = document.getElementById('q-domain').value;
+  const priority = document.getElementById('q-priority').value;
+  const status   = document.getElementById('q-status').value;
+  const output   = document.getElementById('q-output').value;
+  const session  = document.getElementById('q-session').value;
+  const priFilter= currentPreset.priority;
+
+  const all = getAllEntries();
+  lastFiltered = all.filter(d => {
+    if (type     && d.type !== type) return false;
+    if (domain   && d.domain !== domain) return false;
+    if (priority && d.priority !== priority) return false;
+    if (priFilter && !priFilter.includes(d.priority)) return false;
+    if (status   && d.status !== status) return false;
+    if (output   && !d.output.includes(output)) return false;
+    if (session  && d.session !== session) return false;
+    if (q && !d.text.toLowerCase().includes(q) && !d.id.toLowerCase().includes(q)
+            && !d.kde.join(' ').toLowerCase().includes(q)) return false;
+    return true;
+  });
+
+  updateStats(lastFiltered);
+  renderLog(lastFiltered);
+}
+
+function updateStats(data) {
+  const all = getAllEntries();
+  document.getElementById('s-total').textContent     = data.length;
+  document.getElementById('s-decisions').textContent = data.filter(d=>d.type==='DECISION').length;
+  document.getElementById('s-actions').textContent   = data.filter(d=>d.type==='ACTION').length;
+  document.getElementById('s-open').textContent      = data.filter(d=>d.status==='OPEN').length;
+  document.getElementById('s-critical').textContent  = data.filter(d=>d.priority==='CRITICAL').length;
+  document.getElementById('s-sessions').textContent  = new Set(all.map(d=>d.session)).size;
+  document.getElementById('result-count').textContent = `${data.length} záznamů`;
+}
+
+function renderLog(data) {
+  const container = document.getElementById('log-container');
+  container.innerHTML = '';
+  if (!data.length) {
+    container.innerHTML = '<p style="color:var(--c-muted);text-align:center;padding:40px;">Žádné záznamy nenalezeny.</p>';
+    return;
+  }
+  // Group by session
+  const groups={}, order=[];
+  data.forEach(d => {
+    if (!groups[d.session]) { groups[d.session]=[]; order.push(d.session); }
+    groups[d.session].push(d);
+  });
+  order.forEach(sk => {
+    const items = groups[sk];
+    const block = document.createElement('div');
+    block.className = 'session-block';
+    block.innerHTML = `
+      <div class="session-header" onclick="toggleSession(this)">
+        <span class="session-date">${sk.startsWith('2026') ? sk.replace('-s7','').replace('-s6','') : sk}</span>
+        <span class="session-label">${items[0].sessionLabel}</span>
+        <span class="session-count">${items.length}</span>
+        <span class="session-toggle">▲</span>
+      </div>
+      <div class="session-body dec-list">
+        ${items.map(d => renderCard(d)).join('')}
+      </div>`;
+    container.appendChild(block);
+  });
+}
+
+function renderCard(d) {
+  const typeCls   = 'b-' + d.type.toLowerCase();
+  const priCls    = 'b-' + d.priority.toLowerCase();
+  const statCls   = 'b-' + d.status.toLowerCase();
+  const outTags   = d.output.map(o => `<span class="out-tag out-${o}">${o}</span>`).join('');
+  const refs      = d.kde.map(k => `<span>${k}</span>`).join('');
+  const assignee  = d.assignee  ? `<span class="dec-assignee">→ ${d.assignee}</span>` : '';
+  const superBy   = d.superseded_by ? `<span class="dec-superseded">Přepsáno: ${d.superseded_by}</span>` : '';
+  return `
+    <div class="dec-card">
+      <div class="dec-meta">
+        <span class="dec-id">${d.id}</span>
+        <span class="dec-time">${d.time}</span>
+        <span class="badge ${typeCls}">${d.type}</span>
+        <span class="badge" style="background:rgba(255,255,255,.04);color:var(--c-muted);">${d.domain}</span>
+        <span class="badge ${priCls}">${d.priority}</span>
+        <span class="badge ${statCls}">${d.status}</span>
+      </div>
+      <div class="dec-text">${d.text}</div>
+      <div class="dec-footer">
+        <span class="dec-participants">👤 ${d.participants.join(', ')}</span>
+        ${assignee}${superBy}
+        <div class="dec-outputs">${outTags}</div>
+        <div class="dec-where">${refs}</div>
+      </div>
+    </div>`;
+}
+
+function toggleSession(header) {
+  const body = header.nextElementSibling;
+  const tog  = header.querySelector('.session-toggle');
+  body.classList.toggle('collapsed');
+  tog.textContent = body.classList.contains('collapsed') ? '▼' : '▲';
+}
+
+/* ── Export ──────────────────────────────────── */
+function exportFiltered(fmt) {
+  const data = lastFiltered;
+  const date = new Date().toISOString().slice(0,10);
+  if (fmt === 'json') {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+    download(blob, `discussion-log-export-${date}.json`);
+  } else {
+    let md = `# Discussion Record Export — ${date}\n\n`;
+    md += `Celkem záznamů: ${data.length}\n\n---\n\n`;
+    data.forEach(d => {
+      md += `## ${d.id}\n`;
+      md += `- **Datum/Čas:** ${d.session.replace('-s7','').replace('-s6','')} ${d.time}\n`;
+      md += `- **Typ:** ${d.type} | **Oblast:** ${d.domain} | **Priorita:** ${d.priority} | **Status:** ${d.status}\n`;
+      md += `- **Účastníci:** ${d.participants.join(', ')}\n`;
+      md += `- **Output:** ${d.output.join(', ')}\n`;
+      if (d.assignee) md += `- **Assignee:** ${d.assignee}\n`;
+      md += `- **Rozhodnutí:** ${d.text.replace(/<[^>]+>/g,'')}\n`;
+      md += `- **Reference:** ${d.kde.join(', ')}\n\n---\n\n`;
+    });
+    const blob = new Blob([md], {type:'text/markdown'});
+    download(blob, `discussion-log-export-${date}.md`);
+  }
+}
+
+function download(blob, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+}
+
+// Init — load from pre-bundled JS (works on file:// and GitHub Pages)
+DECISIONS = window.DISC_LOG_DATA || [];
+loadPending();
+applyFilters();
+</script>
+</body>
+</html>
+

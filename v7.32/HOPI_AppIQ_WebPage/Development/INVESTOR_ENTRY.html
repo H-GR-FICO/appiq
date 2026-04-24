@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOPI TechIQ — Investor Brief</title>
+
+  <!-- Open Graph / Social sharing -->
+  <meta property="og:title"       content="HOPI TechIQ s.r.o. — Investor Brief 2026">
+  <meta property="og:description" content="AI-powered Enterprise Platform. 8 týdnů do live deploymentu. ~$1k náklady. 109 git commits. Phase 1 Active. CEE → WorldWide.">
+  <meta property="og:type"        content="website">
+  <meta property="og:image"       content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/investor-entry-og.png?v=2">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type"  content="image/png">
+  <meta property="og:url"         content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/INVESTOR_ENTRY.html">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:image"      content="https://h-gr-fico.github.io/appiq/v7.22/HOPI_AppIQ_WebPage/Development/investor-entry-og.png?v=2">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d0d0d;
+      --green: #1DB954;
+      --dgreen: #007d32;
+      --orange: #E8750A;
+      --vi: #A855F7;
+      --an: #CC785C;
+    }
+
+    body {
+      background: var(--bg);
+      color: #fff;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      overflow-x: hidden;
+    }
+
+    /* Ambient glows */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(232,117,10,.07), transparent 70%);
+      pointer-events: none;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -200px; left: -200px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,125,50,.05), transparent 70%);
+      pointer-events: none;
+    }
+
+    .card {
+      max-width: 760px;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* OG Preview image */
+    .og-preview {
+      width: 100%;
+      border-radius: 16px 16px 0 0;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-bottom: none;
+      background: #111;
+    }
+    .og-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* Content panel */
+    .panel {
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(255,255,255,.1);
+      border-top: none;
+      border-radius: 0 0 16px 16px;
+      padding: 32px 36px 36px;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(232,117,10,.7);
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .title span { color: var(--orange); }
+
+    .subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,.45);
+      line-height: 1.6;
+      margin-bottom: 28px;
+      max-width: 560px;
+    }
+
+    /* Stats row */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .stat {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 10px;
+      padding: 14px 12px;
+      text-align: center;
+    }
+    .stat-val {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-lbl {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.35);
+    }
+
+    /* Tags */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+    .tag {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 100px;
+      padding: 5px 14px;
+      font-size: 11px;
+      color: rgba(255,255,255,.5);
+      font-weight: 500;
+    }
+    .tag.live { background: rgba(29,185,84,.1); border-color: rgba(29,185,84,.2); color: #1DB954; }
+    .tag.hot  { background: rgba(232,117,10,.1); border-color: rgba(232,117,10,.2); color: var(--orange); }
+    .tag.ai   { background: rgba(168,85,247,.1); border-color: rgba(168,85,247,.2); color: var(--vi); }
+    .tag.an   { background: rgba(204,120,92,.1); border-color: rgba(204,120,92,.2); color: var(--an); }
+
+    /* CTA button */
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #E8750A, #CC6000);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      letter-spacing: .3px;
+      transition: transform .15s, box-shadow .15s;
+      box-shadow: 0 4px 24px rgba(232,117,10,.25);
+    }
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(232,117,10,.35);
+    }
+    .cta-arrow {
+      font-size: 18px;
+      transition: transform .15s;
+    }
+    .cta:hover .cta-arrow { transform: translateX(4px); }
+
+    .cta-note {
+      display: inline-block;
+      margin-left: 16px;
+      font-size: 11px;
+      color: rgba(255,255,255,.3);
+      vertical-align: middle;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 28px;
+      font-size: 11px;
+      color: rgba(255,255,255,.2);
+      text-align: center;
+      line-height: 1.8;
+    }
+    .footer a { color: rgba(232,117,10,.5); text-decoration: none; }
+
+    /* Confidential badge */
+    .conf {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,50,50,.07);
+      border: 1px solid rgba(255,50,50,.15);
+      border-radius: 6px;
+      padding: 5px 12px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,100,100,.6);
+      margin-bottom: 24px;
+    }
+
+    /* Anthropic teaser */
+    .partnership-teaser {
+      background: linear-gradient(135deg, rgba(204,120,92,.07), rgba(168,85,247,.05));
+      border: 1px solid rgba(204,120,92,.2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 28px;
+      font-size: 12px;
+      color: rgba(255,255,255,.55);
+      line-height: 1.6;
+    }
+    .partnership-teaser strong { color: #CC785C; }
+
+    @media (max-width: 600px) {
+      .panel { padding: 24px 20px 28px; }
+      .cta { width: 100%; justify-content: center; }
+      .cta-note { display: block; margin: 8px 0 0; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div style="max-width:760px;margin:0 auto;padding:16px 20px 0;">
+  <a href="PERSONAL_PITCH.html" style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:rgba(255,255,255,.5);font-size:11px;font-weight:700;padding:6px 14px;text-decoration:none;letter-spacing:.5px;transition:all .15s;">← Personal Pitch</a>
+</div>
+
+<div class="card">
+
+  <!-- OG Preview image (serves as hero) -->
+  <div class="og-preview">
+    <img src="investor-og.png" alt="HOPI TechIQ — Investor Brief" loading="eager">
+  </div>
+
+  <!-- Content panel -->
+  <div class="panel">
+
+    <div class="conf">🔒 Důvěrný dokument · Confidential</div>
+
+    <div class="eyebrow">HOPI TechIQ s.r.o. · Investment Readiness · 2026</div>
+    <h1 class="title"><span>HOPI AppIQ</span> — Investor Brief</h1>
+    <p class="subtitle">
+      AI-powered Enterprise Application Platform. Od interního piloту k celosvětovému SaaS.
+      8 týdnů vývoje. 109 commitů. Živý deployment. Phase 1 aktivní.
+    </p>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-val" style="color:var(--orange);">8 týdnů</div>
+        <div class="stat-lbl">do live deploymentu</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:var(--orange);">~$1k</div>
+        <div class="stat-lbl">celkové náklady</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:var(--green);">109</div>
+        <div class="stat-lbl">git commits</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:var(--vi);">LIVE</div>
+        <div class="stat-lbl">v produkci</div>
+      </div>
+      <div class="stat">
+        <div class="stat-val" style="color:var(--orange);">Phase 1</div>
+        <div class="stat-lbl">aktivní · 2026</div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags">
+      <span class="tag live">● LIVE deployment</span>
+      <span class="tag hot">Phase 1 · HOME B2C</span>
+      <span class="tag ai">AI-powered · Claude</span>
+      <span class="tag an">Anthropic partnership →</span>
+      <span class="tag">CEE → WorldWide</span>
+      <span class="tag">HOPI Group pilot</span>
+      <span class="tag">TOTAL AGILE management</span>
+    </div>
+
+    <!-- Anthropic partnership teaser -->
+    <div class="partnership-teaser">
+      🤝 <strong>Strategická novinka:</strong>
+      HOPI AppIQ → cíl: <strong>HOPI AppIQ by HOPI TECHNOLOGY powered by AI Claude by Anthropic.</strong>
+      Strategie partnerství s Anthropic (CEO Dario + President Daniela Amodei) je součástí tohoto briefu.
+    </div>
+
+    <!-- CTA -->
+    <a href="INVESTOR_BRIEF.html" class="cta">
+      Otevřít Investor Brief
+      <span class="cta-arrow">→</span>
+    </a>
+    <span class="cta-note">🔒 Vyžaduje přístupový kód</span>
+
+  </div><!-- /panel -->
+
+</div><!-- /card -->
+
+<div class="footer">
+  HOPI TechIQ s.r.o. · David Gogela · <a href="mailto:dgogela@hopiholding.eu">dgogela@hopiholding.eu</a><br>
+  Dokument je důvěrný. Nepřeposílat bez souhlasu autora.
+</div>
+<script src="../../_hopiq.js"></script>
+<script src="_ver-badge.js"></script>
+</body>
+</html>
