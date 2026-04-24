@@ -189,13 +189,9 @@ const Shell = (() => {
     var el = document.createElement('div');
     el.id = 'ver-badge';
     el.textContent = 'HOPI AppIQ · ' + v;
-    el.style.cssText = 'position:fixed;bottom:8px;right:14px;z-index:100001;font-size:10px;color:rgba(148,163,184,0.5);font-family:\'Segoe UI\',system-ui,sans-serif;pointer-events:none;user-select:none;letter-spacing:.3px;line-height:1';
+    var btm = window.innerWidth < 900 ? '88px' : '8px';
+    el.style.cssText = 'position:fixed;bottom:' + btm + ';right:14px;z-index:100001;font-size:10px;color:rgba(148,163,184,0.5);font-family:\'Segoe UI\',system-ui,sans-serif;pointer-events:none;user-select:none;letter-spacing:.3px;line-height:1';
     document.body.appendChild(el);
-    // If HOPIQ agent button is present (cockpit pages), shift badge above it on narrow screens
-    requestAnimationFrame(function() {
-      var hopiq = document.getElementById('hopiq-btn');
-      if (hopiq && window.innerWidth <= 1024) el.style.bottom = '88px';
-    });
   }
   function injectVersionBadge() {
     if (typeof PREZ_VERSION !== 'undefined') { _doInjectBadge(); return; }
