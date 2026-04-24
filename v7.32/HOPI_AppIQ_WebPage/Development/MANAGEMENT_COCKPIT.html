@@ -278,14 +278,6 @@
       box-shadow: 0 0 20px rgba(96,165,250,.2);
     }
 
-    /* ── Footer ────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 16px 32px;
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; font-family: var(--sans); color: var(--muted);
-    }
-
     /* ── Cockpit Story Strip ───────────────────────── */
     .story-strip {
       margin-bottom: 24px;
@@ -586,13 +578,6 @@
     </div>
   </div>
 
-  <!-- ══ FOOTER ══════════════════════════════════════════ -->
-  <footer style="display:none" id="footer">
-    <span>HOPI AppIQ · Management Cockpit · <span id="footer-date"></span></span>
-    <span style="color:var(--violet)">💰 Budget je svatý</span>
-    <span>v8.0 · AIQ-00309</span>
-  </footer>
-
   <!-- ══ AUDIO — created dynamically in JS (matches Studio pattern) ══ -->
 
   <script>
@@ -773,7 +758,6 @@
       if (hqBtn) hqBtn.style.display = 'flex';
       loadData();
       renderSections();
-      updateFooter();
       initMusic();
       updateLangBtn();
     }
@@ -1029,11 +1013,6 @@
     function setText(id, val) {
       const el = document.getElementById(id);
       if (el) el.textContent = val;
-    }
-
-    function updateFooter() {
-      const d = new Date();
-      setText('footer-date', d.toLocaleDateString('cs-CZ'));
     }
 
     // ── Boot ──────────────────────────────────────────────
