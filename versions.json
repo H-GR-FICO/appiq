@@ -113,9 +113,10 @@
                          "title":  "Anthropic Journey + David vs Goliáš",
                          "mainUrl":  "v7.24/HOPI_AppIQ_WebPage/Development/index.html",
                          "mainLabel":  "Studio Hub",
-                         "changes":  {
-
-                                     },
+                         "changes":  [
+                                         "Nový: David vs Goliáš — srovnání Anthropic vs HOPI Group vs AppIQ v INVESTOR_BRIEF",
+                                         "Nový: Anthropic Journey — 4fázový plán partnerství (zítra → 2026 → 2026-27 → 2027+)"
+                                     ],
                          "promoLevel":  null,
                          "promoText":  null,
                          "promoTextEn":  null,
@@ -132,9 +133,13 @@
                          "title":  "MANAGEMENT COCKPIT: 3 nové sekce + Compliance opravy",
                          "mainUrl":  "v7.25/HOPI_AppIQ_WebPage/Development/index.html",
                          "mainLabel":  "Studio Hub",
-                         "changes":  {
-
-                                     },
+                         "changes":  [
+                                         "Nový: Overview Dashboard — živé OIL+BOIL statistiky, 5 widgetů",
+                                         "Nový: Launch Plan · Countdown — 3 živá odpočítávání (HOPI/B2C/B2B), progress bary",
+                                         "Nový: Task Control Center — Priority Board S1-S4, Linked View BIZ↔TECH, Capacity Split",
+                                         "Oprava: 9 Anthropic compliance oprav — odstraněna slova production/reální uživatelé",
+                                         "Oprava: MANAGEMENT COCKPIT vizuál — kontrast, bezpatkové písmo, název"
+                                     ],
                          "promoLevel":  null,
                          "promoText":  null,
                          "promoTextEn":  null,
@@ -151,9 +156,11 @@
                          "title":  "Cockpit: kompletní CS/EN překlad + bilingvní opravy · deploy",
                          "mainUrl":  "v7.26/HOPI_AppIQ_WebPage/Development/index.html",
                          "mainLabel":  "Studio Hub",
-                         "changes":  {
-
-                                     },
+                         "changes":  [
+                                         "Všech 20 cockpit sub-stránek plně bilingvních CS/EN",
+                                         "Bug fix: task-control.html četl appiq_lang místo hopi_lang — překlady nefungovaly",
+                                         "MANAGEMENT COCKPIT: sekce labely bilingvní, Story strip CSS opraven"
+                                     ],
                          "promoLevel":  null,
                          "promoText":  null,
                          "promoTextEn":  null,
@@ -170,9 +177,13 @@
                          "title":  "Cluster navigace · Auth redesign · Music fix · OG image · deploy",
                          "mainUrl":  "v7.27/HOPI_AppIQ_WebPage/Development/index.html",
                          "mainLabel":  "Studio Hub",
-                         "changes":  {
-
-                                     },
+                         "changes":  [
+                                         "Nový: Cluster navigace — cockpit → cluster → sekce → Zpět (kompletní hierarchie)",
+                                         "Auth redesign: heslo overlay vždy při fresh tabu, sub-pages bez promptu",
+                                         "Hudba: Music button toggle opraven, bfcache podpora",
+                                         "Nový: cockpit-og.png (1200×630) pro WhatsApp a Teams link preview",
+                                         "Oprava: Documentation — Copy button URL, Finance Portal odkaz, null-safety"
+                                     ],
                          "promoLevel":  null,
                          "promoText":  null,
                          "promoTextEn":  null,
@@ -184,14 +195,18 @@
                      },
                      {
                          "version":  "v7.31",
-                         "date":  "2026-04-23",
+                         "date":  "2026-04-24",
                          "session":  "v7.26-WebPage_20260423_0230",
                          "title":  "Hudba přežije back button · Budget Matrix čitelný na mobilu · 2026-04-24",
                          "mainUrl":  "v7.31/HOPI_AppIQ_WebPage/Development/index.html",
                          "mainLabel":  "Studio Hub",
-                         "changes":  {
-
-                                     },
+                         "changes":  [
+                                         "Nový: Version badge — HOPI AppIQ · vX.XX fixně na každé stránce, auto-update při deploy",
+                                         "KPI.html: živá data (8 karet) — bundled OIL_DATA místo fetch() nefunkčního na file://",
+                                         "Oprava: Finance Portal z dokumentace vždy zobrazí CS/EN výběr (?welcome=1)",
+                                         "Oprava: hudba přežije device back button — pagehide/pageshow místo beforeunload",
+                                         "Oprava: methodology.html Budget Matrix — header row skryt na mobilu, text wrapping"
+                                     ],
                          "promoLevel":  null,
                          "promoText":  null,
                          "promoTextEn":  null,
@@ -205,14 +220,24 @@
                          "version":  "v7.32",
                          "date":  "2026-04-24",
                          "session":  "session_20260424",
-                         "title":  "Cockpit Stream+Dept sloupce · Mojibake fix · Mobile scroll · 2026-04-24",
+                         "title":  "Cockpit: Stream+Dept · Release Selector · Version badge fix · Mojibake · 2026-04-24",
                          "mainUrl":  "v7.32/HOPI_AppIQ_WebPage/Development/index.html",
                          "mainLabel":  "Studio Hub",
                          "changes":  [
-                                         "Cockpit TECH+BIZ: nové sloupce Stream a Dept, klikatelné řazení Effort/Stream/Dept/Assignee",
-                                         "Oprava: 9 315 diakritika CP1250 Mojibake v OIL.json a BOIL.json",
-                                         "Oprava: mobile cockpit horizontální scroll — body overflow-x fix",
-                                         "Oprava: FICO Portál odkaz z mobilu (page not found — isLocal guard)"
+                                         "Nový: Release Selector — cockpit sub-stránka, výběr verze + destinace (9 WEB+APP odkazů)",
+                                         "Cockpit TECH+BIZ: nové sloupce Stream a Dept, klikatelné řazení",
+                                         "Oprava: version badge dynamické načítání (_ver.js jako jediný zdroj pravdy)",
+                                         "Oprava: documentation.html badge kolize + FICO Portal 404 + Release Selector URL",
+                                         "Oprava: 9 315 diakritika CP1250 Mojibake v OIL.json",
+                                         "Oprava: mobile cockpit horizontální scroll"
+                                     ],
+                         "changes_en":  [
+                                         "New: Release Selector — cockpit sub-page, select version + destination (9 WEB+APP links)",
+                                         "Cockpit TECH+BIZ: new Stream and Dept columns, sortable columns",
+                                         "Fix: version badge dynamic loading (_ver.js as single source of truth)",
+                                         "Fix: documentation.html badge conflict + Finance Portal 404 + Release Selector URL",
+                                         "Fix: 9,315 CP1250 Mojibake characters restored in OIL.json",
+                                         "Fix: mobile cockpit horizontal scroll"
                                      ],
                          "promoLevel":  null,
                          "promoText":  null,
