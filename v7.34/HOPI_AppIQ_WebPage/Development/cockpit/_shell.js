@@ -149,8 +149,9 @@ const Shell = (() => {
     // ?back=<encoded-url> lets cluster.html pass the correct return destination
     const urlBack = new URLSearchParams(location.search).get('back');
     const backHref = urlBack ? decodeURIComponent(urlBack) : (cfg.backUrl || '../MANAGEMENT_COCKPIT.html');
-    // Referrer-based back: if user came from Product Hub, show ← Product Hub instead of ← Cockpit
-    const _fromPH = document.referrer && document.referrer.includes('product-hub');
+    // sessionStorage-based back: if user came from Product Hub, show ← Product Hub instead of ← Cockpit
+    const _fromPH = sessionStorage.getItem('_nav_from') === 'product-hub';
+    if (_fromPH) sessionStorage.removeItem('_nav_from');
     const resolvedBackHref = _fromPH ? 'product-hub.html' : backHref;
     const backLabel = _fromPH
       ? '← Product Hub'
@@ -207,12 +208,14 @@ const Shell = (() => {
       </div>
     `;
 
-    // Back button — use history.back() to leverage bfcache (music continuity)
+    // Back button — Product Hub uses location.href (no bfcache needed); Cockpit uses history.back()
     const backBtn = shell.querySelector('.c-back');
     if (backBtn) {
       backBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        if (history.length > 1) {
+        if (_fromPH) {
+          location.href = resolvedBackHref;
+        } else if (history.length > 1) {
           history.back();
         } else {
           location.href = backBtn.href;

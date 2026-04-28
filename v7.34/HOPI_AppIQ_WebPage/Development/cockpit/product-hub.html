@@ -769,6 +769,13 @@
     countUp('kpi-budget', 20,  800);
   });
 
+  /* Product Hub context marker — set sessionStorage so target pages can show ← Product Hub */
+  document.querySelectorAll('a.ph-tile[href]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      sessionStorage.setItem('_nav_from', 'product-hub');
+    });
+  });
+
   /* i18n — "Otevřít ↗" → "Open ↗" */
   document.addEventListener('langChanged', function(e) {
     var isEn = e.detail === 'en';
