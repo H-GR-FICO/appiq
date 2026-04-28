@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Management Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="cockpit-data.js"></script>
+  <style>
+    /* ── Section card grid ─────────────────────────── */
+    .cl-header {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px 24px;
+      margin-bottom: 28px;
+    }
+    .cl-icon { font-size: 44px; line-height: 1; flex-shrink: 0; }
+    .cl-label {
+      font-size: 9px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .cl-name {
+      font-size: 26px; font-weight: 900; color: var(--c-white);
+      font-family: var(--c-font-sans); letter-spacing: -.3px; margin-bottom: 5px;
+    }
+    .cl-desc { font-size: 13px; color: var(--c-muted); font-family: var(--c-font-sans); line-height: 1.5; }
+
+    /* Color accent bar on header */
+    .cl-header[data-color="violet"] { border-left: 4px solid var(--c-violet); }
+    .cl-header[data-color="blue"]   { border-left: 4px solid var(--c-blue); }
+    .cl-header[data-color="green"]  { border-left: 4px solid var(--c-green); }
+    .cl-header[data-color="amber"]  { border-left: 4px solid var(--c-amber); }
+    .cl-header[data-color="pink"]   { border-left: 4px solid var(--c-pink); }
+
+    /* ── Section cards ─────────────────────────────── */
+    .sec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .sec-card {
+      display: flex; flex-direction: column;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden; text-decoration: none;
+      transition: border-color .18s, transform .15s, box-shadow .18s;
+    }
+    .sec-card:hover { transform: translateY(-2px); }
+    .sec-card-top { padding: 22px 20px 16px; flex: 1; }
+    .sec-num {
+      font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .sec-icon { font-size: 36px; display: block; margin-bottom: 10px; line-height: 1; }
+    .sec-name {
+      font-size: 17px; font-weight: 700; color: var(--c-white);
+      font-family: var(--c-font-sans); margin-bottom: 7px;
+    }
+    .sec-desc {
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.55;
+    }
+    .sec-card-foot {
+      margin-top: auto; padding: 11px 20px;
+      border-top: 1px solid var(--c-border);
+      background: rgba(255,255,255,.018);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .sec-open { font-size: 12px; font-weight: 700; font-family: var(--c-font-sans); }
+    .sec-badge {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: .5px;
+    }
+
+    .sec-card[data-color="violet"] { border-top: 3px solid var(--c-violet); }
+    .sec-card[data-color="violet"]:hover { border-color: var(--c-violet); box-shadow: 0 10px 32px rgba(168,85,247,.18); }
+    .sec-card[data-color="violet"] .sec-open { color: var(--c-violet); }
+    .sec-card[data-color="blue"]   { border-top: 3px solid var(--c-blue); }
+    .sec-card[data-color="blue"]:hover   { border-color: var(--c-blue);   box-shadow: 0 10px 32px rgba(96,165,250,.15); }
+    .sec-card[data-color="blue"]   .sec-open { color: var(--c-blue); }
+    .sec-card[data-color="green"]  { border-top: 3px solid var(--c-green); }
+    .sec-card[data-color="green"]:hover  { border-color: var(--c-green);  box-shadow: 0 10px 32px rgba(34,197,94,.12); }
+    .sec-card[data-color="green"]  .sec-open { color: var(--c-green); }
+    .sec-card[data-color="amber"]  { border-top: 3px solid var(--c-amber); }
+    .sec-card[data-color="amber"]:hover  { border-color: var(--c-amber);  box-shadow: 0 10px 32px rgba(245,158,11,.12); }
+    .sec-card[data-color="amber"]  .sec-open { color: var(--c-amber); }
+    .sec-card[data-color="orange"] { border-top: 3px solid var(--c-amber); }
+    .sec-card[data-color="orange"]:hover { border-color: var(--c-amber); box-shadow: 0 10px 32px rgba(245,158,11,.12); }
+    .sec-card[data-color="orange"] .sec-open { color: var(--c-amber); }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 640px) {
+      .sec-grid { grid-template-columns: 1fr; gap: 12px; }
+      .cl-name { font-size: 22px; }
+      .cl-icon { font-size: 36px; }
+    }
+    @media (max-width: 400px) {
+      .cl-header { padding: 16px 18px; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="cockpit-shell"></div>
+  <script src="_shell.js"></script>
+  <script>
+    (function () {
+      const params  = new URLSearchParams(location.search);
+      const cid     = params.get('id') || '';
+      const CLUSTERS = window.COCKPIT_CLUSTERS || [];
+      const SECTIONS = window.COCKPIT_SECTIONS || [];
+
+      const cluster = CLUSTERS.find(c => c.id === cid);
+      if (!cluster) {
+        document.body.innerHTML = '<p style="color:#94a3b8;padding:40px;font-family:sans-serif">Cluster nenalezen. <a href="../MANAGEMENT_COCKPIT.html" style="color:#A855F7">← Zpět</a></p>';
+        return;
+      }
+
+      const secList = SECTIONS.filter(s => cluster.sections.includes(s.num));
+
+      // ── Boot Shell ─────────────────────────────────────────
+      document.addEventListener('DOMContentLoaded', () => {
+        Shell.init({
+          section: cluster.name,
+          backUrl: '../MANAGEMENT_COCKPIT.html',
+          music:   '../cockpit-music.mp3'
+        });
+        render();
+      });
+
+      function getLang() { return Shell.getLang(); }
+
+      // ── Render ─────────────────────────────────────────────
+      function render() {
+        const lang = getLang();
+        const cs   = lang === 'cs';
+
+        // Page title
+        document.title = `${cluster.name[lang]} · Management Cockpit · HOPI AppIQ`;
+
+        // Cluster header
+        const main = document.getElementById('cl-main');
+        const headerHtml = `
+          <div class="cl-header" data-color="${cluster.color}">
+            <span class="cl-icon">${cluster.icon}</span>
+            <div>
+              <div class="cl-label">${cs ? 'SKUPINA' : 'CLUSTER'} ${cid.toUpperCase()}</div>
+              <div class="cl-name">${(cluster.name || {})[lang] || ''}</div>
+              <div class="cl-desc">${(cluster.desc || {})[lang] || ''}</div>
+            </div>
+          </div>`;
+
+        // Section cards — ?back= tells the section page to return here
+        const backParam = encodeURIComponent('cluster.html?id=' + cid);
+        const cardsHtml = `<div class="sec-grid">` +
+          secList.map(s => `
+            <a href="${s.url}?back=${backParam}" class="sec-card" data-color="${s.color}">
+              <div class="sec-card-top">
+                <div class="sec-num">${cs ? 'SEKCE' : 'SECTION'} ${s.num}</div>
+                <span class="sec-icon">${s.icon}</span>
+                <div class="sec-name">${(s.name || {})[lang] || ''}</div>
+                <div class="sec-desc">${(s.desc || {})[lang] || ''}</div>
+              </div>
+              <div class="sec-card-foot">
+                <span class="sec-open">${cs ? 'Otevřít →' : 'Open →'}</span>
+                <span class="sec-badge">${cs ? 'SEKCE' : 'SECTION'} ${s.num}</span>
+              </div>
+            </a>`).join('') +
+          `</div>`;
+
+        main.innerHTML = headerHtml + cardsHtml;
+      }
+
+    })();
+  </script>
+
+  <main class="cockpit-page">
+    <div id="cl-main"><!-- rendered by JS --></div>
+  </main>
+</body>
+</html>

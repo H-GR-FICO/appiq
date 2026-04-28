@@ -1,0 +1,695 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Documentation — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Version badge ───────────────────────────── */
+    .ver-strip {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      background: var(--c-bg3);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      padding: 16px 24px;
+      margin-bottom: 28px;
+    }
+    .ver-badge {
+      font-size: 22px; font-weight: 900; font-family: var(--c-font-sans);
+      color: var(--c-green); letter-spacing: 3px;
+      background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3);
+      border-radius: 8px; padding: 6px 18px;
+    }
+    .ver-info { flex: 1; min-width: 200px; }
+    .ver-label { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 2px; margin-bottom: 4px; }
+    .ver-base-url {
+      font-size: 13px; color: var(--c-blue); font-family: var(--c-font-sans);
+      word-break: break-all;
+    }
+    .ver-warn {
+      font-size: 11px; color: var(--c-amber); font-family: var(--c-font-sans);
+      background: rgba(245,158,11,.07); border: 1px solid rgba(245,158,11,.2);
+      border-radius: 6px; padding: 6px 14px;
+    }
+
+    /* ── Filters ─────────────────────────────────── */
+    .link-note {
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+      margin-bottom: 20px; line-height: 1.7;
+    }
+
+    /* ── Category block ─────────────────────────── */
+    .cat-block { margin-bottom: 36px; }
+    .cat-title {
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 3px; text-transform: uppercase;
+      padding-bottom: 8px; border-bottom: 1px solid var(--c-border);
+      margin-bottom: 12px;
+    }
+    .cat-title span { color: var(--c-violet); }
+
+    /* ── Link rows ───────────────────────────────── */
+    .link-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto auto auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      margin-bottom: 6px;
+      background: var(--c-bg2);
+      transition: border-color .15s, background .15s;
+    }
+    .link-row:hover { border-color: var(--c-border); background: var(--c-bg3); }
+    .link-row.hidden { display: none; }
+
+    .link-status-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .dot-live    { background: var(--c-green); box-shadow: 0 0 6px rgba(34,197,94,.5); }
+    .dot-dev     { background: var(--c-amber); }
+    .dot-planned { background: var(--c-border); }
+
+    .link-meta { min-width: 0; }
+    .link-name {
+      font-size: 14px; color: var(--c-white); font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .link-desc { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); margin-top: 2px; }
+    .link-path { font-size: 11px; color: var(--c-blue); font-family: var(--c-font-sans); margin-top: 1px; word-break: break-all; }
+
+    .link-tags { display: flex; gap: 5px; flex-wrap: wrap; justify-content: flex-end; }
+    .tag-auth { font-size: 10px; color: var(--c-amber); font-family: var(--c-font-sans);
+                background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2);
+                border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
+    .tag-pub  { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+                background: rgba(107,114,128,.1); border: 1px solid rgba(107,114,128,.2);
+                border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
+    .tag-new  { font-size: 10px; color: var(--c-violet); font-family: var(--c-font-sans);
+                background: rgba(168,85,247,.1); border: 1px solid rgba(168,85,247,.2);
+                border-radius: 4px; padding: 1px 6px; white-space: nowrap; }
+
+    /* ── Action buttons ─────────────────────────── */
+    .link-actions { display: flex; gap: 6px; }
+    .btn-open {
+      padding: 4px 12px; border-radius: 6px;
+      background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.3);
+      color: var(--c-blue); font-size: 11px; font-family: var(--c-font-sans);
+      cursor: pointer; text-decoration: none; white-space: nowrap;
+      transition: all .15s;
+    }
+    .btn-open:hover { background: rgba(96,165,250,.2); }
+    .btn-open.disabled {
+      opacity: .35; pointer-events: none; cursor: not-allowed;
+      border-color: var(--c-border); color: var(--c-muted); background: transparent;
+    }
+    .btn-copy {
+      padding: 4px 10px; border-radius: 6px;
+      background: var(--c-bg3); border: 1px solid var(--c-border);
+      color: var(--c-muted); font-size: 11px; font-family: var(--c-font-sans);
+      cursor: pointer; transition: all .15s; white-space: nowrap;
+    }
+    .btn-copy:hover { border-color: var(--c-violet); color: var(--c-violet); }
+    .btn-copy.copied { color: var(--c-green); border-color: var(--c-green); }
+
+    /* ── Status legend ───────────────────────────── */
+    .legend {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      margin-bottom: 24px; align-items: center;
+    }
+    .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-family: var(--c-font-sans); }
+    .leg-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .link-row { grid-template-columns: 24px 1fr auto; }
+      .link-tags { display: none; }
+    }
+    @media (max-width: 600px) {
+      .link-row { grid-template-columns: 1fr; gap: 8px; }
+      .link-actions { justify-content: flex-start; }
+      .ver-strip { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Documentation &amp; Links</h1>
+    <p class="page-subtitle">Centrální správa linků · vždy aktuální verze · AIQ-00310</p>
+
+    <!-- ── Version strip ─────────────────────────── -->
+    <div class="ver-strip">
+      <div class="ver-badge" id="ver-badge">v7.31</div>
+      <div class="ver-info">
+        <div class="ver-label">AKTUÁLNĚ NASAZENÁ VERZE — LIVE NA GITHUB PAGES</div>
+        <div class="ver-base-url" id="base-url-display">https://h-gr-fico.github.io/appiq/v7.31/HOPI_AppIQ_WebPage/Development/</div>
+      </div>
+      <div class="ver-warn">⚠ BASE_VER se aktualizuje automaticky při každém DO_DEPLOY.ps1 — neměnit ručně.</div>
+    </div>
+
+    <!-- ── Legend + Filters ──────────────────────── -->
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-green);box-shadow:0 0 5px rgba(34,197,94,.5)"></div>LIVE — nasazeno na GitHub Pages</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-amber)"></div>DEV — lokálně hotovo, čeká na deploy</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--c-border)"></div>PLÁNOVÁNO — zatím nepostaveno</div>
+    </div>
+
+    <div class="c-filters" id="filter-bar">
+      <button class="c-filter-btn active" onclick="filterLinks('all', this)">Vše</button>
+      <button class="c-filter-btn" onclick="filterLinks('live', this)">LIVE</button>
+      <button class="c-filter-btn" onclick="filterLinks('dev', this)">DEV</button>
+      <button class="c-filter-btn" onclick="filterLinks('planned', this)">Plánováno</button>
+      <button class="c-filter-btn" onclick="filterLinks('auth', this)">🔒 Heslem chráněno</button>
+      <input class="c-search" id="link-search" placeholder="Hledat stránku…" oninput="searchLinks(this.value)" autocomplete="off"/>
+    </div>
+
+    <p class="link-note" id="link-note">
+      Klikni na <strong style="color:var(--c-blue)">Otevřít →</strong> pro přechod na stránku &nbsp;|&nbsp;
+      <strong style="color:var(--c-violet)">Kopírovat</strong> zkopíruje přímý link do schránky &nbsp;|&nbsp;
+      🔒 = vyžaduje heslo <strong style="color:var(--c-amber)">HOPI2026</strong>
+    </p>
+
+    <hr class="c-divider" style="margin-top:0"/>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- KATEGORIE 1 — Marketing & Investor         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="cat-block" id="cat-marketing">
+      <div class="cat-title"><span>01</span> — Marketing &amp; Investor</div>
+      <div id="links-marketing"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- KATEGORIE 2 — AppIQ Studio                 -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="cat-block" id="cat-studio">
+      <div class="cat-title"><span>02</span> — AppIQ Studio (Hub)</div>
+      <div id="links-studio"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- KATEGORIE 3 — Finance Portal (APP)         -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="cat-block" id="cat-app">
+      <div class="cat-title"><span>03</span> — Finance Portal (APP)</div>
+      <div id="links-app"></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- KATEGORIE 4 — Management Cockpit v8.0      -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div class="cat-block" id="cat-cockpit">
+      <div class="cat-title"><span>04</span> — Management Cockpit <span style="color:var(--c-amber);font-size:10px;margin-left:8px">v8.0 · IN DEVELOPMENT</span></div>
+      <div id="links-cockpit"></div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: {cs:'Dokumentace & Linky', en:'Documentation & Links'},
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music:   '../cockpit-music.mp3'
+    });
+
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      var el = document.querySelector('.page-subtitle');
+      if (el) el.textContent = 'Central link management · always current version · AIQ-00310';
+      var verLbl = document.querySelector('.ver-label');
+      if (verLbl) verLbl.textContent = 'CURRENTLY DEPLOYED VERSION — LIVE ON GITHUB PAGES';
+      var verWarn = document.querySelector('.ver-warn');
+      if (verWarn) verWarn.textContent = '⚠ When deploying a new version: update BASE_VER in page code → all links update automatically.';
+      var legItems = document.querySelectorAll('.leg-item');
+      var legEn = ['LIVE — deployed on GitHub Pages', 'DEV — done locally, awaiting deploy', 'PLANNED — not yet built'];
+      legItems.forEach(function(el, i) {
+        if (!legEn[i]) return;
+        var dot = el.querySelector('.leg-dot');
+        el.textContent = legEn[i];
+        if (dot) el.prepend(dot);
+      });
+      var btns = document.querySelectorAll('.c-filter-btn');
+      btns.forEach(function(b) {
+        b.textContent = b.textContent.replace('Vše','All').replace('Plánováno','Planned').replace('Heslem chráněno','Password protected');
+      });
+      var si = document.getElementById('link-search');
+      if (si) si.placeholder = 'Search pages…';
+      var ln = document.getElementById('link-note');
+      if (ln) ln.innerHTML = 'Click <strong style="color:var(--c-blue)">Open →</strong> to go to the page &nbsp;|&nbsp; <strong style="color:var(--c-violet)">Copy</strong> copies the direct link to clipboard &nbsp;|&nbsp; 🔒 = requires password <strong style="color:var(--c-amber)">HOPI2026</strong>';
+    })();
+
+    // ════════════════════════════════════════════════
+    // VERZE — AKTUALIZOVAT PŘI KAŽDÉM DEPLOYI
+    // ════════════════════════════════════════════════
+    const BASE_VER = 'v7.35';
+    const GH_ROOT  = 'https://h-gr-fico.github.io/appiq/' + BASE_VER;
+    const GH_BASE  = 'https://h-gr-fico.github.io/appiq';
+    const WEB_BASE = GH_ROOT + '/HOPI_AppIQ_WebPage/Development';
+    const APP_BASE = GH_ROOT + '/app';
+
+    // ── Stav nasazení ──────────────────────────────
+    // LIVE    = deployed na GitHub Pages ✅
+    // dev     = hotovo lokálně, čeká na deploy
+    // planned = zatím nepostaveno
+
+    // ── Data ───────────────────────────────────────
+    const CATEGORIES = [
+      {
+        id: 'marketing',
+        links: [
+          {
+            name: 'Investor Entry',
+            desc: 'Gateway stránka — rozcestník pro investory, CEO, Anthropic',
+            path: '/INVESTOR_ENTRY.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['vstupní brána']
+          },
+          {
+            name: 'Investor Brief',
+            desc: 'Kompletní investor presentation — product, market, financials, team',
+            path: '/INVESTOR_BRIEF.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['shareable']
+          },
+          {
+            name: 'Personal Pitch — David Gogela',
+            desc: 'Osobní příběh a pitch deck Davida Gogely',
+            path: '/PERSONAL_PITCH.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: false,
+            tags: []
+          },
+          {
+            name: 'CEO Brief',
+            desc: 'Denní projekt update pro vedení — Daily Teaser banner',
+            path: '/CEO_BRIEF.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['denně aktualizováno']
+          },
+          {
+            name: 'Anthropic 2-Pager',
+            desc: 'Aktuální 2-pager pro Anthropic — Studio, AI Maturity, The Ask',
+            path: '/ANTHROPIC_2PAGER.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: false,
+            tags: ['Anthropic', 'aktuální']
+          },
+          {
+            name: 'Anthropic One Pager (archiv)',
+            desc: 'Původní verze — archivní reference',
+            path: '/ANTHROPIC_ONEPAGER.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: false,
+            tags: ['archiv']
+          },
+          {
+            name: 'Platform Presentation',
+            desc: 'Bilingvní CZ/EN prezentace platformy — plné feature přehled',
+            path: '/PORTAL_PRESENTATION.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['CZ/EN']
+          }
+        ]
+      },
+      {
+        id: 'studio',
+        links: [
+          {
+            name: 'Studio Hub',
+            desc: 'Hlavní rozcestník AppIQ Studia — Dev, Test, Admin, Docs, Promo',
+            path: '/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['FC-1']
+          },
+          {
+            name: 'Dev Center',
+            desc: 'Vývojové prostředí — OIL task board, release manager, changelog',
+            path: '/dev/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['FC-2']
+          },
+          {
+            name: 'Test Center',
+            desc: 'UAT testovací prostředí — device preview, checklist',
+            path: '/test/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['FC-3']
+          },
+          {
+            name: 'Admin Center',
+            desc: 'Administrace platformy — nastavení, správa uživatelů',
+            path: '/admin/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['FC-4']
+          },
+          {
+            name: 'Documentation Center',
+            desc: 'Technická a uživatelská dokumentace platformy',
+            path: '/docs/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: true,
+            tags: ['FC-5']
+          },
+          {
+            name: 'Promo',
+            desc: 'Propagační stránka platformy',
+            path: '/promo/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: false,
+            tags: []
+          },
+          {
+            name: 'HOPIQ Chatbot',
+            desc: 'Standalone HOPIQ AI asistent — demo stránka',
+            path: '/hopiq/index.html',
+            base: WEB_BASE,
+            status: 'live',
+            auth: false,
+            tags: ['AI', 'chatbot']
+          },
+          {
+            name: 'Release Selector',
+            desc: 'Přehled všech nasazených verzí AppIQ — výběr verze ke spuštění',
+            path: '/selector.html',
+            base: GH_BASE,
+            status: 'live',
+            auth: false,
+            tags: ['release', 'versions']
+          }
+        ]
+      },
+      {
+        id: 'app',
+        links: [
+          {
+            name: 'Finance Portal — Group Controlling SPA',
+            desc: 'Runtime aplikace — Finance modul pro HOPI Group Controlling. Calendar, Tracking, OrgChart, Reporting.',
+            path: '/index.html?welcome=1',
+            base: APP_BASE,
+            openPath: '../../../HOPI_AppIQ/Development/index.html?welcome=1',
+            status: 'dev',
+            auth: true,
+            tags: ['HOPI interní', 'SPA']
+          }
+        ]
+      },
+      {
+        id: 'cockpit',
+        links: [
+          {
+            name: 'Management Cockpit — Hub',
+            desc: 'Hlavní rozcestník cockpitu — live data z OIL.json + BOIL.json, 6 clusterů, 20 sekcí',
+            path: '/MANAGEMENT_COCKPIT.html',
+            base: WEB_BASE,
+            openPath: '../MANAGEMENT_COCKPIT.html',
+            status: 'dev',
+            auth: true,
+            tags: ['hub', 'v7.31']
+          },
+          {
+            name: '01 · Motivační prostor',
+            desc: 'Loga, velká čísla, Phase mapa, citáty — WOW efekt pro majitele a investory',
+            path: '/cockpit/motivation.html', base: WEB_BASE, openPath: 'motivation.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '02 · Plán startu · Odpočítávání',
+            desc: 'KDY SE TO STANE — 3 tracky: HOPI GROUP · B2C HOME · B2B Enterprise',
+            path: '/cockpit/launch-plan.html', base: WEB_BASE, openPath: 'launch-plan.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '03 · Obchodní model prodeje',
+            desc: 'Ceník · ARR projekce · Exit valuace · Transfer pricing · 4 scénáře',
+            path: '/cockpit/business-model.html', base: WEB_BASE, openPath: 'business-model.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '04 · Byznys architektura',
+            desc: '9D model · Platformová strategie · Tech vrstvy · Fázový plán · Diferenciace',
+            path: '/cockpit/business-architecture.html', base: WEB_BASE, openPath: 'business-architecture.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '05 · Celkový přehled',
+            desc: 'Ranní briefing — agregát KPIs. Realita vs. model. Jeden pohled na celý stav.',
+            path: '/cockpit/overview.html', base: WEB_BASE, openPath: 'overview.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '06 · KPI přehled',
+            desc: '8 live KPI karet — active, closed, countdown B2C, git commits, split Claude/David',
+            path: '/cockpit/kpi.html', base: WEB_BASE, openPath: 'kpi.html',
+            status: 'dev', auth: true, tags: ['opraveno AIQ-00411']
+          },
+          {
+            name: '07 · Finanční přehled',
+            desc: 'Monthly cost tracker, cash injection pipeline ($200k+), ROI argument',
+            path: '/cockpit/financial.html', base: WEB_BASE, openPath: 'financial.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '08 · Sledování rozpočtu',
+            desc: 'Milestone price tags, value delivery chart, cash back / návratnost',
+            path: '/cockpit/budget-track.html', base: WEB_BASE, openPath: 'budget-track.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '09 · Milníkový plán',
+            desc: 'Fáze 0 → s.r.o. → B2C Beta → Launch → Enterprise',
+            path: '/cockpit/timeline.html', base: WEB_BASE, openPath: 'timeline.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '10 · Centrum řízení úkolů',
+            desc: 'OIL + BOIL unified — Priority Board (S1–S4), BIZ↔TECH Linked View',
+            path: '/cockpit/task-control.html', base: WEB_BASE, openPath: 'task-control.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '11 · TECH Task Board (OIL)',
+            desc: 'Všechny AIQ tasky — filtry, expand → OIL_CONTEXT detail. Burndown chart.',
+            path: '/cockpit/oil-board.html', base: WEB_BASE, openPath: 'oil-board.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '12 · BIZ Task Board (BOIL)',
+            desc: 'Všechny BIZ tasky — filtry stream/oblast/typ, expand → BKONTEXT detail',
+            path: '/cockpit/boil-board.html', base: WEB_BASE, openPath: 'boil-board.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '13 · Organizace a koordinace',
+            desc: 'Discussion Log — živý záznam strategických rozhodnutí. Odpovědnosti, kontakty.',
+            path: '/cockpit/org-coordination.html', base: WEB_BASE, openPath: 'org-coordination.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '14 · Jednací místnost',
+            desc: 'Digitální flipchart + discussion board. Real-time spolupráce a rozhodování.',
+            path: '/cockpit/meeting-room.html', base: WEB_BASE, openPath: 'meeting-room.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '15 · Záznam rozhodnutí',
+            desc: 'Klíčová rozhodnutí — datum, kdo rozhodl, dopad, linked task',
+            path: '/cockpit/decisions.html', base: WEB_BASE, openPath: 'decisions.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '16 · Kapacita a odpovědnost',
+            desc: 'Claude vs David split, odpovědnostní matice, bottleneck (REVIEW tasky)',
+            path: '/cockpit/capacity.html', base: WEB_BASE, openPath: 'capacity.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '17 · Projektový tým',
+            desc: 'Aktuální tým, stakeholders, target partneři (Anthropic, AWS, MS)',
+            path: '/cockpit/team.html', base: WEB_BASE, openPath: 'team.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '18 · Zdroje a náklady',
+            desc: 'Lidská práce + AI Resources + SW & Tech + HW + Marketing + Budget',
+            path: '/cockpit/sources.html', base: WEB_BASE, openPath: 'sources.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '19 · Metodika',
+            desc: 'AI pravidla, model selection guide (Opus/Sonnet/Haiku), budget strategie, workflow',
+            path: '/cockpit/methodology.html', base: WEB_BASE, openPath: 'methodology.html',
+            status: 'dev', auth: true, tags: []
+          },
+          {
+            name: '20 · Dokumentace a odkazy',
+            desc: 'Tato stránka — centrální správa URL, vždy aktuální verze, copy links',
+            path: '/cockpit/documentation.html', base: WEB_BASE, openPath: 'documentation.html',
+            status: 'dev', auth: true, tags: ['právě jsme zde']
+          },
+          {
+            name: '22 · AI Control Room',
+            desc: 'Platformní infrastruktura — hooky, auditní log, health checks, session metriky. CONTROL cluster.',
+            path: '/cockpit/ai-control-room.html', base: WEB_BASE, openPath: 'ai-control-room.html',
+            status: 'dev', auth: true, tags: ['new']
+          },
+          {
+            name: '23 · Deploy Control Room',
+            desc: '[to be planned] Správa nasazení — pipeline, preflight, GitHub Pages, verze v produkci.',
+            path: null, base: WEB_BASE, openPath: null,
+            status: 'planned', auth: true, tags: []
+          },
+          {
+            name: '24 · Quality Control Room',
+            desc: '[to be planned] Stav testování — test tasky, code review log, vizuální audit.',
+            path: null, base: WEB_BASE, openPath: null,
+            status: 'planned', auth: true, tags: []
+          },
+          {
+            name: '25 · Data Control Room',
+            desc: '[to be planned] Zdraví datové vrstvy — JSON validace, OIL↔Context konzistence, DISC sekvence.',
+            path: null, base: WEB_BASE, openPath: null,
+            status: 'planned', auth: true, tags: []
+          },
+          {
+            name: '26 · Archive Control Room',
+            desc: '[to be planned] Správa archivace — session history, zálohovací zdraví, transcript rotace.',
+            path: null, base: WEB_BASE, openPath: null,
+            status: 'planned', auth: true, tags: []
+          }
+        ]
+      }
+    ];
+
+    // ── Render ─────────────────────────────────────
+    function buildUrl(link) {
+      if (!link.path) return null;
+      return link.base + link.path;
+    }
+
+    function statusDot(status) {
+      const cls = status === 'live' ? 'dot-live' : status === 'dev' ? 'dot-dev' : 'dot-planned';
+      return `<div class="link-status-dot ${cls}"></div>`;
+    }
+
+    function statusLabel(status) {
+      if (status === 'live')    return 'LIVE';
+      if (status === 'dev')     return 'DEV';
+      return Shell.getLang() === 'en' ? 'PLANNED' : 'PLÁNOVÁNO';
+    }
+
+    function renderLinks() {
+      CATEGORIES.forEach(cat => {
+        const container = document.getElementById('links-' + cat.id);
+        if (!container) return;
+        container.innerHTML = cat.links.map((link, i) => {
+          const url = buildUrl(link);
+          const isLocal = location.protocol === 'file:';
+          const openHref = (isLocal && link.openPath) ? link.openPath : url;
+          const isLive = link.status === 'live';
+          const hasUrl = !!url;
+          const hasOpen = !!openHref;
+          const displayPath = url || (link.localPath || '—');
+          const tagsHtml = [
+            link.auth ? '<span class="tag-auth">🔒 HOPI2026</span>' : `<span class="tag-pub">${Shell.getLang() === 'en' ? 'public' : 'veřejná'}</span>`,
+            ...( link.tags || []).filter(t => t !== 'archiv').map(t => `<span class="tag-new">${t}</span>`)
+          ].join('');
+
+          return `<div class="link-row" data-status="${link.status}" data-auth="${link.auth}" data-name="${link.name.toLowerCase()}" data-desc="${link.desc.toLowerCase()}">
+            ${statusDot(link.status)}
+            <div class="link-meta">
+              <div class="link-name">${link.name}</div>
+              <div class="link-desc">${link.desc}</div>
+              <div class="link-path">${displayPath}</div>
+            </div>
+            <div class="link-tags">${tagsHtml}</div>
+            <div class="link-actions">
+              ${hasOpen
+                ? `<a class="btn-open" href="${openHref}" target="_blank" rel="noopener">${Shell.getLang() === 'en' ? 'Open →' : 'Otevřít →'}</a>`
+                : `<span class="btn-open disabled">${statusLabel(link.status)}</span>`
+              }
+              <button class="btn-copy" onclick="copyLink('${url || ''}', '${displayPath}', this)">${Shell.getLang() === 'en' ? 'Copy' : 'Kopírovat'}</button>
+            </div>
+          </div>`;
+        }).join('');
+      });
+    }
+
+    // ── Copy ───────────────────────────────────────
+    function copyLink(url, fallback, btn) {
+      const text = url || fallback;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = Shell.getLang() === 'en' ? '✓ Copied' : '✓ Zkopírováno';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = Shell.getLang() === 'en' ? 'Copy' : 'Kopírovat'; btn.classList.remove('copied'); }, 2000);
+      }).catch(() => {
+        prompt(Shell.getLang() === 'en' ? 'Copy link:' : 'Zkopíruj link:', text);
+      });
+    }
+
+    // ── Filters ────────────────────────────────────
+    function filterLinks(type, btn) {
+      document.querySelectorAll('.c-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('link-search').value = '';
+      document.querySelectorAll('.link-row').forEach(row => {
+        let show = true;
+        if (type === 'live')    show = row.dataset.status === 'live';
+        if (type === 'dev')     show = row.dataset.status === 'dev';
+        if (type === 'planned') show = row.dataset.status === 'planned';
+        if (type === 'auth')    show = row.dataset.auth === 'true';
+        row.classList.toggle('hidden', !show);
+      });
+    }
+
+    function searchLinks(q) {
+      const query = q.toLowerCase().trim();
+      document.querySelectorAll('.c-filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.link-row').forEach(row => {
+        const match = !query || row.dataset.name.includes(query) || row.dataset.desc.includes(query);
+        row.classList.toggle('hidden', !match);
+      });
+    }
+
+    // ── Version display ────────────────────────────
+    function initVersionDisplay() {
+      document.getElementById('ver-badge').textContent = BASE_VER;
+      var corner = document.getElementById('ver-corner');
+      if (corner) corner.textContent = 'HOPI AppIQ · ' + BASE_VER;
+      document.getElementById('base-url-display').textContent = WEB_BASE + '/';
+    }
+
+    // ── Boot ───────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      initVersionDisplay();
+      renderLinks();
+    });
+  </script>
+<div id="ver-corner" style="position:fixed;bottom:8px;right:14px;z-index:100001;font-size:10px;color:rgba(148,163,184,0.5);font-family:'Segoe UI',system-ui,sans-serif;pointer-events:none;user-select:none;letter-spacing:.3px;line-height:1">HOPI AppIQ · v7.35</div>
+</body>
+</html>
