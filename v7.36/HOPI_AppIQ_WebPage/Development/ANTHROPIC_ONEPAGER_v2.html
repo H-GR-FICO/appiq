@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HOPI AppIQ — Powered by Claude · Anthropic</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0;}
+
+  body{
+    font-family:'Inter',sans-serif;
+    background:#060610;
+    color:#fff;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 16px;
+  }
+
+  .page{
+    width:100%;
+    max-width:720px;
+    border-radius:20px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 40px 80px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.1);
+  }
+
+  /* ── HERO BAND ── */
+  .hero{
+    background:linear-gradient(135deg,#CC4A00 0%,#E8750A 40%,#F59E0B 80%,#CC785C 100%);
+    padding:40px 44px 36px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse 80% 120% at 110% 50%,rgba(255,255,255,.12),transparent 60%);
+    pointer-events:none;
+  }
+  .hero-eyebrow{
+    font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+    color:rgba(255,255,255,.75);margin-bottom:16px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .hero-eyebrow::before{content:'';width:28px;height:2px;background:rgba(255,255,255,.5);}
+  .hero-hook{
+    font-size:clamp(32px,6vw,52px);
+    font-weight:900;
+    line-height:1.05;
+    color:#fff;
+    letter-spacing:-1px;
+    margin-bottom:16px;
+    text-shadow:0 2px 20px rgba(0,0,0,.3);
+  }
+  .hero-hook em{color:rgba(255,255,255,.9);font-style:normal;display:block;font-size:.55em;font-weight:300;letter-spacing:0;margin-top:6px;}
+  .hero-sub{
+    font-size:14px;color:rgba(255,255,255,.8);line-height:1.7;max-width:500px;
+  }
+  .hero-sub strong{color:#fff;font-weight:700;}
+
+  /* Brand lockup in hero */
+  .hero-brand{
+    position:absolute;top:36px;right:44px;
+    display:flex;flex-direction:column;align-items:flex-end;gap:4px;
+  }
+  .hb-appiq{display:flex;align-items:baseline;gap:2px;line-height:1;}
+  .hb-appiq .a{font-size:30px;font-weight:300;color:rgba(255,255,255,.9);}
+  .hb-appiq .i{font-size:34px;font-weight:900;color:#fff;}
+  .hb-powered{font-size:9px;color:rgba(255,255,255,.6);letter-spacing:2px;text-transform:uppercase;}
+
+  /* ── BODY ── */
+  .body{background:linear-gradient(180deg,#0e0e1c 0%,#0a0a16 100%);}
+
+  /* ── STATS ROW ── */
+  .stats-row{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    border-bottom:1px solid rgba(255,255,255,.07);
+  }
+  .stat-cell{
+    padding:22px 20px;
+    border-right:1px solid rgba(255,255,255,.07);
+    text-align:center;
+  }
+  .stat-cell:last-child{border-right:none;}
+  .sc-val{font-size:clamp(20px,3.5vw,30px);font-weight:900;line-height:1;margin-bottom:5px;}
+  .sc-lbl{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.4);}
+  .c-or{color:#F59E0B;}
+  .c-gr{color:#1DB954;}
+  .c-vi{color:#A855F7;}
+  .c-an{color:#CC785C;}
+
+  /* ── PRODUCT ── */
+  .product{
+    padding:28px 44px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    display:flex;gap:28px;align-items:flex-start;flex-wrap:wrap;
+  }
+  .prod-text{flex:1;min-width:200px;}
+  .section-label{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px;}
+  .prod-desc{font-size:13px;color:rgba(255,255,255,.7);line-height:1.8;}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px;}
+  .chip{font-size:10px;font-weight:600;border-radius:6px;padding:5px 12px;border:1px solid;}
+  .chip-ent{color:#F59E0B;background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.3);}
+  .chip-home{color:#1DB954;background:rgba(29,185,84,.1);border-color:rgba(29,185,84,.25);}
+  .chip-ai{color:#CC785C;background:rgba(204,120,92,.1);border-color:rgba(204,120,92,.3);}
+
+  /* ── VS ── */
+  .vs-section{
+    padding:24px 44px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.02);
+  }
+  .vs-grid{display:grid;grid-template-columns:1fr 52px 1fr;gap:0;align-items:stretch;}
+  .vs-col{padding:16px 18px;border-radius:12px;}
+  .vs-col.anth{background:linear-gradient(135deg,rgba(204,120,92,.18),rgba(204,120,92,.08));border:1px solid rgba(204,120,92,.4);}
+  .vs-col.hopi{background:linear-gradient(135deg,rgba(245,158,11,.18),rgba(232,117,10,.08));border:1px solid rgba(245,158,11,.4);}
+  .vs-mid{display:flex;align-items:center;justify-content:center;}
+  .vs-badge{
+    width:36px;height:36px;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.15);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:900;color:rgba(255,255,255,.5);
+  }
+  .vs-name{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+  .vs-name.anth{color:#CC785C;}
+  .vs-name.hopi{color:#F59E0B;}
+  .vs-items{display:flex;flex-direction:column;gap:6px;}
+  .vs-item{display:flex;flex-direction:column;gap:1px;}
+  .vs-val{font-size:clamp(13px,2.2vw,18px);font-weight:800;line-height:1.1;}
+  .vs-val.anth{color:#CC785C;}
+  .vs-val.hopi{color:#F59E0B;}
+  .vs-lbl{font-size:9px;color:rgba(255,255,255,.4);}
+
+  /* Punchline */
+  .punchline{
+    padding:18px 44px;
+    text-align:center;
+    font-size:14px;font-style:italic;font-weight:600;
+    color:rgba(255,255,255,.9);
+    border-bottom:1px solid rgba(255,255,255,.07);
+    background:linear-gradient(90deg,transparent,rgba(232,117,10,.06),transparent);
+  }
+  .punchline span.a{color:#CC785C;}
+  .punchline span.b{color:#F59E0B;}
+
+  /* P3 lockup */
+  .p3{
+    padding:14px 44px;
+    display:flex;align-items:center;justify-content:center;gap:14px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+    background:rgba(204,120,92,.04);
+  }
+  .p3-label{font-size:9px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;}
+  .p3-brand{font-size:13px;font-weight:700;}
+  .p3-and{font-size:11px;color:rgba(255,255,255,.25);}
+
+  /* ── FOOTER ── */
+  .footer{
+    padding:20px 44px;
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:12px;
+    background:linear-gradient(90deg,rgba(232,117,10,.1),rgba(168,85,247,.07));
+  }
+  .footer-left{}
+  .footer-name{font-size:13px;font-weight:700;color:#fff;}
+  .footer-role{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
+  .footer-right{text-align:right;}
+  .footer-url{font-size:10px;font-weight:600;color:#CC785C;letter-spacing:.3px;}
+  .footer-pw{font-size:9px;color:rgba(255,255,255,.25);margin-top:3px;}
+
+  @media(max-width:520px){
+    .hero,.product,.vs-section,.punchline,.p3,.footer{padding-left:20px;padding-right:20px;}
+    .hero-brand{display:none;}
+    .hero-hook{font-size:28px;}
+    .stats-row{grid-template-columns:1fr 1fr;}
+    .stat-cell:nth-child(2){border-right:none;}
+    .vs-grid{grid-template-columns:1fr;gap:8px;}
+    .vs-mid{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO BAND -->
+  <div class="hero">
+    <div class="hero-eyebrow">HOPI AppIQ · Powered by Claude</div>
+    <div class="hero-hook">
+      1 person. 1 AI. 8 weeks. Live.
+      <em>From idea to production platform — at $1k total cost.</em>
+    </div>
+    <div class="hero-sub">
+      An <strong>AI-powered enterprise platform</strong> built in 8 weeks by one person.<br>
+      HOPI Group pilot active. Phase 1 B2C launching 2027.
+    </div>
+    <div class="hero-brand">
+      <div class="hb-appiq">
+        <span class="a">App</span><span class="i">IQ</span>
+      </div>
+      <div class="hb-powered">× Anthropic</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <div class="sc-val c-or">8</div>
+        <div class="sc-lbl">weeks to live</div>
+      </div>
+      <div class="stat-cell">
+        <div class="sc-val c-gr">~$1k</div>
+        <div class="sc-lbl">total cost</div>
+      </div>
+      <div class="stat-cell">
+        <div class="sc-val c-or">v7.25</div>
+        <div class="sc-lbl">live now</div>
+      </div>
+      <div class="stat-cell">
+        <div class="sc-val c-vi">2027</div>
+        <div class="sc-lbl">B2C launch</div>
+      </div>
+    </div>
+
+    <!-- PRODUCT -->
+    <div class="product">
+      <div class="prod-text">
+        <div class="section-label">What we built</div>
+        <div class="prod-desc">
+          A modular, AI-native platform for enterprise and home users.
+          Finance portal, document intelligence, workflow automation —
+          built on Claude API. Designed to scale from 1 user to enterprise.
+        </div>
+        <div class="chips">
+          <span class="chip chip-ent">Finance & Reporting</span>
+          <span class="chip chip-ent">Workflow Engine</span>
+          <span class="chip chip-home">HOME B2C</span>
+          <span class="chip chip-ai">Claude API</span>
+          <span class="chip chip-ai">HOPIQ Chatbot</span>
+          <span class="chip chip-home">CEE → WorldWide</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- VS -->
+    <div class="vs-section">
+      <div class="section-label" style="margin-bottom:14px;">The contrast that makes the story</div>
+      <div class="vs-grid">
+        <div class="vs-col anth">
+          <div class="vs-name anth">Anthropic</div>
+          <div class="vs-items">
+            <div class="vs-item"><span class="vs-val anth">$61.5B</span><span class="vs-lbl">valuation</span></div>
+            <div class="vs-item"><span class="vs-val anth">1 500+</span><span class="vs-lbl">employees</span></div>
+            <div class="vs-item"><span class="vs-val anth">Global</span><span class="vs-lbl">reach</span></div>
+            <div class="vs-item"><span class="vs-val anth">Claude</span><span class="vs-lbl">the engine</span></div>
+          </div>
+        </div>
+        <div class="vs-mid"><div class="vs-badge">vs</div></div>
+        <div class="vs-col hopi">
+          <div class="vs-name hopi">HOPI AppIQ</div>
+          <div class="vs-items">
+            <div class="vs-item"><span class="vs-val hopi">€0.5B</span><span class="vs-lbl">HOPI Group</span></div>
+            <div class="vs-item"><span class="vs-val hopi">1 + AI</span><span class="vs-lbl">team size</span></div>
+            <div class="vs-item"><span class="vs-val hopi">8 CEE</span><span class="vs-lbl">countries</span></div>
+            <div class="vs-item"><span class="vs-val hopi">AppIQ</span><span class="vs-lbl">the car</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PUNCHLINE -->
+    <div class="punchline">
+      "<span class="a">You build the engine.</span> <span class="b">We build the car.</span> And we're driving."
+    </div>
+
+    <!-- P3 LOCKUP -->
+    <div class="p3">
+      <div class="p3-label">partnership vision</div>
+      <div class="p3-brand">
+        <span style="color:#E8750A;font-weight:800;">HOPI AppIQ</span>
+        <span style="color:rgba(255,255,255,.3);font-weight:300;margin:0 6px;">&amp;</span>
+        <span style="color:#CC785C;font-weight:800;">Claude by Anthropic</span>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div class="footer-left">
+        <div class="footer-name">David Gogela</div>
+        <div class="footer-role">Head of Group Controlling · HOPI Holding<br>Founder · HOPI TechIQ s.r.o.</div>
+      </div>
+      <div class="footer-right">
+        <div class="footer-url">h-gr-fico.github.io/appiq/v7.25/<br>HOPI_AppIQ_WebPage/Development/INVESTOR_BRIEF.html?lang=en</div>
+        <div class="footer-pw">password: HOPI2026</div>
+      </div>
+    </div>
+
+  </div><!-- /body -->
+</div><!-- /page -->
+<script src="../../_hopiq.js"></script>
+<script src="_ver-badge.js"></script>
+</body>
+</html>

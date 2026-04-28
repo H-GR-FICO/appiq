@@ -1,6 +1,6 @@
 ﻿{
-  "latest": "v7.35",
-  "updatedAt": "2026-04-28",
+  "latest": "v7.36",
+  "updatedAt": "2026-04-29",
   "versions": [
     {
         "version":  "v7.20",
@@ -311,6 +311,28 @@
         "pitchUrl":  "v7.35/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.35/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.35/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.36",
+        "date":  "2026-04-29",
+        "session":  "session_20260428_2332",
+        "title":  "Training Center: Speaker Notes · Presenter Script · M_EFF Slide · 2026-04-29",
+        "mainUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "Training Center — M3–M8 plný obsah (AIQ-00507)",
+                        "M_EFF Slide — Efektivita s AI (AIQ-00508)",
+                        "Speaker Notes panel — klíčové body (AIQ-00508)",
+                        "Presenter Script — 2. vrstva (AIQ-00508)"
+                    ],
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

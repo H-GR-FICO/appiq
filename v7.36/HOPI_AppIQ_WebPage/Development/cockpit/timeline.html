@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Milestone Timeline — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Countdown hero ──────────────────────────── */
+    .countdown-hero {
+      display: flex; align-items: center; justify-content: center;
+      gap: 40px; flex-wrap: wrap;
+      background: linear-gradient(135deg, rgba(96,165,250,.06) 0%, rgba(168,85,247,.08) 100%);
+      border: 1px solid rgba(96,165,250,.2);
+      border-radius: var(--c-radius);
+      padding: 28px 32px;
+      margin-bottom: 32px;
+      position: relative; overflow: hidden;
+    }
+    .countdown-hero::before {
+      content: '🚀';
+      position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+      font-size: 80px; opacity: .06; pointer-events: none;
+    }
+    .cd-main { text-align: center; }
+    .cd-days  { font-size: clamp(56px, 8vw, 96px); font-weight: 900;
+                font-family: var(--c-font-sans); color: var(--c-blue); line-height: 1;
+                text-shadow: 0 0 60px rgba(96,165,250,.35); }
+    .cd-lbl   { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+                letter-spacing: 4px; margin-top: 6px; }
+    .cd-date  { font-size: 28px; font-weight: 800; color: var(--c-white);
+                font-family: var(--c-font-sans); letter-spacing: 4px; }
+    .cd-sublbl { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+                 letter-spacing: 2px; margin-top: 4px; }
+    .cd-kpis  { display: flex; gap: 24px; flex-wrap: wrap; }
+    .cd-kpi   { text-align: center; }
+    .cd-kpi-val { font-size: 22px; font-weight: 800; font-family: var(--c-font-sans); }
+    .cd-kpi-lbl { font-size: 9px; color: var(--c-muted); font-family: var(--c-font-sans);
+                  letter-spacing: 1.5px; margin-top: 3px; }
+
+    /* ── Timeline ────────────────────────────────── */
+    .timeline { position: relative; padding-left: 32px; margin-bottom: 40px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 10px; top: 16px;
+      bottom: 16px; width: 2px;
+      background: linear-gradient(180deg, var(--c-green) 0%, var(--c-blue) 40%, var(--c-border) 100%);
+    }
+
+    .tl-item {
+      position: relative; margin-bottom: 28px;
+      opacity: 1; transition: opacity .2s;
+    }
+    .tl-item.future { opacity: .6; }
+
+    .tl-dot {
+      position: absolute; left: -27px; top: 14px;
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid var(--c-border);
+      background: var(--c-bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tl-dot.done    { background: var(--c-green); border-color: var(--c-green);
+                      box-shadow: 0 0 10px rgba(34,197,94,.4); }
+    .tl-dot.now     { background: var(--c-violet); border-color: var(--c-violet);
+                      box-shadow: 0 0 14px rgba(168,85,247,.6); animation: pulse 2s infinite; }
+    .tl-dot.next    { background: var(--c-blue); border-color: rgba(96,165,250,.5); }
+    .tl-dot.far     { background: var(--c-border); border-color: var(--c-border); }
+    .tl-dot-inner   { width: 6px; height: 6px; border-radius: 50%; background: white; }
+
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 14px rgba(168,85,247,.6); }
+      50%      { box-shadow: 0 0 22px rgba(168,85,247,.9); }
+    }
+
+    .tl-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 18px 20px;
+      transition: border-color .2s;
+    }
+    .tl-item.done .tl-card  { border-color: rgba(34,197,94,.2); }
+    .tl-item.now  .tl-card  { border-color: rgba(168,85,247,.35);
+                               background: rgba(168,85,247,.04); }
+    .tl-item.next .tl-card  { border-color: rgba(96,165,250,.2); }
+    .tl-card:hover { border-color: rgba(168,85,247,.4); }
+
+    .tl-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+    .tl-phase  { font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted);
+                 letter-spacing: 2px; text-transform: uppercase; }
+    .tl-date   { font-size: 11px; font-family: var(--c-font-sans); color: var(--c-blue);
+                 margin-left: auto; }
+    .tl-name   { font-size: 16px; font-weight: 700; color: var(--c-white); margin-bottom: 6px; }
+    .tl-desc   { font-size: 13px; color: var(--c-text); line-height: 1.6; margin-bottom: 12px; }
+
+    .tl-kpis   { display: flex; gap: 16px; flex-wrap: wrap; }
+    .tl-kpi    { font-size: 11px; font-family: var(--c-font-sans);
+                 background: var(--c-bg3); border: 1px solid var(--c-border);
+                 border-radius: 6px; padding: 4px 10px; color: var(--c-text); }
+    .tl-kpi strong { color: var(--c-white); }
+
+    .tl-badge-done  { background: rgba(34,197,94,.15);  color: var(--c-green); }
+    .tl-badge-now   { background: rgba(168,85,247,.15); color: var(--c-violet); }
+    .tl-badge-next  { background: rgba(96,165,250,.15); color: var(--c-blue); }
+    .tl-badge-far   { background: rgba(107,114,128,.1); color: var(--c-muted); }
+
+    /* ── B2C Phases sub-timeline ─────────────────── */
+    .phase-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px; margin-top: 8px;
+    }
+    .phase-card {
+      background: var(--c-bg3); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 14px 16px;
+    }
+    .phase-card.active { border-color: rgba(96,165,250,.3); }
+    .phase-num  { font-size: 9px; font-family: var(--c-font-sans); color: var(--c-muted); letter-spacing: 2px; }
+    .phase-name { font-size: 13px; font-weight: 700; color: var(--c-white); margin: 4px 0; }
+    .phase-period { font-size: 11px; color: var(--c-blue); font-family: var(--c-font-sans); margin-bottom: 8px; }
+    .phase-items { font-size: 12px; color: var(--c-text); line-height: 1.7; }
+    .phase-kpi  { margin-top: 8px; font-size: 11px; font-family: var(--c-font-sans);
+                  color: var(--c-green); border-top: 1px solid var(--c-border); padding-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> Milestone Timeline</h1>
+    <p class="page-subtitle">Projektová roadmapa · B2C Launch 01.01.2027 · BIZ-00118</p>
+
+    <!-- ── Countdown hero ────────────────────────── -->
+    <div class="countdown-hero">
+      <div class="cd-main">
+        <div class="cd-days" id="cd-days">—</div>
+        <div class="cd-lbl">DNŮ DO B2C LAUNCH</div>
+      </div>
+      <div style="text-align:center">
+        <div class="cd-date">01.01.2027</div>
+        <div class="cd-sublbl">AppIQ HOME · Veřejný launch</div>
+      </div>
+      <div class="cd-kpis">
+        <div class="cd-kpi">
+          <div class="cd-kpi-val" style="color:var(--c-green)" id="cd-proj-days">—</div>
+          <div class="cd-kpi-lbl">DNÍ PROJEKTU</div>
+        </div>
+        <div class="cd-kpi">
+          <div class="cd-kpi-val" style="color:var(--c-amber)">50+</div>
+          <div class="cd-kpi-lbl">FOUNDING MEMBERS</div>
+        </div>
+        <div class="cd-kpi">
+          <div class="cd-kpi-val" style="color:var(--c-violet)">3</div>
+          <div class="cd-kpi-lbl">VERTIKÁLY LIVE</div>
+        </div>
+        <div class="cd-kpi">
+          <div class="cd-kpi-val" style="color:var(--c-blue)">CZK 150K</div>
+          <div class="cd-kpi-lbl">ARR CÍLE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Main Timeline ─────────────────────────── -->
+    <h2 style="font-size:13px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:20px">— PROJEKTOVÁ ROADMAPA</h2>
+
+    <div class="timeline">
+
+      <!-- DONE 1 -->
+      <div class="tl-item done">
+        <div class="tl-dot done"><div class="tl-dot-inner"></div></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 01</span>
+            <span class="badge tl-badge-done">✓ HOTOVO</span>
+            <span class="tl-date">Únor 2026</span>
+          </div>
+          <div class="tl-name">MVP — Platforma spuštěna</div>
+          <div class="tl-desc">HOPI AppIQ Finance Portal live. Studio Hub, Dev/Test/Admin Center, HOPIQ chatbot, PORTAL_PRESENTATION. 8 týdnů, ~$1,000 investice.</div>
+          <div class="tl-kpis">
+            <span class="tl-kpi">💰 <strong>~$1K</strong> celková investice</span>
+            <span class="tl-kpi">📋 <strong>250+</strong> AIQ tasků uzavřeno</span>
+            <span class="tl-kpi">🔀 <strong>109+</strong> git commits</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DONE 2 -->
+      <div class="tl-item done">
+        <div class="tl-dot done"><div class="tl-dot-inner"></div></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 02</span>
+            <span class="badge tl-badge-done">✓ HOTOVO</span>
+            <span class="tl-date">Duben 2026</span>
+          </div>
+          <div class="tl-name">v7.24 — Investor Readiness</div>
+          <div class="tl-desc">Investor Brief, Personal Pitch, CEO Brief, Anthropic One Pager v2, ANTHROPIC_JOURNEY. Platforma připravena pro investor prezentace a Anthropic Startup Program.</div>
+          <div class="tl-kpis">
+            <span class="tl-kpi">📄 <strong>6</strong> presentačních stránek live</span>
+            <span class="tl-kpi">🌐 <strong>v7.24</strong> nasazeno na GitHub Pages</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOW -->
+      <div class="tl-item now">
+        <div class="tl-dot now"><div class="tl-dot-inner"></div></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 03</span>
+            <span class="badge tl-badge-now">● TEĎKA</span>
+            <span class="tl-date">Duben–Červen 2026</span>
+          </div>
+          <div class="tl-name">Fáze 0 — Anthropic + HOPI TechIQ s.r.o.</div>
+          <div class="tl-desc">Aplikace na Anthropic Startup Program (Fáze 0). Registrace HOPI TechIQ s.r.o. AWS Activate Indie ($1K kredity). Management Cockpit v8.0 — řídící středisko projektu.</div>
+          <div class="tl-kpis">
+            <span class="tl-kpi">🎯 <strong>BIZ-00105</strong> Anthropic aplikace</span>
+            <span class="tl-kpi">🏢 <strong>BIZ-00061</strong> s.r.o. registrace</span>
+            <span class="tl-kpi">💻 <strong>AIQ-00309</strong> Cockpit v8.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEXT 1 -->
+      <div class="tl-item next">
+        <div class="tl-dot next"><div class="tl-dot-inner"></div></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 04</span>
+            <span class="badge tl-badge-next">→ NEXT</span>
+            <span class="tl-date">Červenec–Srpen 2026</span>
+          </div>
+          <div class="tl-name">Platform Core v8.0 + HOME Content Build</div>
+          <div class="tl-desc">Platform Core (_core.js, _modules/) + HOME větev. 3 vertikály: Finance, Zdraví, Vzdělávání. HOPIQ chatbot v HOME kontextu. Waitlist landing page live.</div>
+          <div class="tl-kpis">
+            <span class="tl-kpi">🏗 <strong>3</strong> vertikály v8.0</span>
+            <span class="tl-kpi">📧 <strong>25+</strong> waitlist registrací cíl</span>
+            <span class="tl-kpi">💰 <strong>BIZ-00112</strong> Founding Members</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEXT 2 — B2C Detail -->
+      <div class="tl-item next">
+        <div class="tl-dot next"><div class="tl-dot-inner"></div></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 05</span>
+            <span class="badge tl-badge-next">→ NEXT</span>
+            <span class="tl-date">Září–Listopad 2026</span>
+          </div>
+          <div class="tl-name">Alpha → Beta → Pre-Launch</div>
+          <div class="tl-desc">Uzavřená alfa (5–10 users) → veřejná beta (LinkedIn Build in Public) → Pre-launch checklist. Payment gateway (Stripe/GoPay), GDPR audit, onboarding &lt; 90 sekund.</div>
+          <div class="phase-grid" style="margin-top:14px">
+            <div class="phase-card">
+              <div class="phase-num">ETAPA 3</div>
+              <div class="phase-name">Alpha Test</div>
+              <div class="phase-period">Září 2026</div>
+              <div class="phase-items">· Onboarding A/B test<br>· Payment gateway<br>· Bug bash + UX polish</div>
+              <div class="phase-kpi">KPI: NPS ≥ 7, onboarding ≥ 60%</div>
+            </div>
+            <div class="phase-card active">
+              <div class="phase-num">ETAPA 4</div>
+              <div class="phase-name">Beta</div>
+              <div class="phase-period">Říjen–Listopad 2026</div>
+              <div class="phase-items">· Public beta launch<br>· Founding Members prodej<br>· Referral program</div>
+              <div class="phase-kpi">KPI: 30+ beta users, 20+ platících</div>
+            </div>
+            <div class="phase-card">
+              <div class="phase-num">ETAPA 5</div>
+              <div class="phase-name">Pre-Launch</div>
+              <div class="phase-period">Prosinec 2026</div>
+              <div class="phase-items">· GDPR compliance audit<br>· Press kit (1 PR, 3 case studies)<br>· Email welcome flow (7 emailů)</div>
+              <div class="phase-kpi">KPI: 50+ Founding Members</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAUNCH -->
+      <div class="tl-item next">
+        <div class="tl-dot next" style="background:var(--c-blue);border-color:var(--c-blue);box-shadow:0 0 16px rgba(96,165,250,.5)"><div class="tl-dot-inner"></div></div>
+        <div class="tl-card" style="border-color:rgba(96,165,250,.4);background:rgba(96,165,250,.04)">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 06</span>
+            <span class="badge" style="background:rgba(96,165,250,.2);color:var(--c-blue)">🚀 B2C LAUNCH</span>
+            <span class="tl-date" style="font-size:14px;font-weight:700;color:var(--c-blue)">01.01.2027</span>
+          </div>
+          <div class="tl-name" style="font-size:20px;color:var(--c-blue)">AppIQ HOME — Veřejný launch</div>
+          <div class="tl-desc">Public announcement: LinkedIn + Product Hunt + česká média. "Day 1 Report." Investor Brief aktualizován o launch data. Retrospektiva.</div>
+          <div class="tl-kpis">
+            <span class="tl-kpi" style="border-color:rgba(96,165,250,.3);color:var(--c-blue)">🎯 <strong id="tl-launch-days">—</strong> dní zbývá</span>
+            <span class="tl-kpi">👥 <strong>50+</strong> Founding Members</span>
+            <span class="tl-kpi">💰 <strong>CZK 150K</strong> ARR</span>
+            <span class="tl-kpi">🏗 <strong>3</strong> vertikály live</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAR -->
+      <div class="tl-item future">
+        <div class="tl-dot far"><div class="tl-dot-inner" style="background:var(--c-muted)"></div></div>
+        <div class="tl-card">
+          <div class="tl-header">
+            <span class="tl-phase">MILESTONE 07</span>
+            <span class="badge tl-badge-far">BUDOUCNOST</span>
+            <span class="tl-date">2028+</span>
+          </div>
+          <div class="tl-name">Enterprise B2B Launch</div>
+          <div class="tl-desc">AppIQ ENTERPRISE — B2B SaaS pro firmy. HOPI pilot = referenční zákazník. Per-seat licencování. Cílové odvětví: logistika, zdravotnictví, zemědělství.</div>
+          <div class="tl-kpis">
+            <span class="tl-kpi">🏢 HOPI pilot jako reference</span>
+            <span class="tl-kpi">💶 Per-seat SaaS model</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ── Budget na B2C ──────────────────────────── -->
+    <h2 style="font-size:13px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;margin-bottom:16px">— BUDGET DO B2C LAUNCH (ODHADOVANÝ)</h2>
+    <div class="c-kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+      <div class="c-card">
+        <div class="c-card-title">Claude API (HOPIQ)</div>
+        <div class="c-card-value" style="color:var(--c-violet);font-size:22px">$500–1,500</div>
+        <div class="c-card-sub">$50–150/měs × Phase 1</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">Hosting + CDN</div>
+        <div class="c-card-value" style="color:var(--c-blue);font-size:22px">$200–500</div>
+        <div class="c-card-sub">$20–50/měs · AWS / Azure</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">Marketing (LinkedIn)</div>
+        <div class="c-card-value" style="color:var(--c-amber);font-size:22px">$500–2,000</div>
+        <div class="c-card-sub">$100–300/měs · ads + content</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title">Nástroje + domény</div>
+        <div class="c-card-value" style="color:var(--c-muted);font-size:22px">~$200</div>
+        <div class="c-card-sub">$20/měs · domain, SSL, tools</div>
+      </div>
+      <div class="c-card" style="border-color:rgba(34,197,94,.3)">
+        <div class="c-card-title">AWS Activate (BIZ-00107)</div>
+        <div class="c-card-value" style="color:var(--c-green);font-size:22px">-$1,000</div>
+        <div class="c-card-sub">Indie tier — k dispozici ihned</div>
+      </div>
+      <div class="c-card" style="border-color:rgba(34,197,94,.3)">
+        <div class="c-card-title">Founding Members</div>
+        <div class="c-card-value" style="color:var(--c-green);font-size:22px">CZK 150K</div>
+        <div class="c-card-sub">50× CZK 2,990 · lifetime deal</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({ section: {cs:'Milníkový plán', en:'Milestone Timeline'}, backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      const q  = s => document.querySelector(s);
+      const qa = s => [...document.querySelectorAll(s)];
+      q('.page-subtitle').textContent = 'Project roadmap · B2C Launch 01.01.2027 · BIZ-00118';
+      q('.cd-lbl').textContent = 'DAYS TO B2C LAUNCH';
+      q('.cd-sublbl').textContent = 'AppIQ HOME · Public launch';
+      const kpiLbl = qa('.cd-kpi-lbl');
+      kpiLbl[0].textContent = 'PROJECT DAYS'; kpiLbl[2].textContent = 'VERTICALS LIVE'; kpiLbl[3].textContent = 'ARR TARGETS';
+      qa('h2')[0].textContent = '— PROJECT ROADMAP';
+      qa('h2')[1].textContent = '— BUDGET TO B2C LAUNCH (ESTIMATED)';
+      // Status badges
+      qa('.badge').forEach(b => {
+        const t = b.textContent.trim();
+        if (t === '✓ HOTOVO')  b.textContent = '✓ DONE';
+        if (t === '● TEĎKA')   b.textContent = '● NOW';
+        if (t === 'BUDOUCNOST') b.textContent = 'FUTURE';
+      });
+      // CZ month names → EN
+      const months = {'Únor':'February','Duben':'April','Červen':'June','Červenec':'July',
+        'Srpen':'August','Září':'September','Říjen':'October','Listopad':'November','Prosinec':'December'};
+      [...qa('.tl-date'), ...qa('.phase-period')].forEach(e => {
+        let t = e.textContent;
+        Object.entries(months).forEach(([cz, en]) => { t = t.replaceAll(cz, en); });
+        e.textContent = t;
+      });
+      // Milestone names
+      const names = qa('.tl-name');
+      names[0].textContent = 'MVP — Platform launched';
+      names[2].textContent = 'Phase 0 — Anthropic + HOPI TechIQ s.r.o.';
+      names[3].innerHTML   = 'Platform Core v8.0 + HOME Content Build';
+      names[4].textContent = 'Alpha → Beta → Pre-Launch';
+      names[5].textContent = 'AppIQ HOME — Public launch';
+      names[6].textContent = 'Enterprise B2B Launch';
+      // Milestone descriptions
+      const descs = qa('.tl-desc');
+      descs[0].textContent = 'HOPI AppIQ Finance Portal live. Studio Hub, Dev/Test/Admin Center, HOPIQ chatbot, PORTAL_PRESENTATION. 8 weeks, ~$1,000 investment.';
+      descs[1].textContent = 'Investor Brief, Personal Pitch, CEO Brief, Anthropic One Pager v2, ANTHROPIC_JOURNEY. Platform ready for investor presentations and Anthropic Startup Program.';
+      descs[2].textContent = 'Anthropic Startup Program application (Phase 0). HOPI TechIQ s.r.o. registration. AWS Activate Indie ($1K credits). Management Cockpit v8.0 — project control center.';
+      descs[3].textContent = 'Platform Core (_core.js, _modules/) + HOME branch. 3 verticals: Finance, Health, Education. HOPIQ chatbot in HOME context. Waitlist landing page live.';
+      descs[4].textContent = 'Closed alpha (5–10 users) → public beta (LinkedIn Build in Public) → Pre-launch checklist. Payment gateway (Stripe/GoPay), GDPR audit, onboarding < 90 seconds.';
+      descs[5].textContent = 'Public announcement: LinkedIn + Product Hunt + Czech media. "Day 1 Report." Investor Brief updated with launch data. Retrospective.';
+      descs[6].textContent = 'AppIQ ENTERPRISE — B2B SaaS for companies. HOPI pilot = reference customer. Per-seat licensing. Target industries: logistics, healthcare, agriculture.';
+      // Phase sub-labels
+      qa('.phase-num').forEach(e => { e.textContent = e.textContent.replace('ETAPA', 'PHASE'); });
+      // tl-kpi strings
+      qa('.tl-kpi').forEach(e => {
+        e.innerHTML = e.innerHTML.replace('celková investice','total investment').replace('AIQ tasků uzavřeno','AIQ tasks closed').replace('dní zbývá','days remaining').replace('vertikály live','verticals live');
+      });
+      // Budget cards
+      const cardSubs = qa('.c-card-sub');
+      cardSubs.forEach(e => { e.textContent = e.textContent.replace('/měs','/ month').replace('k dispozici ihned','available immediately'); });
+      qa('.c-card-title').forEach(e => {
+        if (e.textContent === 'Nástroje + domény') e.textContent = 'Tools & domains';
+      });
+    })();
+
+    const B2C_DATE  = new Date('2027-01-01');
+    const PROJ_DATE = new Date('2026-02-01');
+
+    function daysTo(d)   { return Math.max(0, Math.ceil((d - new Date()) / 86400000)); }
+    function daysFrom(d) { return Math.ceil((new Date() - d) / 86400000); }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const days = daysTo(B2C_DATE);
+      setText('cd-days',        days);
+      setText('tl-launch-days', days);
+      setText('cd-proj-days',   daysFrom(PROJ_DATE));
+    });
+  </script>
+</body>
+</html>
