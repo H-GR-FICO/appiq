@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Management Cockpit — Shared Shell Module
  * Injects nav, breadcrumb, music, lang, auth into every cockpit sub-page.
  * Usage: Shell.init({ section: 'Section Name', backUrl: '../MANAGEMENT_COCKPIT.html' })
@@ -6,7 +6,7 @@
 const Shell = (() => {
 
   const PASS = 'HOPI2026';
-  const SHELL_VER = 'v7.32'; // auto-updated by DO_DEPLOY.ps1
+  const SHELL_VER = 'v7.34'; // auto-updated by DO_DEPLOY.ps1 // auto-updated by DO_DEPLOY.ps1
   const LANG_KEY = 'hopi_lang';
   const MUSIC_KEY = 'hopi_audio_on';
   const MUSIC_TIME_KEY = 'hopi_shell_time';

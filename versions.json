@@ -273,11 +273,14 @@
     {
         "version":  "v7.34",
         "date":  "2026-04-28",
-        "session":  "session_20260427_2314",
-        "title":  "Cockpit: BOS Card · Product Hub · Founders Board CTA · Music Fix · 2026-04-28",
+        "session":  "session_20260428_1442",
+        "title":  "Cockpit: BOS Card · Product Hub · Founders Board CTA · Music Fix · Navigation Fix · 2026-04-28",
         "mainUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/index.html",
         "mainLabel":  "Studio Hub",
         "changes":  [
+                        "BOS Card — launcher link + obsah (AIQ-00501)",
+                        "Brand Concepts — back button 404 (AIQ-00500)",
+                        "Navigation — Product Hub back button (AIQ-00502)",
                         "BOS Card — Business Overview Summary (AIQ-00495)",
                         "BOS Card Persistence Layer (AIQ-00497)",
                         "Product Hub — sekce 28 (AIQ-00494)",
