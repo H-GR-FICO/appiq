@@ -7,13 +7,27 @@
   <link rel="stylesheet" href="_cockpit.css"/>
   <style>
 
-    /* ── Training Center — override cockpit-page for full-viewport slides ── */
+    /* ── CSS variable alias — _cockpit.css uses --c-muted, not --c-text-muted ── */
+    :root { --c-text-muted: var(--c-muted); }
+
+    /* ── Training Center — full-viewport slide layout ── */
+    /* Body becomes flex column so tc-main fills remaining height
+       regardless of actual shell height (topbar + hero + mottos ≈ 134px) */
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #cockpit-shell { flex-shrink: 0; }
+
     .tc-main {
+      flex: 1;
+      min-height: 0;        /* required for flex children to shrink */
       display: flex;
       flex-direction: column;
       padding: 0 !important;
       max-width: none !important;
-      height: calc(100dvh - 96px); /* below shell strips */
       overflow: hidden;
     }
 

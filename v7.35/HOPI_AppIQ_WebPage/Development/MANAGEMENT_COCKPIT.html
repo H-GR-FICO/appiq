@@ -572,8 +572,6 @@
         <span class="story-step p" style="background:rgba(236,72,153,.18);color:var(--pink);border:1px solid rgba(236,72,153,.4)"><span class="sn">E</span><span id="ss-e">Tým</span></span>
         <span class="story-arrow">→</span>
         <span class="story-step b"><span class="sn">F</span><span id="ss-f">Znalosti</span></span>
-        <span class="story-arrow">→</span>
-        <span class="story-step v"><span class="sn">G</span><span id="ss-g">Vzdělávání</span></span>
       </div>
     </div>
 
@@ -910,7 +908,7 @@ function _bgIsOn() {
 
       // Update story strip labels
       const CLUSTERS = window.COCKPIT_CLUSTERS || [];
-      const storyIds = ['ss-a','ss-b','ss-c','ss-d','ss-e','ss-f','ss-g'];
+      const storyIds = ['ss-a','ss-b','ss-c','ss-d','ss-e','ss-f'];
       CLUSTERS.forEach((c, i) => {
         const el = document.getElementById(storyIds[i]);
         if (el) el.textContent = c.name[lang];

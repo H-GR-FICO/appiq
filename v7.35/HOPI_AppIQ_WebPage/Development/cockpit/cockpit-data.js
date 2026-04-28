@@ -195,8 +195,8 @@ window.COCKPIT_CLUSTERS = [
     icon: '🧠',
     color: 'blue',
     name: { cs: 'Znalosti',       en: 'Knowledge' },
-    desc: { cs: 'Metodika · dokumentace a klíčové odkazy · výběr verze', en: 'Methodology · documentation & key links · release selector' },
-    sections: ['19', '20', '21']
+    desc: { cs: 'Metodika · dokumentace · výběr verze · AI Training Center', en: 'Methodology · documentation · release selector · AI Training Center' },
+    sections: ['19', '20', '21', '29']
   },
   {
     id: 'control',
@@ -205,13 +205,5 @@ window.COCKPIT_CLUSTERS = [
     name: { cs: 'Control',        en: 'Control' },
     desc: { cs: 'Platformní infrastruktura · nasazení · kvalita · data · archivace', en: 'Platform infrastructure · deployment · quality · data · archiving' },
     sections: ['22', '23', '24', '25', '26']
-  },
-  {
-    id: 'learning',
-    icon: '🎓',
-    color: 'violet',
-    name: { cs: 'Vzdělávání',     en: 'Learning' },
-    desc: { cs: 'AI Training Center — interaktivní vzdělávací obsah pro tým a stakeholdery', en: 'AI Training Center — interactive learning content for team & stakeholders' },
-    sections: ['29']
   },
 ];
