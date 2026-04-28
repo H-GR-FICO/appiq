@@ -76,7 +76,7 @@ const Shell = (() => {
     audioEl = document.createElement('audio');
     audioEl.src = musicSrc;
     audioEl.loop = true;
-    audioEl.preload = 'auto';
+    audioEl.preload = 'none';
     audioEl.volume = 0;
 
     if (_shIsOn()) _shTryPlay();

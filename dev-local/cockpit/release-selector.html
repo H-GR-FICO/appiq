@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Release Selector · Management Cockpit</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="cockpit-data.js"></script>
+  <style>
+    #rs-main { max-width: 960px; }
+
+    .rs-step  { display: none; }
+    .rs-step.active { display: block; }
+
+    .rs-label {
+      font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--c-muted); font-family: var(--c-font-sans); margin-bottom: 20px;
+    }
+
+    /* ── Step 1: version cards ── */
+    .ver-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .ver-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 18px 20px;
+      cursor: pointer; transition: border-color .18s, transform .15s, box-shadow .18s;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .ver-card:hover { border-color: var(--c-violet); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(168,85,247,.15); }
+    .ver-card.latest { border-color: rgba(34,197,94,.35); }
+    .ver-card.latest:hover { border-color: var(--c-green); box-shadow: 0 8px 24px rgba(34,197,94,.12); }
+
+    .ver-latest-badge {
+      display: inline-block; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      background: rgba(34,197,94,.12); color: var(--c-green);
+      border: 1px solid rgba(34,197,94,.3); border-radius: 4px;
+      padding: 2px 7px; font-family: var(--c-font-sans); align-self: flex-start; margin-bottom: 4px;
+    }
+    .ver-num {
+      font-size: 26px; font-weight: 900; color: var(--c-white); font-family: var(--c-font-sans); line-height: 1;
+    }
+    .ver-card.latest .ver-num { color: var(--c-green); }
+    .ver-date { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .ver-title { font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); line-height: 1.45; margin-top: 2px; }
+
+    /* ── Step 2: destination cards ── */
+    .rs-back {
+      display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+      background: none; border: 1px solid var(--c-border); border-radius: 6px;
+      padding: 6px 14px; margin-bottom: 24px;
+      transition: color .15s, border-color .15s;
+    }
+    .rs-back:hover { color: var(--c-white); border-color: var(--c-muted); }
+
+    .rs-sel-ver {
+      font-size: 34px; font-weight: 900; color: var(--c-white);
+      font-family: var(--c-font-sans); line-height: 1; margin-bottom: 6px;
+    }
+    .rs-sel-title {
+      font-size: 13px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.5; margin-bottom: 28px;
+    }
+
+    .dest-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .dest-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 18px 18px 16px;
+      text-decoration: none; transition: border-color .18s, transform .15s, box-shadow .18s;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .dest-card:hover { transform: translateY(-2px); }
+    .dest-card[data-color="violet"]:hover { border-color: var(--c-violet); box-shadow: 0 8px 20px rgba(168,85,247,.15); }
+    .dest-card[data-color="blue"]:hover   { border-color: var(--c-blue);   box-shadow: 0 8px 20px rgba(96,165,250,.12); }
+    .dest-card[data-color="green"]:hover  { border-color: var(--c-green);  box-shadow: 0 8px 20px rgba(34,197,94,.10); }
+    .dest-card[data-color="amber"]:hover  { border-color: var(--c-amber);  box-shadow: 0 8px 20px rgba(245,158,11,.10); }
+    .dest-card[data-color="pink"]:hover   { border-color: var(--c-pink);   box-shadow: 0 8px 20px rgba(236,72,153,.10); }
+
+    .dest-icon { font-size: 24px; line-height: 1; margin-bottom: 8px; }
+    .dest-name { font-size: 13px; font-weight: 700; color: var(--c-white); font-family: var(--c-font-sans); }
+    .dest-desc { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); line-height: 1.4; margin-top: 2px; }
+
+    .rs-msg {
+      color: var(--c-muted); font-family: var(--c-font-sans); font-size: 13px;
+      padding: 48px 0; text-align: center;
+    }
+
+    /* ── Layer 2 detail panel ── */
+    .ver-detail-btn {
+      margin-top: 10px; align-self: flex-start;
+      background: none; border: 1px solid rgba(148,163,184,.2); border-radius: 4px;
+      padding: 3px 10px; font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--c-muted); font-family: var(--c-font-sans); cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .ver-detail-btn:hover { color: var(--c-white); border-color: var(--c-muted); }
+    .ver-card.latest .ver-detail-btn { border-color: rgba(34,197,94,.25); color: rgba(34,197,94,.6); }
+    .ver-card.latest .ver-detail-btn:hover { border-color: var(--c-green); color: var(--c-green); }
+
+    .ver-changes {
+      display: none; list-style: none; margin: 8px 0 0; padding: 8px 0 0;
+      border-top: 1px solid var(--c-border);
+      flex-direction: column; gap: 5px;
+    }
+    .ver-changes.open { display: flex; }
+    .ver-changes li {
+      font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.45; padding-left: 14px; position: relative;
+    }
+    .ver-changes li::before {
+      content: '·'; position: absolute; left: 3px; color: var(--c-violet); font-size: 14px; line-height: 1.2;
+    }
+    .ver-card.latest .ver-changes li::before { color: var(--c-green); }
+  </style>
+</head>
+<body>
+
+<div id="cockpit-shell"></div>
+
+<main id="rs-main" class="cockpit-page">
+
+  <!-- ── STEP 1: Výběr verze ── -->
+  <div class="rs-step active" id="step-1">
+    <div class="rs-label">
+      <span class="lang-cs">— 1 / 2 &nbsp;·&nbsp; VYBERTE VERZI</span>
+      <span class="lang-en">— 1 / 2 &nbsp;·&nbsp; SELECT VERSION</span>
+    </div>
+    <div class="ver-grid" id="ver-grid">
+      <div class="rs-msg"><span class="lang-cs">Načítám verze…</span><span class="lang-en">Loading versions…</span></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: Výběr destinace ── -->
+  <div class="rs-step" id="step-2">
+    <button class="rs-back" onclick="goBack()">
+      <span class="lang-cs">← Zpět</span><span class="lang-en">← Back</span>
+    </button>
+    <div class="rs-sel-ver" id="sel-ver"></div>
+    <div class="rs-sel-title" id="sel-title"></div>
+    <div class="rs-label">
+      <span class="lang-cs">— 2 / 2 &nbsp;·&nbsp; KAM JÍT</span>
+      <span class="lang-en">— 2 / 2 &nbsp;·&nbsp; WHERE TO GO</span>
+    </div>
+    <div class="dest-grid" id="dest-grid"></div>
+  </div>
+
+</main>
+
+<script src="_shell.js"></script>
+<script>
+Shell.init({ section: { cs: 'Výběr verze', en: 'Release Selector' }, backUrl: '../MANAGEMENT_COCKPIT.html' });
+
+const GH_BASE = 'https://h-gr-fico.github.io/appiq';
+const RS_STATE_KEY = 'rs_step2_ver';
+
+function _lang() { return Shell.getLang(); }
+
+// ── Persist step 2 state across lang reload ──────────────────────────────────
+window.addEventListener('pagehide', function() {
+  try {
+    const s2 = document.getElementById('step-2');
+    if (s2 && s2.classList.contains('active')) {
+      sessionStorage.setItem(RS_STATE_KEY, document.getElementById('sel-ver').textContent);
+    } else {
+      sessionStorage.removeItem(RS_STATE_KEY);
+    }
+  } catch(e) {}
+});
+
+function destinations(ver) {
+  const en = _lang() === 'en';
+  const w = GH_BASE + '/' + ver + '/HOPI_AppIQ_WebPage/Development';
+  const a = GH_BASE + '/' + ver + '/app';
+  return [
+    { icon:'🏠', name:'Studio Hub',
+      desc: en ? 'Entry point for all centers — Dev, Test, Admin, Promo. Everything launches from here.'
+               : 'Rozcestník všech center — Dev, Test, Admin, Promo. Vše ostatní se spouští odsud.',
+      url: w + '/index.html', color:'violet' },
+    { icon:'🎯', name:'Management Cockpit',
+      desc: en ? '21-section control room — live KPIs, task boards, clusters, bilingual, music.'
+               : '21 sekcí řízení projektu — živé KPI karty, task boardy, clustery, bilingvní, hudba.',
+      url: w + '/MANAGEMENT_COCKPIT.html', color:'violet' },
+    { icon:'📊', name: en ? 'Presentation' : 'Prezentace',
+      desc: en ? 'Full bilingual platform deck — 9 themed sections, live data, WOW effect for investors.'
+               : 'Plná bilingvní prezentace platformy — 9 sekcí, živá data, WOW efekt pro investory.',
+      url: w + '/PORTAL_PRESENTATION.html', color:'blue' },
+    { icon:'🎤', name:'Personal Pitch',
+      desc: en ? 'David\'s personal story — 6 ARCs, Anthropic angle, Story Behind the product.'
+               : 'Osobní příběh Davida — 6 ARC, Anthropic angle, Story Behind za produktem.',
+      url: w + '/PERSONAL_PITCH.html', color:'blue' },
+    { icon:'📰', name:'CEO Brief',
+      desc: en ? 'Leadership-ready brief — MIND-SET REVOLUTION, business case, partner cards (Artin, Intecs).'
+               : 'Brief pro vedení — MIND-SET REVOLUTION, business case, partnerské karty (Artin, Intecs).',
+      url: w + '/CEO_BRIEF.html', color:'amber' },
+    { icon:'📚', name:'Docs',
+      desc: en ? 'Technical docs — architecture, OIL methodology, AI rules, design system, deployment.'
+               : 'Technická dokumentace — architektura, OIL metodika, AI pravidla, design systém, deploy.',
+      url: w + '/docs/index.html', color:'green' },
+    { icon:'📣', name:'Promo',
+      desc: en ? 'Public-facing landing page — shareable with stakeholders and potential partners.'
+               : 'Veřejná landing page — sdílitelná se stakeholdery a potenciálními partnery.',
+      url: w + '/promo/index.html', color:'green' },
+    { icon:'🤖', name:'HOPIQ',
+      desc: en ? 'Live Claude AI — knows the full project. Ask anything about AppIQ, tasks, architecture.'
+               : 'Živý Claude AI — zná celý projekt. Zeptej se na cokoliv o AppIQ, taskách, architektuře.',
+      url: w + '/hopiq/index.html', color:'pink' },
+    { icon:'💼', name:'Finance Portal',
+      desc: en ? 'Group Controlling SPA — FX tracker, org chart, reporting, SAP/BNS integration, CZ/EN.'
+               : 'Group Controlling SPA — FX tracker, org chart, reporting, SAP/BNS integrace, CZ/EN.',
+      url: a + '/index.html?welcome=1', color:'amber' },
+  ];
+}
+
+function chgLabel(n) {
+  if (_lang() === 'en') return n + (n === 1 ? ' change' : ' changes');
+  return n === 1 ? '1 změna' : n < 5 ? n + ' změny' : n + ' změn';
+}
+
+let _allVersions = [];
+
+function renderStep1(versions) {
+  _allVersions = versions;
+  const en = _lang() === 'en';
+  const latest = versions[0] ? versions[0].version : null;
+  document.getElementById('ver-grid').innerHTML = versions.map(v => {
+    const isLatest = v.version === latest;
+    const payload = encodeURIComponent(JSON.stringify(v));
+    const chgArr = en && Array.isArray(v.changes_en) && v.changes_en.length
+      ? v.changes_en
+      : (Array.isArray(v.changes) ? v.changes : []);
+    const detailHtml = chgArr.length ? `
+      <button class="ver-detail-btn" onclick="toggleDetail(event,'${v.version}',${chgArr.length})">▾ ${chgLabel(chgArr.length)}</button>
+      <ul class="ver-changes" id="chg-${v.version}">${chgArr.map(c => `<li>${c}</li>`).join('')}</ul>` : '';
+    return `<div class="ver-card${isLatest ? ' latest' : ''}" onclick="selectVersion(decodeURIComponent('${payload}'))">
+      ${isLatest ? `<span class="ver-latest-badge">${en ? 'LATEST' : 'NEJNOVĚJŠÍ'}</span>` : ''}
+      <div class="ver-num">${v.version}</div>
+      <div class="ver-date">${v.date || ''}</div>
+      <div class="ver-title">${v.title || ''}</div>
+      ${detailHtml}
+    </div>`;
+  }).join('');
+  Shell.applyI18n();
+
+  // Restore step 2 if lang was toggled while viewing a version's destinations
+  try {
+    const saved = sessionStorage.getItem(RS_STATE_KEY);
+    if (saved) {
+      sessionStorage.removeItem(RS_STATE_KEY);
+      const v = versions.find(x => x.version === saved);
+      if (v) { selectVersion(v); return; }
+    }
+  } catch(e) {}
+}
+
+function selectVersion(raw) {
+  const v = typeof raw === 'string' ? JSON.parse(raw) : raw;
+  document.getElementById('sel-ver').textContent = v.version;
+  document.getElementById('sel-title').textContent = v.title || '';
+  document.getElementById('dest-grid').innerHTML = destinations(v.version).map(d =>
+    `<a href="${d.url}" target="_blank" class="dest-card" data-color="${d.color}">
+      <div class="dest-icon">${d.icon}</div>
+      <div class="dest-name">${d.name}</div>
+      <div class="dest-desc">${d.desc}</div>
+    </a>`
+  ).join('');
+  document.getElementById('step-1').classList.remove('active');
+  document.getElementById('step-2').classList.add('active');
+  Shell.applyI18n();
+  window.scrollTo(0, 0);
+}
+
+function toggleDetail(e, ver, count) {
+  e.stopPropagation();
+  const panel = document.getElementById('chg-' + ver);
+  const btn = e.target.closest('.ver-detail-btn');
+  const isOpen = panel.classList.toggle('open');
+  if (btn) btn.textContent = (isOpen ? '▴ ' : '▾ ') + chgLabel(count);
+}
+
+function goBack() {
+  document.getElementById('step-2').classList.remove('active');
+  document.getElementById('step-1').classList.add('active');
+  try { sessionStorage.removeItem(RS_STATE_KEY); } catch(e) {}
+  window.scrollTo(0, 0);
+}
+
+// Cache-bust to always get fresh versions.json after lang reload or deploy
+fetch(GH_BASE + '/versions.json?_=' + Date.now())
+  .then(r => r.json())
+  .then(data => {
+    const versions = (data.versions || []).slice().reverse();
+    if (!versions.length) throw new Error('empty');
+    renderStep1(versions);
+  })
+  .catch(() => {
+    const en = _lang() === 'en';
+    document.getElementById('ver-grid').innerHTML =
+      `<div class="rs-msg">${en ? 'Cannot load versions — page only works on GitHub Pages.' : 'Verze nelze načíst — stránka funguje pouze na GitHub Pages.'}</div>`;
+  });
+</script>
+</body>
+</html>

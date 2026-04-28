@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Control Room — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Section headers ─────────────────────────── */
+    .acr-section { margin-bottom: 40px; }
+    .acr-section-title {
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 3px; text-transform: uppercase;
+      padding-bottom: 8px; border-bottom: 1px solid var(--c-border);
+      margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
+    }
+    .acr-section-title .acr-tag {
+      font-size: 10px; color: var(--c-blue);
+      background: rgba(96,165,250,.1); border: 1px solid rgba(96,165,250,.25);
+      border-radius: 4px; padding: 1px 7px; letter-spacing: 1px;
+    }
+
+    /* ── Hook status cards ───────────────────────── */
+    .hook-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+    .hook-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 16px 18px;
+    }
+    .hook-card.active  { border-top: 3px solid var(--c-green); }
+    .hook-card.missing { border-top: 3px solid #ef4444; }
+    .hook-name { font-size: 13px; font-weight: 700; color: var(--c-white); font-family: var(--c-font-sans); margin-bottom: 4px; }
+    .hook-script { font-size: 11px; color: var(--c-blue); font-family: var(--c-font-sans); margin-bottom: 8px; }
+    .hook-desc { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); line-height: 1.5; }
+    .hook-status {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10px; font-family: var(--c-font-sans); letter-spacing: 1px;
+      border-radius: 4px; padding: 2px 8px; margin-top: 8px;
+    }
+    .hook-status.ok  { background: rgba(34,197,94,.1); color: var(--c-green); border: 1px solid rgba(34,197,94,.25); }
+    .hook-status.err { background: rgba(239,68,68,.1);  color: #ef4444;       border: 1px solid rgba(239,68,68,.25); }
+    .hook-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .hook-dot.ok  { background: var(--c-green); box-shadow: 0 0 5px rgba(34,197,94,.6); }
+    .hook-dot.err { background: #ef4444; }
+
+    /* ── File table ──────────────────────────────── */
+    .file-table { width: 100%; border-collapse: collapse; font-family: var(--c-font-sans); font-size: 12px; }
+    .file-table th {
+      text-align: left; color: var(--c-muted); font-size: 10px; letter-spacing: 2px;
+      text-transform: uppercase; padding: 6px 10px; border-bottom: 1px solid var(--c-border);
+    }
+    .file-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--c-white); }
+    .file-table tr:hover td { background: var(--c-bg2); }
+    .file-mono { font-family: var(--c-font-mono); font-size: 11px; color: var(--c-blue); }
+    .file-role { color: var(--c-muted); font-size: 11px; }
+    .badge-ok  { background: rgba(34,197,94,.1); color: var(--c-green); border: 1px solid rgba(34,197,94,.2); border-radius: 4px; padding: 1px 7px; font-size: 10px; }
+    .badge-warn{ background: rgba(245,158,11,.1); color: var(--c-amber); border: 1px solid rgba(245,158,11,.2); border-radius: 4px; padding: 1px 7px; font-size: 10px; }
+    .badge-err { background: rgba(239,68,68,.1);  color: #ef4444;       border: 1px solid rgba(239,68,68,.2);  border-radius: 4px; padding: 1px 7px; font-size: 10px; }
+
+    /* ── Health check rows ───────────────────────── */
+    .health-row {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 10px 14px; border-radius: 8px;
+      background: var(--c-bg2); border: 1px solid transparent;
+      margin-bottom: 8px; transition: border-color .15s;
+    }
+    .health-row:hover { border-color: var(--c-border); }
+    .health-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .health-body { flex: 1; }
+    .health-label { font-size: 13px; font-weight: 600; color: var(--c-white); font-family: var(--c-font-sans); }
+    .health-detail { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); margin-top: 3px; line-height: 1.5; }
+    .health-value { font-size: 13px; font-family: var(--c-font-sans); font-weight: 700; flex-shrink: 0; }
+    .hv-green { color: var(--c-green); }
+    .hv-amber { color: var(--c-amber); }
+    .hv-red   { color: #ef4444; }
+
+    /* ── Metric grid ─────────────────────────────── */
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; }
+    .metric-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 14px 16px;
+    }
+    .metric-label { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .metric-value { font-size: 26px; font-weight: 900; font-family: var(--c-font-sans); line-height: 1; }
+    .metric-sub   { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); margin-top: 4px; }
+    .mv-blue   { color: var(--c-blue); }
+    .mv-green  { color: var(--c-green); }
+    .mv-violet { color: var(--c-violet); }
+    .mv-amber  { color: var(--c-amber); }
+
+    /* ── Config rows ─────────────────────────────── */
+    .config-row {
+      display: grid; grid-template-columns: 180px 1fr;
+      gap: 14px; padding: 10px 14px;
+      background: var(--c-bg2); border-radius: 8px; margin-bottom: 6px;
+      border: 1px solid transparent;
+    }
+    .config-key { font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); font-weight: 600; }
+    .config-val { font-size: 12px; color: var(--c-white); font-family: var(--c-font-sans); }
+    .config-mono { font-family: var(--c-font-mono); font-size: 11px; color: var(--c-blue); }
+
+    /* ── Quick action buttons ────────────────────── */
+    .action-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+    .action-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 14px 16px;
+      transition: border-color .15s;
+    }
+    .action-card:hover { border-color: var(--c-blue); }
+    .action-name { font-size: 13px; font-weight: 700; color: var(--c-white); font-family: var(--c-font-sans); margin-bottom: 4px; }
+    .action-desc { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); margin-bottom: 10px; line-height: 1.5; }
+    .action-cmd {
+      font-family: var(--c-font-mono); font-size: 11px; color: var(--c-blue);
+      background: rgba(96,165,250,.07); border: 1px solid rgba(96,165,250,.2);
+      border-radius: 6px; padding: 6px 10px; display: block; margin-bottom: 8px;
+      word-break: break-all;
+    }
+    .btn-copy-cmd {
+      padding: 4px 12px; border-radius: 6px; cursor: pointer;
+      background: rgba(96,165,250,.08); border: 1px solid rgba(96,165,250,.3);
+      color: var(--c-blue); font-size: 11px; font-family: var(--c-font-sans);
+      transition: all .15s;
+    }
+    .btn-copy-cmd:hover { background: rgba(96,165,250,.2); }
+    .btn-copy-cmd.copied { color: var(--c-green); border-color: var(--c-green); background: rgba(34,197,94,.08); }
+
+    /* ── Audit log table ─────────────────────────── */
+    .audit-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px 22px; margin-bottom: 16px;
+    }
+    .audit-header { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 14px; flex-wrap: wrap; }
+    .audit-id { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 2px; }
+    .audit-date { font-size: 18px; font-weight: 900; color: var(--c-white); font-family: var(--c-font-sans); }
+    .audit-scope { font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); margin-top: 2px; }
+    .audit-score-block { margin-left: auto; text-align: right; }
+    .audit-score { font-size: 28px; font-weight: 900; color: var(--c-green); font-family: var(--c-font-sans); }
+    .audit-score-sub { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 1px; }
+    .audit-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 14px; }
+    .audit-meta-item { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .audit-meta-item strong { color: var(--c-white); }
+    .gaps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-bottom: 14px; }
+    .gap-pill {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 10px; border-radius: 6px;
+      background: var(--c-bg3); border: 1px solid var(--c-border); font-family: var(--c-font-sans);
+    }
+    .gap-id { font-size: 10px; font-weight: 700; color: var(--c-muted); min-width: 22px; }
+    .gap-title { font-size: 11px; color: var(--c-white); flex: 1; }
+    .gap-sev { font-size: 9px; letter-spacing: 1px; border-radius: 3px; padding: 1px 5px; }
+    .sev-critical { background: rgba(239,68,68,.15); color: #ef4444; }
+    .sev-high     { background: rgba(245,158,11,.15); color: var(--c-amber); }
+    .sev-medium   { background: rgba(96,165,250,.15); color: var(--c-blue); }
+    .sev-low      { background: rgba(107,114,128,.15); color: var(--c-muted); }
+    .gap-fixed { font-size: 10px; color: var(--c-green); margin-left: auto; }
+    .gap-mitigated { font-size: 10px; color: var(--c-amber); margin-left: auto; }
+    .audit-notes {
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.6; padding-top: 12px; border-top: 1px solid var(--c-border);
+    }
+
+    /* ── Participant row ─────────────────────────── */
+    .participant-row {
+      display: flex; align-items: center; gap: 14px;
+      padding: 10px 14px; background: var(--c-bg2);
+      border-radius: 8px; margin-bottom: 6px;
+      border: 1px solid var(--c-border);
+    }
+    .pt-code { font-family: var(--c-font-mono); font-size: 12px; color: var(--c-violet); min-width: 80px; }
+    .pt-type { font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans); min-width: 40px; }
+    .pt-name { font-size: 13px; color: var(--c-white); font-family: var(--c-font-sans); font-weight: 600; flex: 1; }
+    .pt-role { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 900px) {
+      .hook-grid { grid-template-columns: 1fr; }
+      .config-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+      .action-grid { grid-template-columns: 1fr; }
+      .gaps-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>🎛️</span> AI CONTROL ROOM</h1>
+    <p class="page-subtitle" id="acr-subtitle">Platform infrastructure management · Track & Record · System Health</p>
+
+    <!-- ── KPI Strip ─────────────────────────────── -->
+    <div class="c-kpi-grid" id="kpi-strip">
+      <div class="c-card">
+        <div class="c-card-title" data-cs="Aktivní hooky" data-en="Active hooks">Aktivní hooky</div>
+        <div class="c-card-value" id="kpi-hooks" style="color:var(--c-green)">3 / 3</div>
+        <div class="c-card-sub" data-cs="Stop · PreCompact · PostCompact" data-en="Stop · PreCompact · PostCompact">Stop · PreCompact · PostCompact</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title" data-cs="Health score" data-en="Health score">Health score</div>
+        <div class="c-card-value" id="kpi-health" style="color:var(--c-green)">100%</div>
+        <div class="c-card-sub" id="kpi-health-sub" data-cs="Audit 2026-04-25" data-en="Audit 2026-04-25">Audit 2026-04-25</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title" data-cs="Poslední audit" data-en="Last audit">Poslední audit</div>
+        <div class="c-card-value" id="kpi-last-audit" style="color:var(--c-blue)">—</div>
+        <div class="c-card-sub" id="kpi-audit-sub" data-cs="Mezery nalezeny → opraveny" data-en="Gaps found → fixed">—</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title" data-cs="Task velocity" data-en="Task velocity">Task velocity</div>
+        <div class="c-card-value" id="kpi-velocity" style="color:var(--c-violet)">—</div>
+        <div class="c-card-sub" data-cs="CLOSED tasků / 7 dní" data-en="CLOSED tasks / 7 days">CLOSED / 7 dní</div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ A — INFRASTRUCTURE STATUS ══════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="A — Infrastruktura · Hooky a skripty" data-en="A — Infrastructure · Hooks and scripts">A — Infrastruktura · Hooky a skripty</span>
+        <span class="acr-tag">AUTO</span>
+      </div>
+
+      <div class="hook-grid">
+        <div class="hook-card active">
+          <div class="hook-name">Stop Hook</div>
+          <div class="hook-script">_track_append.ps1</div>
+          <div class="hook-desc" data-cs="Verbatim záznam po každé Claude odpovědi — zachycuje HU-GOGD i AI-CLAU. Výstup: DISCUSSION_TRANSCRIPT.md" data-en="Verbatim record after every Claude response — captures HU-GOGD and AI-CLAU. Output: DISCUSSION_TRANSCRIPT.md">Verbatim záznam po každé odpovědi. Výstup: DISCUSSION_TRANSCRIPT.md</div>
+          <div class="hook-status ok"><span class="hook-dot ok"></span> ACTIVE</div>
+        </div>
+        <div class="hook-card active">
+          <div class="hook-name">PreCompact Hook</div>
+          <div class="hook-script">_precompact_flush.ps1</div>
+          <div class="hook-desc" data-cs="Záchranný flush těsně před compactem — IP tasky, DISC stav, compact snapshot. Výstup: TRANSCRIPT marker + COMPACT_LOG.md + _compact_snapshot.md" data-en="Safety flush just before compact — IP tasks, DISC state, compact snapshot. Output: TRANSCRIPT marker + COMPACT_LOG.md + _compact_snapshot.md">Flush těsně před compactem. IP tasky + DISC stav + snapshot.</div>
+          <div class="hook-status ok"><span class="hook-dot ok"></span> ACTIVE</div>
+        </div>
+        <div class="hook-card active">
+          <div class="hook-name">PostCompact Hook</div>
+          <div class="hook-script">_postcompact_signal.ps1</div>
+          <div class="hook-desc" data-cs="Recovery marker po compactu — Claude vidí signal a provede proaktivní startup bez čekání na pokyn. Výstup: TRANSCRIPT marker + _postcompact_flag.json" data-en="Recovery marker after compact — Claude sees signal and performs proactive startup without instruction. Output: TRANSCRIPT marker + _postcompact_flag.json">Recovery marker po compactu → Claude provede startup automaticky.</div>
+          <div class="hook-status ok"><span class="hook-dot ok"></span> ACTIVE</div>
+        </div>
+      </div>
+
+      <table class="file-table">
+        <thead>
+          <tr>
+            <th data-cs="Soubor" data-en="File">Soubor</th>
+            <th data-cs="Role" data-en="Role">Role</th>
+            <th data-cs="Stav" data-en="Status">Stav</th>
+          </tr>
+        </thead>
+        <tbody id="file-table-body">
+          <tr><td class="file-mono">DISCUSSION_TRANSCRIPT.md</td><td class="file-role" data-cs="Verbatim záchranná síť" data-en="Verbatim safety net">Verbatim záchranná síť</td><td><span class="badge-ok">✓ exists</span></td></tr>
+          <tr><td class="file-mono">DISCUSSION_RECORD.md</td><td class="file-role" data-cs="Strukturovaný audit log (DISC záznamy)" data-en="Structured audit log (DISC records)">Strukturovaný audit log</td><td><span class="badge-ok">✓ exists</span></td></tr>
+          <tr><td class="file-mono">COMPACT_LOG.md</td><td class="file-role" data-cs="Compact event log (auto)" data-en="Compact event log (auto)">Compact event log</td><td><span class="badge-ok" id="compact-log-status">✓ auto-created</span></td></tr>
+          <tr><td class="file-mono">_SESSION_START/_compact_snapshot.md</td><td class="file-role" data-cs="Stav před posledním compactem" data-en="State before last compact">Stav před posledním compactem</td><td><span class="badge-warn" id="snapshot-status">⚡ po prvním compactu</span></td></tr>
+          <tr><td class="file-mono">OIL.json</td><td class="file-role" data-cs="Task tracker — AIQ stream" data-en="Task tracker — AIQ stream">Task tracker — AIQ</td><td><span class="badge-ok" id="oil-status">✓ exists</span></td></tr>
+          <tr><td class="file-mono">_SESSION_START/BRIEFING.md</td><td class="file-role" data-cs="Session handover dokument" data-en="Session handover document">Session handover</td><td><span class="badge-ok">✓ exists</span></td></tr>
+          <tr><td class="file-mono">.claude/settings.local.json</td><td class="file-role" data-cs="Hook konfigurace (3 hooky)" data-en="Hook configuration (3 hooks)">Hook konfigurace</td><td><span class="badge-ok">✓ 3 hooky</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ B — DATA HEALTH ════════════════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="B — Data Health · Konzistence záznamů" data-en="B — Data Health · Record consistency">B — Data Health · Konzistence záznamů</span>
+        <span class="acr-tag">COMPUTED</span>
+      </div>
+
+      <div id="health-checks">
+        <div class="health-row">
+          <div class="health-icon">🔢</div>
+          <div class="health-body">
+            <div class="health-label" data-cs="DISC sekvence" data-en="DISC sequence">DISC sekvence</div>
+            <div class="health-detail" data-cs="Spusť: powershell _disc_validate.ps1 pro validaci mezer a duplicit" data-en="Run: powershell _disc_validate.ps1 to validate gaps and duplicates">Spusť: <code>powershell _disc_validate.ps1</code> pro validaci mezer a duplicit</div>
+          </div>
+          <div class="health-value hv-green" id="disc-health">→ sekce F</div>
+        </div>
+        <div class="health-row">
+          <div class="health-icon">📋</div>
+          <div class="health-body">
+            <div class="health-label" data-cs="OIL_CONTEXT konzistence" data-en="OIL_CONTEXT consistency">OIL_CONTEXT konzistence</div>
+            <div class="health-detail" id="oil-context-health-detail" data-cs="CLOSED tasky musí mít záznam v OIL_CONTEXT.md" data-en="CLOSED tasks must have an entry in OIL_CONTEXT.md">CLOSED tasky musí mít záznam v OIL_CONTEXT.md</div>
+          </div>
+          <div class="health-value" id="oil-context-health">—</div>
+        </div>
+        <div class="health-row">
+          <div class="health-icon">📅</div>
+          <div class="health-body">
+            <div class="health-label" data-cs="BRIEFING čerstvost" data-en="BRIEFING freshness">BRIEFING čerstvost</div>
+            <div class="health-detail" data-cs="BRIEFING.md starší než 1 den = varování — ověř před zahájením práce" data-en="BRIEFING.md older than 1 day = warning — verify before starting work">BRIEFING.md starší než 1 den = varování</div>
+          </div>
+          <div class="health-value hv-amber" id="briefing-health">manuální check</div>
+        </div>
+        <div class="health-row">
+          <div class="health-icon">📝</div>
+          <div class="health-body">
+            <div class="health-label" data-cs="IN PROGRESS tasky" data-en="IN PROGRESS tasks">IN PROGRESS tasky</div>
+            <div class="health-detail" id="ip-health-detail" data-cs="Počet a seznam aktuálně otevřených úkolů" data-en="Count and list of currently open tasks">Počet a seznam aktuálně otevřených úkolů</div>
+          </div>
+          <div class="health-value mv-blue" id="ip-health">—</div>
+        </div>
+        <div class="health-row">
+          <div class="health-icon">📄</div>
+          <div class="health-body">
+            <div class="health-label" data-cs="Transcript rotace" data-en="Transcript rotation">Transcript rotace</div>
+            <div class="health-detail" data-cs="Rotuj DISCUSSION_TRANSCRIPT.md pokud přesáhne ~500 KB (záznamy starší 30 dní)" data-en="Rotate DISCUSSION_TRANSCRIPT.md if exceeding ~500 KB (records older than 30 days)">Rotuj pokud přesáhne ~500 KB. Skript: _transcript_rotate.ps1</div>
+          </div>
+          <div class="health-value hv-green" id="transcript-health">→ sekce F</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ C — COMPACT ANALYTICS ══════════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="C — Compact Analytics · Session přehled" data-en="C — Compact Analytics · Session overview">C — Compact Analytics · Session přehled</span>
+        <span class="acr-tag">STATIC</span>
+      </div>
+
+      <div class="metric-grid" id="compact-metrics">
+        <div class="metric-card">
+          <div class="metric-label" data-cs="Hooky aktivní" data-en="Hooks active">Hooky aktivní</div>
+          <div class="metric-value mv-green">3</div>
+          <div class="metric-sub">Stop · PreCompact · PostCompact</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="Compact záchranných vrstev" data-en="Compact safety layers">Záchranných vrstev</div>
+          <div class="metric-value mv-blue">5</div>
+          <div class="metric-sub" data-cs="TRANSCRIPT · COMPACT_LOG · snapshot · BRIEFING · DISC" data-en="TRANSCRIPT · COMPACT_LOG · snapshot · BRIEFING · DISC">TRANSCRIPT · LOG · snapshot · BRIEFING · DISC</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="CLOSED tasků dnes" data-en="CLOSED tasks today">CLOSED tasků dnes</div>
+          <div class="metric-value mv-violet" id="closed-today">—</div>
+          <div class="metric-sub" data-cs="z OIL.json" data-en="from OIL.json">z OIL.json</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="AI / HU poměr tasků" data-en="AI / HU task ratio">AI / HU poměr</div>
+          <div class="metric-value mv-amber" id="ai-hu-ratio">—</div>
+          <div class="metric-sub" data-cs="Claude / David" data-en="Claude / David">Claude / David</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px; padding:14px; background:var(--c-bg2); border-radius:8px; border:1px solid var(--c-border);">
+        <div style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);margin-bottom:8px;letter-spacing:2px;text-transform:uppercase;" data-cs="Compact event log" data-en="Compact event log">Compact event log</div>
+        <div style="font-size:12px;color:var(--c-muted);font-family:var(--c-font-sans);line-height:1.6;" data-cs="COMPACT_LOG.md je generován automaticky PreCompact a PostCompact hooky. Každý compact event (auto i /compact) je tam zaznamenán s timestampem, IP tasky a DISC stavem. Soubor je v root projektu — není dostupný přes browser fetch, ale je archivován s každou session." data-en="COMPACT_LOG.md is generated automatically by PreCompact and PostCompact hooks. Every compact event (auto and /compact) is recorded with timestamp, IP tasks and DISC state. File is in project root — not accessible via browser fetch, but archived with every session.">
+          COMPACT_LOG.md je generován automaticky PreCompact + PostCompact hooky. Každý compact event je zaznamenán s timestampem, IN PROGRESS tasky a DISC stavem. Archivován s každou session přes _run_archive_now.ps1.
+        </div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ D — CONFIGURATION ══════════════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="D — Konfigurace · Účastníci a pravidla" data-en="D — Configuration · Participants and rules">D — Konfigurace · Účastníci a pravidla</span>
+        <span class="acr-tag">LIVE</span>
+      </div>
+
+      <div style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;" data-cs="Registr účastníků — z _track_config.json" data-en="Participant registry — from _track_config.json">Registr účastníků — _track_config.json</div>
+      <div id="participant-list">
+        <div style="font-size:12px;color:var(--c-muted);font-family:var(--c-font-sans);">Načítám…</div>
+      </div>
+
+      <div style="margin-top:20px;font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;" data-cs="Klíčová L1 pravidla — CLAUDE.md" data-en="Key L1 rules — CLAUDE.md">Klíčová L1 pravidla — CLAUDE.md</div>
+      <div id="l1-rules">
+        <div class="config-row"><div class="config-key">OIL-first</div><div class="config-val" data-cs="Před každým vývojovým úkolem: záznam v OIL.json → práce → OIL_CONTEXT.md po CLOSED" data-en="Before every dev task: OIL.json record → work → OIL_CONTEXT.md after CLOSED">Před každým vývojovým úkolem: OIL záznam → práce → kontext po CLOSED</div></div>
+        <div class="config-row"><div class="config-key">STOP pravidlo</div><div class="config-val" data-cs="Nový úkol vznikne → STOP → registruj do OIL.json → pak implementuj" data-en="New task arises → STOP → register in OIL.json → then implement">Nový úkol → STOP → zaregistruj → pak implementuj</div></div>
+        <div class="config-row"><div class="config-key">L3 průběžný zápis</div><div class="config-val" data-cs="[IP NOTE] do OIL_CONTEXT.md i při IN PROGRESS, ne jen po CLOSED" data-en="[IP NOTE] to OIL_CONTEXT.md even during IN PROGRESS, not only after CLOSED">[IP NOTE] do OIL_CONTEXT i při IN PROGRESS</div></div>
+        <div class="config-row"><div class="config-key">TASK DETAIL</div><div class="config-val">AIQ-NNNNN | Název | 1-věta popis — vždy, bez výjimky</div></div>
+        <div class="config-row"><div class="config-key">TASK CONFIRM</div><div class="config-val" data-cs="Mini-karta před každým zápisem do OIL.json — David potvrdí" data-en="Mini-card before every OIL.json write — David confirms">Mini-karta před každým zápisem do OIL.json</div></div>
+        <div class="config-row"><div class="config-key">T1–T4 triggers</div><div class="config-val" data-cs="Record compact: T1=téma hotovo, T2=přechod streamu, T3=přestávka, T4=Claude upozorní (90+ min)" data-en="Record compact: T1=topic done, T2=stream switch, T3=break, T4=Claude alerts (90+ min)">Record compact: T1=téma, T2=stream, T3=přestávka, T4=Claude (90+ min)</div></div>
+        <div class="config-row"><div class="config-key">System Audit</div><div class="config-val" data-cs="Příkaz 'system audit' → měsíčně nebo po infrastrukturní změně" data-en="Command 'system audit' → monthly or after infrastructure change">Příkaz 'system audit' → měsíčně</div></div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ E — OPERATIONAL METRICS ════════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="E — Operační metriky · OIL.json live data" data-en="E — Operational metrics · OIL.json live data">E — Operační metriky · OIL.json live data</span>
+        <span class="acr-tag">LIVE</span>
+      </div>
+      <div class="metric-grid" id="ops-metrics">
+        <div class="metric-card">
+          <div class="metric-label" data-cs="Celkem tasků" data-en="Total tasks">Celkem tasků</div>
+          <div class="metric-value mv-blue" id="m-total">—</div>
+          <div class="metric-sub">OIL.json</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="CLOSED (všechny)" data-en="CLOSED (all)">CLOSED celkem</div>
+          <div class="metric-value mv-green" id="m-closed">—</div>
+          <div class="metric-sub" data-cs="dokončené úkoly" data-en="completed tasks">dokončené</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="IN PROGRESS" data-en="IN PROGRESS">IN PROGRESS</div>
+          <div class="metric-value mv-amber" id="m-ip">—</div>
+          <div class="metric-sub" data-cs="aktivní úkoly" data-en="active tasks">aktivní</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="OPEN (backlog)" data-en="OPEN (backlog)">OPEN (backlog)</div>
+          <div class="metric-value mv-violet" id="m-open">—</div>
+          <div class="metric-sub" data-cs="čeká na zahájení" data-en="waiting to start">čeká</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="Effort accuracy" data-en="Effort accuracy">Effort accuracy</div>
+          <div class="metric-value mv-blue" id="m-accuracy">—</div>
+          <div class="metric-sub" data-cs="actual / estimated čas" data-en="actual / estimated time">actual / estimated</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label" data-cs="Claude vs. David" data-en="Claude vs. David">Claude vs. David</div>
+          <div class="metric-value mv-violet" id="m-assignee">—</div>
+          <div class="metric-sub" data-cs="% tasků přiřazeno Claude" data-en="% tasks assigned to Claude">% tasků Claude</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ F — QUICK ACTIONS ══════════════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="F — Quick Actions · Příkazy ke spuštění" data-en="F — Quick Actions · Commands to run">F — Quick Actions · Příkazy ke spuštění</span>
+        <span class="acr-tag">TOOLS</span>
+      </div>
+      <div class="action-grid" id="action-grid">
+        <div class="action-card">
+          <div class="action-name" data-cs="DISC validace" data-en="DISC validation">DISC validace</div>
+          <div class="action-desc" data-cs="Zkontroluje sekvenci DISC záznamů pro dnešní datum — mezery, duplicity, next ID" data-en="Checks DISC record sequence for today — gaps, duplicates, next ID">Zkontroluje sekvenci dnešních DISC záznamů — mezery, duplicity, next ID.</div>
+          <code class="action-cmd" id="cmd-disc">powershell -File "_disc_validate.ps1"</code>
+          <button class="btn-copy-cmd" onclick="copyCmd('cmd-disc', this)">📋 Kopírovat</button>
+        </div>
+        <div class="action-card">
+          <div class="action-name" data-cs="Next DISC ID" data-en="Next DISC ID">Next DISC ID</div>
+          <div class="action-desc" data-cs="Vrátí next DISC-YYMMDD-NNN ID pro dnešní datum" data-en="Returns next DISC-YYMMDD-NNN ID for today">Vrátí next DISC ID pro dnešní datum.</div>
+          <code class="action-cmd" id="cmd-disc-next">powershell -File "_disc_next.ps1"</code>
+          <button class="btn-copy-cmd" onclick="copyCmd('cmd-disc-next', this)">📋 Kopírovat</button>
+        </div>
+        <div class="action-card">
+          <div class="action-name" data-cs="Transcript rotace" data-en="Transcript rotation">Transcript rotace</div>
+          <div class="action-desc" data-cs="Archivuje záznamy starší než 30 dní z DISCUSSION_TRANSCRIPT.md do _SESSION_START/TRANSCRIPT_ARCHIVE/" data-en="Archives records older than 30 days from DISCUSSION_TRANSCRIPT.md to _SESSION_START/TRANSCRIPT_ARCHIVE/">Archivuje záznamy starší 30 dní.</div>
+          <code class="action-cmd" id="cmd-rotate">powershell -File "_transcript_rotate.ps1"</code>
+          <button class="btn-copy-cmd" onclick="copyCmd('cmd-rotate', this)">📋 Kopírovat</button>
+        </div>
+        <div class="action-card">
+          <div class="action-name" data-cs="META sync (rychlý)" data-en="META sync (quick)">META sync (rychlý)</div>
+          <div class="action-desc" data-cs="Synchronizuje klíčové soubory do _SESSION_START/ bez plné archivace WEB/APP" data-en="Syncs key files to _SESSION_START/ without full WEB/APP archive">Synchronizuje META soubory do _SESSION_START/ bez plné archivace.</div>
+          <code class="action-cmd" id="cmd-meta">powershell -File "_run_archive_now.ps1" -MetaOnly</code>
+          <button class="btn-copy-cmd" onclick="copyCmd('cmd-meta', this)">📋 Kopírovat</button>
+        </div>
+        <div class="action-card">
+          <div class="action-name" data-cs="Plná archivace" data-en="Full archive">Plná archivace</div>
+          <div class="action-desc" data-cs="Spustí kompletní archivaci: NEXUS + META + WEB + APP + TECHIQ" data-en="Runs complete archive: NEXUS + META + WEB + APP + TECHIQ">Kompletní archivace všech streamů.</div>
+          <code class="action-cmd" id="cmd-archive">powershell -File "_run_archive_now.ps1"</code>
+          <button class="btn-copy-cmd" onclick="copyCmd('cmd-archive', this)">📋 Kopírovat</button>
+        </div>
+        <div class="action-card">
+          <div class="action-name" data-cs="System audit (Claude)" data-en="System audit (Claude)">System audit (Claude)</div>
+          <div class="action-desc" data-cs="Zadej Claude: 'system audit' — provede komplexní check a zapíše záznam do system-audit-log.json" data-en="Tell Claude: 'system audit' — performs comprehensive check and writes record to system-audit-log.json">Zadej Claude: <strong>system audit</strong></div>
+          <code class="action-cmd" id="cmd-audit">system audit</code>
+          <button class="btn-copy-cmd" onclick="copyCmd('cmd-audit', this)">📋 Kopírovat</button>
+        </div>
+      </div>
+    </div>
+
+    <hr class="c-divider"/>
+
+    <!-- ══ G — AUDIT LOG ══════════════════════════════════ -->
+    <div class="acr-section">
+      <div class="acr-section-title">
+        <span data-cs="G — Audit Log · Historie systémových auditů" data-en="G — Audit Log · System audit history">G — Audit Log · Historie systémových auditů</span>
+        <span class="acr-tag">LIVE</span>
+      </div>
+      <div id="audit-log-container">
+        <div style="font-size:12px;color:var(--c-muted);font-family:var(--c-font-sans);">Načítám…</div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: 'AI Control Room',
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music:   '../cockpit-music.mp3'
+    });
+
+    const lang = () => document.documentElement.lang || 'cs';
+
+    function t(el) {
+      if (!el) return;
+      const key = 'data-' + lang();
+      if (el.hasAttribute(key)) el.textContent = el.getAttribute(key);
+    }
+
+    // ── Copy command ──────────────────────────────
+    function copyCmd(id, btn) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = '✓ Zkopírováno';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = '📋 Kopírovat'; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    // ── Load _track_config.json → participants ────
+    fetch('../_track_config.json')
+      .then(r => r.json())
+      .then(cfg => {
+        const list = document.getElementById('participant-list');
+        list.innerHTML = '';
+        (cfg.registry || []).forEach(p => {
+          list.innerHTML += `
+            <div class="participant-row">
+              <div class="pt-code">${p.code}</div>
+              <div class="pt-type">${p.type}</div>
+              <div class="pt-name">${p.name}</div>
+              <div class="pt-role">${p.role}</div>
+            </div>`;
+        });
+      })
+      .catch(() => {
+        document.getElementById('participant-list').innerHTML =
+          '<div style="font-size:12px;color:var(--c-muted);font-family:var(--c-font-sans);">_track_config.json — nelze načíst přes file://</div>';
+      });
+
+    // ── Load OIL.json → metrics ───────────────────
+    fetch('../OIL.json')
+      .then(r => r.json())
+      .then(oil => {
+        const tasks = oil.tasks || [];
+        const today = new Date().toISOString().slice(0, 10);
+
+        const total   = tasks.length;
+        const closed  = tasks.filter(t => t.status === 'CLOSED').length;
+        const ip      = tasks.filter(t => t.status === 'IN PROGRESS').length;
+        const open    = tasks.filter(t => t.status === 'OPEN').length;
+        const closedToday = tasks.filter(t => t.status === 'CLOSED' && t.completedAt && t.completedAt.startsWith(today)).length;
+        const claudeTasks = tasks.filter(t => t.assignee === 'Claude').length;
+        const claudePct   = total > 0 ? Math.round(claudeTasks / total * 100) : 0;
+
+        // Effort accuracy (where both actualTime and estimatedTime exist)
+        const withTimes = tasks.filter(t => t.actualTime && t.estimatedTime && t.estimatedTime > 0);
+        const accuracy  = withTimes.length > 0
+          ? Math.round(withTimes.reduce((sum, t) => sum + (t.actualTime / t.estimatedTime), 0) / withTimes.length * 100)
+          : null;
+
+        document.getElementById('m-total').textContent    = total;
+        document.getElementById('m-closed').textContent   = closed;
+        document.getElementById('m-ip').textContent       = ip;
+        document.getElementById('m-open').textContent     = open;
+        document.getElementById('m-accuracy').textContent = accuracy ? accuracy + '%' : '—';
+        document.getElementById('m-assignee').textContent = claudePct + '%';
+        document.getElementById('closed-today').textContent = closedToday;
+        document.getElementById('ai-hu-ratio').textContent  = claudePct + '%';
+        document.getElementById('kpi-velocity').textContent  = closedToday;
+
+        // IP health
+        document.getElementById('ip-health').textContent = ip;
+        document.getElementById('ip-health').className   = 'health-value ' + (ip > 5 ? 'hv-amber' : 'hv-green');
+        document.getElementById('ip-health-detail').textContent =
+          ip + ' IN PROGRESS tasků — ' + (ip > 5 ? 'zvýšená zátěž' : 'OK');
+
+        // OIL context consistency check (basic: count closed vs rough check)
+        document.getElementById('oil-context-health').textContent = closed + ' CLOSED';
+        document.getElementById('oil-context-health').className   = 'health-value hv-green';
+        document.getElementById('oil-context-health-detail').textContent =
+          closed + ' CLOSED tasků — spusť system audit pro detailní kontrolu';
+      })
+      .catch(() => {
+        ['m-total','m-closed','m-ip','m-open','m-accuracy','m-assignee','closed-today','ai-hu-ratio','kpi-velocity']
+          .forEach(id => { const el = document.getElementById(id); if (el) el.textContent = 'n/a'; });
+      });
+
+    // ── Load system-audit-log.json → audit log ────
+    fetch('system-audit-log.json')
+      .then(r => r.json())
+      .then(data => {
+        const audits = data.audits || [];
+        const container = document.getElementById('audit-log-container');
+        container.innerHTML = '';
+
+        // Update KPIs from latest audit
+        if (audits.length > 0) {
+          const latest = audits[0];
+          document.getElementById('kpi-last-audit').textContent = latest.date;
+          document.getElementById('kpi-audit-sub').textContent =
+            latest.findings_count + ' mezer nalezeno → ' + latest.gaps.filter(g => g.status === 'FIXED').length + ' opraveno';
+          document.getElementById('kpi-health').textContent = latest.score_after + '%';
+          document.getElementById('kpi-health-sub').textContent = 'Audit ' + latest.date;
+        }
+
+        audits.forEach(a => {
+          const sevColor = { CRITICAL: 'sev-critical', HIGH: 'sev-high', MEDIUM: 'sev-medium', LOW: 'sev-low' };
+          const gapPills = a.gaps.map(g => `
+            <div class="gap-pill">
+              <div class="gap-id">${g.id}</div>
+              <div class="gap-title">${g.title}</div>
+              <span class="gap-sev ${sevColor[g.severity] || ''}">${g.severity}</span>
+              <span class="${g.status === 'FIXED' ? 'gap-fixed' : 'gap-mitigated'}">${g.status === 'FIXED' ? '✓ FIXED' : '~ MIT'}</span>
+            </div>`).join('');
+
+          const scoreColor = a.score_after >= 90 ? 'var(--c-green)' : a.score_after >= 70 ? 'var(--c-amber)' : '#ef4444';
+          const notesKey   = lang() === 'en' ? 'notes_en' : 'notes_cz';
+
+          container.innerHTML += `
+            <div class="audit-card">
+              <div class="audit-header">
+                <div>
+                  <div class="audit-id">${a.id} · ${a.disc || ''}</div>
+                  <div class="audit-date">${a.date}</div>
+                  <div class="audit-scope">${a.scope}</div>
+                </div>
+                <div class="audit-score-block">
+                  <div class="audit-score" style="color:${scoreColor}">${a.score_after}%</div>
+                  <div class="audit-score-sub">HEALTH SCORE</div>
+                  <div style="font-size:10px;color:var(--c-muted);font-family:var(--c-font-sans);margin-top:2px;">${a.score_before}% → ${a.score_after}%</div>
+                </div>
+              </div>
+              <div class="audit-meta">
+                <div class="audit-meta-item">Auditor: <strong>${(a.auditor || []).join(' + ')}</strong></div>
+                <div class="audit-meta-item">Trvání: <strong>${a.duration_min} min</strong></div>
+                <div class="audit-meta-item">Nálezy: <strong>${a.findings_count}</strong></div>
+                <div class="audit-meta-item">Výsledek: <strong style="color:${a.result === 'CLOSED' ? 'var(--c-green)' : 'var(--c-amber)'}">${a.result}</strong></div>
+                ${a.oil ? `<div class="audit-meta-item">OIL: <strong style="color:var(--c-blue)">${a.oil}</strong></div>` : ''}
+              </div>
+              <div class="gaps-grid">${gapPills}</div>
+              <div class="audit-notes">${a[notesKey] || a.notes_cz || ''}</div>
+            </div>`;
+        });
+
+        if (audits.length === 0) {
+          container.innerHTML = '<div style="font-size:12px;color:var(--c-muted);font-family:var(--c-font-sans);">Žádné audity zatím.</div>';
+        }
+      })
+      .catch(err => {
+        document.getElementById('audit-log-container').innerHTML =
+          '<div style="font-size:12px;color:var(--c-muted);">system-audit-log.json nelze načíst.</div>';
+      });
+
+    // ── Translate on lang change ──────────────────
+    document.addEventListener('langChanged', () => {
+      document.querySelectorAll('[data-cs]').forEach(el => t(el));
+    });
+  </script>
+</body>
+</html>

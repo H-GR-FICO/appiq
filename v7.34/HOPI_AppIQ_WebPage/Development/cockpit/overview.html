@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Executive Overview — Management Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+
+    /* ── Header strip ────────────────────────────── */
+    .ov-header {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 16px 24px;
+      margin-bottom: 28px;
+    }
+    .ov-date {
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+    }
+    .ov-date strong { color: var(--c-white); }
+    .ov-b2c-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.3);
+      border-radius: 8px; padding: 6px 16px;
+    }
+    .ov-b2c-num {
+      font-size: 20px; font-weight: 900; font-family: var(--c-font-sans);
+      color: #60a5fa; letter-spacing: -1px;
+    }
+    .ov-b2c-lbl {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 1px; text-transform: uppercase; line-height: 1.3;
+    }
+
+    /* ── Block titles ────────────────────────────── */
+    .block-title {
+      font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 3px; text-transform: uppercase;
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .block-title span { margin-right: 6px; }
+
+    /* ── Widget grids ────────────────────────────── */
+    .widget-row {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .wrow-4 { grid-template-columns: repeat(4, 1fr); }
+    .wrow-3 { grid-template-columns: repeat(3, 1fr); }
+    .wrow-2 { grid-template-columns: repeat(2, 1fr); }
+
+    .widget {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      padding: 16px 18px;
+      display: flex; flex-direction: column; gap: 6px;
+      cursor: pointer; text-decoration: none;
+      transition: border-color .15s, background .15s;
+      position: relative; overflow: hidden;
+    }
+    .widget:hover { border-color: var(--c-violet); background: var(--c-bg3); }
+    .widget-accent {
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    }
+    .acc-v { background: var(--c-violet); }
+    .acc-b { background: var(--c-blue); }
+    .acc-g { background: var(--c-green); }
+    .acc-a { background: var(--c-amber); }
+    .acc-r { background: #ef4444; }
+
+    .widget-label {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .widget-val {
+      font-size: 28px; font-weight: 900; font-family: var(--c-font-sans);
+      line-height: 1; letter-spacing: -1px;
+    }
+    .val-v { color: var(--c-violet); text-shadow: 0 0 18px rgba(168,85,247,.55); }
+    .val-b { color: var(--c-blue);   text-shadow: 0 0 18px rgba(96,165,250,.55); }
+    .val-g { color: var(--c-green);  text-shadow: 0 0 18px rgba(34,197,94,.55); }
+    .val-a { color: var(--c-amber);  text-shadow: 0 0 18px rgba(245,158,11,.55); }
+    .val-r { color: #ef4444;         text-shadow: 0 0 18px rgba(239,68,68,.55); }
+    .val-w { color: var(--c-white); }
+
+    .widget-sub {
+      font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+      margin-top: 2px;
+    }
+    .widget-link {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      margin-top: 4px; letter-spacing: .5px;
+    }
+    .widget-link:hover { color: var(--c-violet); }
+
+    /* ── Trend indicator ─────────────────────────── */
+    .trend { font-size: 12px; margin-left: 4px; }
+    .tr-up   { color: var(--c-green); }
+    .tr-down { color: #ef4444; }
+    .tr-flat { color: var(--c-muted); }
+
+    /* ── Static info widgets ─────────────────────── */
+    .widget-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 5px; }
+    .widget-list li {
+      display: flex; align-items: baseline; gap: 6px;
+      font-size: 11px; color: var(--c-white); font-family: var(--c-font-sans);
+    }
+    .wl-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 1100px) {
+      .wrow-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .wrow-4, .wrow-3, .wrow-2 { grid-template-columns: 1fr 1fr; }
+      .widget-val { font-size: 24px; }
+    }
+    @media (max-width: 480px) {
+      .wrow-4, .wrow-3, .wrow-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ── Readability ─────────────────────────────── */
+    :root { --c-muted: #94a3b8; --c-font-mono: 'Segoe UI', system-ui, sans-serif; }
+
+    .block-title    { font-size: 12px; letter-spacing: 2px; }
+    .widget-label   { font-size: 12px; letter-spacing: .5px; }
+    .widget-sub     { font-size: 13px; }
+    .widget-link    { font-size: 12px; }
+    .ov-b2c-lbl     { font-size: 12px; letter-spacing: .5px; line-height: 1.5; }
+    .ov-date        { font-size: 13px; }
+    .wl-dot         { margin-top: 4px; }
+    .widget-list li { font-size: 12px; line-height: 1.6; }
+
+    @media (max-width: 700px) {
+      .widget-val   { font-size: 22px; }
+      .widget-label { font-size: 11px; }
+      .widget-sub   { font-size: 12px; }
+      .ov-b2c-num   { font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <!-- ── HEADER STRIP ───────────────────────────── -->
+    <div class="ov-header">
+      <div class="ov-date">
+        <span class="lang-cs">Přehled ke dni</span>
+        <span class="lang-en">Overview as of</span>
+        &nbsp;<strong id="today-date">—</strong>
+      </div>
+      <div class="ov-b2c-chip">
+        <div>
+          <div class="ov-b2c-num" id="hdr-b2c-days">—</div>
+        </div>
+        <div class="ov-b2c-lbl">
+          <span class="lang-cs">dnů<br>do B2C</span>
+          <span class="lang-en">days<br>to B2C</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BLOCK 1: PROJECT PULSE ─────────────────── -->
+    <div class="block-title"><span>📋</span>
+      <span class="lang-cs">Project Pulse — OIL + BOIL</span>
+      <span class="lang-en">Project Pulse — OIL + BOIL</span>
+    </div>
+    <div class="widget-row wrow-4">
+      <a class="widget" href="oil-board.html">
+        <div class="widget-accent acc-v"></div>
+        <div class="widget-label"><span class="lang-cs">Open AIQ tasky</span><span class="lang-en">Open AIQ tasks</span></div>
+        <div class="widget-val val-v" id="w-oil-open">—</div>
+        <div class="widget-sub" id="w-oil-open-sub">—</div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 09</span><span class="lang-en">section 09</span></div>
+      </a>
+      <a class="widget" href="boil-board.html">
+        <div class="widget-accent acc-a"></div>
+        <div class="widget-label"><span class="lang-cs">Open BIZ tasky</span><span class="lang-en">Open BIZ tasks</span></div>
+        <div class="widget-val val-a" id="w-boil-open">—</div>
+        <div class="widget-sub" id="w-boil-open-sub">—</div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 10</span><span class="lang-en">section 10</span></div>
+      </a>
+      <a class="widget" href="task-control.html">
+        <div class="widget-accent acc-r"></div>
+        <div class="widget-label"><span class="lang-cs">S1 Kritické</span><span class="lang-en">S1 Critical</span></div>
+        <div class="widget-val val-r" id="w-s1">—</div>
+        <div class="widget-sub"><span class="lang-cs">vyžadují řešení dnes</span><span class="lang-en">need action today</span></div>
+        <div class="widget-link">→ <span class="lang-cs">Task Control</span><span class="lang-en">Task Control</span></div>
+      </a>
+      <a class="widget" href="task-control.html">
+        <div class="widget-accent acc-b"></div>
+        <div class="widget-label"><span class="lang-cs">REVIEW — čeká na Davida</span><span class="lang-en">REVIEW — waiting</span></div>
+        <div class="widget-val val-b" id="w-review">—</div>
+        <div class="widget-sub"><span class="lang-cs">ke schválení</span><span class="lang-en">pending approval</span></div>
+        <div class="widget-link">→ <span class="lang-cs">Task Control</span><span class="lang-en">Task Control</span></div>
+      </a>
+    </div>
+
+    <!-- ── BLOCK 2: EXECUTION ─────────────────────── -->
+    <div class="block-title"><span>⚖️</span>
+      <span class="lang-cs">Execution — Kapacity</span>
+      <span class="lang-en">Execution — Capacity</span>
+    </div>
+    <div class="widget-row wrow-4">
+      <a class="widget" href="capacity.html">
+        <div class="widget-accent acc-v"></div>
+        <div class="widget-label">Claude 🤖</div>
+        <div class="widget-val val-v" id="w-claude-cnt">—</div>
+        <div class="widget-sub" id="w-claude-h"><span class="lang-cs">hod. odhadovaných</span><span class="lang-en">est. hours</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 11</span><span class="lang-en">section 11</span></div>
+      </a>
+      <a class="widget" href="capacity.html">
+        <div class="widget-accent acc-b"></div>
+        <div class="widget-label">David 👤</div>
+        <div class="widget-val val-b" id="w-david-cnt">—</div>
+        <div class="widget-sub" id="w-david-h"><span class="lang-cs">hod. odhadovaných</span><span class="lang-en">est. hours</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 11</span><span class="lang-en">section 11</span></div>
+      </a>
+      <a class="widget" href="oil-board.html">
+        <div class="widget-accent acc-g"></div>
+        <div class="widget-label"><span class="lang-cs">Uzavřeno celkem</span><span class="lang-en">Closed total</span></div>
+        <div class="widget-val val-g" id="w-closed-total">—</div>
+        <div class="widget-sub"><span class="lang-cs">AIQ + BIZ tasků</span><span class="lang-en">AIQ + BIZ tasks</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 09</span><span class="lang-en">section 09</span></div>
+      </a>
+      <a class="widget" href="task-control.html">
+        <div class="widget-accent acc-a"></div>
+        <div class="widget-label"><span class="lang-cs">Otevřeno celkem</span><span class="lang-en">Open total</span></div>
+        <div class="widget-val val-a" id="w-open-total">—</div>
+        <div class="widget-sub"><span class="lang-cs">AIQ + BIZ dohromady</span><span class="lang-en">AIQ + BIZ combined</span></div>
+        <div class="widget-link">→ <span class="lang-cs">Task Control</span><span class="lang-en">Task Control</span></div>
+      </a>
+    </div>
+
+    <!-- ── BLOCK 3: LAUNCH ────────────────────────── -->
+    <div class="block-title"><span>🚀</span>
+      <span class="lang-cs">Launch Countdown</span>
+      <span class="lang-en">Launch Countdown</span>
+    </div>
+    <div class="widget-row wrow-3">
+      <a class="widget" href="launch-plan.html">
+        <div class="widget-accent acc-g"></div>
+        <div class="widget-label"><span class="lang-cs">HOPI GROUP rollout</span><span class="lang-en">HOPI GROUP rollout</span></div>
+        <div class="widget-val val-g" id="w-hopi-days">—</div>
+        <div class="widget-sub"><span class="lang-cs">dnů do 31.12.2027</span><span class="lang-en">days to 31.12.2027</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 03</span><span class="lang-en">section 03</span></div>
+      </a>
+      <a class="widget" href="launch-plan.html">
+        <div class="widget-accent acc-b"></div>
+        <div class="widget-label"><span class="lang-cs">B2C HOME launch</span><span class="lang-en">B2C HOME launch</span></div>
+        <div class="widget-val val-b" id="w-b2c-days">—</div>
+        <div class="widget-sub"><span class="lang-cs">dnů do 01.01.2027</span><span class="lang-en">days to 01.01.2027</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 03</span><span class="lang-en">section 03</span></div>
+      </a>
+      <a class="widget" href="launch-plan.html">
+        <div class="widget-accent acc-a"></div>
+        <div class="widget-label"><span class="lang-cs">B2B Enterprise launch</span><span class="lang-en">B2B Enterprise launch</span></div>
+        <div class="widget-val val-a" id="w-b2b-days">—</div>
+        <div class="widget-sub"><span class="lang-cs">dnů do 01.01.2028</span><span class="lang-en">days to 01.01.2028</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 03</span><span class="lang-en">section 03</span></div>
+      </a>
+    </div>
+
+    <!-- ── BLOCK 4: STRATEGIC ─────────────────────── -->
+    <div class="block-title"><span>🧭</span>
+      <span class="lang-cs">Strategic — Tým a partneři</span>
+      <span class="lang-en">Strategic — Team &amp; partners</span>
+    </div>
+    <div class="widget-row wrow-2">
+      <a class="widget" href="team.html">
+        <div class="widget-accent acc-b"></div>
+        <div class="widget-label"><span class="lang-cs">Aktuální tým + klíčoví stakeholdeři</span><span class="lang-en">Current team + key stakeholders</span></div>
+        <ul class="widget-list" style="margin-top:6px">
+          <li><div class="wl-dot" style="background:#a855f7"></div><span class="lang-cs">David Gogela — Builder, Product Owner</span><span class="lang-en">David Gogela — Builder, Product Owner</span></li>
+          <li><div class="wl-dot" style="background:#3b82f6"></div><span class="lang-cs">Claude (Anthropic) — AI Engineering Partner</span><span class="lang-en">Claude (Anthropic) — AI Engineering Partner</span></li>
+          <li><div class="wl-dot" style="background:#22c55e"></div><span class="lang-cs">HOPI Holding — Pilot zákazník + investor</span><span class="lang-en">HOPI Holding — Pilot customer + investor</span></li>
+        </ul>
+        <div class="widget-link" style="margin-top:10px">→ <span class="lang-cs">sekce 12</span><span class="lang-en">section 12</span></div>
+      </a>
+      <a class="widget" href="team.html">
+        <div class="widget-accent acc-v"></div>
+        <div class="widget-label"><span class="lang-cs">Target partneři — outreach status</span><span class="lang-en">Target partners — outreach status</span></div>
+        <ul class="widget-list" style="margin-top:6px">
+          <li><div class="wl-dot" style="background:#a855f7"></div><span>Anthropic — <span class="lang-cs">strategic outreach (deck připraven)</span><span class="lang-en">strategic outreach (deck ready)</span></span></li>
+          <li><div class="wl-dot" style="background:#f59e0b"></div><span>AWS — <span class="lang-cs">Activate Indie ($1K credits)</span><span class="lang-en">Activate Indie ($1K credits)</span></span></li>
+          <li><div class="wl-dot" style="background:#60a5fa"></div><span>ARTIN · INTECS — <span class="lang-cs">aktivní piloty v chodu</span><span class="lang-en">active pilots underway</span></span></li>
+        </ul>
+        <div class="widget-link" style="margin-top:10px">→ <span class="lang-cs">sekce 12</span><span class="lang-en">section 12</span></div>
+      </a>
+    </div>
+
+    <!-- ── BLOCK 5: FINANCE (placeholders) ────────── -->
+    <div class="block-title"><span>💰</span>
+      <span class="lang-cs">Business Health — Finance (připojit ze sekcí 05+06)</span>
+      <span class="lang-en">Business Health — Finance (connect from sections 05+06)</span>
+    </div>
+    <div class="widget-row wrow-4">
+      <a class="widget" href="budget-track.html">
+        <div class="widget-accent acc-a"></div>
+        <div class="widget-label"><span class="lang-cs">Investice celkem</span><span class="lang-en">Total investment</span></div>
+        <div class="widget-val val-a">—</div>
+        <div class="widget-sub"><span class="lang-cs">čeká na data sekce 05</span><span class="lang-en">awaiting section 05 data</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 05</span><span class="lang-en">section 05</span></div>
+      </a>
+      <a class="widget" href="financial.html">
+        <div class="widget-accent acc-g"></div>
+        <div class="widget-label"><span class="lang-cs">Pipeline (cash injection)</span><span class="lang-en">Pipeline (cash injection)</span></div>
+        <div class="widget-val val-g">—</div>
+        <div class="widget-sub"><span class="lang-cs">čeká na data sekce 06</span><span class="lang-en">awaiting section 06 data</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 06</span><span class="lang-en">section 06</span></div>
+      </a>
+      <a class="widget" href="financial.html">
+        <div class="widget-accent acc-a"></div>
+        <div class="widget-label"><span class="lang-cs">Měsíční náklad</span><span class="lang-en">Monthly cost</span></div>
+        <div class="widget-val val-a">—</div>
+        <div class="widget-sub"><span class="lang-cs">čeká na data sekce 06</span><span class="lang-en">awaiting section 06 data</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 06</span><span class="lang-en">section 06</span></div>
+      </a>
+      <a class="widget" href="budget-track.html">
+        <div class="widget-accent acc-v"></div>
+        <div class="widget-label"><span class="lang-cs">Valuace cíl</span><span class="lang-en">Valuation target</span></div>
+        <div class="widget-val val-v">—</div>
+        <div class="widget-sub"><span class="lang-cs">čeká na data sekce 05</span><span class="lang-en">awaiting section 05 data</span></div>
+        <div class="widget-link">→ <span class="lang-cs">sekce 05</span><span class="lang-en">section 05</span></div>
+      </a>
+    </div>
+
+  </main>
+
+  <script src="oil-data.js"></script>
+  <script src="boil-data.js"></script>
+  <script src="_shell.js"></script>
+  <script>
+    // ── Language helper — use Shell (correct key: hopi_lang) ─────────────────
+    const getLang = () => Shell.getLang();
+
+    // ── Date helpers ───────────────────────────────
+    function daysTo(iso) {
+      return Math.max(0, Math.ceil((new Date(iso) - Date.now()) / 86400000));
+    }
+    function fmt(n) { return n.toLocaleString(getLang() === 'en' ? 'en-GB' : 'cs-CZ'); }
+
+    // ── Load OIL + BOIL — from pre-bundled JS (file:// safe, no fetch) ────────
+    function loadData() {
+      const oilTasks  = (window.OIL_DATA  || {}).tasks || [];
+      const boilTasks = (window.BOIL_DATA || {}).tasks || [];
+
+      const oilOpen   = oilTasks.filter(t => t.status !== 'CLOSED' && t.status !== 'CANCELLED');
+      const boilOpen  = boilTasks.filter(t => t.status !== 'CLOSED' && t.status !== 'CANCELLED');
+      const allOpen   = [...oilOpen, ...boilOpen];
+
+      const oilClosed  = oilTasks.filter(t => t.status === 'CLOSED');
+      const boilClosed = boilTasks.filter(t => t.status === 'CLOSED');
+
+      const s1Tasks    = allOpen.filter(t => t.severity === 'S1-KRITICKÝ');
+      const reviewTasks = oilTasks.filter(t => t.status === 'REVIEW');
+
+      const claudeTasks = oilOpen.filter(t => t.assignee === 'Claude');
+      const davidTasks  = [...oilOpen, ...boilOpen].filter(t => t.assignee === 'David Gogela');
+      const claudeH = Math.round(claudeTasks.reduce((s,t) => s + (t.estimatedTime||0), 0) / 60);
+      const davidH  = Math.round(davidTasks.reduce((s,t)  => s + (t.estimatedTime||0), 0) / 60);
+
+      // Block 1 — Project Pulse
+      document.getElementById('w-oil-open').textContent  = fmt(oilOpen.length);
+      document.getElementById('w-oil-open-sub').textContent = `IN PROGRESS: ${oilOpen.filter(t=>t.status==='IN PROGRESS').length}`;
+      document.getElementById('w-boil-open').textContent  = fmt(boilOpen.length);
+      document.getElementById('w-boil-open-sub').textContent = `IN PROGRESS: ${boilOpen.filter(t=>t.status==='IN PROGRESS').length}`;
+      document.getElementById('w-s1').textContent   = fmt(s1Tasks.length);
+      document.getElementById('w-review').textContent = fmt(reviewTasks.length);
+
+      // Block 2 — Execution
+      document.getElementById('w-claude-cnt').textContent = fmt(claudeTasks.length);
+      document.getElementById('w-david-cnt').textContent  = fmt(davidTasks.length);
+      const L = getLang();
+      document.getElementById('w-claude-h').textContent = L === 'en' ? `${claudeH} est. hours` : `${claudeH} hod. odhadovaných`;
+      document.getElementById('w-david-h').textContent  = L === 'en' ? `${davidH} est. hours` : `${davidH} hod. odhadovaných`;
+      document.getElementById('w-closed-total').textContent = fmt(oilClosed.length + boilClosed.length);
+      document.getElementById('w-open-total').textContent   = fmt(allOpen.length);
+    }
+
+    // ── Countdowns ─────────────────────────────────
+    function initCountdowns() {
+      const b2c  = daysTo('2027-01-01');
+      const b2b  = daysTo('2028-01-01');
+      const hopi = daysTo('2027-12-31');
+      document.getElementById('hdr-b2c-days').textContent = fmt(b2c);
+      document.getElementById('w-b2c-days').textContent   = fmt(b2c);
+      document.getElementById('w-b2b-days').textContent   = fmt(b2b);
+      document.getElementById('w-hopi-days').textContent  = fmt(hopi);
+    }
+
+    // ── Today date ─────────────────────────────────
+    function initDate() {
+      const d = new Date();
+      const s = d.toLocaleDateString(getLang() === 'en' ? 'en-GB' : 'cs-CZ', {day:'2-digit',month:'long',year:'numeric'});
+      document.getElementById('today-date').textContent = s;
+    }
+
+    // ── Boot ───────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      initDate();
+      initCountdowns();
+      try { loadData(); } catch(e) {}
+      if (typeof Shell !== 'undefined') {
+        Shell.init({ section: {cs:'Celkový přehled', en:'Executive Overview'}, backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
+      }
+    });
+  </script>
+</body>
+</html>

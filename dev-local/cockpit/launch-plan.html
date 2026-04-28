@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Launch Plan · Countdown — Management Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+
+    /* ── Track cards ─────────────────────────────── */
+    .tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .track-card {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      padding: 24px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+      position: relative; overflow: hidden;
+    }
+    .track-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .track-hopi::before  { background: linear-gradient(90deg, #22c55e, #16a34a); }
+    .track-b2c::before   { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+    .track-b2b::before   { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+
+    .track-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 10px; font-family: var(--c-font-sans);
+      font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 4px;
+      width: fit-content;
+    }
+    .badge-hopi  { background: rgba(34,197,94,.12); color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
+    .badge-b2c   { background: rgba(59,130,246,.12); color: #60a5fa; border: 1px solid rgba(59,130,246,.3); }
+    .badge-b2b   { background: rgba(245,158,11,.12); color: #fbbf24; border: 1px solid rgba(245,158,11,.3); }
+
+    .track-title {
+      font-size: 17px; font-weight: 800; color: var(--c-white);
+      line-height: 1.2;
+    }
+    .track-subtitle {
+      font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.5;
+    }
+
+    /* ── Countdown display ───────────────────────── */
+    .countdown-box {
+      background: var(--c-bg3);
+      border: 1px solid var(--c-border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .countdown-num {
+      font-size: 42px; font-weight: 900; font-family: var(--c-font-sans);
+      line-height: 1; letter-spacing: -2px;
+    }
+    .cnt-hopi  { color: #22c55e; }
+    .cnt-b2c   { color: #60a5fa; }
+    .cnt-b2b   { color: #fbbf24; }
+    .countdown-label {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;
+    }
+    .countdown-date {
+      font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans);
+      margin-top: 6px;
+    }
+
+    /* ── Progress bar ────────────────────────────── */
+    .progress-wrap { display: flex; flex-direction: column; gap: 6px; }
+    .progress-label {
+      display: flex; justify-content: space-between;
+      font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted);
+    }
+    .progress-bar {
+      height: 6px; background: var(--c-border); border-radius: 3px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; border-radius: 3px;
+      transition: width .5s ease;
+    }
+    .fill-hopi { background: linear-gradient(90deg, #22c55e, #4ade80); }
+    .fill-b2c  { background: linear-gradient(90deg, #3b82f6, #818cf8); }
+    .fill-b2b  { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+
+    /* ── HOPI GROUP department timeline ─────────── */
+    .section-title {
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 3px; text-transform: uppercase;
+      padding-bottom: 10px; border-bottom: 1px solid var(--c-border);
+      margin-bottom: 20px;
+    }
+    .dept-timeline {
+      display: flex; flex-direction: column; gap: 0;
+      position: relative;
+    }
+    .dept-timeline::before {
+      content: '';
+      position: absolute; left: 15px; top: 16px; bottom: 16px;
+      width: 2px; background: var(--c-border);
+    }
+    .dept-row {
+      display: grid;
+      grid-template-columns: 32px 1fr auto;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 14px 0;
+      position: relative;
+    }
+    .dept-row + .dept-row { border-top: 1px solid rgba(255,255,255,.04); }
+
+    .dept-dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 2px solid var(--c-border);
+      background: var(--c-bg2);
+      flex-shrink: 0; margin-top: 2px;
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8px;
+      transition: all .2s;
+      margin-left: 7px;
+    }
+    .dept-dot.active  { background: #22c55e; border-color: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,.4); }
+    .dept-dot.soon    { background: #3b82f6; border-color: #3b82f6; }
+    .dept-dot.planned { background: var(--c-bg3); border-color: var(--c-muted); }
+
+    .dept-info {}
+    .dept-name {
+      font-size: 14px; font-weight: 700; color: var(--c-white);
+      margin-bottom: 3px;
+    }
+    .dept-scope {
+      font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+      line-height: 1.5;
+    }
+    .dept-status {
+      font-size: 10px; font-family: var(--c-font-sans); font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+      align-self: flex-start;
+    }
+    .st-active  { background: rgba(34,197,94,.12); color: #22c55e; border: 1px solid rgba(34,197,94,.3); }
+    .st-soon    { background: rgba(59,130,246,.12); color: #60a5fa; border: 1px solid rgba(59,130,246,.3); }
+    .st-planned { background: var(--c-bg3); color: var(--c-muted); border: 1px solid var(--c-border); }
+
+    .dept-date {
+      font-size: 10px; color: var(--c-muted); font-family: var(--c-font-sans);
+      margin-top: 4px; display: block;
+    }
+
+    /* ── Two-column layout for bottom ───────────── */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 28px;
+    }
+    .info-card {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 20px;
+    }
+    .info-title {
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+      letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .info-row {
+      display: flex; align-items: baseline; gap: 8px;
+      padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.04);
+      font-size: 12px;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+    .info-key  { color: var(--c-muted); font-family: var(--c-font-sans); min-width: 90px; font-size: 11px; }
+    .info-val  { color: var(--c-white); font-weight: 600; }
+
+    /* ── Responsive ─────────────────────────────── */
+    @media (max-width: 1100px) {
+      .tracks-grid { grid-template-columns: 1fr 1fr; }
+      .track-card:first-child { grid-column: 1 / -1; }
+    }
+    @media (max-width: 700px) {
+      .tracks-grid  { grid-template-columns: 1fr; }
+      .bottom-grid  { grid-template-columns: 1fr; }
+      .dept-row     { grid-template-columns: 32px 1fr; }
+      .dept-status  { display: none; }
+    }
+
+    /* ── Readability ─────────────────────────────── */
+    :root { --c-muted: #94a3b8; --c-font-mono: 'Segoe UI', system-ui, sans-serif; }
+
+    .track-badge       { font-size: 11px; }
+    .track-subtitle    { font-size: 13px; line-height: 1.6; }
+    .countdown-label   { font-size: 12px; letter-spacing: 1px; }
+    .countdown-date    { font-size: 13px; }
+    .section-title     { font-size: 12px; }
+    .dept-name         { font-size: 15px; }
+    .dept-scope        { font-size: 13px; line-height: 1.6; }
+    .dept-date         { font-size: 12px; }
+    .dept-status       { font-size: 11px; }
+    .info-title        { font-size: 12px; }
+    .info-key          { font-size: 12px; }
+    .info-val          { font-size: 13px; }
+    .progress-label    { font-size: 12px; }
+
+    @media (max-width: 700px) {
+      .countdown-num  { font-size: 34px; }
+      .track-title    { font-size: 15px; }
+      .track-subtitle { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <!-- ── TOP 3 TRACK CARDS ─────────────────────── -->
+    <div class="tracks-grid">
+
+      <!-- HOPI GROUP -->
+      <div class="track-card track-hopi">
+        <div class="track-badge badge-hopi">🏢 HOPI GROUP</div>
+        <div class="track-title">
+          <span class="lang-cs">Interní rollout skupiny</span>
+          <span class="lang-en">Internal group rollout</span>
+        </div>
+        <div class="track-subtitle">
+          <span class="lang-cs">01.06.2026 → 31.12.2027 · 5 oddělení · ~5 000 uživatelů</span>
+          <span class="lang-en">01.06.2026 → 31.12.2027 · 5 departments · ~5,000 users</span>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-num cnt-hopi" id="hopi-days">—</div>
+          <div class="countdown-label">
+            <span class="lang-cs">dnů do konce rollout</span>
+            <span class="lang-en">days to rollout end</span>
+          </div>
+          <div class="countdown-date">→ 31.12.2027</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="lang-cs">Zahájeno 01.06.2026</span>
+            <span class="lang-en">Started 01.06.2026</span>
+            <span id="hopi-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill fill-hopi" id="hopi-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- B2C HOME -->
+      <div class="track-card track-b2c">
+        <div class="track-badge badge-b2c">🌍 B2C HOME</div>
+        <div class="track-title">
+          <span class="lang-cs">AppIQ HOME Launch</span>
+          <span class="lang-en">AppIQ HOME Launch</span>
+        </div>
+        <div class="track-subtitle">
+          <span class="lang-cs">Komerční spuštění · Freemium → Premium · PLG motion · CEE first</span>
+          <span class="lang-en">Commercial launch · Freemium → Premium · PLG motion · CEE first</span>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-num cnt-b2c" id="b2c-days">—</div>
+          <div class="countdown-label">
+            <span class="lang-cs">dnů do launche</span>
+            <span class="lang-en">days to launch</span>
+          </div>
+          <div class="countdown-date">→ 01.01.2027</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="lang-cs">Cíl: Founding Members</span>
+            <span class="lang-en">Target: Founding Members</span>
+            <span id="b2c-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill fill-b2c" id="b2c-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- B2B ENTERPRISE -->
+      <div class="track-card track-b2b">
+        <div class="track-badge badge-b2b">🏭 B2B ENTERPRISE</div>
+        <div class="track-title">
+          <span class="lang-cs">Enterprise Launch</span>
+          <span class="lang-en">Enterprise Launch</span>
+        </div>
+        <div class="track-subtitle">
+          <span class="lang-cs">HOPI Group = referenční zákazník · CEE market entry · White-label ready</span>
+          <span class="lang-en">HOPI Group = reference customer · CEE market entry · White-label ready</span>
+        </div>
+        <div class="countdown-box">
+          <div class="countdown-num cnt-b2b" id="b2b-days">—</div>
+          <div class="countdown-label">
+            <span class="lang-cs">dnů do launche</span>
+            <span class="lang-en">days to launch</span>
+          </div>
+          <div class="countdown-date">→ 01.01.2028</div>
+        </div>
+        <div class="progress-wrap">
+          <div class="progress-label">
+            <span class="lang-cs">Závisí na B2C validaci</span>
+            <span class="lang-en">Depends on B2C validation</span>
+            <span id="b2b-pct">0%</span>
+          </div>
+          <div class="progress-bar"><div class="progress-fill fill-b2b" id="b2b-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+
+    </div><!-- /tracks-grid -->
+
+    <!-- ── HOPI GROUP DEPARTMENT TIMELINE ─────────── -->
+    <div class="section-title">
+      <span class="lang-cs">🏢 HOPI GROUP — Plán nasazení per oddělení</span>
+      <span class="lang-en">🏢 HOPI GROUP — Department rollout plan</span>
+    </div>
+
+    <div class="dept-timeline">
+
+      <div class="dept-row">
+        <div class="dept-dot active"></div>
+        <div class="dept-info">
+          <div class="dept-name">
+            <span class="lang-cs">Finance &amp; Controlling</span>
+            <span class="lang-en">Finance &amp; Controlling</span>
+          </div>
+          <div class="dept-scope">
+            <span class="lang-cs">Controlling, Treasury, FX, Reporting, SAP integrace · HOPI Holding</span>
+            <span class="lang-en">Controlling, Treasury, FX, Reporting, SAP integration · HOPI Holding</span>
+          </div>
+          <span class="dept-date">01.06.2026</span>
+        </div>
+        <div class="dept-status st-active">
+          <span class="lang-cs">Probíhá</span>
+          <span class="lang-en">Active</span>
+        </div>
+      </div>
+
+      <div class="dept-row">
+        <div class="dept-dot soon"></div>
+        <div class="dept-info">
+          <div class="dept-name">
+            <span class="lang-cs">Legal · Tax · Compliance</span>
+            <span class="lang-en">Legal · Tax · Compliance</span>
+          </div>
+          <div class="dept-scope">
+            <span class="lang-cs">Smlouvy, daně, compliance tracking, právní dokumenty</span>
+            <span class="lang-en">Contracts, taxes, compliance tracking, legal documents</span>
+          </div>
+          <span class="dept-date">01.10.2026</span>
+        </div>
+        <div class="dept-status st-soon">
+          <span class="lang-cs">Q4 2026</span>
+          <span class="lang-en">Q4 2026</span>
+        </div>
+      </div>
+
+      <div class="dept-row">
+        <div class="dept-dot planned"></div>
+        <div class="dept-info">
+          <div class="dept-name">
+            <span class="lang-cs">Operations · Purchasing</span>
+            <span class="lang-en">Operations · Purchasing</span>
+          </div>
+          <div class="dept-scope">
+            <span class="lang-cs">Supply Chain, výroba, nákup, vendor management · SUPPLY CHAIN + AGRICULTURE</span>
+            <span class="lang-en">Supply chain, production, procurement, vendor management · SUPPLY CHAIN + AGRICULTURE</span>
+          </div>
+          <span class="dept-date">01.04.2027</span>
+        </div>
+        <div class="dept-status st-planned">
+          <span class="lang-cs">Q2 2027</span>
+          <span class="lang-en">Q2 2027</span>
+        </div>
+      </div>
+
+      <div class="dept-row">
+        <div class="dept-dot planned"></div>
+        <div class="dept-info">
+          <div class="dept-name">
+            <span class="lang-cs">HR · IT · Marketing</span>
+            <span class="lang-en">HR · IT · Marketing</span>
+          </div>
+          <div class="dept-scope">
+            <span class="lang-cs">Lidské zdroje, IT správa, interní komunikace, marketing · Celá mateřská společnost</span>
+            <span class="lang-en">Human resources, IT management, internal comms, marketing · Entire parent company</span>
+          </div>
+          <span class="dept-date">01.07.2027</span>
+        </div>
+        <div class="dept-status st-planned">
+          <span class="lang-cs">Q3 2027</span>
+          <span class="lang-en">Q3 2027</span>
+        </div>
+      </div>
+
+      <div class="dept-row">
+        <div class="dept-dot planned"></div>
+        <div class="dept-info">
+          <div class="dept-name">
+            <span class="lang-cs">Dceřiné společnosti — všechny divize</span>
+            <span class="lang-en">Subsidiaries — all divisions</span>
+          </div>
+          <div class="dept-scope">
+            <span class="lang-cs">~30 společností · FOODS · SERVICES · AGRICULTURE · 8 zemí · 9 jazyků · Plná AI asistence</span>
+            <span class="lang-en">~30 companies · FOODS · SERVICES · AGRICULTURE · 8 countries · 9 languages · Full AI</span>
+          </div>
+          <span class="dept-date">01.10.2027 → 31.12.2027</span>
+        </div>
+        <div class="dept-status st-planned">
+          <span class="lang-cs">Q4 2027</span>
+          <span class="lang-en">Q4 2027</span>
+        </div>
+      </div>
+
+    </div><!-- /dept-timeline -->
+
+    <!-- ── BOTTOM INFO CARDS ───────────────────────── -->
+    <div class="bottom-grid">
+
+      <div class="info-card">
+        <div class="info-title">
+          <span class="lang-cs">B2C HOME — klíčové parametry</span>
+          <span class="lang-en">B2C HOME — key parameters</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#60a5fa"></div>
+          <span class="info-key lang-cs">Launch</span><span class="info-key lang-en">Launch</span>
+          <span class="info-val">01.01.2027</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#60a5fa"></div>
+          <span class="info-key lang-cs">Model</span><span class="info-key lang-en">Model</span>
+          <span class="info-val">Freemium → Premium</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#60a5fa"></div>
+          <span class="info-key lang-cs">Motion</span><span class="info-key lang-en">Motion</span>
+          <span class="info-val">PLG (Product-Led Growth)</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#60a5fa"></div>
+          <span class="info-key lang-cs">Trh</span><span class="info-key lang-en">Market</span>
+          <span class="info-val lang-cs">CEE first → Global</span>
+          <span class="info-val lang-en">CEE first → Global</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#60a5fa"></div>
+          <span class="info-key lang-cs">Profily</span><span class="info-key lang-en">Profiles</span>
+          <span class="info-val lang-cs">H1 Jednotlivec · H2 Pár · H3 Rodina · H4 Rozšířená</span>
+          <span class="info-val lang-en">H1 Individual · H2 Couple · H3 Family · H4 Extended</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#60a5fa"></div>
+          <span class="info-key lang-cs">Priority domény</span><span class="info-key lang-en">Priority domains</span>
+          <span class="info-val lang-cs">Finance · Zdraví · Vzdělávání · Domácnost</span>
+          <span class="info-val lang-en">Finance · Health · Education · Home</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <div class="info-title">
+          <span class="lang-cs">B2B Enterprise — klíčové parametry</span>
+          <span class="lang-en">B2B Enterprise — key parameters</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#fbbf24"></div>
+          <span class="info-key lang-cs">Launch</span><span class="info-key lang-en">Launch</span>
+          <span class="info-val">01.01.2028</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#fbbf24"></div>
+          <span class="info-key lang-cs">Reference</span><span class="info-key lang-en">Reference</span>
+          <span class="info-val lang-cs">HOPI Group — živý důkaz</span>
+          <span class="info-val lang-en">HOPI Group — live proof</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#fbbf24"></div>
+          <span class="info-key lang-cs">Model</span><span class="info-key lang-en">Model</span>
+          <span class="info-val lang-cs">SaaS · White-label · Reseller</span>
+          <span class="info-val lang-en">SaaS · White-label · Reseller</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#fbbf24"></div>
+          <span class="info-key lang-cs">Trh</span><span class="info-key lang-en">Market</span>
+          <span class="info-val lang-cs">CEE Holdingové skupiny + střední firmy</span>
+          <span class="info-val lang-en">CEE holding groups + mid-market</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#fbbf24"></div>
+          <span class="info-key lang-cs">Prerekvizita</span><span class="info-key lang-en">Prerequisite</span>
+          <span class="info-val lang-cs">B2C validace + HOPI Group reference</span>
+          <span class="info-val lang-en">B2C validation + HOPI Group reference</span>
+        </div>
+        <div class="info-row">
+          <div class="info-dot" style="background:#fbbf24"></div>
+          <span class="info-key lang-cs">Profily</span><span class="info-key lang-en">Profiles</span>
+          <span class="info-val lang-cs">E3 Střední firma · E4 Velká firma · E6 Holding</span>
+          <span class="info-val lang-en">E3 Mid-size · E4 Large corp · E6 Holding</span>
+        </div>
+      </div>
+
+    </div><!-- /bottom-grid -->
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    // ── Language — handled by Shell.applyI18n() called in Shell.init() ───────
+    const lang = Shell.getLang();
+
+    // ── Countdown logic ────────────────────────────
+    function daysTo(targetDate) {
+      const now  = new Date();
+      const then = new Date(targetDate);
+      const diff = Math.ceil((then - now) / (1000 * 60 * 60 * 24));
+      return Math.max(0, diff);
+    }
+
+    function progressPct(startDate, endDate) {
+      const start = new Date(startDate).getTime();
+      const end   = new Date(endDate).getTime();
+      const now   = Date.now();
+      if (now <= start) return 0;
+      if (now >= end)   return 100;
+      return Math.round((now - start) / (end - start) * 100);
+    }
+
+    function initCountdowns() {
+      // HOPI GROUP: 01.06.2026 → 31.12.2027
+      const hopiDays = daysTo('2027-12-31');
+      const hopiPct  = progressPct('2026-06-01', '2027-12-31');
+      document.getElementById('hopi-days').textContent = hopiDays.toLocaleString();
+      document.getElementById('hopi-pct').textContent  = hopiPct + '%';
+      document.getElementById('hopi-bar').style.width  = hopiPct + '%';
+
+      // B2C: 01.01.2027
+      const b2cDays = daysTo('2027-01-01');
+      const b2cPct  = progressPct('2026-01-01', '2027-01-01');
+      document.getElementById('b2c-days').textContent = b2cDays.toLocaleString();
+      document.getElementById('b2c-pct').textContent  = b2cPct + '%';
+      document.getElementById('b2c-bar').style.width  = b2cPct + '%';
+
+      // B2B: 01.01.2028
+      const b2bDays = daysTo('2028-01-01');
+      const b2bPct  = progressPct('2027-01-01', '2028-01-01');
+      document.getElementById('b2b-days').textContent = b2bDays.toLocaleString();
+      document.getElementById('b2b-pct').textContent  = b2bPct + '%';
+      document.getElementById('b2b-bar').style.width  = b2bPct + '%';
+    }
+
+    // ── Boot ───────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      initCountdowns();
+      if (typeof Shell !== 'undefined') {
+        Shell.init({ section: 'Launch Plan · Countdown', backUrl: '../MANAGEMENT_COCKPIT.html', music: '../cockpit-music.mp3' });
+      }
+    });
+  </script>
+</body>
+</html>

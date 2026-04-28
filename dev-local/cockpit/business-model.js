@@ -1,0 +1,199 @@
+// Auto-generated from business-model.json — do not edit manually
+window.BUSINESS_MODEL_DATA = {
+  "version": "1.0",
+  "updated": "2026-04-22",
+  "linked_task": "AIQ-00336",
+  "note": "Single source of truth — feeds Business Sales Model, Motivation Chamber, Budget Track, Financial Cockpit.",
+
+  "segments": [
+    {
+      "id": "b2c-individual",
+      "group": "HOME B2C",
+      "name": { "cs": "Jednotlivec", "en": "Individual" },
+      "unit_type": "user",
+      "pricing_model": "freemium",
+      "price_monthly_eur": 9.99,
+      "free_tier": true,
+      "active": true
+    },
+    {
+      "id": "b2c-couple",
+      "group": "HOME B2C",
+      "name": { "cs": "Pár", "en": "Couple" },
+      "unit_type": "user",
+      "pricing_model": "freemium",
+      "price_monthly_eur": 14.99,
+      "free_tier": true,
+      "active": true
+    },
+    {
+      "id": "b2c-family",
+      "group": "HOME B2C",
+      "name": { "cs": "Rodina", "en": "Family" },
+      "unit_type": "user",
+      "pricing_model": "freemium",
+      "price_monthly_eur": 19.99,
+      "free_tier": true,
+      "active": true
+    },
+    {
+      "id": "b2b-startup",
+      "group": "Enterprise B2B",
+      "name": { "cs": "Startup", "en": "Startup" },
+      "unit_type": "company",
+      "pricing_model": "flat",
+      "price_monthly_eur": 49,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "b2b-business",
+      "group": "Enterprise B2B",
+      "name": { "cs": "Business", "en": "Business" },
+      "unit_type": "company",
+      "pricing_model": "flat",
+      "price_monthly_eur": 149,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "b2b-enterprise",
+      "group": "Enterprise B2B",
+      "name": { "cs": "Enterprise", "en": "Enterprise" },
+      "unit_type": "company",
+      "pricing_model": "flat",
+      "price_monthly_eur": 499,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "cockpit-department",
+      "group": "Cockpit B2B",
+      "name": { "cs": "Oddělení", "en": "Department" },
+      "unit_type": "cockpit_seat",
+      "pricing_model": "per_unit",
+      "base_price_eur": 49,
+      "per_user_eur": 3.00,
+      "max_users": 20,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "cockpit-division",
+      "group": "Cockpit B2B",
+      "name": { "cs": "Divize", "en": "Division" },
+      "unit_type": "cockpit_seat",
+      "pricing_model": "per_unit",
+      "base_price_eur": 99,
+      "per_user_eur": 2.50,
+      "max_users": 100,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "cockpit-holding",
+      "group": "Cockpit B2B",
+      "name": { "cs": "Holding", "en": "Holding" },
+      "unit_type": "cockpit_seat",
+      "pricing_model": "per_unit",
+      "base_price_eur": 199,
+      "per_user_eur": 2.00,
+      "max_users": null,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "cockpit-home-individual",
+      "group": "Cockpit HOME",
+      "name": { "cs": "Osobní Cockpit", "en": "Personal Cockpit" },
+      "unit_type": "user",
+      "pricing_model": "flat",
+      "price_monthly_eur": 4.99,
+      "free_tier": false,
+      "active": true
+    },
+    {
+      "id": "cockpit-home-family",
+      "group": "Cockpit HOME",
+      "name": { "cs": "Rodinný Cockpit", "en": "Family Cockpit" },
+      "unit_type": "user",
+      "pricing_model": "flat",
+      "price_monthly_eur": 9.99,
+      "free_tier": false,
+      "active": true
+    }
+  ],
+
+  "internal_billing": [
+    { "id": "hopi-supply-chain", "division": "Supply Chain", "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 30 },
+    { "id": "hopi-foods",        "division": "Foods",        "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 25 },
+    { "id": "hopi-agriculture",  "division": "Agriculture",  "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 20 },
+    { "id": "hopi-services",     "division": "Services",     "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 15 },
+    { "id": "hopi-holding",      "division": "Holding",      "transfer_price_per_user_eur": 3.00, "method": "OECD cost-plus 5%", "placeholder_users": 10 }
+  ],
+
+  "scenarios": [
+    {
+      "id": "conservative",
+      "name": { "cs": "Konzervativní", "en": "Conservative" },
+      "color": "blue",
+      "freemium_conversion_rate": 0.08,
+      "projections": { "y1_arr_eur": 150000, "y2_arr_eur": 700000, "y3_arr_eur": 1500000 }
+    },
+    {
+      "id": "middle",
+      "name": { "cs": "Středný", "en": "Middle" },
+      "color": "green",
+      "is_anchor": true,
+      "freemium_conversion_rate": 0.10,
+      "projections": { "y1_arr_eur": 500000, "y2_arr_eur": 2000000, "y3_arr_eur": 5000000 }
+    },
+    {
+      "id": "ambitious",
+      "name": { "cs": "Ambiciózní", "en": "Ambitious" },
+      "color": "violet",
+      "freemium_conversion_rate": 0.15,
+      "projections": { "y1_arr_eur": 1200000, "y2_arr_eur": 5000000, "y3_arr_eur": 15000000 }
+    },
+    {
+      "id": "dream",
+      "name": { "cs": "Dream 🌟", "en": "Dream 🌟" },
+      "color": "amber",
+      "freemium_conversion_rate": 0.22,
+      "note": "Po diskusi s majiteli HOPI Group — čísla TBD",
+      "projections": { "y1_arr_eur": null, "y2_arr_eur": null, "y3_arr_eur": 30000000 }
+    }
+  ],
+
+  "exit_paths": [
+    { "id": "acquisition", "name": { "cs": "Akvizice (SAP/MS/Anthropic)", "en": "Acquisition (SAP/MS/Anthropic)" }, "multiple_arr": 12, "is_baseline": false },
+    { "id": "pe_buyout",   "name": { "cs": "PE Buyout", "en": "PE Buyout" }, "multiple_arr": 6, "is_baseline": false },
+    { "id": "ipo",         "name": { "cs": "IPO", "en": "IPO" }, "multiple_arr": 25, "is_baseline": false },
+    { "id": "hopi_group",  "name": { "cs": "HOPI Group ∞", "en": "HOPI Group ∞" }, "multiple_arr": 10, "is_baseline": true, "note": "Vždy zobrazena — AppIQ vždy zvyšuje hodnotu skupiny" }
+  ],
+
+  "hopi_group_baseline": {
+    "group_valuation_eur": 500000000,
+    "uplift_pct": 10,
+    "note": "HOPI Group = €500M. Middle scénář přidá +€50M (10% uplift)."
+  },
+
+  "cost_assumptions": {
+    "gross_margin_pct": 72,
+    "api_cost_per_session_eur": 0.10,
+    "avg_sessions_per_user_monthly": 30,
+    "payment_processing_pct": 2.9,
+    "hosting_per_user_eur": 0.20
+  },
+
+  "transfer_pricing_calc": {
+    "reference_price_eur": 9.99,
+    "gross_margin_pct": 72,
+    "full_costs_eur": 2.80,
+    "markup_pct": 5,
+    "transfer_price_eur": 2.94,
+    "rounded_eur": 3.00,
+    "method": "OECD cost-plus",
+    "formula": "reference_price × (1 − gross_margin) × (1 + markup)"
+  }
+};

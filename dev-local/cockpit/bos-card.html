@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BOS Card — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+
+    /* ── Header row ───────────────────────────── */
+    .bos-header-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .bos-action-col {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .bos-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      border-radius: var(--c-radius-sm);
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s;
+      text-decoration: none;
+      background: transparent;
+      border: 1px solid var(--c-violet);
+      color: var(--c-violet);
+      font-family: var(--c-font-sans);
+      white-space: nowrap;
+    }
+    .bos-action-btn:hover { background: var(--c-violet); color: #fff; }
+    .bos-action-btn.btn-muted {
+      border-color: var(--c-border);
+      color: var(--c-muted);
+    }
+    .bos-action-btn.btn-muted:hover { background: var(--c-border); color: var(--c-white); }
+
+    /* ── Edit hint ────────────────────────────── */
+    .bos-edit-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--c-muted);
+      font-family: var(--c-font-sans);
+      margin-bottom: 16px;
+    }
+    .bos-edit-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--c-violet);
+      flex-shrink: 0;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── BOS Document card ────────────────────── */
+    .bos-doc {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    /* ── Document meta header ─────────────────── */
+    .bos-meta {
+      padding: 20px 28px;
+      border-bottom: 2px solid var(--c-violet);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: start;
+    }
+    .bos-doc-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--c-violet);
+      font-family: var(--c-font-sans);
+      margin-bottom: 6px;
+    }
+    .bos-project-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--c-white);
+      font-family: var(--c-font-sans);
+      outline: none;
+      border-bottom: 1px dashed transparent;
+      transition: border-color .2s;
+      padding: 2px 0;
+      min-width: 200px;
+    }
+    .bos-project-name:focus { border-bottom-color: var(--c-violet); }
+    .bos-project-name:empty::before {
+      content: attr(data-placeholder);
+      color: var(--c-muted);
+      font-style: italic;
+      pointer-events: none;
+    }
+    .bos-meta-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 24px;
+      min-width: 260px;
+    }
+    .bos-field-row { display: flex; flex-direction: column; gap: 3px; }
+    .bos-field-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      font-family: var(--c-font-sans);
+    }
+    .bos-field-input {
+      font-size: 13px;
+      color: var(--c-text);
+      outline: none;
+      border-bottom: 1px dashed var(--c-border);
+      padding: 2px 0;
+      font-family: var(--c-font-sans);
+      min-width: 100px;
+      transition: border-color .2s;
+    }
+    .bos-field-input:focus { border-bottom-color: var(--c-violet); }
+    .bos-field-input:empty::before {
+      content: attr(data-placeholder);
+      color: var(--c-muted);
+      font-style: italic;
+      pointer-events: none;
+    }
+
+    /* ── Section ──────────────────────────────── */
+    .bos-section { border-bottom: 1px solid var(--c-border); }
+    .bos-section:last-of-type { border-bottom: none; }
+
+    .bos-section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      background: rgba(255,255,255,0.02);
+      border-bottom: 1px solid var(--c-border);
+    }
+    .bos-section-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: var(--c-font-sans);
+      padding: 3px 10px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .bos-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--c-white);
+      font-family: var(--c-font-sans);
+    }
+    .bos-section-guide {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--c-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: var(--c-font-sans);
+      white-space: nowrap;
+    }
+    .bos-section-body { padding: 14px 24px; }
+
+    /* ── Editable text area ───────────────────── */
+    .bos-editable {
+      width: 100%;
+      min-height: 84px;
+      color: var(--c-text);
+      font-size: 13px;
+      line-height: 1.75;
+      font-family: var(--c-font-sans);
+      outline: none;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      padding: 8px 10px;
+      transition: border-color .2s, background .2s;
+      box-sizing: border-box;
+      white-space: pre-wrap;
+    }
+    .bos-editable:focus {
+      border-color: rgba(168,85,247,.3);
+      background: rgba(168,85,247,.04);
+    }
+    .bos-editable:empty::before {
+      content: attr(data-placeholder);
+      color: var(--c-muted);
+      font-style: italic;
+      white-space: pre-wrap;
+      pointer-events: none;
+    }
+    .bos-editable.compact { min-height: 42px; }
+
+    /* ── Scope two-col ────────────────────────── */
+    .bos-scope-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .bos-scope-col-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      font-family: var(--c-font-sans);
+      padding: 0 10px;
+    }
+    .bos-scope-in  { color: var(--c-green); }
+    .bos-scope-out { color: var(--c-amber); }
+
+    /* ── Resources grid ───────────────────────── */
+    .bos-res-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .bos-res-cell {
+      background: var(--c-bg3);
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+    .bos-res-cell.span2 { grid-column: 1 / -1; }
+    .bos-res-cell-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      margin-bottom: 6px;
+      font-family: var(--c-font-sans);
+    }
+
+    /* ── Approval strip ───────────────────────── */
+    .bos-approval {
+      padding: 20px 24px;
+      border-top: 2px solid var(--c-border);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .bos-sign-col { display: flex; flex-direction: column; gap: 6px; }
+    .bos-sign-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--c-muted);
+      font-family: var(--c-font-sans);
+    }
+    .bos-sign-line {
+      border-bottom: 1px solid var(--c-border);
+      height: 34px;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 4px;
+    }
+    .bos-sign-input {
+      font-size: 13px;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+      outline: none;
+      width: 100%;
+    }
+    .bos-sign-input:focus { color: var(--c-white); }
+    .bos-sign-input:empty::before {
+      content: attr(data-placeholder);
+      color: var(--c-muted);
+      font-style: italic;
+      pointer-events: none;
+    }
+
+    /* ── Persistence buttons ─────────────────── */
+    .btn-green { border-color: var(--c-green) !important; color: var(--c-green) !important; }
+    .btn-green:hover { background: var(--c-green) !important; color: #000 !important; }
+
+    /* ── Load panel dropdown ──────────────────── */
+    .bos-load-wrap { position: relative; }
+    #bos-load-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      width: 270px;
+      background: var(--c-bg3);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius-sm);
+      z-index: 200;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,.5);
+    }
+    .bos-load-item {
+      padding: 10px 14px;
+      font-size: 12px;
+      font-family: var(--c-font-sans);
+      color: var(--c-text);
+      cursor: pointer;
+      border-bottom: 1px solid var(--c-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      transition: background .15s;
+    }
+    .bos-load-item:last-child { border-bottom: none; }
+    .bos-load-item:hover { background: rgba(168,85,247,.12); color: var(--c-white); }
+    .bos-load-item .bos-load-date { font-size: 10px; color: var(--c-muted); flex-shrink: 0; }
+    .bos-load-empty { padding: 12px 14px; font-size: 12px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .bos-load-file { color: var(--c-violet) !important; font-weight: 700; border-top: 1px solid var(--c-border) !important; }
+
+    /* ── num badge colors ─────────────────────── */
+    .num-violet { background: rgba(168,85,247,.12); color: var(--c-violet); border: 1px solid rgba(168,85,247,.3); }
+    .num-green  { background: rgba(34,197,94,.12);  color: var(--c-green);  border: 1px solid rgba(34,197,94,.3); }
+    .num-amber  { background: rgba(245,158,11,.12); color: var(--c-amber);  border: 1px solid rgba(245,158,11,.3); }
+    .num-blue   { background: rgba(96,165,250,.12); color: var(--c-blue);   border: 1px solid rgba(96,165,250,.3); }
+    .num-red    { background: rgba(239,68,68,.12);  color: #EF4444;         border: 1px solid rgba(239,68,68,.3); }
+
+    /* ── Print ────────────────────────────────── */
+    @media print {
+      #cockpit-shell, .bos-action-col, .bos-edit-hint,
+      #ver-badge, #agent-btn, #bos-load-panel, #bos-file-input, #bos-toast { display: none !important; }
+
+      .bos-edit-dot { animation: none !important; }
+
+      body { background: #fff !important; color: #111 !important; }
+      .cockpit-page { max-width: 100%; padding: 0; }
+
+      .bos-doc { background: #fff !important; border: 1px solid #ccc !important; }
+
+      .bos-meta { background: #fff !important; border-bottom: 2px solid #6d28d9 !important; padding: 14pt 18pt; }
+      .bos-doc-label { color: #6d28d9 !important; }
+      .bos-project-name { color: #111 !important; font-size: 16pt; border-bottom: none; }
+      .bos-field-label { color: #666 !important; }
+      .bos-field-input { color: #111 !important; border-bottom-color: #aaa !important; }
+
+      .bos-section-header { background: #f5f5f5 !important; border-bottom: 1px solid #ccc !important; padding: 8pt 14pt; }
+      .bos-section-title { color: #111 !important; font-size: 11pt; }
+      .bos-section-guide { color: #888 !important; }
+      .bos-section-body { padding: 8pt 14pt; }
+
+      .bos-editable {
+        color: #222 !important;
+        font-size: 10pt;
+        border: none;
+        padding: 0;
+        background: transparent !important;
+        min-height: 0;
+      }
+      .bos-editable.compact { min-height: 0; }
+
+      .bos-scope-col-label { padding: 0; }
+      .bos-scope-in  { color: #166534 !important; }
+      .bos-scope-out { color: #92400e !important; }
+
+      .bos-res-cell { background: #f8f8f8 !important; border: 1px solid #ddd !important; }
+      .bos-res-cell-label { color: #666 !important; }
+
+      .bos-approval { border-top: 2px solid #ccc !important; padding: 14pt 18pt; }
+      .bos-sign-label { color: #666 !important; }
+      .bos-sign-line { border-bottom-color: #aaa !important; }
+      .bos-sign-input { color: #111 !important; }
+
+      .num-violet { background: #ede9fe !important; color: #5b21b6 !important; border-color: #c4b5fd !important; }
+      .num-green  { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
+      .num-amber  { background: #fef3c7 !important; color: #92400e !important; border-color: #fcd34d !important; }
+      .num-blue   { background: #dbeafe !important; color: #1d4ed8 !important; border-color: #93c5fd !important; }
+      .num-red    { background: #fee2e2 !important; color: #991b1b !important; border-color: #fca5a5 !important; }
+
+      .bos-section       { break-inside: avoid; }
+      .bos-scope-grid    { grid-template-columns: 1fr 1fr; }
+      .bos-res-grid      { grid-template-columns: 1fr 1fr; }
+      .bos-meta-fields   { grid-template-columns: 1fr 1fr; }
+      .bos-approval      { grid-template-columns: repeat(3, 1fr); }
+
+      .bos-section:nth-child(5) { break-before: page; }
+
+      @page { margin: 15mm 18mm; size: A4; }
+    }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 768px) {
+      .bos-meta         { grid-template-columns: 1fr; }
+      .bos-meta-fields  { grid-template-columns: 1fr; }
+      .bos-scope-grid   { grid-template-columns: 1fr; }
+      .bos-res-grid     { grid-template-columns: 1fr; }
+      .bos-res-cell.span2 { grid-column: auto; }
+      .bos-approval     { grid-template-columns: 1fr; }
+      .bos-action-col   { flex-wrap: wrap; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <!-- ── Header row ─────────────────────────── -->
+    <div class="bos-header-row">
+      <div>
+        <h1 class="page-title"><span>▤</span> BOS Card</h1>
+        <p class="page-subtitle">
+          <span data-en="Project Charter · HOPI Standard · Editable + PDF Export">Projektová karta · HOPI standard · Editovatelná + PDF export</span>
+        </p>
+      </div>
+      <div class="bos-action-col">
+        <button class="bos-action-btn btn-green" onclick="saveCard()">💾 <span data-en="Save">Uložit</span></button>
+        <div class="bos-load-wrap">
+          <button class="bos-action-btn" id="bos-load-btn" onclick="toggleLoadPanel()">📂 <span data-en="Load">Načíst</span></button>
+          <div id="bos-load-panel"></div>
+        </div>
+        <button class="bos-action-btn" onclick="downloadJSON()">↓ <span data-en="Download JSON">Stáhnout JSON</span></button>
+        <button class="bos-action-btn" onclick="window.print()">⎙ <span data-en="Export PDF">Export PDF</span></button>
+        <button class="bos-action-btn btn-muted" onclick="clearCard()">↺ <span data-en="Clear / New">Vymazat</span></button>
+        <a href="founders-board.html" class="bos-action-btn">← <span data-en="Founders Board">Founders Board</span></a>
+      </div>
+      <input type="file" id="bos-file-input" accept=".json" style="display:none" onchange="importJSON(this)"/>
+    </div>
+
+    <!-- ── Edit hint ──────────────────────────── -->
+    <div class="bos-edit-hint">
+      <span class="bos-edit-dot"></span>
+      <span data-en="All fields are editable — click any field and start typing. Use Export PDF to print.">Všechna pole jsou editovatelná — klikni na pole a piš. Export PDF spustí tisk.</span>
+    </div>
+
+    <!-- ════════════════════════════════════════════
+         BOS CARD DOCUMENT
+         ════════════════════════════════════════════ -->
+    <div class="bos-doc">
+
+      <!-- META HEADER ──────────────────────────── -->
+      <div class="bos-meta">
+        <div>
+          <div class="bos-doc-label" data-en="BOS CARD · PROJECT CHARTER">BOS CARD · PROJEKTOVÁ KARTA</div>
+          <div
+            class="bos-project-name"
+            contenteditable="true"
+            data-field="projectName"
+            data-placeholder="Název projektu / Project Name"></div>
+        </div>
+        <div class="bos-meta-fields">
+          <div class="bos-field-row">
+            <span class="bos-field-label" data-en="Version">Verze</span>
+            <div contenteditable="true" class="bos-field-input" data-field="version" data-placeholder="1.0"></div>
+          </div>
+          <div class="bos-field-row">
+            <span class="bos-field-label" data-en="Date">Datum</span>
+            <div contenteditable="true" class="bos-field-input" id="bos-date" data-field="date" data-placeholder="DD.MM.YYYY"></div>
+          </div>
+          <div class="bos-field-row">
+            <span class="bos-field-label" data-en="Project Manager">Projektový manažer</span>
+            <div contenteditable="true" class="bos-field-input" data-field="pm" data-placeholder="Jméno PM / PM Name"></div>
+          </div>
+          <div class="bos-field-row">
+            <span class="bos-field-label" data-en="Sponsor">Sponzor</span>
+            <div contenteditable="true" class="bos-field-input" data-field="sponsor" data-placeholder="Jméno sponzora / Sponsor"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 01 · BACKGROUND ──────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-violet" data-en="01 · BACKGROUND">01 · POZADÍ</span>
+          <span class="bos-section-title" data-en="Background">Background (Pozadí)</span>
+          <span class="bos-section-guide" data-en="CONTEXT">KONTEXT</span>
+        </div>
+        <div class="bos-section-body">
+          <div contenteditable="true" class="bos-editable" data-field="background"
+            data-placeholder="Poskytněte informace z pozadí projektu, včetně důvodu vzniku a definice klíčových vlastníků, kteří budou profitovat z výstupů.&#10;&#10;Provide project background: why it was initiated, which stakeholders benefit, and what the motivation is."></div>
+        </div>
+      </div>
+
+      <!-- 02 · OBJECTIVE ───────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-green" data-en="02 · OBJECTIVE">02 · CÍLE</span>
+          <span class="bos-section-title" data-en="Objective">Objective (Cíle)</span>
+          <span class="bos-section-guide" data-en="GOALS">CÍLE</span>
+        </div>
+        <div class="bos-section-body">
+          <div contenteditable="true" class="bos-editable" data-field="objective"
+            data-placeholder="• Cíl 1 — popište tržní příležitost nebo vzniklý problém k řešení&#10;• Cíl 2&#10;• Cíl 3&#10;&#10;• Goal 1 — describe the market opportunity or problem to solve&#10;• Goal 2&#10;• Goal 3"></div>
+        </div>
+      </div>
+
+      <!-- 03 · SCOPE ───────────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-blue" data-en="03 · SCOPE">03 · ROZSAH</span>
+          <span class="bos-section-title" data-en="Scope">Scope (Rozsah)</span>
+          <span class="bos-section-guide" data-en="IN / OUT">IN / OUT</span>
+        </div>
+        <div class="bos-section-body">
+          <div class="bos-scope-grid">
+            <div>
+              <div class="bos-scope-col-label bos-scope-in" data-en="✓ Included">✓ Zahrnuto</div>
+              <div contenteditable="true" class="bos-editable" data-field="scopeIn"
+                data-placeholder="• Co je zahrnuto v rozsahu&#10;• Funkcionalita, procesy, výstupy&#10;&#10;• What is in scope&#10;• Features, processes, outputs"></div>
+            </div>
+            <div>
+              <div class="bos-scope-col-label bos-scope-out" data-en="✗ Excluded">✗ Není zahrnuto</div>
+              <div contenteditable="true" class="bos-editable" data-field="scopeOut"
+                data-placeholder="• Co NENÍ součástí projektu&#10;• Explicitní vyloučení&#10;&#10;• What is NOT in scope&#10;• Explicit exclusions"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 · CONSTRAINTS ─────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-amber" data-en="04 · CONSTRAINTS">04 · OMEZENÍ</span>
+          <span class="bos-section-title" data-en="Constraints">Constraints (Omezení)</span>
+          <span class="bos-section-guide" data-en="LIMITS">LIMITY</span>
+        </div>
+        <div class="bos-section-body">
+          <div contenteditable="true" class="bos-editable" data-field="constraints"
+            data-placeholder="• Omezení na straně zákazníka&#10;• Omezení na straně dodavatele&#10;• Technické, legislativní nebo kapacitní limity&#10;&#10;• Customer-side constraints&#10;• Supplier-side constraints&#10;• Technical, legal, or capacity limits"></div>
+        </div>
+      </div>
+
+      <!-- 05 · ASSUMPTIONS ─────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-blue" data-en="05 · ASSUMPTIONS">05 · PŘEDPOKLADY</span>
+          <span class="bos-section-title" data-en="Assumptions">Assumptions (Předpoklady)</span>
+          <span class="bos-section-guide" data-en="PREREQUISITES">PODMÍNKY</span>
+        </div>
+        <div class="bos-section-body">
+          <div contenteditable="true" class="bos-editable" data-field="assumptions"
+            data-placeholder="• Předpoklady nutné pro plánování a realizaci projektu&#10;• Dostupnost prostoru, kapacit, kooperace s dalšími subjekty&#10;&#10;• Assumptions required for project planning and execution&#10;• Space, capacity, cooperation with other parties"></div>
+        </div>
+      </div>
+
+      <!-- 06 · RESOURCES ───────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-violet" data-en="06 · RESOURCES">06 · ZDROJE</span>
+          <span class="bos-section-title" data-en="Resources">Resources (Zdroje)</span>
+          <span class="bos-section-guide" data-en="TEAM + COSTS">TÝM + NÁKLADY</span>
+        </div>
+        <div class="bos-section-body">
+          <div class="bos-res-grid">
+            <div class="bos-res-cell">
+              <div class="bos-res-cell-label" data-en="Sponsor">Sponzor</div>
+              <div contenteditable="true" class="bos-editable compact" data-field="resSponsor"
+                data-placeholder="Jméno sponzora / Sponsor name"></div>
+            </div>
+            <div class="bos-res-cell">
+              <div class="bos-res-cell-label" data-en="Project Manager">Projektový manažer</div>
+              <div contenteditable="true" class="bos-editable compact" data-field="resPM"
+                data-placeholder="Jméno PM / PM name"></div>
+            </div>
+            <div class="bos-res-cell span2">
+              <div class="bos-res-cell-label" data-en="Team Members">Členové týmu</div>
+              <div contenteditable="true" class="bos-editable" data-field="resTeam"
+                data-placeholder="• Jméno 1 — role&#10;• Jméno 2 — role&#10;&#10;• Name 1 — role&#10;• Name 2 — role"></div>
+            </div>
+            <div class="bos-res-cell">
+              <div class="bos-res-cell-label" data-en="Capex (one-time)">Capex (jednorázové)</div>
+              <div contenteditable="true" class="bos-editable compact" data-field="resCapex"
+                data-placeholder="Výše / Amount"></div>
+            </div>
+            <div class="bos-res-cell">
+              <div class="bos-res-cell-label" data-en="Opex (recurring)">Opex (opakované)</div>
+              <div contenteditable="true" class="bos-editable compact" data-field="resOpex"
+                data-placeholder="Výše / Amount"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 07 · DELIVERABLES ────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-green" data-en="07 · DELIVERABLES">07 · DODÁVKY</span>
+          <span class="bos-section-title" data-en="Deliverables">Deliverables (Dodávky)</span>
+          <span class="bos-section-guide" data-en="MILESTONES">MILNÍKY</span>
+        </div>
+        <div class="bos-section-body">
+          <div contenteditable="true" class="bos-editable" data-field="deliverables"
+            data-placeholder="• Klíčový milník 1 — popis výstupu vedoucího k naplnění cílů&#10;• Klíčový milník 2&#10;• Závěrečná zpráva a doporučení pro rozšíření&#10;&#10;• Key milestone 1 — output description&#10;• Key milestone 2&#10;• Final report and recommendations for expansion"></div>
+        </div>
+      </div>
+
+      <!-- 08 · RISKS ───────────────────────────── -->
+      <div class="bos-section">
+        <div class="bos-section-header">
+          <span class="bos-section-num num-red" data-en="08 · RISKS">08 · RIZIKA</span>
+          <span class="bos-section-title" data-en="Risks">Risks (Rizika)</span>
+          <span class="bos-section-guide" data-en="IMPORTANCE + OWNER">DŮLEŽITOST + ODPOVĚDNOST</span>
+        </div>
+        <div class="bos-section-body">
+          <div contenteditable="true" class="bos-editable" data-field="risks"
+            data-placeholder="• Riziko 1 — důležitost: H/M/L — odpovědný: [jméno / role]&#10;• Riziko 2 — důležitost: H/M/L — odpovědný: [jméno / role]&#10;&#10;• Risk 1 — importance: H/M/L — owner: [name / role]&#10;• Risk 2 — importance: H/M/L — owner: [name / role]"></div>
+        </div>
+      </div>
+
+      <!-- APPROVAL ─────────────────────────────── -->
+      <div class="bos-approval">
+        <div class="bos-sign-col">
+          <span class="bos-sign-label" data-en="Project Manager">Projektový manažer</span>
+          <div class="bos-sign-line">
+            <div contenteditable="true" class="bos-sign-input" data-field="signPM"
+              data-placeholder="Jméno / Podpis · Name / Signature"></div>
+          </div>
+        </div>
+        <div class="bos-sign-col">
+          <span class="bos-sign-label" data-en="Sponsor">Sponzor</span>
+          <div class="bos-sign-line">
+            <div contenteditable="true" class="bos-sign-input" data-field="signSponsor"
+              data-placeholder="Jméno / Podpis · Name / Signature"></div>
+          </div>
+        </div>
+        <div class="bos-sign-col">
+          <span class="bos-sign-label" data-en="Date of Approval">Datum schválení</span>
+          <div class="bos-sign-line">
+            <div contenteditable="true" class="bos-sign-input" data-field="signDate"
+              data-placeholder="DD.MM.YYYY"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /bos-doc -->
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: 'BOS Card',
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music:   '../cockpit-music.mp3'
+    });
+
+    // ── Field helpers ─────────────────────────────────
+    function _field(name) {
+      return document.querySelector('[data-field="' + name + '"]');
+    }
+    function _set(name, value) {
+      const el = _field(name);
+      if (el && value !== undefined && value !== null) el.textContent = value;
+    }
+
+    // ── fillCard(data) — agent / URL / JS entry point ─
+    //
+    // Schema (all fields optional):
+    // {
+    //   projectName, version, date, pm, sponsor,
+    //   background, objective,
+    //   scopeIn, scopeOut,
+    //   constraints, assumptions,
+    //   resSponsor, resPM, resTeam, resCapex, resOpex,
+    //   deliverables, risks,
+    //   signPM, signSponsor, signDate
+    // }
+    window.fillCard = function (data) {
+      if (!data || typeof data !== 'object') return;
+      Object.keys(data).forEach(k => _set(k, data[k]));
+    };
+
+    // ── Prefill loader: URL param ?data=base64 OR sessionStorage ──
+    (function () {
+      try {
+        // 1. sessionStorage (set by launcher file, works on file://)
+        const stored = sessionStorage.getItem('bos_prefill');
+        if (stored) {
+          window.fillCard(JSON.parse(stored));
+          sessionStorage.removeItem('bos_prefill');
+          return;
+        }
+        // 2. URL param ?data=base64 (fallback for server / GitHub Pages)
+        const raw = new URLSearchParams(location.search).get('data');
+        if (raw) window.fillCard(JSON.parse(decodeURIComponent(escape(atob(raw)))));
+      } catch (e) { /* ignore */ }
+    })();
+
+    // ── Pre-fill today's date (if not set via URL) ────
+    (function () {
+      const el = _field('date');
+      if (el && !el.textContent.trim()) {
+        const d = new Date();
+        const p = n => String(n).padStart(2, '0');
+        el.textContent = p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear();
+      }
+    })();
+
+    // ── getData — snapshot všech polí do objektu ──────
+    function getData() {
+      const data = {};
+      document.querySelectorAll('[data-field]').forEach(el => {
+        data[el.dataset.field] = el.textContent.trim();
+      });
+      return data;
+    }
+
+    // ── saveCard — uloží do localStorage ─────────────
+    function saveCard() {
+      const data = getData();
+      const name = data.projectName || 'Karta bez názvu';
+      const slug = name.replace(/[^a-z0-9áčďéěíňóřšťúůýžÁČĎÉĚÍŇÓŘŠŤÚŮÝŽ]/gi, '_').slice(0, 40);
+      const key  = 'bos_card_' + slug;
+      localStorage.setItem(key, JSON.stringify({ ...data, _name: name, _savedAt: new Date().toISOString() }));
+      const idx = JSON.parse(localStorage.getItem('bos_cards_index') || '[]');
+      if (!idx.includes(key)) { idx.unshift(key); localStorage.setItem('bos_cards_index', JSON.stringify(idx)); }
+      showToast('✓ Uloženo: ' + name);
+    }
+
+    // ── toggleLoadPanel — dropdown seznam + načíst ze souboru ──
+    function toggleLoadPanel() {
+      const panel = document.getElementById('bos-load-panel');
+      if (panel.style.display === 'block') { panel.style.display = 'none'; return; }
+      const idx = JSON.parse(localStorage.getItem('bos_cards_index') || '[]');
+      let html = '';
+      idx.forEach(function(key) {
+        try {
+          const d = JSON.parse(localStorage.getItem(key));
+          const date = d._savedAt ? new Date(d._savedAt).toLocaleDateString('cs') : '';
+          html += '<div class="bos-load-item" onclick="loadFromStorage(\'' + key + '\')">'
+                + '<span>' + (d._name || key) + '</span>'
+                + '<span class="bos-load-date">' + date + '</span></div>';
+        } catch(e) {}
+      });
+      if (!html) html = '<div class="bos-load-empty">Žádné uložené karty</div>';
+      html += '<div class="bos-load-item bos-load-file" onclick="document.getElementById(\'bos-file-input\').click()">📂 Načíst ze souboru (.json)</div>';
+      panel.innerHTML = html;
+      panel.style.display = 'block';
+    }
+
+    function loadFromStorage(key) {
+      try {
+        const d = JSON.parse(localStorage.getItem(key));
+        window.fillCard(d);
+        document.getElementById('bos-load-panel').style.display = 'none';
+        showToast('✓ Načteno: ' + (d._name || key));
+      } catch(e) { alert('Nelze načíst kartu.'); }
+    }
+
+    // ── downloadJSON — stáhne aktuální kartu jako JSON soubor ──
+    function downloadJSON() {
+      const data = getData();
+      const name = data.projectName || 'bos-card';
+      const slug = name.replace(/[^a-z0-9]/gi, '_').toLowerCase().slice(0, 40);
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'bos-' + slug + '.json';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    // ── importJSON — načte JSON soubor a vyplní formulář ──
+    function importJSON(input) {
+      var file = input.files[0];
+      if (!file) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          var data = JSON.parse(e.target.result);
+          window.fillCard(data);
+          showToast('✓ Načteno: ' + (data.projectName || file.name));
+        } catch(err) { alert('Neplatný JSON soubor.'); }
+      };
+      reader.readAsText(file);
+      input.value = '';
+    }
+
+    // ── Toast notifikace ──────────────────────────────
+    function showToast(msg) {
+      var t = document.getElementById('bos-toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'bos-toast';
+        t.style.cssText = 'position:fixed;bottom:80px;right:24px;background:var(--c-violet);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-family:var(--c-font-sans);font-weight:600;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(t._timer);
+      t._timer = setTimeout(function() { t.style.opacity = '0'; }, 2500);
+    }
+
+    // ── Zavřít load panel při kliku jinam ────────────
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('#bos-load-btn') && !e.target.closest('#bos-load-panel')) {
+        var p = document.getElementById('bos-load-panel');
+        if (p) p.style.display = 'none';
+      }
+    });
+
+    // ── Clear all fields, refill date ─────────────────
+    function clearCard() {
+      const msg = document.documentElement.lang === 'en'
+        ? 'Clear all fields and start a new BOS Card?'
+        : 'Vymazat všechna pole a začít novou kartu?';
+      if (!confirm(msg)) return;
+      document.querySelectorAll('[contenteditable="true"]').forEach(el => {
+        el.textContent = '';
+      });
+      const d = new Date();
+      const p = n => String(n).padStart(2, '0');
+      _field('date').textContent = p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear();
+    }
+  </script>
+</body>
+</html>

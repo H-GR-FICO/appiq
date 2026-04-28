@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"/><title>BOS Card — AppIQ launcher</title></head>
+<body>
+<script>
+var data = {
+  projectName: "HOPI AppIQ — AI-powered Enterprise Application Platform",
+  version:     "1.0",
+  pm:          "David Gogela — Founder & Product Lead",
+  sponsor:     "HOPI Group Management",
+
+  background:
+    "HOPI Group funguje napříč 5 divizemi s desítkami procesů. Management data jsou rozdělena mezi SAP, DWH a Power BI — tři oddělené systémy. Každé strategické rozhodnutí vyžaduje hodiny ruční agregace v Excelu.\n\nCílem projektu je vybudovat AI-native platformu, která tato data unifikuje — bez náhrady stávajících systémů. David Gogela jako Head of Group Controlling identifikoval tento gap zevnitř a zahájil vývoj v březnu 2026. Projekt je zárodkem 6. divize HOPI Group — HOPI TechIQ s.r.o.",
+
+  objective:
+    "• Vytvořit AI-native unifikační platformu nad SAP / DWH / Power BI (Unification Layer — ne náhrada)\n• Phase 1 (2026–2027): HOME B2C produkt — Jednotlivec, Pár, Rodina, Rozšířená rodina (H1–H4)\n• HOPI Group = living proof a pilot zákazník pro Phase 2 B2B enterprise dealy\n• Spin-off: registrace HOPI TechIQ s.r.o. jako 6. divize HOPI Group\n• Demonstrovat AI-augmented development jako konkurenční výhodu (first mover, 12–18 měs. window)",
+
+  scopeIn:
+    "• Management Cockpit — 28+ aktivních sekcí (KPI, Finance, Launch Plan, Task Control, AI Control)\n• HOME B2C architektura v8.x — 9D Product Model, Phase 1 GTM\n• HOPI pilot deployment — living proof, žádný revenue deal\n• AI-augmented development metodika (493+ tasků, full audit log, session protokol)\n• Backend infrastruktura: auth provider, data storage, API layer (ADR v přípravě)",
+
+  scopeOut:
+    "• Enterprise B2B dealy — Phase 2 (2027–2028), ne Phase 1\n• Marketplace / White-label / Reseller — Phase 3 (2028+)\n• Náhrada SAP, DWH ani Power BI — pouze unifikace nad nimi\n• Enterprise feature komplexita před validací HOME B2C",
+
+  constraints:
+    "• Registrace HOPI TechIQ s.r.o. nutná před B2B dealy a investičními koly\n• AI window = 12–18 měsíců — po té se first mover výhoda normalizuje\n• Backend architektura: ADR stále otevřeno\n• Tým teprve budovat — 3 seniori + 2 juniors + UX + integration specialist\n• Seed budget schválení závisí na Go/No-Go rozhodnutí HOPI Group leadership",
+
+  assumptions:
+    "• HOPI Group potvrdí účast jako founding partner (Go/No-Go decision)\n• Seed budget ~20M CZK / 18 měsíců schválen\n• HOPI Group IT poskytne přístup pro SAP integraci\n• Anthropic jako strategický partner (budoucí)\n• HOME B2C trh validuje produkt do Q1 2027",
+
+  resSponsor: "HOPI Group Management",
+  resPM:      "David Gogela — Founder & Product Lead, Head of Group Controlling",
+  resTeam:
+    "• David Gogela — Founder, Product Lead, Head of Group Controlling\n• AI-CLAU (Claude / Anthropic) — AI Developer & Architect\n• 3× Senior Developer (planned)\n• 2× Junior Developer / vibe coder (planned)\n• 1× UX Designer (planned)\n• 1× Integration Specialist — SAP/SharePoint (planned)",
+  resCapex: "~20M CZK — Standard scénář / 18 měsíců (tým + infrastruktura + provoz do B2C launch Q1 2027)",
+  resOpex:  "Provozní náklady post-launch (Q1 2027+) — cloud infra, podpora, marketing",
+
+  deliverables:
+    "• Management Cockpit v7.33+ — 28 aktivních sekcí, živý prototyp [DONE] (2026-04-27)\n• HOME B2C platforma v8.x — target launch Q1 2027\n• HOPI pilot deployment — living proof pro Phase 2 B2B\n• Registrace HOPI TechIQ s.r.o. — právní entita pro IP, smlouvy, investice\n• Backend infrastruktura — auth, data storage, API layer\n• Záverečná zpráva a doporučení pro Phase 2 enterprise expansion",
+
+  risks:
+    "• AI first mover window uzavření — H — David Gogela / celý tým\n• Neschválení seed budgetu HOPI Management — H — David Gogela\n• Backend architektura ADR otevřeno — H — David Gogela + AI-CLAU\n• Registrace HOPI TechIQ s.r.o. prodleva — H — David Gogela / Legal\n• Team building / nábor seniorů — M — David Gogela\n• Technické limity Phase 1 bez backendu — M — AI-CLAU",
+
+  signPM:      "David Gogela",
+  signSponsor: "HOPI Group Management",
+  signDate:    "27.04.2026"
+};
+
+sessionStorage.setItem('bos_prefill', JSON.stringify(data));
+window.location.href = 'bos-card.html';
+</script>
+</body>
+</html>

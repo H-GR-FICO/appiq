@@ -1,6 +1,6 @@
 ﻿{
-  "latest": "v7.33",
-  "updatedAt": "2026-04-25",
+  "latest": "v7.34",
+  "updatedAt": "2026-04-28",
   "versions": [
     {
         "version":  "v7.20",
@@ -269,6 +269,28 @@
         "pitchUrl":  "v7.33/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.33/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.33/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.34",
+        "date":  "2026-04-28",
+        "session":  "session_20260427_2314",
+        "title":  "Cockpit: BOS Card · Product Hub · Founders Board CTA · Music Fix · 2026-04-28",
+        "mainUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "BOS Card — Business Overview Summary (AIQ-00495)",
+                        "BOS Card Persistence Layer (AIQ-00497)",
+                        "Product Hub — sekce 28 (AIQ-00494)",
+                        "Music seek fix — preload + sessionStorage (AIQ-00496)"
+                    ],
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.34/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

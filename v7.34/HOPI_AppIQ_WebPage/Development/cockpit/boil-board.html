@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BOIL Task Board — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <script src="boil-data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <style>
+    .summary-bar {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); padding: 16px 20px;
+      margin-bottom: 24px; align-items: center;
+    }
+    .sum-stat { text-align: center; min-width: 70px; }
+    .sum-val  { font-size: 26px; font-weight: 900; font-family: var(--c-font-sans); line-height: 1; }
+    .sum-lbl  { font-size: 9px; color: var(--c-muted); font-family: var(--c-font-sans); letter-spacing: 1.5px; margin-top: 3px; text-transform: uppercase; }
+    .sum-divider { width: 1px; height: 40px; background: var(--c-border); }
+    .sum-chart-wrap { margin-left: auto; width: 90px; height: 90px; flex-shrink: 0; }
+
+    .progress-wrap { margin-bottom: 20px; }
+    .progress-label { display: flex; justify-content: space-between;
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted); margin-bottom: 6px; }
+    .progress-bar  { height: 6px; background: var(--c-border); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--c-amber), var(--c-green)); border-radius: 3px; transition: width .6s ease; }
+
+    .col-id     { width: 110px; }
+    .col-title  { min-width: 140px; }
+    .col-st     { width: 115px; }
+    .col-pri    { width: 80px; }
+    .col-eff    { width: 60px; text-align: center; }
+    .col-stream { width: 110px; }
+    .col-dept   { width: 100px; }
+    .col-who    { width: 90px; }
+    .col-date   { width: 95px; }
+
+    .effort-pill { display: inline-block; padding: 1px 7px; border-radius: 10px;
+      font-size: 10px; font-family: var(--c-font-sans); font-weight: 700; }
+    .effort-XS { background: rgba(34,197,94,.1);  color: var(--c-green); }
+    .effort-S  { background: rgba(96,165,250,.1); color: var(--c-blue); }
+    .effort-M  { background: rgba(168,85,247,.1); color: var(--c-violet); }
+    .effort-L  { background: rgba(245,158,11,.1); color: var(--c-amber); }
+    .effort-XL { background: rgba(239,68,68,.1);  color: #EF4444; }
+
+    .stream-pill { display: inline-block; padding: 1px 7px; border-radius: 10px;
+      font-size: 10px; font-family: var(--c-font-sans); font-weight: 600;
+      background: rgba(245,158,11,.1); color: var(--c-amber); }
+
+    .detail-cell { padding: 0 !important; }
+    .detail-inner { display: none; padding: 14px 20px 14px 32px;
+      background: var(--c-bg3); border-left: 3px solid var(--c-amber);
+      font-size: 13px; color: var(--c-text); line-height: 1.7; }
+    .detail-inner.open { display: block; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 10px; }
+    .detail-key { font-size: 10px; font-family: var(--c-font-sans); color: var(--c-muted); letter-spacing: 1px; margin-bottom: 2px; }
+    .detail-val { font-size: 13px; color: var(--c-white); }
+    .detail-note { margin-top: 12px; font-size: 12px; color: var(--c-text); line-height: 1.6;
+      background: rgba(245,158,11,.05); border-radius: 6px; padding: 10px 14px;
+      border-left: 2px solid rgba(245,158,11,.3); }
+    .detail-deps { margin-top: 8px; font-size: 11px; color: var(--c-muted);
+      font-family: var(--c-font-sans); }
+
+    .sort-header { cursor: pointer; user-select: none; }
+    .sort-header:hover { color: var(--c-amber); }
+    .sort-arrow { font-size: 9px; margin-left: 3px; opacity: .5; }
+    .empty-state { text-align: center; padding: 48px 24px; color: var(--c-muted);
+      font-family: var(--c-font-sans); font-size: 13px; }
+
+    .stream-filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+
+    body { overflow-x: hidden; }
+    .c-task-table { min-width: 900px; }
+    @media (max-width: 768px) { .sum-chart-wrap { display: none; } }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <h1 class="page-title"><span>⬡</span> BOIL Task Board</h1>
+    <p class="page-subtitle" id="board-subtitle">Všechny BIZ tasky · Live z BOIL.json</p>
+
+    <!-- ── Summary bar ───────────────────────────── -->
+    <div class="summary-bar">
+      <div class="sum-stat">
+        <div class="sum-val" style="color:var(--c-white)"  id="s-total">—</div>
+        <div class="sum-lbl">CELKEM</div>
+      </div>
+      <div class="sum-divider"></div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:var(--c-blue)"   id="s-open">—</div>
+        <div class="sum-lbl">OPEN</div>
+      </div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:#F97316"         id="s-inprog">—</div>
+        <div class="sum-lbl">IN PROGRESS</div>
+      </div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:var(--c-violet)" id="s-review">—</div>
+        <div class="sum-lbl">REVIEW</div>
+      </div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:var(--c-green)"  id="s-closed">—</div>
+        <div class="sum-lbl">CLOSED</div>
+      </div>
+      <div class="sum-divider"></div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:#EF4444"         id="s-high">—</div>
+        <div class="sum-lbl">HIGH / CRIT</div>
+      </div>
+      <div class="sum-divider"></div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:var(--c-amber)"  id="s-srec">—</div>
+        <div class="sum-lbl">STRAT RECON</div>
+      </div>
+      <div class="sum-stat">
+        <div class="sum-val" style="color:var(--c-green)"  id="s-cash">—</div>
+        <div class="sum-lbl">CASH/BUDGET</div>
+      </div>
+      <div class="sum-chart-wrap">
+        <canvas id="status-chart"></canvas>
+      </div>
+    </div>
+
+    <!-- ── Progress ──────────────────────────────── -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="prog-label">Dokončeno: —</span>
+        <span id="prog-pct">— %</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- ── Filters — status ──────────────────────── -->
+    <div class="c-filters" id="filter-bar">
+      <button class="c-filter-btn active" onclick="applyFilter('all',this)">Vše</button>
+      <button class="c-filter-btn" onclick="applyFilter('OPEN',this)">Open</button>
+      <button class="c-filter-btn" onclick="applyFilter('IN PROGRESS',this)">In Progress</button>
+      <button class="c-filter-btn" onclick="applyFilter('REVIEW',this)">Review</button>
+      <button class="c-filter-btn" onclick="applyFilter('CLOSED',this)">Closed</button>
+      <button class="c-filter-btn" onclick="applyFilter('high',this)">🔴 High / Critical</button>
+      <input class="c-search" id="task-search" placeholder="Hledat BIZ úkol…"
+             oninput="searchTasks(this.value)" autocomplete="off"/>
+    </div>
+
+    <!-- ── Stream filters ────────────────────────── -->
+    <div class="stream-filter-row" id="stream-filters">
+      <!-- rendered by JS from actual data -->
+    </div>
+
+    <hr class="c-divider" style="margin:12px 0 0"/>
+
+    <div style="overflow-x:auto; width:100%; -webkit-overflow-scrolling:touch;">
+      <table class="c-task-table" id="task-table">
+        <thead>
+          <tr>
+            <th class="col-id sort-header" onclick="sortBy('id')">ID <span class="sort-arrow" id="arr-id"></span></th>
+            <th class="col-title">Název</th>
+            <th class="col-st sort-header" onclick="sortBy('status')">Status <span class="sort-arrow" id="arr-status">↑</span></th>
+            <th class="col-pri sort-header" onclick="sortBy('priority')">Priorita <span class="sort-arrow" id="arr-priority"></span></th>
+            <th class="col-eff sort-header" onclick="sortBy('effort')">Effort <span class="sort-arrow" id="arr-effort"></span></th>
+            <th class="col-stream sort-header" onclick="sortBy('stream')">Stream <span class="sort-arrow" id="arr-stream"></span></th>
+            <th class="col-dept sort-header" onclick="sortBy('department')">Dept <span class="sort-arrow" id="arr-dept"></span></th>
+            <th class="col-who sort-header" onclick="sortBy('assignee')">Assignee <span class="sort-arrow" id="arr-assignee"></span></th>
+            <th class="col-date sort-header" onclick="sortBy('createdAt')">Vytvořen <span class="sort-arrow" id="arr-createdAt"></span></th>
+          </tr>
+        </thead>
+        <tbody id="task-tbody">
+          <tr><td colspan="9" class="empty-state">Načítám data…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans)" id="row-count"></div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: {cs:'BOIL Task Board', en:'BOIL Task Board'},
+      backUrl: '../MANAGEMENT_COCKPIT.html',
+      music:   '../cockpit-music.mp3'
+    });
+
+    (function() {
+      if (Shell.getLang() !== 'en') return;
+      var celkem = document.querySelector('.sum-lbl');
+      if (celkem && celkem.textContent === 'CELKEM') celkem.textContent = 'TOTAL';
+      var filterAll = document.querySelector('#filter-bar .c-filter-btn.active');
+      if (filterAll) filterAll.textContent = 'All';
+      var si = document.getElementById('task-search');
+      if (si) si.placeholder = 'Search BIZ task…';
+      document.querySelectorAll('.c-task-table th').forEach(function(th) {
+        var t = th.textContent;
+        if (t.startsWith('Název')) th.innerHTML = th.innerHTML.replace('Název','Title');
+        if (t.startsWith('Priorita')) th.innerHTML = th.innerHTML.replace('Priorita','Priority');
+        if (t.startsWith('Vytvořen')) th.innerHTML = th.innerHTML.replace('Vytvořen','Created');
+      });
+    })();
+
+    let ALL_TASKS    = [];
+    let activeFilter = 'all';
+    let activeStream = 'all';
+    let activeSearch = '';
+    let currentSortField = 'status';
+    let currentSortDir   = 1;
+
+    const PRIO_ORDER   = { 'CRITICAL':0, 'HIGH':1, 'MEDIUM':2, 'LOW':3 };
+    const STATUS_ORDER = { 'IN PROGRESS':0, 'REVIEW':1, 'OPEN':2, 'CANCELLED':3, 'CLOSED':4 };
+    const EFFORT_ORDER = { 'XS':0, 'S':1, 'M':2, 'L':3, 'XL':4 };
+
+    // ── Load — from pre-bundled JS (works on file:// and GitHub Pages)
+    ALL_TASKS = ((window.BOIL_DATA || {}).tasks || []).map(t => ({
+      id:           t.id || '',
+      title:        t.title || (Shell.getLang() === 'en' ? '(no title)' : '(bez názvu)'),
+      status:       t.status || 'OPEN',
+      priority:     t.priority || 'MEDIUM',
+      effort:       t.effort || '—',
+      stream:       t.stream || t.bizType || '—',
+      department:   t.department || '—',
+      area:         t.area || '',
+      taskType:     t.taskType || t.bizType || '',
+      assignee:     t.assignee || '—',
+      createdAt:    t.createdAt || '',
+      completedAt:  t.completedAt || '',
+      note:         t.note || '',
+      linkedTask:   t.linkedTask || '',
+      dependsOn:    t.dependsOn || [],
+      estimatedTime: t.estimatedTime || null,
+      actualTime:   t.actualTime || null,
+    }));
+    renderStats();
+    renderChart();
+    renderStreamFilters();
+    renderTable();
+
+    function renderStats() {
+      const tasks  = ALL_TASKS;
+      const open   = tasks.filter(t => t.status === 'OPEN').length;
+      const inprog = tasks.filter(t => t.status === 'IN PROGRESS').length;
+      const review = tasks.filter(t => t.status === 'REVIEW').length;
+      const closed = tasks.filter(t => t.status === 'CLOSED').length;
+      const total  = tasks.length;
+      const high   = tasks.filter(t => t.priority === 'HIGH' || t.priority === 'CRITICAL').length;
+      const srec   = tasks.filter(t => (t.stream || '').includes('STRATEGIC') || (t.stream || '').includes('RECON')).length;
+      const cash   = tasks.filter(t => (t.stream || '').includes('CASH') || (t.stream || '').includes('BUDGET') ||
+                                        (t.stream || '') === 'strategy').length;
+      const pct    = total ? Math.round(closed / total * 100) : 0;
+
+      setText('s-total',  total);
+      setText('s-open',   open);
+      setText('s-inprog', inprog);
+      setText('s-review', review);
+      setText('s-closed', closed);
+      setText('s-high',   high);
+      setText('s-srec',   srec);
+      setText('s-cash',   cash);
+      setText('prog-label', Shell.getLang()==='en' ? `Completed: ${closed} of ${total}` : `Dokončeno: ${closed} z ${total}`);
+      setText('prog-pct',   pct + ' %');
+      document.getElementById('prog-fill').style.width = pct + '%';
+      const _lc = Shell.getLang()==='en' ? 'en-GB' : 'cs-CZ';
+      setText('board-subtitle', Shell.getLang()==='en'
+        ? `${total} BIZ tasks · Live from BOIL.json · ${new Date().toLocaleString(_lc,{hour:'2-digit',minute:'2-digit'})}`
+        : `${total} BIZ tasků · Live z BOIL.json · ${new Date().toLocaleString(_lc,{hour:'2-digit',minute:'2-digit'})}`);
+    }
+
+    function renderChart() {
+      if (typeof Chart === 'undefined') return;
+      const open   = ALL_TASKS.filter(t => t.status === 'OPEN').length;
+      const inprog = ALL_TASKS.filter(t => t.status === 'IN PROGRESS').length;
+      const review = ALL_TASKS.filter(t => t.status === 'REVIEW').length;
+      const closed = ALL_TASKS.filter(t => t.status === 'CLOSED').length;
+      const ctx = document.getElementById('status-chart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Open','In Progress','Review','Closed'],
+          datasets: [{
+            data: [open, inprog, review, closed],
+            backgroundColor: ['#60A5FA','#F97316','#A855F7','#22C55E'],
+            borderColor: '#0a1020', borderWidth: 2, hoverOffset: 4
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true, cutout: '70%',
+          plugins: { legend: { display: false }, tooltip: {
+            callbacks: { label: c => ` ${c.label}: ${c.parsed}` }
+          }},
+          animation: { duration: 600 }
+        }
+      });
+    }
+
+    function renderStreamFilters() {
+      const streams = [...new Set(ALL_TASKS.map(t => t.stream || 'other'))].sort();
+      const wrap = document.getElementById('stream-filters');
+      wrap.innerHTML = `<button class="c-filter-btn active" onclick="applyStream('all',this)">${Shell.getLang()==='en' ? 'All streams' : 'Všechny streamy'}</button>` +
+        streams.map(s => `<button class="c-filter-btn" onclick="applyStream('${escHtml(s)}',this)">${escHtml(s)}</button>`).join('');
+    }
+
+    function applyStream(stream, btn) {
+      activeStream = stream;
+      document.querySelectorAll('#stream-filters .c-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderTable();
+    }
+
+    function applyFilter(type, btn) {
+      activeFilter = type;
+      document.querySelectorAll('#filter-bar .c-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('task-search').value = '';
+      activeSearch = '';
+      renderTable();
+    }
+
+    function searchTasks(q) {
+      activeSearch = q.toLowerCase().trim();
+      document.querySelectorAll('#filter-bar .c-filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('#filter-bar .c-filter-btn').classList.add('active');
+      activeFilter = 'all';
+      renderTable();
+    }
+
+    function sortBy(field) {
+      if (currentSortField === field) currentSortDir *= -1;
+      else { currentSortField = field; currentSortDir = 1; }
+      document.querySelectorAll('.sort-arrow').forEach(el => el.textContent = '');
+      const arr = document.getElementById('arr-' + field);
+      if (arr) arr.textContent = currentSortDir === 1 ? '↑' : '↓';
+      renderTable();
+    }
+
+    function filteredTasks() {
+      return ALL_TASKS.filter(t => {
+        if (activeStream !== 'all' && t.stream !== activeStream) return false;
+        if (activeFilter === 'high')   return t.priority === 'HIGH' || t.priority === 'CRITICAL';
+        if (activeFilter !== 'all')    return t.status === activeFilter;
+        if (activeSearch) {
+          return t.id.toLowerCase().includes(activeSearch) ||
+                 t.title.toLowerCase().includes(activeSearch) ||
+                 (t.stream || '').toLowerCase().includes(activeSearch) ||
+                 (t.note || '').toLowerCase().includes(activeSearch);
+        }
+        return true;
+      });
+    }
+
+    function sortedTasks(tasks) {
+      return [...tasks].sort((a, b) => {
+        let av, bv;
+        if (currentSortField === 'status') {
+          av = STATUS_ORDER[a.status] ?? 99;
+          bv = STATUS_ORDER[b.status] ?? 99;
+          if (av === bv) { av = PRIO_ORDER[a.priority] ?? 99; bv = PRIO_ORDER[b.priority] ?? 99; }
+        } else if (currentSortField === 'priority') {
+          av = PRIO_ORDER[a.priority] ?? 99; bv = PRIO_ORDER[b.priority] ?? 99;
+        } else if (currentSortField === 'effort') {
+          av = EFFORT_ORDER[a.effort] ?? 99; bv = EFFORT_ORDER[b.effort] ?? 99;
+        } else if (currentSortField === 'id') {
+          av = parseInt(a.id.replace('BIZ-',''), 10) || 0;
+          bv = parseInt(b.id.replace('BIZ-',''), 10) || 0;
+        } else if (currentSortField === 'createdAt') {
+          av = a.createdAt || ''; bv = b.createdAt || '';
+        } else {
+          av = a[currentSortField] || ''; bv = b[currentSortField] || '';
+        }
+        if (av < bv) return -currentSortDir;
+        if (av > bv) return  currentSortDir;
+        return 0;
+      });
+    }
+
+    function renderTable() {
+      const tasks = sortedTasks(filteredTasks());
+      const tbody = document.getElementById('task-tbody');
+
+      if (!tasks.length) {
+        tbody.innerHTML = `<tr><td colspan="9" class="empty-state">${Shell.getLang()==='en' ? 'No BIZ tasks match the filter.' : 'Žádné BIZ úkoly neodpovídají filtru.'}</td></tr>`;
+        setText('row-count', '');
+        return;
+      }
+
+      tbody.innerHTML = tasks.map(t => {
+        const statusBadge = statusBadgeHtml(t.status);
+        const prioBadge   = prioBadgeHtml(t.priority);
+        const effortPill  = `<span class="effort-pill effort-${t.effort}">${t.effort}</span>`;
+        const streamPill  = `<span class="stream-pill">${escHtml(t.stream)}</span>`;
+        const whoShort    = (t.assignee || '').includes('Claude') && (t.assignee || '').includes('David')
+                              ? (Shell.getLang()==='en' ? '🤖👤 Both' : '🤖👤 Oba')
+                              : t.assignee === 'Claude' ? '🤖 Claude'
+                              : (t.assignee || '').includes('David') ? '👤 David' : t.assignee;
+        const dateShort   = (t.createdAt || '').slice(0, 10);
+        const noteText    = t.note ? escHtml(t.note).slice(0, 400) + (t.note.length > 400 ? '…' : '') : '';
+        const linkedHtml  = t.linkedTask ? `<span style="color:var(--c-amber);font-family:var(--c-font-sans);font-size:12px">${escHtml(t.linkedTask)}</span>` : '—';
+        const depsHtml    = t.dependsOn && t.dependsOn.length ? t.dependsOn.map(d => `<span style="color:var(--c-muted);font-family:var(--c-font-sans);font-size:11px">${escHtml(d)}</span>`).join(', ') : '—';
+        const timeHtml    = t.estimatedTime ? `${t.actualTime || '?'}/${t.estimatedTime} min` : '—';
+        const detailId    = 'detail-' + t.id.replace('-','');
+
+        return `
+          <tr class="c-task-row" onclick="toggleDetail('${detailId}', this)">
+            <td class="c-task-id" style="color:var(--c-amber)">${t.id}<span class="c-expand-icon" id="icon-${detailId}">▶</span></td>
+            <td style="font-size:13px;color:var(--c-white)">${escHtml(t.title)}</td>
+            <td>${statusBadge}</td>
+            <td>${prioBadge}</td>
+            <td class="col-eff">${effortPill}</td>
+            <td class="col-stream">${streamPill}</td>
+            <td class="col-dept" style="font-size:11px;color:var(--c-muted)">${escHtml(t.department)}</td>
+            <td style="font-size:12px;color:var(--c-muted)">${whoShort}</td>
+            <td style="font-size:11px;color:var(--c-muted);font-family:var(--c-font-sans)">${dateShort}</td>
+          </tr>
+          <tr>
+            <td colspan="9" class="detail-cell">
+              <div class="detail-inner" id="${detailId}">
+                <div class="detail-grid">
+                  <div class="detail-field"><div class="detail-key">${Shell.getLang()==='en'?'TYPE':'TYP'}</div><div class="detail-val">${escHtml(t.taskType)}</div></div>
+                  <div class="detail-field"><div class="detail-key">LINKED TASK</div><div class="detail-val">${linkedHtml}</div></div>
+                  <div class="detail-field"><div class="detail-key">${Shell.getLang()==='en'?'DEPENDS ON':'ZÁVISÍ NA'}</div><div class="detail-val">${depsHtml}</div></div>
+                  <div class="detail-field"><div class="detail-key">${Shell.getLang()==='en'?'TIME (actual/estimate)':'ČAS (skut./odhad)'}</div><div class="detail-val">${timeHtml}</div></div>
+                  <div class="detail-field"><div class="detail-key">AREA</div><div class="detail-val">${escHtml(t.area)}</div></div>
+                  <div class="detail-field"><div class="detail-key">${Shell.getLang()==='en'?'COMPLETED':'DOKONČENO'}</div><div class="detail-val" style="font-family:var(--c-font-sans);font-size:12px">${t.completedAt || '—'}</div></div>
+                </div>
+                ${noteText ? `<div class="detail-note">${noteText}</div>` : ''}
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      setText('row-count', Shell.getLang()==='en'
+        ? `Showing ${tasks.length} of ${ALL_TASKS.length} BIZ tasks`
+        : `Zobrazeno ${tasks.length} z ${ALL_TASKS.length} BIZ tasků`);
+    }
+
+    function toggleDetail(id, row) {
+      const detail = document.getElementById(id);
+      const icon   = document.getElementById('icon-' + id);
+      if (!detail) return;
+      const open = detail.classList.toggle('open');
+      if (icon) icon.textContent = open ? '▼' : '▶';
+    }
+
+    function statusBadgeHtml(s) {
+      const map = { 'OPEN':'badge-open','IN PROGRESS':'badge-progress','REVIEW':'badge-review','CLOSED':'badge-closed','CANCELLED':'badge-low' };
+      return `<span class="badge ${map[s] || 'badge-low'}">${s}</span>`;
+    }
+
+    function prioBadgeHtml(p) {
+      const map = { 'CRITICAL':'badge-critical','HIGH':'badge-high','MEDIUM':'badge-med','LOW':'badge-low' };
+      return `<span class="badge ${map[p] || 'badge-low'}">${p || '—'}</span>`;
+    }
+
+    function escHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function setText(id, val) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = val;
+    }
+  </script>
+</body>
+</html>
