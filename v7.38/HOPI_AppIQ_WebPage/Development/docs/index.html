@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="cs" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — Documentation Center (FC-7)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── NAV ── */
+.dc-nav{background:#161b22;border-bottom:2px solid #26c6da;padding:0 20px;height:48px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.dc-nav-back{color:#26c6da;font-size:12px;font-weight:700;text-decoration:none;border:1px solid rgba(38,198,218,.4);border-radius:5px;padding:4px 12px;transition:all .2s;white-space:nowrap;}
+.dc-nav-back:hover{background:rgba(38,198,218,.15);border-color:#26c6da;}
+.dc-nav-brand{font-size:13px;font-weight:700;color:#e6edf3;}
+.dc-nav-version{font-size:11px;color:#484f58;font-family:Consolas,monospace;margin-left:2px;}
+.dc-nav-badge{font-size:10px;background:rgba(38,198,218,.12);color:#26c6da;border:1px solid rgba(38,198,218,.3);border-radius:10px;padding:2px 9px;font-weight:700;white-space:nowrap;}
+
+/* ── TABS ── */
+.dc-tabs{display:flex;gap:0;background:#161b22;border-bottom:1px solid #30363d;flex-shrink:0;}
+.dc-tab{padding:9px 22px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#8b949e;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Segoe UI',Arial,sans-serif;transition:all .15s;white-space:nowrap;}
+.dc-tab.active{color:#26c6da;border-bottom-color:#26c6da;}
+.dc-tab:hover:not(.active){color:#e6edf3;background:#21262d;}
+
+/* ── BODY / PANES ── */
+.dc-body{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.dc-pane{flex:1;overflow-y:auto;display:none;padding:16px 20px;background:#0d1117;}
+.dc-pane.active{display:block;}
+
+/* ── LANG SWITCH ── */
+.lang-switch{display:flex;gap:4px;align-items:center;margin-left:auto;}
+.lang-btn{background:transparent;border:1px solid #30363d;border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;color:#8b949e;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.lang-btn:hover{border-color:#8b949e;color:#e6edf3;}
+.lang-btn.active{border-color:#26c6da;color:#26c6da;background:rgba(38,198,218,.1);}
+
+/* ── ACCORDION ── */
+.acc-section{background:#161b22;border:1px solid #30363d;border-radius:8px;margin-bottom:10px;overflow:hidden;}
+.acc-header{padding:12px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none;transition:background .15s;}
+.acc-header:hover{background:#21262d;}
+.acc-title{font-size:13px;font-weight:700;color:#e6edf3;flex:1;}
+.acc-badge{font-size:10px;font-weight:700;border-radius:4px;padding:2px 8px;white-space:nowrap;background:rgba(38,198,218,.1);color:#26c6da;border:1px solid rgba(38,198,218,.3);}
+.acc-chevron{font-size:10px;color:#484f58;transition:transform .2s;flex-shrink:0;}
+.acc-section.open>.acc-header .acc-chevron{transform:rotate(180deg);}
+.acc-body{display:none;padding:0 16px 16px;}
+.acc-section.open>.acc-body{display:block;}
+
+/* ── CONTENT ELEMENTS ── */
+.doc-sec-hdr{font-size:11px;font-weight:700;color:#26c6da;letter-spacing:.1em;text-transform:uppercase;padding:4px 0;border-bottom:1px solid rgba(38,198,218,.2);margin-bottom:10px;margin-top:18px;}
+.doc-sec-hdr:first-child{margin-top:4px;}
+.doc-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px;}
+.doc-tbl th{background:#21262d;font-weight:600;padding:6px 10px;text-align:left;font-size:11px;color:#8b949e;border-bottom:1px solid #30363d;white-space:nowrap;}
+.doc-tbl td{padding:6px 10px;border-bottom:1px solid #21262d;vertical-align:top;}
+.doc-tbl tr:hover td{background:#161b22;}
+.doc-code{display:inline-block;background:#010409;color:#7ec8e3;font-family:'Cascadia Code',Consolas,monospace;font-size:11px;padding:1px 6px;border-radius:3px;border:1px solid #21262d;}
+.doc-badge{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:2px 7px;white-space:nowrap;}
+.db-active{background:#0d4429;color:#3fb950;}
+.db-stub{background:#2d0849;color:#d2a8ff;}
+.db-planned{background:#3d1f00;color:#f0883e;}
+.doc-fc-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;flex-shrink:0;}
+.doc-p{font-size:12.5px;color:#8b949e;line-height:1.7;margin-bottom:10px;}
+.doc-ul{font-size:12px;color:#8b949e;line-height:1.8;padding-left:18px;margin-bottom:10px;}
+.doc-ul li{margin-bottom:2px;}
+.doc-ul li::marker{color:#26c6da;}
+.doc-note{background:#21262d;border-left:3px solid #26c6da;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12px;color:#8b949e;margin-bottom:10px;line-height:1.6;}
+.doc-warn{background:rgba(240,136,62,.06);border-left:3px solid #f0883e;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12px;color:#f0883e;margin-bottom:10px;line-height:1.6;}
+.doc-ok{background:#0d4429;border-left:3px solid #3fb950;padding:10px 14px;border-radius:0 6px 6px 0;font-size:12px;color:#3fb950;margin-bottom:10px;line-height:1.6;}
+.doc-pre{background:#010409;color:#7ec8e3;font-family:'Cascadia Code',Consolas,monospace;font-size:11.5px;line-height:1.7;padding:14px 16px;border-radius:6px;overflow-x:auto;white-space:pre;margin-bottom:10px;border:1px solid #21262d;}
+.doc-loading{text-align:center;color:#484f58;padding:40px 20px;font-size:13px;}
+
+/* ── STAT ROW ── */
+.doc-stat-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+.doc-stat{background:#21262d;border:1px solid #30363d;border-radius:6px;padding:10px 14px;min-width:100px;text-align:center;}
+.doc-stat-val{font-size:22px;font-weight:700;color:#26c6da;font-family:Consolas,monospace;line-height:1;}
+.doc-stat-lbl{font-size:10px;color:#8b949e;margin-top:4px;}
+
+/* ── GD-1 ARCHITECTURE ── */
+.gd1-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:12px;}
+.gd1-card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 14px;border-top:3px solid var(--fc-color,#484f58);}
+.gd1-card-icon{font-size:16px;margin-bottom:3px;}
+.gd1-card-id{font-size:10px;color:#484f58;font-weight:700;letter-spacing:.08em;}
+.gd1-card-name{font-size:12px;font-weight:700;color:#e6edf3;margin:2px 0;}
+.gd1-card-desc{font-size:10.5px;color:#8b949e;line-height:1.5;margin-bottom:6px;}
+.gd1-streams{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.gd1-stream{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 14px;}
+.gd1-stream-hdr{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #30363d;}
+.gd1-stream.web .gd1-stream-hdr{color:#3fb950;}
+.gd1-stream.app .gd1-stream-hdr{color:#f0883e;}
+.gd1-stream-item{font-size:11px;color:#c9d1d9;padding:4px 0;border-bottom:1px solid #21262d;display:flex;align-items:center;gap:6px;}
+.gd1-stream-item:last-child{border-bottom:none;}
+
+/* ── MERMAID ── */
+.mermaid-wrap{background:#010409;border:1px solid #21262d;border-radius:8px;padding:16px;overflow-x:auto;margin-bottom:10px;min-height:80px;}
+.mermaid{text-align:center;}
+
+/* ── STEPS ── */
+.doc-steps{margin-bottom:10px;}
+.doc-step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start;}
+.doc-step-num{width:22px;height:22px;background:#26c6da;color:#010409;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.doc-step-title{font-size:12px;font-weight:700;color:#e6edf3;}
+.doc-step-desc{font-size:11.5px;color:#8b949e;line-height:1.6;margin-top:1px;}
+
+/* ── PHASE CARD ── */
+.phase-card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px 16px;margin-bottom:8px;}
+.phase-card.active{border-left:3px solid #3fb950;}
+.phase-card.planned{border-left:3px solid #f0883e;}
+.phase-card-hdr{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.phase-card-num{font-size:16px;font-weight:700;font-family:Consolas,monospace;}
+.phase-card.active .phase-card-num{color:#3fb950;}
+.phase-card.planned .phase-card-num{color:#f0883e;}
+.phase-card-name{font-size:13px;font-weight:700;color:#e6edf3;flex:1;}
+.phase-card-target{font-size:11px;color:#484f58;}
+.phase-card-desc{font-size:12px;color:#8b949e;line-height:1.6;}
+
+/* ── MODULE CHIPS ── */
+.module-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.module-chip{background:#21262d;border:1px solid #30363d;border-radius:4px;padding:3px 9px;font-size:11px;color:#e6edf3;}
+</style>
+<script src="../../../_i18n.js"></script>
+<script src="../_ver.js"></script>
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────────────────── -->
+<nav class="dc-nav">
+  <a class="dc-nav-back" href="../index.html" data-i18n="common.back">&#8592; Studio Hub</a>
+  <div class="dc-nav-brand">&#128218; <span data-i18n="docs.title">Documentation Center</span></div>
+  <span class="dc-nav-version" id="docVer"></span>
+  <div class="dc-nav-badge">FC-7</div>
+  <div class="lang-switch">
+    <button class="lang-btn" data-lang="cs" onclick="I18n.setLang('cs')">CZ</button>
+    <button class="lang-btn" data-lang="en" onclick="I18n.setLang('en')">EN</button>
+  </div>
+</nav>
+
+<!-- ── TABS ─────────────────────────────────────────────────────────────── -->
+<div class="dc-tabs">
+  <button class="dc-tab active" data-pane="tech" onclick="dcTab('tech')" data-i18n="docs.tab.tech">&#128203; Tech Spec</button>
+  <button class="dc-tab" data-pane="biz" onclick="dcTab('biz')" data-i18n="docs.tab.biz">&#128202; Business Spec</button>
+  <button class="dc-tab" data-pane="diag" onclick="dcTab('diag')" data-i18n="docs.tab.diag">&#128208; Diagramy</button>
+</div>
+
+<!-- ── PANES ─────────────────────────────────────────────────────────────── -->
+<div class="dc-body">
+  <div class="dc-pane active" id="pane-tech">
+    <div class="doc-loading" id="techLoading">&#9200; Na&#269;&#237;t&#225;m Tech Spec&hellip;</div>
+  </div>
+  <div class="dc-pane" id="pane-biz">
+    <div class="doc-loading" id="bizLoading">&#9200; Na&#269;&#237;t&#225;m Business Spec&hellip;</div>
+  </div>
+  <div class="dc-pane" id="pane-diag">
+    <div class="doc-loading" id="diagLoading">&#9200; Na&#269;&#237;t&#225;m diagramy&hellip;</div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// DOCS_CONFIG — single source of truth pro FC-7 Documentation Center
+//
+// PRAVIDLO: Kdykoli se změní architektura platformy (nové FC, nová integrace,
+// nová doména, nová role), aktualizovat tento objekt. Dokumentace se aktualizuje
+// automaticky při příštím načtení stránky.
+// ═══════════════════════════════════════════════════════════════════════════
+var DOCS_CONFIG = {
+
+  fcs: [
+    { id:'FC-1', name:'Studio Hub',           icon:'🏠', path:'../index.html',        color:'#E8750A', status:'ACTIVE', stream:'WEB', desc:'Hlavní vstupní bod — navigace na centra, project status, OIL badge' },
+    { id:'FC-2', name:'Finance Portal',       icon:'💼', path:null,                    color:'#f0883e', status:'ACTIVE', stream:'APP', desc:'Runtime aplikace — Group Controlling Portal (HOPI_AppIQ/ stream)' },
+    { id:'FC-3', name:'Dev Center',           icon:'🗺', path:'../dev/index.html',     color:'#79c0ff', status:'ACTIVE', stream:'WEB', desc:'Arch Map viewer, responsive matrix, platform architecture diagram' },
+    { id:'FC-4', name:'Test Center',          icon:'✅', path:'../test/index.html',    color:'#d2a8ff', status:'STUB',   stream:'WEB', desc:'QA checklisty, sign-off workflow, known issues tracking' },
+    { id:'FC-5', name:'Admin Center',         icon:'⚙️', path:'../admin/index.html',  color:'#f85149', status:'ACTIVE', stream:'WEB', desc:'OIL Backlog, Kapacita, Release & Deploy, i18n správa' },
+    { id:'FC-6', name:'Promo Web',            icon:'🚀', path:'../promo/index.html',   color:'#3fb950', status:'ACTIVE', stream:'WEB', desc:'Landing page platformy — bez dev nástrojů, pro externe prezentaci' },
+    { id:'FC-7', name:'Documentation Center', icon:'📚', path:'docs/index.html',       color:'#26c6da', status:'ACTIVE', stream:'WEB', desc:'Tech Spec, Business Spec, Diagramy — živá dokumentace platformy' }
+  ],
+
+  domains: [
+    { name:'Finance',    stream:'APP', status:'Phase 0', modules:['Calendar','Tracking','OrgChart','Reporting','FX','SAP','BNS','SharePoint','PowerBI','HelpSystem'] },
+    { name:'Operations', stream:'APP', status:'Planned', modules:['HelpSystem'] },
+    { name:'Purchasing', stream:'APP', status:'Planned', modules:['HelpSystem'] },
+    { name:'Studio',     stream:'WEB', status:'Active',  modules:['Hub','DevCenter','TestCenter','AdminCenter','Promo','Docs','Presentation'] },
+    { name:'Platform',   stream:'WEB', status:'Active',  modules:['Brand','Architecture','PMO','OIL','ReleaseManager','Changelog','Auth','TranslationStore'] }
+  ],
+
+  phases: [
+    { id:'Phase 0', name:'Finance Pilot',      status:'ACTIVE',  target:'Q2 2026',  desc:'Interní pilot Finance týmu HOPI Holding — client-side only, trust-based přístup. Vhodné pro kontrolované prostředí.' },
+    { id:'Phase 1', name:'HOPI Group Rollout', status:'PLANNED', target:'Q4 2026',  desc:'Rozšíření na všechny divize skupiny — Azure AD integrace, 5 000+ uživatelů, HOPI IT jako správce.' },
+    { id:'Phase 2', name:'Commercial SaaS',    status:'PLANNED', target:'2027+',    desc:'Spin-off HOPI TechIQ s.r.o. — komerční launch, multi-tenant SaaS model, external zákazníci.' }
+  ],
+
+  stack: [
+    { layer:'Core',      tech:'HTML5 / CSS3 / JavaScript ES6+', note:'Žádný npm, žádný build step — spustitelné přímo z filesystému' },
+    { layer:'i18n',      tech:'_i18n.js (interní modul)',        note:'CS/EN aktivní, 7 dalších jazyků planned — data-i18n atributy + I18n.t()' },
+    { layer:'Data',      tech:'OIL.json + localStorage',         note:'Client-side only Phase 0 — OIL.json je zdrojem pravdy pro úkoly' },
+    { layer:'Diagrams',  tech:'Mermaid.js (CDN lazy-load)',       note:'Načítá se pouze při otevření záložky Diagramy' },
+    { layer:'Deploy',    tech:'GitHub Pages + OneDrive sync',     note:'CI/CD přes gh-pages branch, DO_DEPLOY.ps1 pipeline' }
+  ],
+
+  integrations: [
+    { name:'appiq://',      type:'Windows Protocol Handler', status:'Active',            desc:'Registry → PowerShell → akce (archive, deploy). Registrace: DO_REGISTER.ps1' },
+    { name:'sap-client://', type:'URI Scheme',               status:'Active',            desc:'Otevře SAP GUI klienta — vyžaduje nainstalovaný SAP GUI na stanici' },
+    { name:'BNSDesktop://', type:'URI Scheme',               status:'Active',            desc:'BNS Desktop client — direct link z Finance portálu' },
+    { name:'idware://',     type:'URI Scheme',               status:'Active',            desc:'IDWare application — direct link z Finance portálu' },
+    { name:'Azure AD',      type:'Auth Integration',         status:'Planned (Phase 1)', desc:'Nahradí trust-based Phase 0 model — SSO pro HOPI Group' }
+  ],
+
+  roles: [
+    { role:'Admin',      user:'David Gogela',  access:'Full — OIL editor + save, Release, Settings, všechna Studio centra' },
+    { role:'Developer',  user:'Claude',        access:'Všechna Studio centra — read OIL, render dokumentaci, vývoj' },
+    { role:'Power User', user:'Finance Team',  access:'Finance Portal — Calendar, Tracking, Reporting, SAP/BNS/IDWare tiles' },
+    { role:'Viewer',     user:'Management',    access:'Prezentace + Reporting — read-only, žádné dev funkce' },
+    { role:'IT Admin',   user:'HOPI IT Dept.', access:'Deploy, Protocol Handler setup, GitHub Pages, síťová infrastruktura' }
+  ],
+
+  localStorage: [
+    { key:'hopi_lang',         fc:'ALL',  desc:'Aktuální jazyk (cs|en) — sdíleno všemi FC přes I18n.init()' },
+    { key:'hopi_oil_cache',    fc:'FC-5', desc:'Cache OIL.json obsahu — JSON string, fallback při offline' },
+    { key:'hopi_oil_settings', fc:'FC-5', desc:'OIL nastavení — aktivní sort sloupec, směr řazení, filtry' },
+    { key:'gc_lang_v1',        fc:'FC-2', desc:'Finance Portal — jazyk preference, synchronizováno s hopi_lang' },
+    { key:'hopi_audio_on',     fc:'FC-6', desc:'Promo Web — ambient audio track on/off preference' }
+  ],
+
+  oilSchema: [
+    { field:'id',            type:'string',  req:true,  desc:'AIQ-NNNNN — unikátní 5-ciferné sekvenční ID' },
+    { field:'title',         type:'string',  req:true,  desc:'Stručný název úkolu — max. ~100 znaků' },
+    { field:'description',   type:'string',  req:false, desc:'Detailní popis — co, proč, jak. Markdown not supported' },
+    { field:'stream',        type:'enum',    req:true,  desc:'WEB | APP — do které části projektu úkol patří' },
+    { field:'priority',      type:'enum',    req:true,  desc:'HIGH | MED | LOW — vliv na řazení v OIL Backlogu' },
+    { field:'status',        type:'enum',    req:true,  desc:'OPEN | IN PROGRESS | REVIEW | CLOSED | RETURNED | CANCELLED' },
+    { field:'domain',        type:'string',  req:false, desc:'Doména dle OIL_DOMAINS — Finance, Operations, Studio, Platform…' },
+    { field:'module',        type:'string',  req:false, desc:'Název modulu v rámci domény (Calendar, AdminCenter, TranslationStore…)' },
+    { field:'component',     type:'string',  req:false, desc:'Konkrétní komponenta / soubor / záložka' },
+    { field:'taskType',      type:'enum',    req:true,  desc:'development | fix | content | design | review | approval | test | release | archive | research | docs' },
+    { field:'effort',        type:'enum',    req:true,  desc:'XS (<30 min) | S (30–120 min) | M (121–240 min) | L (241–480 min) | XL (480+ min)' },
+    { field:'estimatedTime', type:'number',  req:false, desc:'Odhadnutý čas v minutách — null pokud neznámý' },
+    { field:'actualTime',    type:'number',  req:false, desc:'Skutečný čas v minutách — doplnit po dokončení, null pokud ještě neznámý' },
+    { field:'assignee',      type:'string',  req:true,  desc:'Claude | David Gogela | HOPI IT' },
+    { field:'createdAt',     type:'date',    req:true,  desc:'Datum vytvoření — YYYY-MM-DD nebo YYYY-MM-DD HH:MM' },
+    { field:'createdBy',     type:'string',  req:true,  desc:'Kdo vytvořil úkol (Claude | David Gogela)' },
+    { field:'completedBy',   type:'string',  req:false, desc:'Kdo uzavřel — null pokud stále otevřený' },
+    { field:'completedAt',   type:'date',    req:false, desc:'Datum uzavření — null pokud stále otevřený' },
+    { field:'comment',       type:'string',  req:false, desc:'Komentář / klíčová rozhodnutí / kontext k úkolu' },
+    { field:'note',          type:'string',  req:false, desc:'Technická poznámka — výsledek, status zpráva, odkaz na commit' }
+  ]
+};
+
+// ═══════════════════════════════════════════════════════════
+// GLOBALS + HELPERS
+// ═══════════════════════════════════════════════════════════
+var _oilData = null;
+var _mermaidLoaded = false;
+var _diagramsRendered = false;
+var _oilSource = null;       // 'live' | 'archive' | 'cache' | null
+var _archiveInfo = null;     // null v development módu, objekt v archivu
+
+function esc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function badge(text, cls) {
+  return '<span class="doc-badge '+(cls||'db-planned')+'">'+esc(text)+'</span>';
+}
+
+function step(n, title, descHtml) {
+  return '<div class="doc-step">'
+    +'<div class="doc-step-num">'+n+'</div>'
+    +'<div><div class="doc-step-title">'+esc(title)+'</div>'
+    +'<div class="doc-step-desc">'+descHtml+'</div></div>'
+    +'</div>';
+}
+
+function acc(id, title, badgeTxt, bodyHtml, open) {
+  return '<div class="acc-section'+(open?' open':'')+'" id="acc-'+id+'">'
+    +'<div class="acc-header" onclick="toggleAcc(\''+id+'\')">'
+    +'<span class="acc-title">'+esc(title)+'</span>'
+    +(badgeTxt ? '<span class="acc-badge">'+esc(badgeTxt)+'</span>' : '')
+    +'<span class="acc-chevron">&#9660;</span>'
+    +'</div>'
+    +'<div class="acc-body">'+bodyHtml+'</div>'
+    +'</div>';
+}
+
+function toggleAcc(id) {
+  var el = document.getElementById('acc-'+id);
+  if (el) {
+    el.classList.toggle('open');
+    if (_mermaidLoaded && el.classList.contains('open')) {
+      try { mermaid.run(); } catch(e) {}
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════
+function dcTab(name) {
+  document.querySelectorAll('.dc-tab').forEach(function(t) {
+    t.classList.toggle('active', t.dataset.pane === name);
+  });
+  document.querySelectorAll('.dc-pane').forEach(function(p) {
+    p.classList.toggle('active', p.id === 'pane-' + name);
+  });
+  if (name === 'diag') initDiagrams();
+}
+
+function initDiagrams() {
+  if (!_diagramsRendered) {
+    _diagramsRendered = true;
+    renderDiagrams();
+    if (!_mermaidLoaded) loadMermaid();
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// MERMAID LAZY LOAD
+// ═══════════════════════════════════════════════════════════
+function loadMermaid() {
+  _mermaidLoaded = true;
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js';
+  s.onload = function() {
+    mermaid.initialize({ theme: 'dark', startOnLoad: false, securityLevel: 'loose' });
+    try { mermaid.run(); } catch(e) {}
+  };
+  s.onerror = function() {
+    document.querySelectorAll('.mermaid-wrap').forEach(function(w) {
+      w.innerHTML = '<div style="color:#484f58;font-size:12px;padding:8px;">&#9888; Mermaid CDN nedostupný — diagram nelze zobrazit offline.</div>';
+    });
+  };
+  document.head.appendChild(s);
+}
+
+// ═══════════════════════════════════════════════════════════
+// OIL.JSON FETCH
+// Priorita cest:
+//   1. ../../../OIL.json  — Development (live)
+//   2. ../OIL.json        — Archive (snapshot zkopírovaný AUTO_ARCHIVE.bat)
+// ═══════════════════════════════════════════════════════════
+
+function loadOIL() {
+  var cached = null;
+  try { cached = localStorage.getItem('hopi_oil_cache'); } catch(e) {}
+  if (cached) {
+    try { _oilData = JSON.parse(cached); _oilSource = 'cache'; renderAll(); } catch(e) {}
+  }
+
+  // Pokus 1 — vývojová cesta (3 levely nahoru = CO_PROJECT root)
+  fetch('../../../OIL.json?_=' + Date.now())
+    .then(function(r) { if (!r.ok) throw 0; return r.text(); })
+    .then(function(txt) {
+      try {
+        _oilData = JSON.parse(txt);
+        _oilSource = 'live';
+        localStorage.setItem('hopi_oil_cache', txt);
+      } catch(e) { _oilData = null; }
+      renderAll();
+    })
+    .catch(function() {
+      // Pokus 2 — archivní cesta (1 level nahoru = kořen archive session)
+      fetch('../OIL.json?_=' + Date.now())
+        .then(function(r) { if (!r.ok) throw 0; return r.text(); })
+        .then(function(txt) {
+          try { _oilData = JSON.parse(txt); _oilSource = 'archive'; } catch(e) { _oilData = null; }
+          renderAll();
+        })
+        .catch(function() {
+          _oilSource = cached ? 'cache' : null;
+          if (!cached) renderAll();
+        });
+    });
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER ALL (Tech + Biz — Diagrams are lazy)
+// ═══════════════════════════════════════════════════════════
+function renderAll() {
+  renderTechSpec();
+  renderBizSpec();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TECH SPEC
+// ═══════════════════════════════════════════════════════════════════════════
+function renderTechSpec() {
+  var h = '';
+  h += acc('ts1', 'TS-1 — Platform Overview + File Structure', 'DOCS_CONFIG', buildTS1(), true);
+  h += acc('ts2', 'TS-2 — Technology Stack + Browser Requirements', 'Stack', buildTS2(), false);
+  h += acc('ts3', 'TS-3 — Data Layer & Storage Model', 'OIL v3.0', buildTS3(), false);
+  h += acc('ts4', 'TS-4 — Integration Points + Protocol Handlers', 'Integrace', buildTS4(), false);
+  h += acc('ts5', 'TS-5 — Deployment & Operations Guide', 'DO_*.ps1', buildTS5(), false);
+  h += acc('ts6', 'TS-6 — Security Model + Extension Guide', 'Phase 0', buildTS6(), false);
+  document.getElementById('pane-tech').innerHTML = h;
+}
+
+function buildTS1() {
+  // FC table — generated from DOCS_CONFIG.fcs
+  var t = '<table class="doc-tbl"><thead><tr><th>FC</th><th>N&#225;zev</th><th>Soubor</th><th>Stream</th><th>Status</th><th>Popis</th></tr></thead><tbody>';
+  DOCS_CONFIG.fcs.forEach(function(fc) {
+    var stCls = fc.status === 'ACTIVE' ? 'db-active' : fc.status === 'STUB' ? 'db-stub' : 'db-planned';
+    t += '<tr>'
+      +'<td><span class="doc-fc-dot" style="background:'+fc.color+'"></span><b>'+esc(fc.id)+'</b></td>'
+      +'<td>'+fc.icon+' '+esc(fc.name)+'</td>'
+      +'<td><code class="doc-code">'+esc(fc.path || '—')+'</code></td>'
+      +'<td style="color:#8b949e">'+esc(fc.stream)+'</td>'
+      +'<td>'+badge(fc.status, stCls)+'</td>'
+      +'<td style="color:#8b949e;font-size:11px">'+esc(fc.desc)+'</td>'
+      +'</tr>';
+  });
+  t += '</tbody></table>';
+
+  var tree = '<div class="doc-pre">'
+    +'CO_PROJECT/\n'
+    +'&#9500;&#9472;&#9472; _i18n.js               # Jazykov&#225; slu&#382;ba &#8212; sd&#237;len&#225; v&#353;emi FC\n'
+    +'&#9500;&#9472;&#9472; OIL.json               # Task tracker (AIQ-NNNNN) &#8212; verze 3.0\n'
+    +'&#9500;&#9472;&#9472; OIL_CONTEXT.md         # Kontext a rozhodnut&#237; per &#250;kol\n'
+    +'&#9500;&#9472;&#9472; ARCH_MAP.md            # Architekturni mapa &#8212; k&#243;dy objekt&#367;\n'
+    +'&#9500;&#9472;&#9472; PORTAL_ARCHITECTURE.md # BLOK 0&#8211;8 architektonick&#253; r&#225;mec\n'
+    +'&#9500;&#9472;&#9472; CLAUDE.md              # Session startup instrukce pro Claude\n'
+    +'&#9500;&#9472;&#9472; CHANGELOG.md           # Souhrnny changelog obou stream&#367;\n'
+    +'&#9500;&#9472;&#9472; AUTO_ARCHIVE.bat       # Archiva&#269;n&#237; skript (META sekce)\n'
+    +'&#9500;&#9472;&#9472; _SESSION_START/        # Snapshot stavu na konci session\n'
+    +'&#9500;&#9472;&#9472; HOPI_AppIQ_WebPage/\n'
+    +'&#9474;   &#9492;&#9472;&#9472; Development/\n'
+    +'&#9474;       &#9500;&#9472;&#9472; index.html              # FC-1 Studio Hub\n'
+    +'&#9474;       &#9500;&#9472;&#9472; _ver.js                # PREZ_VERSION konstanta\n'
+    +'&#9474;       &#9500;&#9472;&#9472; _status.json           # Deploy/archiv status\n'
+    +'&#9474;       &#9500;&#9472;&#9472; RESPONSIVE_DATA.js     # Browser compatibility matrix\n'
+    +'&#9474;       &#9500;&#9472;&#9472; PORTAL_PRESENTATION.html  # Prezentace platformy v7+\n'
+    +'&#9474;       &#9500;&#9472;&#9472; PERSONAL_PITCH.html       # Osobn&#237; pitch (GR/vlastn&#237;k)\n'
+    +'&#9474;       &#9500;&#9472;&#9472; admin/index.html        # FC-5 Admin Center\n'
+    +'&#9474;       &#9500;&#9472;&#9472; dev/index.html          # FC-3 Dev Center\n'
+    +'&#9474;       &#9500;&#9472;&#9472; test/index.html         # FC-4 Test Center (STUB)\n'
+    +'&#9474;       &#9500;&#9472;&#9472; promo/index.html        # FC-6 Promo Web\n'
+    +'&#9474;       &#9492;&#9472;&#9472; docs/index.html         # FC-7 Documentation Center\n'
+    +'&#9492;&#9472;&#9472; HOPI_AppIQ/\n'
+    +'    &#9492;&#9472;&#9472; Development/\n'
+    +'        &#9492;&#9472;&#9472; index.html              # FC-2 Finance Portal (APP stream)'
+    +'</div>';
+
+  // ── Version stamp header (vždy viditelný) ──
+  var verStamp = '<div style="display:flex;align-items:center;gap:10px;padding:10px 14px;background:#161b22;border:1px solid #30363d;border-radius:6px;margin-bottom:12px;flex-wrap:wrap;">'
+    +'<span style="font-size:11px;color:#484f58;font-weight:700;letter-spacing:.08em;text-transform:uppercase;">Dokumentace pro verzi</span>'
+    +'<span style="font-size:14px;font-weight:700;color:#26c6da;font-family:Consolas,monospace;">'+esc(DOCS_CONFIG._version)+'</span>'
+    +(_archiveInfo ? '<span style="font-size:10px;color:#f0883e;font-weight:700;margin-left:auto;">&#128230; ARCHIVNÍ SNAPSHOT &nbsp;&#183;&nbsp; '+esc(_archiveInfo.date)+'</span>' : '<span style="font-size:10px;color:#3fb950;margin-left:auto;">&#128994; live</span>')
+    +'</div>';
+
+  // ── Archivní release notes panel (jen v archivovaných verzích) ──
+  var archivePanel = '';
+  if (_archiveInfo) {
+    var clHtml = '';
+    if (_archiveInfo.changelog) {
+      // Renderovat changelog jako čitelný text — zachovat ### / ** formátování v textu
+      var clLines = _archiveInfo.changelog.split('\n');
+      clHtml = '<div style="background:#010409;border:1px solid #21262d;border-radius:6px;padding:12px 14px;max-height:320px;overflow-y:auto;font-family:\'Cascadia Code\',Consolas,monospace;font-size:11.5px;line-height:1.7;color:#c9d1d9;white-space:pre-wrap;margin-top:10px;">';
+      clLines.forEach(function(l) {
+        var colored = esc(l)
+          .replace(/^(## .+)$/, '<span style="color:#26c6da;font-weight:700">$1</span>')
+          .replace(/^(### .+)$/, '<span style="color:#79c0ff;font-weight:700">$1</span>')
+          .replace(/\*\*(.+?)\*\*/g, '<b style="color:#e6edf3">$1</b>')
+          .replace(/`(.+?)`/g, '<code style="background:#21262d;border-radius:3px;padding:1px 4px;color:#7ec8e3">$1</code>');
+        clHtml += colored + '\n';
+      });
+      clHtml += '</div>';
+    }
+    archivePanel = '<div style="background:#161b22;border:1px solid #f0883e;border-radius:8px;padding:14px 16px;margin-bottom:14px;">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">'
+      +'<span style="font-size:13px;font-weight:700;color:#f0883e;">&#128230; Archivn&#237; snapshot</span>'
+      +'<span style="font-size:12px;font-weight:700;color:#26c6da;font-family:Consolas,monospace;">'+esc(_archiveInfo.version)+'</span>'
+      +'<span style="font-size:11px;color:#8b949e;">'+esc(_archiveInfo.date)+'</span>'
+      +'<span style="font-size:10px;color:#484f58;font-family:Consolas,monospace;">'+esc(_archiveInfo.session)+'</span>'
+      +'</div>'
+      +'<div style="font-size:11px;color:#484f58;">Tato dokumentace je archivn&#237; snapshot. Data n&#237;&#382;e odp&#237;daj&#237; stavu v dob&#283; archivace. Aktu&#225;ln&#237; stav: <code class="doc-code">Development/docs/index.html</code></div>'
+      +(_archiveInfo.changelog ? '<div style="font-size:11px;font-weight:700;color:#8b949e;margin-top:10px;margin-bottom:4px;">&#128203; Co bylo v t&#233;to verzi p&#345;id&#225;no (z CHANGELOG.md):</div>'+clHtml : '')
+      +'</div>';
+  }
+
+  return archivePanel + verStamp
+    + '<div class="doc-sec-hdr">Functional Centers &#8212; generov&#225;no z DOCS_CONFIG</div>'
+    + t
+    + '<div class="doc-sec-hdr">Adres&#225;&#345;ov&#225; struktura projektu</div>'
+    + tree
+    + '<div class="doc-note">Dv&#283; streamy: <b>WEB</b> (Studio &#8212; v&#253;vojov&#233; n&#225;stroje a dokumentace) a <b>APP</b> (Runtime &#8212; Finance Portal). Ob&#283; jsou &#269;ist&#233; statick&#233; HTML aplikace bez build stepu nebo n&#225;stroj&#367;.</div>';
+}
+
+function buildTS2() {
+  var stkHtml = '<table class="doc-tbl"><thead><tr><th>Vrstva</th><th>Technologie</th><th>Pozn&#225;mka</th></tr></thead><tbody>';
+  DOCS_CONFIG.stack.forEach(function(s) {
+    stkHtml += '<tr><td><b>'+esc(s.layer)+'</b></td>'
+      +'<td><code class="doc-code">'+esc(s.tech)+'</code></td>'
+      +'<td style="color:#8b949e;font-size:11px">'+esc(s.note)+'</td></tr>';
+  });
+  stkHtml += '</tbody></table>';
+
+  var bwHtml = '<table class="doc-tbl"><thead><tr><th>Prohl&#237;&#382;e&#269;</th><th>Min. verze</th><th>File System API</th><th>Podpora</th></tr></thead><tbody>'
+    +'<tr><td>Chrome</td><td>86+</td><td>'+badge('&#10003; Pln&#225;','db-active')+'</td><td>'+badge('&#10003; Doporu&#269;eno','db-active')+'</td></tr>'
+    +'<tr><td>Edge (Chromium)</td><td>86+</td><td>'+badge('&#10003; Pln&#225;','db-active')+'</td><td>'+badge('&#10003; Doporu&#269;eno','db-active')+'</td></tr>'
+    +'<tr><td>Firefox</td><td>any</td><td>'+badge('&#10005; Nepodporuje','db-planned')+'</td><td>'+badge('&#9888; Omezen&#253; (bez OIL save)','db-planned')+'</td></tr>'
+    +'<tr><td>Safari</td><td>any</td><td>'+badge('&#10005; Omezen&#253;','db-planned')+'</td><td>'+badge('&#9888; Omezen&#253;','db-planned')+'</td></tr>'
+    +'</tbody></table>';
+
+  // i18n live coverage
+  var i18nHtml = '';
+  if (typeof I18n !== 'undefined' && I18n.langs) {
+    var langs = I18n.langs();
+    i18nHtml = '<table class="doc-tbl"><thead><tr><th>Jazyk</th><th>Scope</th><th>Status</th><th>Pokryt&#237; kl&#237;&#269;&#367;</th></tr></thead><tbody>';
+    langs.forEach(function(l) {
+      var m = I18n.meta(l);
+      var cov = I18n.coverage(l);
+      var stCls = m.status === 'active' ? 'db-active' : 'db-planned';
+      i18nHtml += '<tr>'
+        +'<td>'+esc(m.flag)+' <b>'+esc(l.toUpperCase())+'</b> <span style="color:#8b949e;font-size:11px">'+esc(m.name)+'</span></td>'
+        +'<td style="color:#8b949e">'+esc(m.scope)+'</td>'
+        +'<td>'+badge(m.status, stCls)+'</td>'
+        +'<td><b style="color:'+((cov>90)?'#3fb950':(cov>50)?'#f0883e':'#f85149')+'">'+cov+'%</b></td>'
+        +'</tr>';
+    });
+    i18nHtml += '</tbody></table>';
+  } else {
+    i18nHtml = '<div class="doc-note">I18n objekt nedostup&#253;.</div>';
+  }
+
+  return '<div class="doc-sec-hdr">Technologick&#253; z&#225;sobn&#237;k</div>'
+    + stkHtml
+    + '<div class="doc-ok">&#9989; Zero-dependency &#8212; &#382;&#225;dn&#253; npm, node.js, webpack ani build krok. Platforma b&#283;&#382;&#237; p&#345;&#237;mo z file syst&#233;mu nebo jednoduch&#233;ho HTTP serveru (DO_SERVER.ps1).</div>'
+    + '<div class="doc-sec-hdr">Browser support</div>'
+    + bwHtml
+    + '<div class="doc-warn">&#9888; File System Access API (Admin Center &#8594; OIL edit + save) vy&#382;aduje Chrome/Edge 86+. V&#353;echny ostatn&#237; funkce funguj&#237; ve v&#353;ech modern&#237;ch prohl&#237;&#382;e&#269;&#237;ch.</div>'
+    + '<div class="doc-sec-hdr">Jazykov&#233; pokryt&#237; (_i18n.js) &#8212; live data</div>'
+    + i18nHtml;
+}
+
+function buildTS3() {
+  // Live OIL stats
+  var statsHtml = '';
+  if (_oilData && _oilData.tasks) {
+    var tasks = _oilData.tasks;
+    var byStatus = {};
+    tasks.forEach(function(t) { byStatus[t.status] = (byStatus[t.status] || 0) + 1; });
+    var withEst = tasks.filter(function(t) { return t.estimatedTime != null; }).length;
+    var totalEst = tasks.reduce(function(s, t) { return s + (t.estimatedTime || 0); }, 0);
+    statsHtml = '<div class="doc-stat-row">'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+tasks.length+'</div><div class="doc-stat-lbl">Celkem &#250;kol&#367;</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+(byStatus['OPEN']||0)+'</div><div class="doc-stat-lbl">OPEN</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+(byStatus['IN PROGRESS']||0)+'</div><div class="doc-stat-lbl">IN PROGRESS</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+(byStatus['CLOSED']||0)+'</div><div class="doc-stat-lbl">CLOSED</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+Math.round(withEst/tasks.length*100)+'%</div><div class="doc-stat-lbl">S odhadem</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+Math.round(totalEst/60)+'h</div><div class="doc-stat-lbl">Celkov&#253; odhad</div></div>'
+      +'</div>'
+      +(function(){
+        var srcLabel = _oilSource==='live'    ? '&#128994; live (Development)'
+                     : _oilSource==='archive' ? '&#128993; archiv (snapshot)'
+                     : _oilSource==='cache'   ? '&#128309; cache (localStorage)'
+                     : '&#9898; nezn&#225;m&#253;';
+        return '<div class="doc-note">Zdroj dat: <b>'+srcLabel+'</b> &nbsp;&#183;&nbsp; OIL.json v'+esc(_oilData.version||'?')+' &nbsp;&#183;&nbsp; '+esc(_oilData.lastUpdated||'?')+' &nbsp;&#183;&nbsp; Audity: '+((_oilData.audits||[]).length)+'</div>';
+      })();
+  } else {
+    statsHtml = '<div class="doc-note">OIL.json nedostupn&#253; &#8212; spus&#357;te p&#345;es HTTP server (<code class="doc-code">DO_SERVER.ps1</code>). V archivu: OIL.json mus&#237; b&#253;t zkop&#237;rov&#225;n do slo&#382;ky archivu pomoc&#237; <code class="doc-code">AUTO_ARCHIVE.bat</code>.</div>';
+  }
+
+  // Schema table
+  var schHtml = '<table class="doc-tbl"><thead><tr><th>Pole</th><th>Typ</th><th>Povinn&#233;</th><th>Popis</th></tr></thead><tbody>';
+  DOCS_CONFIG.oilSchema.forEach(function(f) {
+    schHtml += '<tr>'
+      +'<td><code class="doc-code">'+esc(f.field)+'</code></td>'
+      +'<td><code class="doc-code" style="color:#d2a8ff">'+esc(f.type)+'</code></td>'
+      +'<td>'+(f.req ? badge('&#10003;','db-active') : '<span style="color:#484f58">&#8212;</span>')+'</td>'
+      +'<td style="color:#8b949e;font-size:11px">'+esc(f.desc)+'</td>'
+      +'</tr>';
+  });
+  schHtml += '</tbody></table>';
+
+  // localStorage
+  var lsHtml = '<table class="doc-tbl"><thead><tr><th>Kl&#237;&#269;</th><th>FC</th><th>Popis</th></tr></thead><tbody>';
+  DOCS_CONFIG.localStorage.forEach(function(k) {
+    lsHtml += '<tr>'
+      +'<td><code class="doc-code">'+esc(k.key)+'</code></td>'
+      +'<td><b>'+esc(k.fc)+'</b></td>'
+      +'<td style="color:#8b949e;font-size:11px">'+esc(k.desc)+'</td>'
+      +'</tr>';
+  });
+  lsHtml += '</tbody></table>';
+
+  return '<div class="doc-sec-hdr">OIL.json &#8212; live statistiky</div>'
+    + statsHtml
+    + '<div class="doc-sec-hdr">OIL.json &#8212; schema (v3.0)</div>'
+    + schHtml
+    + '<div class="doc-sec-hdr">localStorage kl&#237;&#269;e</div>'
+    + lsHtml
+    + '<div class="doc-warn">&#9888; Phase 0: data jsou ulo&#382;ena pouze client-side. &#381;&#225;dn&#225; synchronizace mezi u&#382;ivateli &#8212; sd&#237;len&#237; = fyzick&#233; kop&#237;rov&#225;n&#237; OIL.json p&#345;es OneDrive.</div>';
+}
+
+function buildTS4() {
+  var intHtml = '<table class="doc-tbl"><thead><tr><th>Integrace</th><th>Typ</th><th>Status</th><th>Popis</th></tr></thead><tbody>';
+  DOCS_CONFIG.integrations.forEach(function(i) {
+    var stCls = i.status === 'Active' ? 'db-active' : 'db-planned';
+    intHtml += '<tr>'
+      +'<td><code class="doc-code">'+esc(i.name)+'</code></td>'
+      +'<td style="color:#8b949e">'+esc(i.type)+'</td>'
+      +'<td>'+badge(i.status, stCls)+'</td>'
+      +'<td style="color:#8b949e;font-size:11px">'+esc(i.desc)+'</td>'
+      +'</tr>';
+  });
+  intHtml += '</tbody></table>';
+
+  return '<div class="doc-sec-hdr">Integra&#269;n&#237; body &#8212; generov&#225;no z DOCS_CONFIG</div>'
+    + intHtml
+    + '<div class="doc-sec-hdr">appiq:// Protocol Handler &#8212; jak funguje</div>'
+    + '<div class="doc-steps">'
+    + step(1, 'Registrace (IT, jednor&#225;zov&#233;)', 'DO_REGISTER.ps1 spustit jako admin &#8212; zap&#237;&#353;e do Windows Registry: <code class="doc-code">HKCU\\Software\\Classes\\appiq\\shell\\open\\command</code> &rarr; PowerShell handler')
+    + step(2, 'Trigger z prohl&#237;&#382;e&#269;e', 'Klik na <code class="doc-code">appiq://archive</code> nebo <code class="doc-code">appiq://deploy</code> link v prohl&#237;&#382;e&#269;i &rarr; Windows p&#345;ed&#225; URL PowerShell skriptu')
+    + step(3, 'Parse &amp; execute', 'Handler parsuje p&#345;&#237;kaz: <code class="doc-code">appiq:archive</code> &rarr; spust&#237; DO_ARCHIVE.bat, <code class="doc-code">appiq:deploy</code> &rarr; DO_DEPLOY.ps1')
+    + step(4, 'Transparentn&#237; akce', 'Akce prob&#283;hne na pozad&#237; bez otev&#345;en&#237; nov&#233;ho okna &#8212; transparentn&#237; pro u&#382;ivatele')
+    + '</div>'
+    + '<div class="doc-note">SharePoint hosting nen&#237; podporov&#225;n &#8212; iframe restrictions a mixed content policy blokuj&#237; na&#269;ten&#237;. GitHub Pages nebo lok&#225;ln&#237; HTTP server (DO_SERVER.ps1) jsou doporu&#269;en&#233; mo&#382;nosti.</div>';
+}
+
+function buildTS5() {
+  return '<div class="doc-sec-hdr">Prerekvizizy</div>'
+    + '<ul class="doc-ul">'
+    + '<li>Windows 10 / Windows 11</li>'
+    + '<li>Google Chrome nebo Microsoft Edge 86+</li>'
+    + '<li>PowerShell 5+ (pro deployment skripty)</li>'
+    + '<li>Git (pro GitHub Pages deploy)</li>'
+    + '<li>OneDrive (pro sync mezi za&#345;&#237;zen&#237;mi &#8212; voliteln&#233;)</li>'
+    + '</ul>'
+    + '<div class="doc-sec-hdr">Jednor&#225;zov&#225; registrace (IT)</div>'
+    + '<div class="doc-steps">'
+    + step(1, 'Z&#237;skat k&#243;d', 'Naklonovat GitHub repozit&#225;&#345; nebo zkop&#237;rovat p&#345;es OneDrive na v&#353;echny stanice')
+    + step(2, 'Registrovat Protocol Handler', 'Spustit jako admin: <code class="doc-code">DO_REGISTER.ps1</code> &#8212; zap&#237;&#353;e <code class="doc-code">appiq://</code> do Windows Registry')
+    + step(3, 'Otestovat spou&#353;t&#283;n&#237;', 'Otev&#345;&#237;t <code class="doc-code">Development/index.html</code> v Chrome &rarr; Studio Hub mus&#237; na&#269;&#237;st v&#353;echna centra')
+    + step(4, 'HTTP server (voliteln&#233;)', 'Spustit <code class="doc-code">DO_SERVER.ps1</code> &rarr; lok&#225;ln&#237; server port 8080 &#8212; nutn&#233; pro fetch() a live data v Hub + Documentation Center')
+    + '</div>'
+    + '<div class="doc-sec-hdr">Archivace verze</div>'
+    + '<div class="doc-pre">AUTO_ARCHIVE.bat &#8212; archivuje aktu&#225;ln&#237; verzi:\n'
+    +'1. Zkop&#237;ruje HOPI_AppIQ_WebPage/Development/ &rarr; Archive/WEB/v7.xx/\n'
+    +'2. Zkop&#237;ruje HOPI_AppIQ/Development/        &rarr; Archive/APP/v7.xx/\n'
+    +'3. Aktualizuje _SESSION_START/ snapshoty (OIL.json, ARCH_MAP, BRIEFING)\n'
+    +'4. Aktualizuje CHANGELOG.md</div>'
+    + '<div class="doc-sec-hdr">Nasazen&#237; na GitHub Pages</div>'
+    + '<div class="doc-pre">DO_DEPLOY.ps1 &#8212; kompletn&#237; deploy pipeline:\n'
+    +'1. git add . + git commit -m "v7.xx release"\n'
+    +'2. git push origin gh-pages\n'
+    +'3. GitHub Actions &rarr; publikov&#225;no na https://h-gr-fico.github.io/appiq/</div>';
+}
+
+function buildTS6() {
+  return '<div class="doc-sec-hdr">Bezpe&#269;nostn&#237; model &#8212; Phase 0</div>'
+    + '<div class="doc-warn">&#9888; Phase 0 = trust-based. &#381;&#225;dn&#225; autentizace, &#382;&#225;dn&#233; backend API. Vhodn&#233; pro intern&#237; pilot v kontrolovan&#233;m prost&#345;ed&#237;. <b>P&#345;ed &#353;ir&#353;&#237;m nasazen&#237;m nutn&#253; p&#345;echod na Phase 1 (Azure AD).</b></div>'
+    + '<table class="doc-tbl"><thead><tr><th>Oblast</th><th>Phase 0 (aktu&#225;ln&#237;)</th><th>Phase 1 (pl&#225;nov&#225;no)</th></tr></thead><tbody>'
+    + '<tr><td><b>Autentizace</b></td><td style="color:#f0883e">&#381;&#225;dn&#225; &#8212; trust-based</td><td style="color:#3fb950">Azure AD / Microsoft SSO</td></tr>'
+    + '<tr><td><b>Autorizace</b></td><td style="color:#f0883e">&#381;&#225;dn&#225; &#8212; kdo otev&#345;e, m&#225; p&#345;&#237;stup</td><td style="color:#3fb950">Role-based (Admin/User/Viewer)</td></tr>'
+    + '<tr><td><b>Data storage</b></td><td style="color:#f0883e">localStorage + OIL.json (plain text)</td><td style="color:#3fb950">SharePoint / Azure Blob</td></tr>'
+    + '<tr><td><b>Transport</b></td><td style="color:#8b949e">File:// nebo localhost</td><td style="color:#3fb950">HTTPS (GitHub Pages)</td></tr>'
+    + '<tr><td><b>Audit log</b></td><td style="color:#8b949e">OIL.json (ru&#269;n&#237;)</td><td style="color:#3fb950">Azure AD audit log</td></tr>'
+    + '</tbody></table>'
+    + '<div class="doc-sec-hdr">Extension Guide &#8212; p&#345;idat nov&#233; FC</div>'
+    + '<div class="doc-steps">'
+    + step(1, 'Vytvo&#345;it OIL &#250;kol', 'Admin Center &rarr; + P&#345;idat &#250;kol &#8212; vyplnit taskType=development, effort, estimatedTime, assignee')
+    + step(2, 'Vytvo&#345;it HTML soubor', 'Nov&#225; slo&#382;ka <code class="doc-code">Development/nazev/index.html</code> &#8212; zkop&#237;rovat strukturu z nejbli&#382;&#353;&#237;ho existuj&#237;c&#237;ho FC')
+    + step(3, 'P&#345;idat kartu do Hub', '<code class="doc-code">Development/index.html</code> &#8212; p&#345;idat <code class="doc-code">.hub-card</code> do sekce Centers s nov&#253;m FC')
+    + step(4, 'P&#345;idat i18n kl&#237;&#269;e', '<code class="doc-code">_i18n.js</code> &#8212; p&#345;idat CS + EN kl&#237;&#269;e pro nav, tabs a obsah nov&#233; str&#225;nky')
+    + step(5, 'Aktualizovat ARCH_MAP.md', 'P&#345;idat nov&#253; FC do tabulky a sekce MAPA VAZEB')
+    + step(6, 'Aktualizovat DOCS_CONFIG', '<code class="doc-code">docs/index.html</code> &rarr; DOCS_CONFIG.fcs &#8212; dokumentace se aktualizuje automaticky')
+    + '</div>'
+    + '<div class="doc-sec-hdr">Extension Guide &#8212; p&#345;idat nov&#253; jazyk</div>'
+    + '<div class="doc-steps">'
+    + step(1, 'P&#345;idat do _META', '<code class="doc-code">_i18n.js</code> &rarr; _META objekt: k&#243;d, n&#225;zev, flag emoji, scope, status')
+    + step(2, 'P&#345;idat p&#345;ekladovou sekci', 'Zkop&#237;rovat EN sekci &#8212; p&#345;elo&#382;it v&#353;echny kl&#237;&#269;e. Zachovat stejn&#253; set kl&#237;&#269;&#367; jako CS (reference language).')
+    + step(3, 'P&#345;idat lang button', 'P&#345;idat <code class="doc-code">&lt;button data-lang="xx"&gt;</code> do .lang-switch na ka&#382;d&#233; str&#225;nce')
+    + '</div>';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BUSINESS SPEC
+// ═══════════════════════════════════════════════════════════════════════════
+function renderBizSpec() {
+  var h = '';
+  h += acc('bs1', 'BS-1 — Executive Summary + Business Case', 'CEO/CFO', buildBS1(), true);
+  h += acc('bs2', 'BS-2 — Module Catalog', 'DOCS_CONFIG', buildBS2(), false);
+  h += acc('bs3', 'BS-3 — Deployment Phases + Roadmap', 'Phase 0 ACTIVE', buildBS3(), false);
+  h += acc('bs4', 'BS-4 — User Roles + Success Metrics', 'KPIs', buildBS4(), false);
+  document.getElementById('pane-biz').innerHTML = h;
+}
+
+function buildBS1() {
+  var statsHtml = '';
+  if (_oilData && _oilData.tasks) {
+    var tasks = _oilData.tasks;
+    var open = tasks.filter(function(t) { return t.status==='OPEN'||t.status==='IN PROGRESS'||t.status==='REVIEW'; }).length;
+    var closed = tasks.filter(function(t) { return t.status==='CLOSED'; }).length;
+    var totalEst = tasks.reduce(function(s,t) { return s+(t.estimatedTime||0); }, 0);
+    statsHtml = '<div class="doc-stat-row">'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+tasks.length+'</div><div class="doc-stat-lbl">Celkem OIL &#250;kol&#367;</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+open+'</div><div class="doc-stat-lbl">Otev&#345;en&#253;ch</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+closed+'</div><div class="doc-stat-lbl">Ukon&#269;en&#253;ch</div></div>'
+      +'<div class="doc-stat"><div class="doc-stat-val">'+Math.round(totalEst/60)+'h</div><div class="doc-stat-lbl">Odhadnut&#253; effort</div></div>'
+      +'</div>';
+  }
+  return '<div class="doc-p"><b>HOPI AppIQ</b> je AI-powered Enterprise Application Platform budovan&#225; zevnit&#345; skupiny HOPI Holding. Finance t&#253;m skupiny ji vyu&#382;&#237;v&#225; jako centr&#225;ln&#237; port&#225;l pro controlling &#8212; finan&#269;n&#237; uz&#225;v&#283;rky, tracking, reporting a integraci na SAP, BNS a IDWare syst&#233;my.</div>'
+    + '<div class="doc-sec-hdr">Pro&#269; AppIQ vznikla</div>'
+    + '<ul class="doc-ul">'
+    + '<li>Heterogenn&#237; IT stack HOPI &#8212; SAP, BNS, IDWare, SharePoint, Excel &#8212; bez centr&#225;ln&#237;ho vstupu pro u&#382;ivatele</li>'
+    + '<li>Ka&#382;d&#225; divize pracuje jinak, duplicitn&#237; procesy, &#382;&#225;dn&#225; sd&#237;len&#225; platforma</li>'
+    + '<li>P&#345;&#237;chod AI (Claude/Anthropic) otev&#345;el mo&#382;nost budovat intern&#237; IT platformu zevnit&#345; &#8212; bez akvizice</li>'
+    + '</ul>'
+    + '<div class="doc-sec-hdr">Strategick&#225; hodnota pro HOPI</div>'
+    + '<table class="doc-tbl"><thead><tr><th>Rozm&#283;r</th><th>Hodnota</th></tr></thead><tbody>'
+    + '<tr><td>&#218;spora &#269;asu</td><td>C&#237;l: -2h / finan&#269;n&#237; uz&#225;v&#283;rka / FTE</td></tr>'
+    + '<tr><td>Jazykov&#225; podpora</td><td>9 jazyk&#367; (CS/EN aktivn&#237;, 7 planned) &#8212; HOPI Group 5 zem&#237;</td></tr>'
+    + '<tr><td>Budouc&#237; u&#382;ivatel&#233;</td><td>5 000+ zam&#283;stnanc&#367; skupiny (Phase 1)</td></tr>'
+    + '<tr><td>Komer&#269;n&#237; potenci&#225;l</td><td>Spin-off HOPI TechIQ s.r.o. &#8212; SaaS model (Phase 2)</td></tr>'
+    + '<tr><td>Valuace (odhad)</td><td>&#8364;12M &#8211; &#8364;86M (konzervativn&#237; &#8211; optimistick&#253; sc&#233;n&#225;&#345;)</td></tr>'
+    + '</tbody></table>'
+    + '<div class="doc-sec-hdr">Stav projektu &#8212; live data</div>'
+    + statsHtml
+    + '<div class="doc-ok">&#9989; Phase 0 Finance Pilot je v provozu. Studio Hub (FC-1) + Admin Center (FC-5) + Dev Center (FC-3) + Documentation Center (FC-7) aktivn&#237;. Finance Portal (FC-2) dostupn&#253;.</div>';
+}
+
+function buildBS2() {
+  var h = '';
+  DOCS_CONFIG.domains.forEach(function(d) {
+    var stCls = (d.status==='Phase 0'||d.status==='Active') ? 'db-active' : 'db-planned';
+    h += '<div class="doc-sec-hdr">'+esc(d.name)+'  <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:11px">('+esc(d.stream)+')</span>'
+      +'  '+badge(d.status, stCls)+'</div>';
+    h += '<div class="module-chips">';
+    d.modules.forEach(function(m) {
+      h += '<span class="module-chip">'+esc(m)+'</span>';
+    });
+    h += '</div>';
+  });
+  h += '<div class="doc-note">Modul&#225;rn&#237; katalog je definov&#225;n v DOCS_CONFIG.domains (tato str&#225;nka) a zrcadl&#237; PORTAL_ARCHITECTURE.md Module Registry. Detail per modul (popis, stav, mockup) bude dopl&#328;ov&#225;n postupn&#283; v AIQ-00057.</div>';
+  return h;
+}
+
+function buildBS3() {
+  var h = '';
+  DOCS_CONFIG.phases.forEach(function(p, i) {
+    var cls = p.status === 'ACTIVE' ? 'active' : 'planned';
+    h += '<div class="phase-card '+cls+'">'
+      +'<div class="phase-card-hdr">'
+      +'<span class="phase-card-num">'+(i+1)+'</span>'
+      +'<span class="phase-card-name">'+esc(p.id)+' &#8212; '+esc(p.name)+'</span>'
+      +badge(p.status, p.status==='ACTIVE'?'db-active':'db-planned')
+      +'<span class="phase-card-target">C&#237;l: '+esc(p.target)+'</span>'
+      +'</div>'
+      +'<div class="phase-card-desc">'+esc(p.desc)+'</div>'
+      +'</div>';
+  });
+  h += '<div class="doc-note">Podm&#237;nka p&#345;echodu Phase 0 &#8594; 1: IT souhlas, Azure AD integrace, min. 3 m&#283;s&#237;ce v provozu. Phase 1 &#8594; 2: z&#225;jem 2+ extern&#237;ch z&#225;kazn&#237;k&#367;, pr&#225;vn&#237; struktura HOPI TechIQ s.r.o.</div>';
+  return h;
+}
+
+function buildBS4() {
+  var rHtml = '<table class="doc-tbl"><thead><tr><th>Role</th><th>U&#382;ivatel</th><th>P&#345;&#237;stup</th></tr></thead><tbody>';
+  DOCS_CONFIG.roles.forEach(function(r) {
+    rHtml += '<tr><td><b>'+esc(r.role)+'</b></td><td>'+esc(r.user)+'</td><td style="color:#8b949e;font-size:11px">'+esc(r.access)+'</td></tr>';
+  });
+  rHtml += '</tbody></table>';
+
+  var kpiHtml = '<table class="doc-tbl"><thead><tr><th>KPI</th><th>C&#237;l</th><th>M&#283;&#345;en&#237;</th><th>Status</th></tr></thead><tbody>'
+    +'<tr><td>Adoption rate</td><td>80% Finance t&#253;mu aktivn&#237;ch t&#253;dn&#283;</td><td>Manu&#225;ln&#237; (Phase 0)</td><td>'+badge('Sleduje se','db-planned')+'</td></tr>'
+    +'<tr><td>&#218;spora &#269;asu / uz&#225;v&#283;rka</td><td>-2h / FTE / uz&#225;v&#283;rka</td><td>Self-reporting</td><td>'+badge('Baseline Q2 2026','db-planned')+'</td></tr>'
+    +'<tr><td>NPS</td><td>&gt;50</td><td>Quarterly survey</td><td>'+badge('Q3 2026','db-planned')+'</td></tr>'
+    +'<tr><td>Modul&#367; Live</td><td>10 (Finance Phase 0)</td><td>DOCS_CONFIG.domains</td><td>'+badge('&#10003; Dosa&#382;eno','db-active')+'</td></tr>'
+    +'<tr><td>Jazykov&#225; podpora</td><td>9 jazyk&#367;</td><td>I18n.langs()</td><td>'+badge('2/9 aktivn&#237;','db-planned')+'</td></tr>'
+    +'</tbody></table>';
+
+  return rHtml
+    + '<div class="doc-sec-hdr">KPIs &#8212; metriky &#250;sp&#283;chu</div>'
+    + kpiHtml;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DIAGRAMS
+// ═══════════════════════════════════════════════════════════════════════════
+function renderDiagrams() {
+  var h = '';
+  h += acc('gd1', 'GD-1 — Platform Architecture Schema', 'HTML/CSS', buildGD1(), true);
+  h += acc('gd2', 'GD-2 — Navigation Flow', 'Mermaid', buildGD2(), false);
+  h += acc('gd3', 'GD-3 — Business Process Diagrams', 'Mermaid', buildGD3(), false);
+  h += acc('gd4', 'GD-4 — Technical Data Flow', 'Mermaid', buildGD4(), false);
+  document.getElementById('pane-diag').innerHTML = h;
+  if (_mermaidLoaded) { try { mermaid.run(); } catch(e) {} }
+}
+
+function buildGD1() {
+  var grid = '<div class="gd1-grid">';
+  DOCS_CONFIG.fcs.forEach(function(fc) {
+    var stCls = fc.status==='ACTIVE'?'db-active':fc.status==='STUB'?'db-stub':'db-planned';
+    grid += '<div class="gd1-card" style="--fc-color:'+fc.color+'">'
+      +'<div class="gd1-card-icon">'+fc.icon+'</div>'
+      +'<div class="gd1-card-id">'+esc(fc.id)+' &#183; '+esc(fc.stream)+'</div>'
+      +'<div class="gd1-card-name">'+esc(fc.name)+'</div>'
+      +'<div class="gd1-card-desc">'+esc(fc.desc)+'</div>'
+      +badge(fc.status, stCls)
+      +'</div>';
+  });
+  grid += '</div>';
+
+  var webFcs = DOCS_CONFIG.fcs.filter(function(f){ return f.stream==='WEB'; });
+  var appFcs = DOCS_CONFIG.fcs.filter(function(f){ return f.stream==='APP'; });
+
+  var streams = '<div class="gd1-streams">'
+    +'<div class="gd1-stream web"><div class="gd1-stream-hdr">&#127760; WEB Stream &#8212; HOPI_AppIQ_WebPage/</div>';
+  webFcs.forEach(function(fc) {
+    streams += '<div class="gd1-stream-item"><span class="doc-fc-dot" style="background:'+fc.color+'"></span><b>'+esc(fc.id)+'</b> '+fc.icon+' '+esc(fc.name)+'</div>';
+  });
+  streams += '</div><div class="gd1-stream app"><div class="gd1-stream-hdr">&#128241; APP Stream &#8212; HOPI_AppIQ/</div>';
+  appFcs.forEach(function(fc) {
+    streams += '<div class="gd1-stream-item"><span class="doc-fc-dot" style="background:'+fc.color+'"></span><b>'+esc(fc.id)+'</b> '+fc.icon+' '+esc(fc.name)+'</div>';
+  });
+  streams += '<div class="gd1-stream-item" style="color:#484f58;font-size:10px;font-style:italic">Budouc&#237; APP centra: Operations, Purchasing, HR&#8230;</div>';
+  streams += '</div></div>';
+
+  return '<div class="doc-sec-hdr">V&#353;echna Functional Centers &#8212; live z DOCS_CONFIG.fcs</div>'
+    + grid
+    + '<div class="doc-sec-hdr">Dvoj&#237; stream platformy</div>'
+    + streams
+    + '<div class="doc-note">Diagram je generov&#225;n &#382;iv&#283; z <code class="doc-code">DOCS_CONFIG.fcs</code>. P&#345;id&#225;n&#237; nov&#233;ho FC = p&#345;idat objekt do pole &rarr; GD-1 se aktualizuje automaticky.</div>';
+}
+
+function buildGD2() {
+  return '<div class="doc-note">&#128204; Mermaid diagram se vykreslu je po na&#269;ten&#237; Mermaid.js CDN. P&#345;i prvn&#237;m otev&#345;en&#237; t&#233;to z&#225;lo&#382;ky se CDN na&#269;te automaticky.</div>'
+    +'<div class="mermaid-wrap"><div class="mermaid">%%{init:{\'theme\':\'dark\'}}%%\ngraph LR\n'
+    +'    U([&#128100; U&#382;ivatel]) --> HUB\n'
+    +'    subgraph WEB["&#127760; WEB Stream"]\n'
+    +'        HUB["&#128202; FC-1\\nStudio Hub\\nindex.html"]\n'
+    +'        ADM["&#9881; FC-5\\nAdmin Center\\nadmin/"]\n'
+    +'        DEV["&#128506; FC-3\\nDev Center\\ndev/"]\n'
+    +'        TST["&#9989; FC-4\\nTest Center\\ntest/ STUB"]\n'
+    +'        PRO["&#128640; FC-6\\nPromo Web\\npromo/"]\n'
+    +'        DOC["&#128218; FC-7\\nDocs Center\\ndocs/"]\n'
+    +'        PREZ["&#127917; Prezentace\\nPORTAL_PRESENTATION"]\n'
+    +'    end\n'
+    +'    subgraph APP["&#128241; APP Stream"]\n'
+    +'        FIN["&#128188; FC-2\\nFinance Portal\\nHOPI_AppIQ/"]\n'
+    +'    end\n'
+    +'    HUB --> ADM & DEV & TST & PRO & DOC & PREZ & FIN\n'
+    +'    ADM --> HUB\n'
+    +'    DEV --> HUB\n'
+    +'    DOC --> HUB\n'
+    +'    style HUB fill:#E8750A,color:#fff\n'
+    +'    style ADM fill:#c0392b,color:#fff\n'
+    +'    style DEV fill:#1565c0,color:#fff\n'
+    +'    style DOC fill:#26c6da,color:#010409\n'
+    +'    style FIN fill:#f0883e,color:#010409\n'
+    +'    style TST fill:#6a1b9a,color:#fff\n'
+    +'    style PRO fill:#007d32,color:#fff\n'
+    +'</div></div>';
+}
+
+function buildGD3() {
+  return '<div class="doc-note">Financial Closing Process &#8212; end-to-end postup finan&#269;n&#237; uz&#225;v&#283;rky v AppIQ platform&#283;.</div>'
+    +'<div class="mermaid-wrap"><div class="mermaid">%%{init:{\'theme\':\'dark\'}}%%\ngraph TD\n'
+    +'    T([&#128276; Trigger\\nUz&#225;v&#283;rka]) --> C[&#128197; Calendar\\nN&#225;pl&#225;novat uz&#225;v&#283;rku]\n'
+    +'    C --> TR[&#128203; Tracking\\nZadat &#250;koly t&#253;mu]\n'
+    +'    TR --> D{Data kompletn&#237;?}\n'
+    +'    D -- Ne --> TR\n'
+    +'    D -- Ano --> R[&#128202; Reporting\\nGenerovat reporty]\n'
+    +'    R --> FX[&#128178; FX\\nAktualizovat kurzy]\n'
+    +'    FX --> SAP[&#127970; SAP / BNS\\nExport dat]\n'
+    +'    SAP --> REV[&#128065; Review\\nKontroling schvaluje]\n'
+    +'    REV --> A{Schv&#225;leno?}\n'
+    +'    A -- Vr&#225;ceno --> TR\n'
+    +'    A -- Ano --> SIGN[&#9989; Sign-off\\nUz&#225;v&#283;rka uzav&#345;ena]\n'
+    +'    style T fill:#26c6da,color:#010409\n'
+    +'    style SIGN fill:#3fb950,color:#010409\n'
+    +'    style D fill:#f0883e,color:#fff\n'
+    +'    style A fill:#f0883e,color:#fff\n'
+    +'</div></div>';
+}
+
+function buildGD4() {
+  return '<div class="doc-note">Technick&#253; datov&#253; tok &#8212; kdo &#269;te a zapisuje kl&#237;&#269;ov&#233; soubory platformy.</div>'
+    +'<div class="mermaid-wrap"><div class="mermaid">%%{init:{\'theme\':\'dark\'}}%%\ngraph LR\n'
+    +'    subgraph Files["&#128193; Sd&#237;len&#233; soubory"]\n'
+    +'        OIL["OIL.json"]\n'
+    +'        I18N["_i18n.js"]\n'
+    +'        VER["_ver.js"]\n'
+    +'        STAT["_status.json"]\n'
+    +'        LS["localStorage"]\n'
+    +'    end\n'
+    +'    subgraph FCs["&#128187; Functional Centers"]\n'
+    +'        HUB["FC-1 Hub"]\n'
+    +'        ADM["FC-5 Admin"]\n'
+    +'        DEV["FC-3 Dev"]\n'
+    +'        DOC["FC-7 Docs"]\n'
+    +'    end\n'
+    +'    OIL -->|fetch read| HUB\n'
+    +'    OIL -->|File System API read+write| ADM\n'
+    +'    OIL -->|fetch read| DOC\n'
+    +'    I18N -->|script include| HUB\n'
+    +'    I18N -->|script include| ADM\n'
+    +'    I18N -->|script include| DEV\n'
+    +'    I18N -->|script include| DOC\n'
+    +'    VER -->|script include| HUB\n'
+    +'    VER -->|script include| DOC\n'
+    +'    STAT -->|fetch read| HUB\n'
+    +'    STAT -->|fetch read| ADM\n'
+    +'    HUB & ADM -->|read/write| LS\n'
+    +'    style OIL fill:#f0883e,color:#010409\n'
+    +'    style I18N fill:#26c6da,color:#010409\n'
+    +'    style LS fill:#484f58,color:#fff\n'
+    +'    style DOC fill:#26c6da,color:#010409\n'
+    +'</div></div>';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ARCHIVE INFO — načte VERSION.txt + CHANGELOG.md z archivní složky
+// Funguje jen v archivu (../VERSION.txt tam existuje, v Development/ ne)
+// ═══════════════════════════════════════════════════════════════════════════
+function loadArchiveInfo() {
+  fetch('../VERSION.txt?_=' + Date.now())
+    .then(function(r) { if (!r.ok) throw 0; return r.text(); })
+    .then(function(txt) {
+      // FORMAT: session_xxx | YYYY-MM-DD HH:MM | v7.xx | note
+      var parts = txt.trim().split(' | ');
+      _archiveInfo = {
+        session:  (parts[0] || '').trim(),
+        date:     (parts[1] || '').trim(),
+        version:  (parts[2] || '').trim(),
+        note:     (parts[3] || '').trim(),
+        changelog: null
+      };
+      // Načíst CHANGELOG.md ze stejné archivní složky
+      return fetch('../CHANGELOG.md?_=' + Date.now());
+    })
+    .then(function(r) { return r && r.ok ? r.text() : null; })
+    .then(function(md) {
+      if (md && _archiveInfo) {
+        _archiveInfo.changelog = _parseFirstChangelogSection(md);
+      }
+      // Překreslit TS-1 s archivním panelem
+      renderTechSpec();
+    })
+    .catch(function() {
+      // Nejsme v archivu nebo soubory chybí — nic nezobrazit
+      _archiveInfo = null;
+    });
+}
+
+function _parseFirstChangelogSection(md) {
+  // Extrahuje první ## sekci z CHANGELOG.md (= nejnovější release)
+  // Vrátí pole řádků (max. 60) pro zobrazení
+  var lines = md.split('\n');
+  var result = [];
+  var inSection = false;
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i];
+    if (line.match(/^## /)) {
+      if (inSection) break; // konec první sekce
+      inSection = true;
+      result.push(line);
+    } else if (inSection) {
+      if (line.match(/^---\s*$/)) break; // oddělovač = konec sekce
+      result.push(line);
+      if (result.length >= 60) { result.push('…'); break; }
+    }
+  }
+  return result.join('\n').trim();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════
+
+// ── Version stamp — přiřadit DOCS_CONFIG._version z _ver.js ──────────────
+// Toto je klíčové: při archivaci se _ver.js zkopíruje spolu s docs/index.html
+// → DOCS_CONFIG._version = verze platná v okamžiku archivace
+DOCS_CONFIG._version     = (typeof PREZ_VERSION !== 'undefined') ? PREZ_VERSION : '?';
+DOCS_CONFIG._archivedAt  = null; // vyplní AUTO_ARCHIVE.bat — viz níže
+DOCS_CONFIG._builtAt     = (function() {
+  // Pokus načíst _archivedAt z VERSION.txt přes fetch (dostupné jen v archivu)
+  fetch('../VERSION.txt').then(function(r){ return r.ok ? r.text() : null; }).then(function(t){
+    if (t) DOCS_CONFIG._archivedAt = t.trim().split('|')[1] || null;
+  }).catch(function(){});
+  return new Date().toISOString().slice(0,10);
+})();
+
+// Version in nav
+(function() {
+  var el = document.getElementById('docVer');
+  if (el) el.textContent = DOCS_CONFIG._version;
+})();
+
+// i18n
+I18n.init();
+
+// Lang button state sync
+(function() {
+  function syncLangBtns() {
+    var lang = I18n.getLang();
+    document.querySelectorAll('.lang-btn').forEach(function(b) {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+  }
+  syncLangBtns();
+  var _orig = I18n.setLang.bind(I18n);
+  I18n.setLang = function(l) { _orig(l); syncLangBtns(); };
+})();
+
+// Load OIL + render
+loadOIL();
+
+// Archive info — detekce archivního módu a načtení release notes
+loadArchiveInfo();
+</script>
+<script src="../../../_hopiq.js"></script>
+<script src="../_ver-badge.js"></script>
+</body>
+</html>

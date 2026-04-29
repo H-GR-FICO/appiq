@@ -1,0 +1,141 @@
+/* ── HOPIQ Chat Widget ────────────────────────────────────────────────────── */
+/* Sdíleno všemi stránkami AppIQ. Umístění: CO_PROJECT root.                  */
+
+#hopiq-btn {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  background: #007d32;
+  border: none; cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,125,50,.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 10000;
+  transition: transform .2s, box-shadow .2s;
+}
+#hopiq-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(0,125,50,.6); }
+#hopiq-btn svg { width: 26px; height: 26px; fill: #fff; }
+#hopiq-btn .hopiq-badge {
+  position: absolute; top: -2px; right: -2px;
+  background: #E8750A; color: #fff;
+  font-size: 9px; font-weight: 700;
+  border-radius: 8px; padding: 1px 5px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  letter-spacing: .5px;
+}
+
+#hopiq-panel {
+  position: fixed;
+  bottom: 92px; right: 28px;
+  width: 360px; max-height: 520px;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 14px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.6);
+  display: flex; flex-direction: column;
+  z-index: 10002;
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  transition: opacity .2s, transform .2s;
+}
+#hopiq-panel.hopiq-hidden {
+  opacity: 0; pointer-events: none;
+  transform: translateY(10px);
+}
+
+.hopiq-hdr {
+  background: #0d1117;
+  border-bottom: 1px solid #30363d;
+  padding: 12px 16px;
+  display: flex; align-items: center; gap: 10px;
+  flex-shrink: 0;
+}
+.hopiq-hdr-bar { width: 3px; height: 20px; background: #007d32; border-radius: 2px; }
+.hopiq-hdr-title {
+  font-size: 13px; font-weight: 700; color: #fff;
+  letter-spacing: 1px; flex: 1;
+}
+.hopiq-hdr-title span { color: #007d32; }
+.hopiq-hdr-close {
+  background: transparent; border: none;
+  color: #8b949e; font-size: 16px; cursor: pointer; padding: 0 2px;
+  line-height: 1;
+}
+.hopiq-hdr-close:hover { color: #e6edf3; }
+
+.hopiq-messages {
+  flex: 1; overflow-y: auto;
+  padding: 14px 14px 8px;
+  display: flex; flex-direction: column; gap: 10px;
+  min-height: 80px;
+}
+.hopiq-messages::-webkit-scrollbar { width: 4px; }
+.hopiq-messages::-webkit-scrollbar-track { background: transparent; }
+.hopiq-messages::-webkit-scrollbar-thumb { background: #30363d; border-radius: 2px; }
+
+.hopiq-msg {
+  max-width: 88%; padding: 9px 13px;
+  border-radius: 10px; font-size: 13px; line-height: 1.55;
+  word-break: break-word;
+}
+.hopiq-msg.user {
+  background: #007d32; color: #fff;
+  align-self: flex-end; border-bottom-right-radius: 3px;
+}
+.hopiq-msg.assistant {
+  background: #1c2128; color: #e6edf3;
+  border: 1px solid #30363d;
+  align-self: flex-start; border-bottom-left-radius: 3px;
+}
+.hopiq-msg.system-msg {
+  background: transparent; color: #8b949e;
+  font-size: 11px; text-align: center;
+  border: none; max-width: 100%; padding: 4px 0;
+}
+.hopiq-typing {
+  display: flex; gap: 4px; align-items: center; padding: 10px 13px;
+  background: #1c2128; border: 1px solid #30363d;
+  border-radius: 10px; border-bottom-left-radius: 3px;
+  align-self: flex-start;
+}
+.hopiq-typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #8b949e; animation: hopiq-bounce .9s infinite;
+}
+.hopiq-typing span:nth-child(2) { animation-delay: .15s; }
+.hopiq-typing span:nth-child(3) { animation-delay: .3s; }
+@keyframes hopiq-bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}
+
+.hopiq-input-row {
+  padding: 10px 12px 12px;
+  display: flex; gap: 8px; align-items: flex-end;
+  border-top: 1px solid #30363d;
+  flex-shrink: 0;
+}
+#hopiq-input {
+  flex: 1; background: #0d1117;
+  border: 1px solid #30363d; border-radius: 8px;
+  color: #e6edf3; font-size: 13px;
+  padding: 8px 11px; resize: none;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  outline: none; max-height: 90px; line-height: 1.4;
+}
+#hopiq-input:focus { border-color: #007d32; }
+#hopiq-input::placeholder { color: #484f58; }
+#hopiq-send {
+  background: #007d32; border: none; border-radius: 8px;
+  width: 36px; height: 36px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .15s;
+}
+#hopiq-send:hover { opacity: .85; }
+#hopiq-send:disabled { opacity: .4; cursor: default; }
+#hopiq-send svg { width: 16px; height: 16px; fill: #fff; }
+
+@media (max-width: 480px) {
+  #hopiq-panel { width: calc(100vw - 24px); right: 12px; bottom: 80px; }
+  #hopiq-btn   { bottom: 16px; right: 16px; }
+}
