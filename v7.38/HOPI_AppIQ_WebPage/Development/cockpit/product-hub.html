@@ -492,8 +492,8 @@
         <span class="ph-q-text">WHAT WE OFFER?</span>
         <span class="ph-q-sub" data-en="Product · platform · live components">Produkt · platforma · živé komponenty</span>
         <span class="ph-sec-progress">
-          <span class="ph-prog-live">3 live</span>
-          <span class="ph-prog-soon">2 coming</span>
+          <span class="ph-prog-live">4 live</span>
+          <span class="ph-prog-soon">1 coming</span>
         </span>
       </div>
       <div class="ph-tile-grid">
@@ -521,12 +521,12 @@
           <span class="ph-tile-open">Otevřít ↗</span>
         </a>
 
-        <div class="ph-tile ph-tile-soon">
+        <a class="ph-tile" href="../index.html">
           <span class="ph-tile-cat">studio</span>
           <span class="ph-tile-title">Studio</span>
           <span class="ph-tile-desc" data-en="Design lab · prototyping environment">Design lab · prototypovací prostředí</span>
-          <span class="ph-tile-badge-soon">Coming Soon</span>
-        </div>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
 
         <div class="ph-tile ph-tile-soon">
           <span class="ph-tile-cat">catalog</span>
@@ -768,6 +768,15 @@
     countUp('kpi-tasks', 493, 1400);
     countUp('kpi-budget', 20,  800);
   });
+
+  /* FICO Portal path: GitHub Pages deploys app to /app/, local dev has it at HOPI_AppIQ/Development/ */
+  (function() {
+    if (location.protocol === 'file:') {
+      document.querySelectorAll('a.ph-tile[href="../../../app/index.html"]').forEach(function(a) {
+        a.href = '../../../HOPI_AppIQ/Development/index.html';
+      });
+    }
+  })();
 
   /* Product Hub context marker — set sessionStorage so target pages can show ← Product Hub */
   document.querySelectorAll('a.ph-tile[href]').forEach(function(a) {
