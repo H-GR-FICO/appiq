@@ -1,5 +1,5 @@
 ﻿{
-  "latest": "v7.36",
+  "latest": "v7.37",
   "updatedAt": "2026-04-29",
   "versions": [
     {
@@ -333,6 +333,27 @@
         "pitchUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.36/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.37",
+        "date":  "2026-04-29",
+        "session":  "session_20260429_0023",
+        "title":  "Training Center: Complete · Expert Chapter · PDF Export · Presentation Filter · 2026-04-29",
+        "mainUrl":  "v7.37/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "Training Center — kompletní prezentace (23 slidů) (AIQ-00510, AIQ-00512)",
+                        "PDF Export — 2 varianty + výběr stránek (AIQ-00511, AIQ-00513)",
+                        "Presentation Filter Mode (AIQ-00514)"
+                    ],
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.37/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.37/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.37/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.37/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.37/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

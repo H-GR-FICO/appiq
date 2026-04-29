@@ -1,0 +1,2155 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Training Center — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+
+    /* ── CSS variable alias — _cockpit.css uses --c-muted, not --c-text-muted ── */
+    :root { --c-text-muted: var(--c-muted); }
+
+    /* ── Training Center — full-viewport slide layout ── */
+    /* Body becomes flex column so tc-main fills remaining height
+       regardless of actual shell height (topbar + hero + mottos ≈ 134px) */
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #cockpit-shell { flex-shrink: 0; }
+
+    .tc-main {
+      flex: 1;
+      min-height: 0;        /* required for flex children to shrink */
+      display: flex;
+      flex-direction: column;
+      padding: 0 !important;
+      max-width: none !important;
+      overflow: hidden;
+    }
+
+    /* ── Stage ─────────────────────────────────────────────────────────── */
+    .tc-stage {
+      flex: 1;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tc-slide {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 28px 48px 16px;
+      overflow-y: auto;
+      animation: tcFadeIn .25s ease;
+    }
+    @keyframes tcFadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ── Chapter badge ──────────────────────────────────────────────────── */
+    .tc-chapter-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .tc-chapter-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: var(--c-font-sans);
+    }
+    .tc-chapter-badge.foundation { background: rgba(168,85,247,.18); color: #A855F7; }
+    .tc-chapter-badge.practice   { background: rgba(59,130,246,.18);  color: #3B82F6; }
+    .tc-chapter-badge.expert     { background: rgba(245,158,11,.18);  color: #F59E0B; }
+    .tc-chapter-badge.domain     { background: rgba(16,185,129,.18);  color: #10B981; }
+    .tc-chapter-badge.intro      { background: rgba(255,255,255,.08); color: var(--c-text-muted); }
+
+    .tc-slide-id {
+      font-size: 11px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      font-weight: 600;
+      letter-spacing: .5px;
+    }
+
+    /* ── Slide title ────────────────────────────────────────────────────── */
+    .tc-title {
+      font-size: clamp(22px, 3vw, 36px);
+      font-weight: 700;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+      line-height: 1.2;
+      margin: 6px 0 4px;
+    }
+    .tc-title .accent { color: var(--c-violet); }
+
+    .tc-subtitle {
+      font-size: 15px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      margin-bottom: 20px;
+    }
+
+    /* ── Content blocks ─────────────────────────────────────────────────── */
+    .tc-body { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+
+    .tc-cols { display: grid; gap: 16px; }
+    .tc-cols-2 { grid-template-columns: 1fr 1fr; }
+    .tc-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .tc-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+    .tc-card {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      padding: 16px 18px;
+    }
+    .tc-card.highlight { border-color: var(--c-violet); background: rgba(168,85,247,.07); }
+    .tc-card.green     { border-color: #10B981; background: rgba(16,185,129,.07); }
+    .tc-card.amber     { border-color: #F59E0B; background: rgba(245,158,11,.07); }
+    .tc-card.blue      { border-color: #3B82F6; background: rgba(59,130,246,.07); }
+    .tc-card.muted     { opacity: .55; }
+
+    .tc-card-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--c-text-muted);
+      margin-bottom: 6px;
+      font-family: var(--c-font-sans);
+    }
+    .tc-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+      margin-bottom: 6px;
+    }
+    .tc-card-text {
+      font-size: 13px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      line-height: 1.5;
+    }
+    .tc-card-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-top: 8px;
+      font-family: var(--c-font-sans);
+    }
+    .tag-done    { background: rgba(16,185,129,.2); color: #10B981; }
+    .tag-dev     { background: rgba(168,85,247,.2); color: #A855F7; }
+    .tag-soon    { background: rgba(255,255,255,.08); color: var(--c-text-muted); }
+    .tag-best    { background: rgba(16,185,129,.2); color: #10B981; }
+    .tag-risk    { background: rgba(239,68,68,.2); color: #EF4444; }
+    .tag-default { background: rgba(245,158,11,.2); color: #F59E0B; }
+
+    .tc-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 7px; }
+    .tc-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+      line-height: 1.4;
+    }
+    .tc-list li::before { content: '→'; color: var(--c-violet); flex-shrink: 0; font-weight: 700; }
+    .tc-list li.muted::before { color: var(--c-text-muted); }
+    .tc-list li.muted { color: var(--c-text-muted); }
+
+    .tc-insight {
+      background: rgba(168,85,247,.1);
+      border-left: 3px solid var(--c-violet);
+      border-radius: 0 var(--c-radius-sm) var(--c-radius-sm) 0;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-style: italic;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+      line-height: 1.5;
+    }
+    .tc-insight.green  { background: rgba(16,185,129,.1);  border-color: #10B981; }
+    .tc-insight.amber  { background: rgba(245,158,11,.1);  border-color: #F59E0B; }
+    .tc-insight.blue   { background: rgba(59,130,246,.1);  border-color: #3B82F6; }
+
+    .tc-big-number {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--c-violet);
+      font-family: var(--c-font-sans);
+      line-height: 1;
+    }
+    .tc-big-label {
+      font-size: 12px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      margin-top: 4px;
+    }
+
+    /* Stack layer item */
+    .tc-layer {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 16px;
+      border-radius: var(--c-radius-sm);
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+    }
+    .tc-layer.our   { border-color: var(--c-violet); background: rgba(168,85,247,.09); }
+    .tc-layer-num   { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; font-family: var(--c-font-sans); }
+    .tc-layer-name  { font-size: 14px; font-weight: 700; color: var(--c-text); font-family: var(--c-font-sans); min-width: 140px; }
+    .tc-layer-exa   { font-size: 12px; color: var(--c-text-muted); font-family: var(--c-font-sans); }
+
+    /* Placeholder slide */
+    .tc-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 16px;
+      opacity: .7;
+    }
+    .tc-ph-icon { font-size: 40px; }
+    .tc-ph-title { font-size: 20px; font-weight: 700; color: var(--c-text); font-family: var(--c-font-sans); }
+    .tc-ph-desc  { font-size: 14px; color: var(--c-text-muted); font-family: var(--c-font-sans); max-width: 360px; line-height: 1.5; }
+    .tc-ph-tag   { font-size: 11px; font-weight: 700; letter-spacing: 1px; padding: 4px 14px; border-radius: 20px; font-family: var(--c-font-sans); }
+
+    /* ── Bottom navigation ──────────────────────────────────────────────── */
+    .tc-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 48px 14px;
+      border-top: 1px solid var(--c-border);
+      gap: 16px;
+      background: var(--c-bg);
+      flex-shrink: 0;
+    }
+
+    .tc-nav-btn {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      color: var(--c-text);
+      border-radius: var(--c-radius-sm);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      font-family: var(--c-font-sans);
+      transition: background .15s, border-color .15s;
+      flex-shrink: 0;
+    }
+    .tc-nav-btn:hover:not(:disabled) { background: var(--c-violet); border-color: var(--c-violet); color: #fff; }
+    .tc-nav-btn:disabled { opacity: .3; cursor: default; }
+
+    .tc-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      flex: 1;
+    }
+    .tc-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--c-border);
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+      flex-shrink: 0;
+    }
+    .tc-dot.active { background: var(--c-violet); transform: scale(1.35); }
+    .tc-dot.foundation { --dot-c: #A855F7; }
+    .tc-dot.practice   { --dot-c: #3B82F6; }
+    .tc-dot.expert     { --dot-c: #F59E0B; }
+    .tc-dot.domain     { --dot-c: #10B981; }
+    .tc-dot.active { background: var(--dot-c, var(--c-violet)); }
+
+    .tc-counter {
+      font-size: 12px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      font-weight: 600;
+      min-width: 48px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .tc-fullscreen-btn {
+      background: transparent;
+      border: 1px solid var(--c-border);
+      color: var(--c-text-muted);
+      border-radius: var(--c-radius-sm);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+      transition: border-color .15s, color .15s;
+      flex-shrink: 0;
+    }
+    .tc-fullscreen-btn:hover { border-color: var(--c-violet); color: var(--c-violet); }
+
+    /* ── Speaker Notes panel ────────────────────────────────────────────── */
+    .tc-notes-panel {
+      display: none;
+      background: rgba(168,85,247,.06);
+      border-top: 1px solid rgba(168,85,247,.22);
+      padding: 8px 48px;
+      flex-shrink: 0;
+      max-height: 72px;
+      overflow-y: auto;
+    }
+    .tc-notes-panel.tc-notes-visible { display: block; }
+    .tc-notes-list {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-wrap: wrap; gap: 4px 28px;
+    }
+    .tc-notes-item {
+      font-size: 12px; color: var(--c-text); font-family: var(--c-font-sans);
+      line-height: 1.4; display: flex; gap: 6px; align-items: baseline;
+    }
+    .tc-notes-item::before { content: '▶'; color: var(--c-violet); font-size: 9px; flex-shrink: 0; }
+    .tc-notes-btn {
+      background: transparent;
+      border: 1px solid var(--c-border);
+      color: var(--c-text-muted);
+      border-radius: var(--c-radius-sm);
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 11px; font-weight: 700;
+      font-family: var(--c-font-sans); letter-spacing: .5px;
+      transition: border-color .15s, color .15s;
+      flex-shrink: 0;
+    }
+    .tc-notes-btn:hover    { border-color: var(--c-violet); color: var(--c-violet); }
+    .tc-notes-btn.active   { border-color: var(--c-violet); color: var(--c-violet); background: rgba(168,85,247,.1); }
+    .tc-notes-tabs { display:flex; gap:0; padding-bottom:4px; border-bottom:1px solid rgba(168,85,247,.18); margin-bottom:6px; flex-shrink:0; }
+    .tc-notes-tab  { background:transparent; border:none; border-bottom:2px solid transparent; padding:2px 12px 5px; font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--c-text-muted); font-family:var(--c-font-sans); cursor:pointer; transition:color .15s,border-color .15s; margin-bottom:-1px; }
+    .tc-notes-tab.active { color:var(--c-violet); border-bottom-color:var(--c-violet); }
+    .tc-notes-tab:hover   { color:var(--c-violet); }
+    .tc-notes-script { font-size:13px; color:var(--c-text); font-family:var(--c-font-sans); line-height:1.6; overflow-y:auto; }
+    .tc-notes-script p { margin:0 0 4px 0; }
+    .tc-sc-story { color:#10B981; font-style:italic; }
+    .tc-sc-q     { color:var(--c-violet); font-style:italic; }
+    .tc-notes-hidden  { display:none !important; }
+    .tc-notes-panel.script-mode { max-height:190px; }
+
+    /* ── Responsive ─────────────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .tc-slide   { padding: 18px 20px 12px; }
+      .tc-nav     { padding: 8px 20px 10px; }
+      .tc-cols-2, .tc-cols-3, .tc-cols-4 { grid-template-columns: 1fr; }
+      .tc-title   { font-size: 20px; }
+      .tc-notes-panel { padding: 6px 20px; }
+      .tc-notes-btn   { display: none; }
+    }
+
+    /* ── PDF Export dropdown ────────────────────────────────────────────── */
+    .tc-pdf-wrap { position: relative; flex-shrink: 0; }
+    .tc-pdf-menu {
+      position: absolute; bottom: calc(100% + 8px); right: 0;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 10px; padding: 6px; min-width: 224px;
+      display: none; flex-direction: column; gap: 4px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.35); z-index: 200;
+    }
+    .tc-pdf-menu.open { display: flex; }
+    .tc-pdf-opt {
+      background: transparent; border: none; border-radius: 7px;
+      padding: 8px 12px; color: var(--c-text);
+      font-family: var(--c-font-sans); font-size: 13px; font-weight: 600;
+      text-align: left; cursor: pointer; display: flex; flex-direction: column; gap: 2px;
+      transition: background .15s;
+    }
+    .tc-pdf-opt:hover { background: rgba(168,85,247,.12); }
+    .tc-pdf-opt span  { font-size: 10px; font-weight: 400; color: var(--c-text-muted); }
+    #tc-print-container { display: none; }
+
+    /* ── Slide Selection Modal ──────────────────────────────────────────────── */
+    .tc-sel-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,.65);
+      z-index: 9000; display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .tc-sel-modal.open { display: flex; }
+    .tc-sel-box {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: 14px; width: 100%; max-width: 540px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5); display: flex; flex-direction: column;
+      max-height: 90vh;
+    }
+    .tc-sel-head {
+      display: flex; align-items: center; gap: 8px;
+      padding: 14px 16px 12px; border-bottom: 1px solid var(--c-border); flex-shrink: 0;
+    }
+    .tc-sel-title { font-size: 14px; font-weight: 700; color: var(--c-text); flex: 1; }
+    .tc-sel-all, .tc-sel-none {
+      background: transparent; border: 1px solid var(--c-border); border-radius: 6px;
+      padding: 3px 9px; font-size: 11px; color: var(--c-text-muted);
+      font-family: var(--c-font-sans); cursor: pointer; transition: all .15s;
+    }
+    .tc-sel-all:hover  { border-color: var(--c-violet); color: var(--c-violet); }
+    .tc-sel-none:hover { border-color: #ef4444; color: #ef4444; }
+    .tc-sel-close {
+      background: transparent; border: none; font-size: 16px; line-height: 1;
+      color: var(--c-text-muted); cursor: pointer; padding: 4px 6px; border-radius: 6px;
+      transition: background .15s; margin-left: 4px;
+    }
+    .tc-sel-close:hover { background: rgba(239,68,68,.12); color: #ef4444; }
+    .tc-sel-list {
+      overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column;
+      gap: 1px; flex: 1; min-height: 0; max-height: 380px;
+    }
+    .tc-sel-group {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .06em; color: var(--c-text-muted); padding: 8px 4px 3px;
+    }
+    .tc-sel-group:first-child { padding-top: 2px; }
+    .tc-sel-item {
+      display: flex; align-items: center; gap: 10px; padding: 5px 8px;
+      border-radius: 7px; cursor: pointer; transition: background .12s;
+    }
+    .tc-sel-item:hover { background: rgba(168,85,247,.08); }
+    .tc-sel-item input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--c-violet); cursor: pointer; flex-shrink: 0; }
+    .tc-sel-item.expert input[type="checkbox"] { accent-color: #F59E0B; }
+    .tc-sel-id  { font-size: 10px; font-weight: 700; color: var(--c-text-muted); min-width: 34px; }
+    .tc-sel-item.expert .tc-sel-id { color: #F59E0B; }
+    .tc-sel-lbl { font-size: 12px; color: var(--c-text); line-height: 1.35; }
+    .tc-sel-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; border-top: 1px solid var(--c-border); flex-shrink: 0;
+    }
+    .tc-sel-count { font-size: 11px; color: var(--c-text-muted); }
+    .tc-sel-export {
+      background: var(--c-violet); border: none; border-radius: 8px;
+      padding: 8px 20px; color: #fff; font-size: 13px; font-weight: 700;
+      font-family: var(--c-font-sans); cursor: pointer; transition: opacity .15s;
+    }
+    .tc-sel-export:hover  { opacity: .85; }
+    .tc-sel-export:disabled { opacity: .4; cursor: not-allowed; }
+
+    /* ── Presentation Filter Button ─────────────────────────────────────── */
+    .tc-filter-btn {
+      background: transparent; border: 1px solid transparent; border-radius: 7px;
+      padding: 5px 8px; color: var(--c-text-muted); font-size: 15px; line-height: 1;
+      font-family: var(--c-font-sans); cursor: pointer; transition: all .15s; flex-shrink: 0;
+    }
+    .tc-filter-btn:hover { background: rgba(168,85,247,.1); color: var(--c-violet); border-color: rgba(168,85,247,.3); }
+    .tc-filter-btn.active { color: #F59E0B; border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.08); }
+
+    /* ── @media print ───────────────────────────────────────────────────── */
+    @media print {
+      :root {
+        --c-bg: #fff; --c-bg2: #f5f5f5; --c-bg3: #ebebeb;
+        --c-text: #111; --c-text-muted: #555; --c-border: #ddd; --c-violet: #7C3AED;
+      }
+      #cockpit-shell, .tc-nav, .tc-notes-panel { display: none !important; }
+      .tc-main  { height: auto !important; overflow: visible !important; display: block !important; }
+      .tc-stage { display: none !important; }
+      #tc-print-container { display: block !important; }
+      .tc-print-slide {
+        page-break-after: always; break-after: page;
+        overflow: hidden; background: #fff; padding: 0;
+      }
+      .tc-print-slide:last-child { page-break-after: avoid; break-after: avoid; }
+      .tc-print-header { padding-bottom: 8px; border-bottom: 2px solid #7C3AED; margin-bottom: 10px; }
+      .tc-print-chapter { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #7C3AED; margin-bottom: 2px; font-family: 'Segoe UI', sans-serif; }
+      .tc-print-title   { font-size: 22px; font-weight: 800; color: #111; margin: 0 0 2px; line-height: 1.2; font-family: 'Segoe UI', sans-serif; }
+      .tc-print-title .accent { color: #7C3AED; }
+      .tc-print-subtitle { font-size: 12px; color: #555; margin: 0; font-family: 'Segoe UI', sans-serif; }
+      .tc-print-notes-section { margin-top: 10px; padding-top: 8px; border-top: 1px solid #ddd; }
+      .tc-print-notes-section h4 { font-size: 9px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #7C3AED; margin: 0 0 4px; font-family: 'Segoe UI', sans-serif; }
+      .tc-print-notes-section ul { margin: 0; padding-left: 16px; }
+      .tc-print-notes-section li, .tc-print-notes-section p { font-size: 10px; color: #333; margin-bottom: 2px; font-family: 'Segoe UI', sans-serif; line-height: 1.4; }
+      .tc-print-notes-section p { margin: 2px 0; }
+      body.tc-print-pres .tc-print-slide { min-height: calc(100vh - 24mm); display: flex; flex-direction: column; }
+      body.tc-print-pres .tc-print-slide .tc-body { flex: 1; }
+      body.tc-print-pres .tc-print-notes-section { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page tc-main">
+
+    <div class="tc-stage">
+      <div class="tc-slide" id="tc-slide"><!-- JS injected --></div>
+    </div>
+
+    <div class="tc-notes-panel" id="tc-notes">
+      <div class="tc-notes-tabs">
+        <button class="tc-notes-tab active" id="tc-tab-bullets">KLÍČOVÉ BODY</button>
+        <button class="tc-notes-tab"        id="tc-tab-script">PROJEV</button>
+      </div>
+      <ul class="tc-notes-list" id="tc-notes-list"></ul>
+      <div class="tc-notes-script" id="tc-notes-script"></div>
+    </div>
+
+    <nav class="tc-nav">
+      <button class="tc-nav-btn" id="tc-prev" title="Předchozí (←)">‹</button>
+      <div class="tc-dots" id="tc-dots"></div>
+      <span class="tc-counter" id="tc-counter"></span>
+      <button class="tc-filter-btn" id="tc-filter-btn" title="Filtr slidů (S)">⊙</button>
+      <button class="tc-notes-btn" id="tc-notes-btn" title="Speaker Notes (N)">N</button>
+      <div class="tc-pdf-wrap" id="tc-pdf-wrap">
+        <button class="tc-fullscreen-btn" id="tc-pdf-btn" title="Export do PDF (P)">🖨</button>
+        <div class="tc-pdf-menu" id="tc-pdf-menu">
+          <button class="tc-pdf-opt" data-mode="pres">🖼 Prezentace <span>1 slide / stránka · landscape</span></button>
+          <button class="tc-pdf-opt" data-mode="full">📄 Kompletní handout <span>slide + projev · portrait</span></button>
+        </div>
+      </div>
+      <button class="tc-fullscreen-btn" id="tc-fs" title="Fullscreen (F)">⛶</button>
+      <button class="tc-nav-btn" id="tc-next" title="Další (→)">›</button>
+    </nav>
+    <div id="tc-print-container"></div>
+
+    <div class="tc-sel-modal" id="tc-sel-modal" aria-modal="true" role="dialog">
+      <div class="tc-sel-box">
+        <div class="tc-sel-head">
+          <span class="tc-sel-title">Výběr slidů pro export</span>
+          <button class="tc-sel-all" id="tc-sel-all">Vybrat vše</button>
+          <button class="tc-sel-none" id="tc-sel-none">Zrušit vše</button>
+          <button class="tc-sel-close" id="tc-sel-close" title="Zavřít (Esc)">✕</button>
+        </div>
+        <div class="tc-sel-list" id="tc-sel-list"></div>
+        <div class="tc-sel-foot">
+          <span class="tc-sel-count" id="tc-sel-count"></span>
+          <button class="tc-sel-export" id="tc-sel-export">Exportovat PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tc-sel-modal" id="tc-filt-modal" aria-modal="true" role="dialog">
+      <div class="tc-sel-box">
+        <div class="tc-sel-head">
+          <span class="tc-sel-title">Filtr slidů prezentace</span>
+          <button class="tc-sel-all" id="tc-filt-all">Vybrat vše</button>
+          <button class="tc-sel-none" id="tc-filt-none">Zrušit vše</button>
+          <button class="tc-sel-close" id="tc-filt-close" title="Zavřít (Esc)">✕</button>
+        </div>
+        <div class="tc-sel-list" id="tc-filt-list"></div>
+        <div class="tc-sel-foot">
+          <span class="tc-sel-count" id="tc-filt-count"></span>
+          <button class="tc-sel-export" id="tc-filt-apply">Použít filtr</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+
+  Shell.init({
+    section: 'AI Training Center',
+    sectionEn: 'AI Training Center',
+    backUrl:  '../MANAGEMENT_COCKPIT.html',
+    music:    '../cockpit-music.mp3'
+  });
+
+  /* ─────────────────────────────────────────────────────────────────────
+     SLIDES DATA
+  ───────────────────────────────────────────────────────────────────── */
+  const SLIDES = [
+
+    /* ── 00 — INTRO ─────────────────────────────────────────────── */
+    { id: 'INTRO', chapter: 'intro', chapterLabel: 'HOPI AppIQ', title: 'AI <span class="accent">Training Center</span>',
+      subtitle: 'Vzdělávání v AI pro HOPI Group — od základů po praxi',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-4" style="margin-bottom:8px">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Foundation</div>
+              <div class="tc-card-title">Základy AI</div>
+              <div class="tc-card-text">Proč teď, ekosystém, jak to funguje, HOPI kontext</div>
+              <span class="tc-card-tag tag-dev">M0 – M5</span>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Practice</div>
+              <div class="tc-card-title">Jak to děláme</div>
+              <div class="tc-card-text">Vibe Coding, systém práce s AI, FI/CO case study</div>
+              <span class="tc-card-tag tag-dev">M6 – M8</span>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">Expert Chapter</div>
+              <div class="tc-card-title">Pro odborníky</div>
+              <div class="tc-card-text">Context engineering, economics, architektura, výhled</div>
+              <span class="tc-card-tag tag-soon">MX1 – MX6</span>
+            </div>
+            <div class="tc-card green">
+              <div class="tc-card-label">Domain</div>
+              <div class="tc-card-title">HOPI Use Cases</div>
+              <div class="tc-card-text">Výstupy z workshopu — use cases vašich oddělení</div>
+              <span class="tc-card-tag tag-soon">M9+</span>
+            </div>
+          </div>
+          <div class="tc-insight">
+            Tento Training Center je živý — každý workshop přidá novou vrstvu. Dnes zakládáme Foundation.
+          </div>
+        </div>` },
+
+    /* ── M0 — Filozofie Cockpitu ─────────────────────────────────── */
+    { id: 'M0', chapter: 'foundation', chapterLabel: 'Foundation', title: 'Co je <span class="accent">Management Cockpit</span>',
+      subtitle: 'Filozofie dvou streamů',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Stream 1</div>
+              <div class="tc-card-title">Prostředí pro řízení projektu</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Každá sekce odpovídá reálnému aspektu budování AppIQ</li>
+                <li>OIL tracker, DISC audit log, session management</li>
+                <li>CEO Brief, Founders Board, BOS Card, Governance</li>
+                <li>Projekt <strong>řídíme nástrojem, který sám budujeme</strong></li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Stream 2</div>
+              <div class="tc-card-title">Šablona pro business oblasti</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Stejná architektura — jiný obsah</li>
+                <li>Finance ✓ — Supply Chain, Foods, Agriculture, HR...</li>
+                <li>Co se mění: data, sekce, business logika</li>
+                <li>Co zůstává: shell, navigace, AI vrstva, bezpečnost</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight">
+            "Pokud funguje pro nás — funguje pro každého." AI není feature Cockpitu. AI je důvod proč Cockpit existuje.
+          </div>
+        </div>` },
+
+    /* ── M1 — Proč právě teď ─────────────────────────────────────── */
+    { id: 'M1', chapter: 'foundation', chapterLabel: 'Foundation', title: '<span class="accent">Proč právě teď</span>',
+      subtitle: 'AI Inflection Point — okno které se otevírá jednou',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:4px">
+            <div class="tc-card">
+              <div class="tc-card-label">Capability skok</div>
+              <div class="tc-card-title">3 roky = dekáda</div>
+              <div class="tc-card-text">ChatGPT → GPT-4 → Claude 3.5 → Claude 3.7 → Claude 4 · GPT-5.5.<br/>Skok, který jindy trval 10 let, proběhl za 3 roky.</div>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Vibe Coding</div>
+              <div class="tc-card-title">1 člověk = malý tým</div>
+              <div class="tc-card-text">Nepíšeš kód — popisuješ co potřebuješ. AI implementuje, ty revidujete a řídíš. Výsledek: týdny místo měsíců.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">First Mover Window</div>
+              <div class="tc-card-title">12–18 měsíců</div>
+              <div class="tc-card-text">Pak se přístup stane standardem a výhoda zmizí. Kdo čeká, dohání. Kdo dohání, platí víc.</div>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-3">
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">500+</div>
+              <div class="tc-big-label">trackovaných tasků<br/>1 člověk · 9 týdnů</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">29</div>
+              <div class="tc-big-label">sekcí Cockpitu<br/>funkčních a nasazených</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">týdny</div>
+              <div class="tc-big-label">ne měsíce<br/>od nápadu po produkci</div>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            Tichá většina firem zatím "sleduje". To je vaše příležitost.
+          </div>
+        </div>` },
+
+    /* ── M_HOPI-A — Kde jsme dnes ───────────────────────────────── */
+    { id: 'M_HOPI · A', chapter: 'foundation', chapterLabel: 'Foundation · HOPI Kontext', title: 'Výchozí pozice <span class="accent">HOPI</span>',
+      subtitle: 'Kde jsme dnes — business a IT kontext',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card">
+              <div class="tc-card-label">Business kontext</div>
+              <ul class="tc-list" style="margin-top:6px">
+                <li>5 divizí: Supply Chain, Foods, Agriculture, Services, Holding</li>
+                <li>30+ let, CEE leader, rodinná firma — FBN membership</li>
+                <li>Silný operační backbone, etablované procesy</li>
+                <li>Holding: Finance, IT, Group Management</li>
+              </ul>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">IT kontext</div>
+              <ul class="tc-list" style="margin-top:6px">
+                <li>SAP jako páteř — ERP, finance, logistika</li>
+                <li>Microsoft 365 — Teams, SharePoint, Azure AD</li>
+                <li>DWH existuje — data jsou, ale roztříštěná</li>
+                <li>Azure Cloud (částečně) · ARTIN, INTECS jako partneři</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card amber">
+              <div class="tc-card-label">AI dnes v HOPI</div>
+              <ul class="tc-list" style="margin-top:6px">
+                <li>Copilot v M365 licencích — ad-hoc použití</li>
+                <li>Individuální ChatGPT / Claude — nekoordinovaně</li>
+                <li class="muted">Žádná centrální AI strategie</li>
+                <li class="muted">Žádná sdílená infrastruktura</li>
+              </ul>
+            </div>
+            <div class="tc-card green">
+              <div class="tc-card-label">První strukturovaná AI aplikace</div>
+              <div class="tc-card-title">FI/CO Portal — Management Cockpit</div>
+              <div class="tc-card-text">Finance · živý provoz · IT přebírá integraci · 29 sekcí · jeden člověk + AI</div>
+              <span class="tc-card-tag tag-done">✓ V PRODUKCI</span>
+            </div>
+          </div>
+        </div>` },
+
+    /* ── M_HOPI-B — AI potenciál ─────────────────────────────────── */
+    { id: 'M_HOPI · B', chapter: 'foundation', chapterLabel: 'Foundation · HOPI Kontext', title: 'AI potenciál <span class="accent">v HOPI</span>',
+      subtitle: 'Co otvíráme — příležitosti po divizích',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card">
+              <div class="tc-card-label">🚛 Supply Chain</div>
+              <ul class="tc-list" style="margin-top:4px;font-size:13px">
+                <li>Optimalizace tras a logistiky</li>
+                <li>Demand forecasting — predikce poptávky</li>
+                <li>Analýza dodavatelů a smluv</li>
+                <li>Inventory management — zásoby bez gut-feel</li>
+              </ul>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">🍎 Foods</div>
+              <ul class="tc-list" style="margin-top:4px;font-size:13px">
+                <li>Plánování výroby a kapacit</li>
+                <li>Quality control — detekce anomálií</li>
+                <li>Receptury a optimalizace nákladů</li>
+                <li>Regulatory compliance — automatizace</li>
+              </ul>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">🌾 Agriculture</div>
+              <ul class="tc-list" style="margin-top:4px;font-size:13px">
+                <li>Předpovědi úrody a sezónní plánování</li>
+                <li>Maintenance prediction — stroje a technika</li>
+                <li>Precision farming — data z terénu</li>
+                <li>Dotační compliance a reporting</li>
+              </ul>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">🏢 Holding / Finance</div>
+              <ul class="tc-list" style="margin-top:4px;font-size:13px">
+                <li><strong>Management reporting ✓ — HOTOVO</strong></li>
+                <li>SAP data extraction a analýza</li>
+                <li>FX analýza a treasury support</li>
+                <li>Audit support a interní kontroly</li>
+              </ul>
+              <span class="tc-card-tag tag-done">✓ Proof of Concept existuje</span>
+            </div>
+          </div>
+          <div class="tc-insight green">
+            Každá divize má stejný problém: data jsou, ale insight chybí. AI tuto mezeru zavírá.
+          </div>
+        </div>` },
+
+    /* ── M_HOPI-C — 4 scénáře ────────────────────────────────────── */
+    { id: 'M_HOPI · C', chapter: 'foundation', chapterLabel: 'Foundation · HOPI Kontext', title: '<span class="accent">4 scénáře</span> — jak přistoupit k AI',
+      subtitle: 'Variantní strategie pro HOPI Group',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card muted">
+              <div class="tc-card-label">Scénář A</div>
+              <div class="tc-card-title">Organický (bottom-up)</div>
+              <div class="tc-card-text">Každá divize experimentuje sama. Nízké riziko, okamžitý start.</div>
+              <div style="margin-top:8px;font-size:12px;color:var(--c-text-muted)">✗ Fragmentace · duplikace · žádná synergie</div>
+              <span class="tc-card-tag tag-risk">Výsledek: ostrůvky</span>
+            </div>
+            <div class="tc-card muted">
+              <div class="tc-card-label">Scénář B</div>
+              <div class="tc-card-title">Microsoft-first</div>
+              <div class="tc-card-text">Copilot for M365 + Azure AI. Jednoduchý start, familiar prostředí.</div>
+              <div style="margin-top:8px;font-size:12px;color:var(--c-text-muted)">✗ Vendor lock-in · SAP mimo dosah · omezené pokrytí</div>
+              <span class="tc-card-tag tag-default">Výsledek: částečné řešení</span>
+            </div>
+            <div class="tc-card muted">
+              <div class="tc-card-label">Scénář C</div>
+              <div class="tc-card-title">Centrální platforma (top-down)</div>
+              <div class="tc-card-text">IT buduje centrální AI platformu pro všechny. Konzistentní governance.</div>
+              <div style="margin-top:8px;font-size:12px;color:var(--c-text-muted)">✗ Pomalý start · IT bottleneck · 2 roky do value</div>
+              <span class="tc-card-tag tag-default">Výsledek: správně, ale pozdě</span>
+            </div>
+            <div class="tc-card green">
+              <div class="tc-card-label">Scénář D ← doporučeno</div>
+              <div class="tc-card-title">Federovaný model</div>
+              <div class="tc-card-text">Centrální shell + doménové moduly per divize. Business definuje, IT staví.</div>
+              <div style="margin-top:8px;font-size:12px;color:#10B981">✓ Rychlá value · škálovatelnost · governance · proof existuje</div>
+              <span class="tc-card-tag tag-best">Výsledek: Finance → Group</span>
+            </div>
+          </div>
+          <div class="tc-insight green">
+            Proof of concept Scénáře D existuje. FI/CO Portal = Divize Holding / Finance. Stejný model → Supply Chain, Foods, Agriculture.
+          </div>
+        </div>` },
+
+    /* ── M2 — AI Ekosystém ───────────────────────────────────────── */
+    { id: 'M2', chapter: 'foundation', chapterLabel: 'Foundation', title: 'AI <span class="accent">Ekosystém</span>',
+      subtitle: 'Vrstvy a hráči — kde v tom celém jsme my',
+      html: `
+        <div class="tc-body">
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <div class="tc-layer">
+              <div class="tc-layer-num" style="background:rgba(156,163,175,.15);color:#9CA3AF">7</div>
+              <div class="tc-layer-name">Hardware</div>
+              <div class="tc-layer-exa">NVIDIA H100/H200, AMD MI300, Google TPU v5 — fyzická výpočetní síla</div>
+            </div>
+            <div class="tc-layer">
+              <div class="tc-layer-num" style="background:rgba(156,163,175,.15);color:#9CA3AF">6</div>
+              <div class="tc-layer-name">Data Centra</div>
+              <div class="tc-layer-exa">AWS, Microsoft Azure, Google Cloud, Meta vlastní DC — kde modely žijí</div>
+            </div>
+            <div class="tc-layer">
+              <div class="tc-layer-num" style="background:rgba(59,130,246,.15);color:#3B82F6">5</div>
+              <div class="tc-layer-name">Foundation Models</div>
+              <div class="tc-layer-exa">Anthropic Claude, OpenAI GPT, Google Gemini, Meta Llama (open), Mistral</div>
+            </div>
+            <div class="tc-layer">
+              <div class="tc-layer-num" style="background:rgba(59,130,246,.15);color:#3B82F6">4</div>
+              <div class="tc-layer-name">API / Platformy</div>
+              <div class="tc-layer-exa">Přímé API, Azure OpenAI Service, AWS Bedrock, Google Vertex AI</div>
+            </div>
+            <div class="tc-layer">
+              <div class="tc-layer-num" style="background:rgba(168,85,247,.15);color:#A855F7">3</div>
+              <div class="tc-layer-name">AI Aplikace</div>
+              <div class="tc-layer-exa">ChatGPT, Claude.ai, Perplexity, Copilot, Midjourney — produkty pro end-usery</div>
+            </div>
+            <div class="tc-layer">
+              <div class="tc-layer-num" style="background:rgba(168,85,247,.15);color:#A855F7">2</div>
+              <div class="tc-layer-name">Enterprise Integrace</div>
+              <div class="tc-layer-exa">SAP AI Core, Microsoft Copilot for M365, Salesforce Einstein, ServiceNow AI</div>
+            </div>
+            <div class="tc-layer our">
+              <div class="tc-layer-num" style="background:rgba(168,85,247,.3);color:#A855F7;font-size:14px">★</div>
+              <div class="tc-layer-name" style="color:var(--c-violet)">Naše vrstva</div>
+              <div class="tc-layer-exa">Management Cockpit · FI/CO Portal — HOPI-specifická aplikace postavená na vrstvách 4–5</div>
+            </div>
+          </div>
+          <div class="tc-insight" style="margin-top:4px">
+            Nesoutěžíme s výrobci modelů. Sedíme na jejich ramenou a stavíme business hodnotu pro HOPI.
+          </div>
+        </div>` },
+
+    /* ── M3 — AI Podvozek ───────────────────────────────────────── */
+    { id: 'M3', chapter: 'foundation', chapterLabel: 'Foundation', title: 'AI <span class="accent">Podvozek</span>',
+      subtitle: 'Jak to funguje — pod kapotou bez kódu',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:4px">
+            <div class="tc-card">
+              <div class="tc-card-label">Token</div>
+              <div class="tc-card-title">Základní jednotka</div>
+              <div class="tc-card-text">Ne slovo, ne znak — kus textu (~4 znaky). 1 stránka A4 ≈ 500 tokenů. Za tokeny platíš, s tokeny pracuješ.</div>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Context Window</div>
+              <div class="tc-card-title">Pracovní paměť AI</div>
+              <div class="tc-card-text">Vše co AI vidí najednou — otázka, history, dokumenty, instrukce. Claude: 200 000 tokenů ≈ celá kniha (cca 300 stran textu).</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">Paměť</div>
+              <div class="tc-card-title">Proč AI "zapomíná"</div>
+              <div class="tc-card-text">LLM nemá trvalou paměť. Každý chat = čistý list. Celá "paměť" = obsah context window v dané chvíli.</div>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card">
+              <div class="tc-card-label">LLM — jak to funguje</div>
+              <div class="tc-card-title">Predikce dalšího tokenu</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Trénován na miliardách dokumentů — texty, kód, věda</li>
+                <li>Matematicky: "co je nejpravděpodobnější pokračování?"</li>
+                <li>Výsledek: zdánlivé "rozumění" — emergentní chování</li>
+                <li>Různé modely = různé silné stránky a náklady</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Agenti</div>
+              <div class="tc-card-title">LLM + nástroje = AI Agent</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Základní LLM = jen text dovnitř, text ven</li>
+                <li>Agent = LLM + nástroje (web, kód, soubory, API)</li>
+                <li>Claude Code, ChatGPT + plugins = agentické chování</li>
+                <li>Multi-agent: agenti, co spolu spolupracují</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            AI nezapomíná — nikdy si nic nepamatoval. Context window je vše. Čím víc mu dáš kontextu, tím lépe odpovídá.
+          </div>
+        </div>` },
+
+    /* ── M4 — AI v IT prostředí ──────────────────────────────────── */
+    { id: 'M4', chapter: 'foundation', chapterLabel: 'Foundation', title: 'AI v <span class="accent">IT prostředí</span> firmy',
+      subtitle: 'Integrace, bezpečnost, build vs. buy',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card">
+              <div class="tc-card-label">Kde AI sedí v IT stacku</div>
+              <div class="tc-card-title">Nad ERP, pod business</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Nepřepisuje SAP — čte, interpretuje, generuje</li>
+                <li>Data flow: SAP export → JSON/API → AI model → UI</li>
+                <li>Azure AD / M365 = identity a access management</li>
+                <li>AI je nová interpretační vrstva nad existujícím stackem</li>
+              </ul>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">Build vs. Buy vs. API</div>
+              <div class="tc-card-title">Rozhodovací rámec</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li><strong>Buy (Copilot)</strong> — rychle, generic, vendor lock</li>
+                <li><strong>API (Claude / GPT)</strong> — vlastní UI, plná kontrola dat ✓</li>
+                <li><strong>Build vlastní model</strong> — 10× dražší, zřídka nutné</li>
+                <li class="muted">HOPI: API-first přístup → vlastní aplikační vrstva</li>
+              </ul>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">GDPR &amp; Data Privacy</div>
+              <div class="tc-card-title">Co smíte poslat do AI</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Agregovaná business data ✓ — bezpečné</li>
+                <li>Anonymizovaná data ✓ — OK s rozmyslem</li>
+                <li class="muted">Osobní data bez zpracovatelské smlouvy ✗</li>
+                <li>Anthropic / OpenAI DPA k dispozici — nutno podepsat</li>
+              </ul>
+            </div>
+            <div class="tc-card green">
+              <div class="tc-card-label">Integrační vzory — 3 přístupy</div>
+              <div class="tc-card-title">Od nejjednoduššího po enterprise</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li><strong>Export file</strong> — SAP → Excel/JSON → AI (nejjednodušší)</li>
+                <li><strong>REST API</strong> — přímé volání dat v reálném čase</li>
+                <li><strong>RAG</strong> — AI prohledává firemní dokumenty sémanticky</li>
+              </ul>
+              <span class="tc-card-tag tag-done">HOPI: Export file v produkci ✓</span>
+            </div>
+          </div>
+          <div class="tc-insight green">
+            Není nutné přepisovat IT infrastrukturu. AI sedí vedle SAP jako nová interpretační vrstva — přidává hodnotu, nenahrazuje základ.
+          </div>
+        </div>` },
+
+    /* ── M5 — Slovníček ──────────────────────────────────────────── */
+    { id: 'M5', chapter: 'foundation', chapterLabel: 'Foundation', title: '<span class="accent">Slovníček</span> základních pojmů',
+      subtitle: 'Společný jazyk pro AI diskuse — 14 klíčových pojmů',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card">
+              <div class="tc-card-label">Základní pojmy</div>
+              <div style="display:flex;flex-direction:column;gap:7px;margin-top:6px">
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">LLM</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Large Language Model. AI trénovaný na textu k predikci jazyka.</span></div>
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">Token</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Základní jednotka (~4 znaky). Za tokeny se platí, s tokeny se pracuje.</span></div>
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">Prompt</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Vstupní instrukce nebo otázka pro AI model.</span></div>
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">Context window</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Pracovní paměť modelu. Vše co AI vidí najednou.</span></div>
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">RAG</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Retrieval-Augmented Generation. AI si nejprve hledá relevantní dokumenty.</span></div>
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">Fine-tuning</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Dotrénování modelu na specifická data. Drahé a zřídka nutné.</span></div>
+                <div><span style="font-weight:700;color:var(--c-violet);font-size:13px;font-family:var(--c-font-sans)">Hallucination</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — AI vymyslí informaci, která neexistuje. Riziko bez verifikace.</span></div>
+              </div>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Pokročilé pojmy</div>
+              <div style="display:flex;flex-direction:column;gap:7px;margin-top:6px">
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">Agent</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — LLM s nástroji. AI co může hledat, psát kód, volat API.</span></div>
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">MCP</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Model Context Protocol. Standard pro připojení AI k nástrojům a datům.</span></div>
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">Vibe Coding</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Popisuješ záměr, AI implementuje. Ty revidujete a schvaluješ.</span></div>
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">System prompt</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Trvalá instrukce pro AI. Definuje roli, styl, pravidla konverzace.</span></div>
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">Temperature</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Míra kreativity modelu. 0 = deterministické, 1 = kreativní výstupy.</span></div>
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">Embedding</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Matematická reprezentace textu. Základ sémantického vyhledávání.</span></div>
+                <div><span style="font-weight:700;color:#3B82F6;font-size:13px;font-family:var(--c-font-sans)">Inference</span><span style="font-size:13px;color:var(--c-text-muted);font-family:var(--c-font-sans)"> — Samotný výpočet odpovědi. Čím větší model, tím pomalejší inference.</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="tc-insight">
+            Nemusíš znát matematiku za modely. Tyhle pojmy jsou jazyk AI diskusí — kdo je nezná, nevede.
+          </div>
+        </div>` },
+
+    /* ── M6 — Vibe Coding ────────────────────────────────────────── */
+    { id: 'M6', chapter: 'practice', chapterLabel: 'Practice', title: '<span class="accent">Vibe Coding</span> — filozofie přístupu',
+      subtitle: 'Jak pracovat s AI jako vývojovým partnerem',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2" style="margin-bottom:4px">
+            <div class="tc-card muted">
+              <div class="tc-card-label">Tradiční přístup</div>
+              <div class="tc-card-title">Programátor píše kód</div>
+              <ul class="tc-list" style="margin-top:8px;font-size:13px">
+                <li>Specifikace → design → vývoj → review → deploy</li>
+                <li>Developer = bottleneck každého projektu</li>
+                <li>Business čeká, IT nestíhá, výsledek za měsíce</li>
+                <li class="muted">Znalost kódu = nutná podmínka vstupu</li>
+              </ul>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Vibe Coding</div>
+              <div class="tc-card-title">Ty popisuješ záměr, AI implementuje</div>
+              <ul class="tc-list" style="margin-top:8px;font-size:13px">
+                <li>Záměr → AI navrhne řešení → ty revidujete a schválíte</li>
+                <li>Product Owner = řidič, ne pasažér</li>
+                <li>Business rozhoduje, AI staví, IT validuje</li>
+                <li>Výsledek za hodiny nebo dny, ne měsíce</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-4">
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div style="font-size:24px;margin-bottom:8px">🎯</div>
+              <div class="tc-card-title" style="font-size:13px">1. Záměr</div>
+              <div class="tc-card-text" style="font-size:12px">Popíšeš co chceš — ne jak to udělat</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div style="font-size:24px;margin-bottom:8px">⚡</div>
+              <div class="tc-card-title" style="font-size:13px">2. AI implementuje</div>
+              <div class="tc-card-text" style="font-size:12px">Kód, architektura, dokumenty — za minuty</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div style="font-size:24px;margin-bottom:8px">👁️</div>
+              <div class="tc-card-title" style="font-size:13px">3. Revize</div>
+              <div class="tc-card-text" style="font-size:12px">Ty kontroluješ výsledek, ne každý řádek</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div style="font-size:24px;margin-bottom:8px">✓</div>
+              <div class="tc-card-title" style="font-size:13px">4. Schválení</div>
+              <div class="tc-card-text" style="font-size:12px">Deploy nebo iterate — rozhoduješ ty</div>
+            </div>
+          </div>
+          <div class="tc-insight">
+            Vibe Coding nemění co stavíme — mění kdo to staví a jak rychle. 1 člověk s AI dokáže víc než malý tým bez AI.
+          </div>
+        </div>` },
+
+    /* ── M_VC — DGO Playbook ─────────────────────────────────────── */
+    { id: 'M_VC', chapter: 'practice', chapterLabel: 'Practice · DGO Playbook', title: 'DGO Playbook — <span class="accent">9 týdnů v praxi</span>',
+      subtitle: 'Co skutečně funguje — lekce z 9 týdnů intenzivního Vibe Codingu',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:4px">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Lekce 1</div>
+              <div class="tc-card-title">Záměr rozhoduje vše</div>
+              <div class="tc-card-text">AI nezná HOPI, váš kontext ani co považujete za dobré. Čím přesnější záměr, tím lepší výsledek. Váš brief je hnací motor.</div>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Lekce 2</div>
+              <div class="tc-card-title">Iteruj, nepřepisuj</div>
+              <div class="tc-card-text">Ne "udělej vše najednou". Záměr → výsledek → korekce → výsledek. Malé kroky = kontrola + rychlost. Jeden velký záměr = chaos.</div>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Lekce 3</div>
+              <div class="tc-card-title">Kontext je kapitál</div>
+              <div class="tc-card-text">5 minut přípravy kontextu ušetří 30 minut korekcí. AI s kontextem trefuje. AI bez kontextu hádá. Investuj do briefu, ne do oprav.</div>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card green">
+              <div class="tc-card-label">Funguje ✓</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Konkrétní záměr s příkladem výsledku</li>
+                <li>Iterativní schválení — krok po kroku</li>
+                <li>1 téma = 1 session — bez přeskakování</li>
+                <li>Zachovat kontext (BRIEFING, OIL, předchozí rozhodnutí)</li>
+                <li>AI implementuje → ty rozhoduješ a schvaluješ</li>
+              </ul>
+            </div>
+            <div class="tc-card" style="border-color:rgba(239,68,68,.3)">
+              <div class="tc-card-label" style="color:#EF4444">Nefunguje ✗</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>"Udělej to líp" — AI neví co je líp</li>
+                <li>Vágní záměr bez příkladu nebo kontextu</li>
+                <li>Přeskočit revizi — schválit bez kontroly</li>
+                <li>Míchat 3 témata v jedné session</li>
+                <li>Nechat AI rozhodovat — quality gate = člověk</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight">
+            AI je nejlepší partner, jakého jsem měl — ale musíte ho briefovat jako nového kolegu. Čím víc mu dáte, tím víc dostanete zpět.
+          </div>
+        </div>` },
+
+    /* ── M7 — Náš systém práce s AI ─────────────────────────────── */
+    { id: 'M7', chapter: 'practice', chapterLabel: 'Practice', title: 'Náš <span class="accent">systém práce</span> s AI',
+      subtitle: 'Governance, tracking, deploy, archivace',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">OIL Tracker</div>
+              <div class="tc-card-title">Open Issue List</div>
+              <div class="tc-card-text">Každá práce má záznam: OPEN → IN PROGRESS → REVIEW → CLOSED. Žádná akce bez registrovaného ID.</div>
+              <span class="tc-card-tag tag-done">✓ Live — 500+ záznamů</span>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">DISC Audit Log</div>
+              <div class="tc-card-title">Discussion Record</div>
+              <div class="tc-card-text">Každé rozhodnutí má DISC-ID, datum, autora. Totální auditovatelnost — nic nezůstane nezapsané.</div>
+              <span class="tc-card-tag tag-done">✓ Live — 230+ rozhodnutí</span>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">Session Management</div>
+              <div class="tc-card-title">Protokol práce s AI</div>
+              <div class="tc-card-text">Startup ritual, BRIEFING handover, record compact. AI má plný kontext při každém startu — bez opakování.</div>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">Versioned Deploy</div>
+              <div class="tc-card-title">Bezpečný release</div>
+              <div class="tc-card-text">Feature = nová verze. Hotfix = patch. Staré verze nikdy nesmazat. 36 verzí za 9 týdnů, každá dostupná.</div>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">4-Tier Testing</div>
+              <div class="tc-card-title">Kvalita před deployem</div>
+              <div class="tc-card-text">Integrity check → lokální test → golden path review → produkce. AI navrhuje, člověk schvaluje a pushuje.</div>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Tokenomika</div>
+              <div class="tc-card-title">Efektivita AI práce</div>
+              <div class="tc-card-text">9 pravidel efektivní práce: 1 session = 1 téma · compact místo restartu · cílené čtení · batch operace.</div>
+            </div>
+          </div>
+          <div class="tc-insight">
+            Metodika není overhead — je to co umožňuje 1 člověku řídit 500+ tasků s AI bez ztráty kontextu.
+          </div>
+        </div>` },
+
+    /* ── M8 — Case Study ─────────────────────────────────────────── */
+    { id: 'M8', chapter: 'practice', chapterLabel: 'Practice', title: 'FI/CO Portal — <span class="accent">Case Study</span>',
+      subtitle: 'Od nápadu po produkci — s AI jako partnerem',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-4" style="margin-bottom:4px">
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">29</div>
+              <div class="tc-big-label">sekcí Cockpitu<br/>v produkci</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">500+</div>
+              <div class="tc-big-label">trackovaných tasků<br/>1 člověk · OIL</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">36</div>
+              <div class="tc-big-label">verzí nasazených<br/>za 9 týdnů</div>
+            </div>
+            <div class="tc-card" style="text-align:center;padding:14px 10px">
+              <div class="tc-big-number">0</div>
+              <div class="tc-big-label">tradičních<br/>vývojářů</div>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-4">
+            <div class="tc-card">
+              <div class="tc-card-label">① Problém</div>
+              <div class="tc-card-title">Finance bez přehledu</div>
+              <div class="tc-card-text" style="font-size:12px">SAP data existovala, ale insight chyběl. Reporting byl ruční, pomalý, neskaloval na skupinovou úroveň.</div>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">② Architektura</div>
+              <div class="tc-card-title">AI + Shell + Moduly</div>
+              <div class="tc-card-text" style="font-size:12px">Single-page aplikace. Každá sekce = modul. Bilingvní. Versioning. Event Bus. Backend-ready od začátku.</div>
+            </div>
+            <div class="tc-card green">
+              <div class="tc-card-label">③ Implementace</div>
+              <div class="tc-card-title">Vibe Coding · 9 týdnů</div>
+              <div class="tc-card-text" style="font-size:12px">David (business) + Claude (AI architekt). OIL tracking každého tasku. DISC záznamy každého rozhodnutí.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">④ Výsledek</div>
+              <div class="tc-card-title">Living Proof</div>
+              <div class="tc-card-text" style="font-size:12px">29 sekcí live. IT přebírá SAP integraci. HOPI Finance = reálný zákazník. Šablona pro ostatní divize.</div>
+              <span class="tc-card-tag tag-done">✓ V PRODUKCI</span>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            Největší poučení: AI nenahradil experta — dal expertu superschopnosti. Rychlost stavění se změnila, quality gate zůstal.
+          </div>
+        </div>` },
+
+    /* ── M_EFF — Efektivita s AI ─────────────────────────────────── */
+    { id: 'M_EFF', chapter: 'practice', chapterLabel: 'Practice · DGO Workflow', title: 'Efektivní práce s AI — <span class="accent">zkušenosti z praxe</span>',
+      subtitle: 'Každodenní Vibe Coding — co skutečně funguje (od člověka, co to dělá)',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:4px">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Hardware setup</div>
+              <div class="tc-card-title">2 obrazovky · 2 kognitivní zóny</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li><strong>Monitor</strong> — Claude Code + soubory + browser</li>
+                <li><strong>NTB</strong> — poznámky, Commander, web research</li>
+                <li>Fyzické oddělení = mentální oddělení fokusů</li>
+                <li>Žádné přepínání — každá zóna ví co dělá</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Stream 1 — Monitor (hlavní)</div>
+              <div class="tc-card-title">Vibe Coding + CO práce</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Claude Code: záměr → implementace → revize</li>
+                <li>Excel + Copilot: analýza dat, formátování reportů</li>
+                <li>Word + AI: šablony, první draft, překlady</li>
+                <li>Outlook + Teams: AI-asistovaná komunikace a zápisy</li>
+              </ul>
+            </div>
+            <div class="tc-card">
+              <div class="tc-card-label">Stream 2 — NTB (doplňkový)</div>
+              <div class="tc-card-title">Operativa + research</div>
+              <ul class="tc-list" style="margin-top:6px;font-size:13px">
+                <li>Teams / OneNote: záznamy rozhodnutí a follow-up</li>
+                <li>Total Commander: správa souborů a archivů</li>
+                <li>Web: reference, verifikace, rychlý research</li>
+                <li>Zatímco AI implementuje → ty zpracuješ operativu</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-4">
+            <div class="tc-card" style="padding:12px 14px">
+              <div class="tc-card-label">Pravidlo 1</div>
+              <div class="tc-card-title" style="font-size:13px">AI nikdy nečeká</div>
+              <div class="tc-card-text" style="font-size:12px">Mám záměr připravený vždy. AI bez úkolu = drahý prostoj.</div>
+            </div>
+            <div class="tc-card" style="padding:12px 14px">
+              <div class="tc-card-label">Pravidlo 2</div>
+              <div class="tc-card-title" style="font-size:13px">Ty nikdy nečekáš</div>
+              <div class="tc-card-text" style="font-size:12px">Zatímco AI implementuje → zpracuji emaily nebo zapíši poznámky.</div>
+            </div>
+            <div class="tc-card" style="padding:12px 14px">
+              <div class="tc-card-label">Pravidlo 3</div>
+              <div class="tc-card-title" style="font-size:13px">1 session = 1 téma</div>
+              <div class="tc-card-text" style="font-size:12px">Neskákat. Dokončit blok. Přechod = nová session s čerstvým kontextem.</div>
+            </div>
+            <div class="tc-card" style="padding:12px 14px">
+              <div class="tc-card-label">Pravidlo 4</div>
+              <div class="tc-card-title" style="font-size:13px">Rozhoduješ ty</div>
+              <div class="tc-card-text" style="font-size:12px">AI implementuje, nikdy neschvaluje. Quality gate = člověk. Vždy.</div>
+            </div>
+          </div>
+          <div class="tc-insight">
+            Největší objev: AI nenahrazuje mou práci — zdvojnásobuje mou kapacitu. Mám 2 paralelní procesory: svůj mozek a Claude.
+          </div>
+        </div>` },
+
+    /* ── Expert teaser ───────────────────────────────────────────── */
+    { id: 'EXPERT', chapter: 'expert', chapterLabel: 'Expert Chapter', title: '<span class="accent">Expert Chapter</span>',
+      subtitle: 'Pro CIO, architekty, AI specialisty a inženýry — 6 modulů',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:8px">
+            <div class="tc-card amber">
+              <div class="tc-card-label">MX1</div>
+              <div class="tc-card-title">Naše řešení — Tech Stack</div>
+              <div class="tc-card-text">HTML5/CSS3/JS vanilla, Claude Code, OneDrive+Git+GitHub Pages, JSON datová vrstva. Zero dependencies.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">MX2</div>
+              <div class="tc-card-title">Naše řešení — Architektura</div>
+              <div class="tc-card-text">Modulární soubory, event bus, OIL+DISC+NEXUS procesní vrstva. Backend-Ready vzor.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">MX3</div>
+              <div class="tc-card-title">Context Engineering</div>
+              <div class="tc-card-text">Ne prompting — architektura informací. Context window, token ekonomika, session management.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">MX4</div>
+              <div class="tc-card-title">AI Economics &amp; ROI</div>
+              <div class="tc-card-text">Tokeny, náklady, latence. ROI kalkulace. Build vs API vs fine-tuning. HOPI kontext.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">MX5</div>
+              <div class="tc-card-title">Bezpečnost &amp; Governance</div>
+              <div class="tc-card-text">Data klasifikace, co posílám do cloudu, GDPR kontext, firemní AI politika.</div>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">MX6</div>
+              <div class="tc-card-title">Výhled 2026–2028</div>
+              <div class="tc-card-text">AI Agents, multimodal, autonomní workflow. First mover vs fast follower. HOPI roadmap.</div>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            Expert Chapter roste z praxe — každý projekt přidá modul ze skutečné zkušenosti, ne z teorie.
+          </div>
+        </div>` },
+
+    /* ── MX1 — Tech Stack ───────────────────────────────────────── */
+    { id: 'MX1', chapter: 'expert', chapterLabel: 'Expert Chapter · Naše řešení',
+      title: 'Tech Stack & <span class="accent">Nástroje</span>',
+      subtitle: 'Na čem technicky stojí celé naše řešení',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card amber">
+              <div class="tc-card-label">Jazyk & Runtime</div>
+              <div class="tc-card-title">Pure Web Stack</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><strong>HTML5</strong> — struktura a sémantika</li>
+                <li><strong>CSS3</strong> — layout, animace, dark theme, print</li>
+                <li><strong>JavaScript (vanilla)</strong> — 0 frameworků, 0 build steps</li>
+                <li><strong>JSON</strong> — datová vrstva (OIL.json, versions.json…)</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">AI & Infrastructure</div>
+              <div class="tc-card-title">Nástroje</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><strong>Claude Code</strong> — AI developer (Sonnet/Opus 4.x)</li>
+                <li><strong>OneDrive</strong> — real-time sync + záloha</li>
+                <li><strong>Git + GitHub Pages</strong> — verzování + hosting (free CDN)</li>
+                <li><strong>PowerShell</strong> — automatizace (deploy, archivace, skripty)</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-3" style="margin-top:8px">
+            <div class="tc-hl-card"><div class="tc-hl-val">0</div><div class="tc-hl-lbl">npm packages</div></div>
+            <div class="tc-hl-card"><div class="tc-hl-val">0</div><div class="tc-hl-lbl">build steps</div></div>
+            <div class="tc-hl-card"><div class="tc-hl-val">free</div><div class="tc-hl-lbl">hosting + CDN</div></div>
+          </div>
+        </div>` },
+
+    /* ── MX2 — Architecture ──────────────────────────────────────── */
+    { id: 'MX2', chapter: 'expert', chapterLabel: 'Expert Chapter · Naše řešení',
+      title: 'Architektura & <span class="accent">Procesy</span>',
+      subtitle: 'Jak je to postaveno a připraveno na rozvoj',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card amber">
+              <div class="tc-card-label">Modulární architektura</div>
+              <div class="tc-card-title">Klíčové soubory</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><code style="font-family:monospace;font-size:12px">_shell.js</code> — UI shell, navigace, jazyk, hudba</li>
+                <li><code style="font-family:monospace;font-size:12px">_data.js</code> — datová vrstva (JSON → REST → SQL)</li>
+                <li><code style="font-family:monospace;font-size:12px">_ver.js / _ver-badge.js</code> — verzování</li>
+                <li><code style="font-family:monospace;font-size:12px">_music.js</code> — audio continuity</li>
+                <li>Event Bus: <code style="font-family:monospace;font-size:12px">AppIQ.emit() / AppIQ.on()</code></li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Procesní vrstva</div>
+              <div class="tc-card-title">Komunikace & Řízení</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><strong>OIL.json</strong> — task tracking (512+ záznamů)</li>
+                <li><strong>DISCUSSION_RECORD.md</strong> — totální audit log</li>
+                <li><strong>BRIEFING.md</strong> — session handover AI↔Human</li>
+                <li><strong>CLAUDE.md + LEXICON.md</strong> — AI onboarding docs</li>
+                <li><strong>NEXUS</strong> — budoucí Control Brain Center</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            Backend-Ready: <strong>JSON → REST API → SQL = změna pouze v _data.js.</strong> Frontend se nedotkne.
+          </div>
+        </div>` },
+
+    /* ── MX3 — Context Engineering ───────────────────────────────── */
+    { id: 'MX3', chapter: 'expert', chapterLabel: 'Expert Chapter',
+      title: 'Context <span class="accent">Engineering</span>',
+      subtitle: 'Ne prompting — architektura informací pro maximální výkon modelu',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card amber">
+              <div class="tc-card-label">Jak AI čte text</div>
+              <div class="tc-card-title">Context Window</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>1 token ≈ 4 znaky (orientačně)</li>
+                <li>Claude Sonnet 4.6: <strong>200K tokenů</strong> ≈ 130 000+ slov</li>
+                <li>Claude Opus 4.7: <strong>1M tokenů</strong> ≈ 650 000+ slov</li>
+                <li>AI "zapomíná" vše mimo context window</li>
+                <li>Compact vs restart — ekonomika tokenů</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Vrstvy kontextu</div>
+              <div class="tc-card-title">Stavební bloky</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><strong>System prompt</strong> — pravidla, persona, konvence</li>
+                <li><strong>Memory files</strong> — CLAUDE.md, LEXICON.md, BRIEFING.md</li>
+                <li><strong>Conversation</strong> — aktivní dialog</li>
+                <li><strong>Tool results</strong> — výstupy nástrojů</li>
+                <li><strong>Session rituál</strong> — strukturovaný startup protokol</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            <strong>Pravidlo #1:</strong> 1 session = 1 téma. Přechod kontextu = nová session. Nevyhazovat kontext zbytečně.
+          </div>
+        </div>` },
+
+    /* ── MX4 — AI Economics ───────────────────────────────────────── */
+    { id: 'MX4', chapter: 'expert', chapterLabel: 'Expert Chapter',
+      title: 'AI Economics <span class="accent">&amp; ROI</span>',
+      subtitle: 'Kolik stojí, co přinese a jak se rozhodovat',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:8px">
+            <div class="tc-hl-card"><div class="tc-hl-val">~$500</div><div class="tc-hl-lbl">všechny AI nástroje, 9 týdnů</div></div>
+            <div class="tc-hl-card"><div class="tc-hl-val">500K+</div><div class="tc-hl-lbl">Kč ext. firma za totéž</div></div>
+            <div class="tc-hl-card"><div class="tc-hl-val">1000×</div><div class="tc-hl-lbl">ROI multiplikátor</div></div>
+          </div>
+          <div class="tc-cols tc-cols-2">
+            <div class="tc-card amber">
+              <div class="tc-card-label">Cenové modely</div>
+              <div class="tc-card-title">API vs Nástroj</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><strong>Claude Code Pro</strong> — $20/měsíc flat (development)</li>
+                <li><strong>API pay-per-token</strong> — pro produkční aplikace</li>
+                <li><strong>Enterprise tier</strong> — SSO, compliance, SLA</li>
+                <li><strong>Fine-tuning</strong> — pouze pro velký objem uniformních tasků</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Rozhodovací rámec</div>
+              <div class="tc-card-title">Build vs Buy</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li><strong>Buduj:</strong> core business logika, unikátní procesy</li>
+                <li><strong>Kup:</strong> commodity funkce (email, calendar, HR)</li>
+                <li><strong>AI stack:</strong> buduj vlastní znalost, nakupuj infrastrukturu</li>
+                <li><strong>HOPI model:</strong> interní pilot → spin-off → SaaS</li>
+              </ul>
+            </div>
+          </div>
+        </div>` },
+
+    /* ── MX5 — Security & Governance ─────────────────────────────── */
+    { id: 'MX5', chapter: 'expert', chapterLabel: 'Expert Chapter',
+      title: 'Bezpečnost & <span class="accent">Governance</span>',
+      subtitle: 'Co posílám do cloudu, co ne — a jak zavést firemní AI politiku',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:8px">
+            <div class="tc-card" style="border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.06)">
+              <div class="tc-card-label" style="color:#10B981">✅ Veřejné</div>
+              <div class="tc-card-title">Pošlu bez omezení</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Kód a architektura</li>
+                <li>Procesy a metodiky</li>
+                <li>Agregované statistiky</li>
+                <li>Veřejně dostupné info</li>
+              </ul>
+            </div>
+            <div class="tc-card amber">
+              <div class="tc-card-label">⚠️ Interní</div>
+              <div class="tc-card-title">S vědomím</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Business strategie (obecně)</li>
+                <li>Interní procesy</li>
+                <li>Anonymizované příklady</li>
+                <li>Firemní terminologie</li>
+              </ul>
+            </div>
+            <div class="tc-card" style="border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.06)">
+              <div class="tc-card-label" style="color:#EF4444">🚫 Citlivé</div>
+              <div class="tc-card-title">Nikdy nezadávat</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Hesla a přístupy</li>
+                <li>Osobní data (GDPR)</li>
+                <li>Konkrétní fin. výsledky</li>
+                <li>Obchodní tajemství</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight amber">
+            Firemní AI politika = 3 kroky: <strong>(1) definuj třídy dat</strong> · <strong>(2) urči povolené nástroje per třída</strong> · <strong>(3) školení za 30 minut</strong>.
+          </div>
+        </div>` },
+
+    /* ── MX6 — Výhled ────────────────────────────────────────────── */
+    { id: 'MX6', chapter: 'expert', chapterLabel: 'Expert Chapter',
+      title: 'Výhled <span class="accent">2026–2028</span>',
+      subtitle: 'Co přichází a jak se HOPI připravuje',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:8px">
+            <div class="tc-card amber">
+              <div class="tc-card-label">2026 — Nyní</div>
+              <div class="tc-card-title">AI Agents</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Autonomní AI workflow</li>
+                <li>MCP servery (tool integrace)</li>
+                <li>Claude Code → agentní orchestrace</li>
+                <li>NEXUS: první agent architektura</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">2027 — Blízko</div>
+              <div class="tc-card-title">Multimodal & Real-time</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Audio/video jako first-class vstupy</li>
+                <li>Real-time AI asistence ve schůzkách</li>
+                <li>Voice-first business aplikace</li>
+                <li>AI jako standard, ne výjimka</li>
+              </ul>
+            </div>
+            <div class="tc-card highlight">
+              <div class="tc-card-label">2028 — Horizont</div>
+              <div class="tc-card-title">AI-Native Enterprise</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>AI rozhoduje v reálném čase</li>
+                <li>Autonomní obchodní procesy</li>
+                <li>HOPI TechIQ: 6. divize + SaaS</li>
+                <li>AppIQ marketplace — první zákazníci</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight">
+            <strong>First mover advantage:</strong> Kdo má zkušenost dnes — bude orchestrovat AI v 2027. Ostatní budou teprve začínat.
+          </div>
+        </div>` },
+
+    /* ── Domain ──────────────────────────────────────────────────── */
+    { id: 'M9+', chapter: 'domain', chapterLabel: 'Domain · Workshop Output', title: 'HOPI <span class="accent">Use Cases</span>',
+      subtitle: 'Váš přínos — use cases z oddělení',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3">
+            <div class="tc-card muted" style="text-align:center;padding:28px 16px">
+              <div style="font-size:32px;margin-bottom:12px">🚛</div>
+              <div class="tc-card-title">Supply Chain</div>
+              <div class="tc-card-text">Use case přidán po workshopu</div>
+              <span class="tc-card-tag tag-soon" style="margin-top:12px">Workshop output</span>
+            </div>
+            <div class="tc-card muted" style="text-align:center;padding:28px 16px">
+              <div style="font-size:32px;margin-bottom:12px">🍎</div>
+              <div class="tc-card-title">Foods</div>
+              <div class="tc-card-text">Use case přidán po workshopu</div>
+              <span class="tc-card-tag tag-soon" style="margin-top:12px">Workshop output</span>
+            </div>
+            <div class="tc-card muted" style="text-align:center;padding:28px 16px">
+              <div style="font-size:32px;margin-bottom:12px">🌾</div>
+              <div class="tc-card-title">Agriculture</div>
+              <div class="tc-card-text">Use case přidán po workshopu</div>
+              <span class="tc-card-tag tag-soon" style="margin-top:12px">Workshop output</span>
+            </div>
+          </div>
+          <div class="tc-insight green">
+            Tento Training Center čeká na váš příspěvek. Dnešní workshop = první editorial meeting — co přidáme?
+          </div>
+        </div>` }
+  ];
+
+  /* ─────────────────────────────────────────────────────────────────────
+     SPEAKER NOTES
+  ───────────────────────────────────────────────────────────────────── */
+  const NOTES = {
+    'INTRO':      ['Toto je živý nástroj — stavěný metodou kterou dnes budeme ukazovat', 'Training Center roste s projektem — vidíte jeho aktuální stav', 'Projdeme Foundation → Practice → vaše otázky'],
+    'M0':         ['Stream 1 = tato aplikace. Stream 2 = vaše oddělení', 'Klíčová pointa: řídíme projekt nástrojem, který sami stavíme — eating our own cooking', 'Každá divize dostane vlastní konfiguraci'],
+    'M1':         ['500+ tasků, 29 sekcí, 1 člověk — reálná čísla z tohoto projektu, ne z prezentace', 'Inflection point: kdo čeká, dohání. Kdo dohání, platí víc za menší výsledek', 'Tato místnost má 12–18 měsíc výhodu před ostatními firmami'],
+    'M_HOPI · A': ['Mluvíme o HOPI — vaší firmě, vašich systémech', 'DWH existuje, data máme — insight chybí. AI tuto mezeru zavírá', 'FI/CO Portal = první strukturovaná AI aplikace v HOPI — spuštěno, v produkci'],
+    'M_HOPI · B': ['Každá divize = konkrétní příležitost, ne abstraktní AI potenciál', 'Otázka do pléna: Co je váš největší reporting nebo analytický pain point?', 'Holding/Finance = hotovo a v produkci — to co dnes vidíte je ten výsledek'],
+    'M_HOPI · C': ['Scénáře A a B jsou realita mnoha firem — vedou do slepé uličky', 'Scénář D = federated model. Proof of concept existuje, neexperimentujeme na prázdno', 'HOPI Finance = živý pilot Scénáře D. Přidat vaši divizi je otázka dat, ne kódu'],
+    'M2':         ['Vrstvový model: nemusíte rozumět vrstvám 6–7 — to je commodity infrastruktura', 'Naše vrstva (★) = kde přidáváme business hodnotu pro HOPI', 'Nesoutěžíme s OpenAI — sedíme na jejich ramenou a stavíme pro HOPI'],
+    'M3':         ['Token a context window = 2 nejdůležitější pojmy pro každodenní práci', 'Proč AI zapomíná? — nejčastější otázka. Odpověď: nikdy si nic nepamatoval', 'Agenti = budoucnost enterprise AI. Claude Code = agent. Používáme ho každý den'],
+    'M4':         ['Klíčový argument pro IT: AI nepřepisuje SAP — čte ho a interpretuje výsledky', 'Export file přístup = nejjednodušší vstup. HOPI Finance ho používá v produkci', 'GDPR: agregovaná business data jsou bezpečná — to posíláme do AI'],
+    'M5':         ['Referenční karta — nemusíte si pamatovat vše, uslyšíte tyto pojmy znovu', '3 pojmy které MUSÍTE znát: LLM · Context window · Hallucination', 'Hallucination = proč AI vždy potřebuje lidskou kontrolu. Quality gate = člověk'],
+    'M6':         ['Klíčový shift: od umím kód k mám záměr a vizi', '4 kroky = nový workflow. Nejen pro vývojáře — pro každého business ownera', 'Toto není budoucnost — dnes ráno jsem takto postavil obsah těchto slidů'],
+    'M_VC':       ['Osobní zkušenost z 9 týdnů — věci které fungovaly nebo nefungovaly, žádná teorie', 'Záměr + iterace + kontext = trojúhelník efektivního Vibe Codingu', 'Anti-pattern: "udělej to líp" — nejčastější příčina špatných výsledků'],
+    'M7':         ['OIL Tracker: 500+ tasků, 1 člověk — ne chaos, ale metodika, která funguje', 'Toto není jen pro IT — každý business owner může řídit AI projekt takto', 'Versioned deploy: proto nikdy nepřijdeme o funkce — starší verze vždy dostupná'],
+    'M8':         ['Čísla jsou reálná — tento projekt, tato firma, tato místnost', '0 tradičních vývojářů — to je statement o možnostech AI dnes, ne sci-fi', 'Klíčový takeaway: není to o IT, je to o business owneru s AI jako partnerem'],
+    'M_EFF':      ['Toto je osobní zkušenost — ne teorie z knihy, dělám to 9 týdnů každý den', '2 streamy: simultánní provoz = žádný dead time. AI pracuje, já pracuji zároveň', 'Pravidlo 4 = nejdůležitější: AI nikdy neschvaluje. Výsledek vždy prochází mnou'],
+    'EXPERT':     ['Pro ty z vás kdo chtějí jít hlouběji — toto je váš playlist', 'Expert Chapter roste z praxe: každý váš use case po workshopu přidá modul', 'CIO agenda: Context Engineering a AI Economics = klíčové kompetence dalších 2 let'],
+    'MX1':        ['Proč vanilla JS? Zero dependencies = zero build tooling = přímá deployovatelnost odkudkoli', 'Claude Code je náš full-stack developer — píše kód, debuguje, navrhuje architekturu, pamatuje si kontext', 'GitHub Pages = free static hosting s CDN. Pro SPA bez backendu je to production-grade řešení'],
+    'MX2':        ['Single Responsibility: každý soubor dělá JEDNU věc. _shell.js dělá JEDNU věc. _data.js dělá JEDNU věc. Nikdy víc', 'Event Bus AppIQ.emit/on = moduly se neznají navzájem, komunikují přes zprávy — škálovatelné bez refactoru', 'Backend-Ready = největší architektonické rozhodnutí: JSON dnes, REST zítra, SQL pozítří. Frontend se nedotkne'],
+    'MX3':        ['Context window ≠ paměť. AI nezapomíná ze zlé vůle — jednoduše nevidí za hranici okna', 'Sonnet 4.6 = 200K tokenů (130K+ slov). Opus 4.7 = 1M tokenů (650K+ slov) = celá Harry Potter série', 'CLAUDE.md + LEXICON.md = naše firemní AI onboarding dokumenty. Každá session začíná s tímto kontextem'],
+    'MX4':        ['Claude Code Pro = $20/měsíc. Za 9 týdnů ≈ $50. Ext. firma za stejný výstup = 500 000+ Kč', 'API vs nástroj: flat rate je pro development. Pay-per-token škáluje pro produkci', 'Fine-tuning má smysl jen pro velký objem uniformních tasků s kvalitními trénovacími daty — pro nás nevhodné'],
+    'MX5':        ['Klíčové pravidlo: co je veřejně dostupné, mohu posílat. Co je osobní nebo citlivé finanční — nikdy', 'GDPR kontext: jména, rodná čísla, adresy = osobní data. Anonymizovat PŘED odesláním do AI nástroje', 'Firemní AI politika se nepíše na 50 stran — stačí 1 stránka s klasifikací dat a povoleným toolingem per třída'],
+    'MX6':        ['AI Agents 2026: Claude může sám plánovat, používat nástroje a dokončovat úkoly bez lidského vstupu každý krok', 'NEXUS je naše příprava na agentní éru — Control Brain Center orchestrující AI workflow pro HOPI', 'First mover není o technologii — je o organizační schopnosti adoptovat, experimentovat a iterovat rychleji než konkurence'],
+    'M9+':        ['Toto je váš příspěvek — tady čekáme na váš vstup, ne na další PowerPoint', 'Skupinová práce 30 min: každá skupina navrhne 1–2 konkrétní use cases ze své oblasti', 'Výstup workshopu = první obsah tohoto slidu — stane se součástí Training Center']
+  };
+
+  /* ─────────────────────────────────────────────────────────────────────
+     PRESENTER SCRIPT — 5–8 vět na slide (draft DGO, 2026-04-29)
+  ───────────────────────────────────────────────────────────────────── */
+  const SCRIPT = {
+    'INTRO': [
+      'Vítejte na prvním strukturovaném AI workshopu HOPI Group. To co vidíte před sebou není PowerPoint — je to živý nástroj, postavený přesně tou metodou, o které dnes budeme mluvit.',
+      'Tenhle Training Center jsem ještě dnes ráno upravoval — přidal jsem 7 nových kapitol a tuto funkci pro projev prezentátora. Celé dopoledne strávil AI stavěním, já usměrňováním a schvalováním.',
+      'Za 9 týdnů jsme prošli cestou od nápadu po 29 sekcí v produkci, 500 trackovaných úkolů a první strukturovanou AI aplikaci v HOPI. Bez jednoho tradičního vývojáře.',
+      '🗣 Přiznám se: před rokem jsem nedokázal napsat funkční řádek kódu. Dnes spravuji platformu, která běží na GitHubu a používá ji HOPI Finance každý den. To není magie — je to metodická práce s AI jako partnerem.',
+      'Dnes nebudeme mluvit o tom, co AI jednou možná umí. Budeme mluvit o tom, co AI umí teď, co z toho HOPI používá v produkci a kde je vaše příležitost.',
+      '❓ Než začneme: kolik z vás dnes ráno použilo AI k nějaké pracovní věci? Ukažte ruce.'
+    ],
+    'M0': [
+      'Management Cockpit má dva paralelní záměry. První: nástroj pro řízení samotného projektu AppIQ — tracking, reporty, rozhodnutí. Druhý: šablona nasaditelná na každou divizi HOPI.',
+      'Klíčový princip, který nás vede: "eating our own cooking." Nestavíme nástroj pro ostatní a sami používáme Excel. Projekt AppIQ řídíme nástrojem, který AppIQ sám je.',
+      'Finance byla první divize — ne proto, že je nejdůležitější, ale proto, že jako Holding máme data a přímou zodpovědnost. Finance = proof of concept. Supply Chain, Foods, Agriculture = stejná architektura, jiná data.',
+      '🗣 Představte si firmu, která si postaví vlastní IT systém zevnitř — ne akvizicí, ne externím projektem, ale jedním člověkem s AI. To je záměr: 6. divize HOPI, AppIQ s.r.o., vybudovaná organicky.',
+      '❓ Jak dnes řídíte svoje projekty a úkoly? Co vám chybí v přehledu a reportingu?'
+    ],
+    'M1': [
+      'Jsme uprostřed technologického inflection pointu. ChatGPT přišel na konci 2022, GPT-4 v 2023, Claude 3.5 v 2024, Claude 3.7 na začátku 2025 — a vývoj nezastavil: Claude Opus 4.7 a GPT-5.5 vyšly v dubnu 2026. Skok který jindy trval 10 let proběhl za 3 roky a tempo roste.',
+      'Co to v praxi znamená? Jeden člověk s AI dokáže to, co dřív zvládl malý tým. Ne proto, že AI je chytrý — ale proto, že AI je rychlý, trpělivý a nikdy neztrácí kontext.',
+      'First mover window je otevřené přibližně 12–18 měsíců. Pak se přístup stane standardem a výhoda raných uživatelů zmizí. Kdo čeká, dohání. Kdo dohání, platí víc za menší výsledek.',
+      'Čísla z tohoto projektu: 500 trackovaných úkolů, 29 funkčních sekcí, 36 nasazených verzí, 1 člověk, 9 týdnů. Tohle není prezentace budoucnosti — je to výsledek metodické práce, probíhající paralelně s mou běžnou funkcí v HOPI.',
+      '🗣 Tato místnost má 12–18 měsíc výhodu před ostatními firmami v našem segmentu. Otázka není jestli AI adoptovat — ale jak rychle a jak metodicky.',
+      '❓ Kde vidíte největší příležitost pro AI ve vaší oblasti práce? Jeden konkrétní příklad.'
+    ],
+    'M_HOPI · A': [
+      'Nezačínáme od nuly. HOPI má silný základ: SAP jako páteř, Microsoft 365 pro spolupráci, DWH s daty, Azure Cloud a osvědčené partnery jako ARTIN a INTECS.',
+      'Problém není nedostatek dat — problém je nedostatek insightu. SAP obsahuje tisíce transakcí denně, ale přeložit je do manažerského přehledu bylo vždy ruční a pomalé. AI tuto mezeru zavírá.',
+      'Copilot v M365 licencích a individuální ChatGPT tu sice jsou, ale bez centrální strategie. Každý experimentuje zvlášť, výsledky se nesdílí, synergies se nevyužívají. To je stav, který chceme změnit.',
+      'FI/CO Portal — Management Cockpit — je první odpovědí. 29 sekcí, live provoz, IT přebírá SAP integraci. Není to experiment. Je to produkce.',
+      '🗣 Nejsme tady s PowerPointem plným "co by se mohlo stát." Jsme tady s živou aplikací, kterou HOPI Finance používá každý den.',
+      '❓ Co vás v současném IT setupu nejvíce brzdí? Kde je největší friction mezi daty a rozhodnutím?'
+    ],
+    'M_HOPI · B': [
+      'Každá divize HOPI má svůj AI potenciál — ale musíme být konkrétní. Supply Chain: optimalizace tras, demand forecasting, analýza dodavatelů. Foods: plánování výroby, quality control. Agriculture: predikce úrody, maintenance prediction.',
+      'Společný jmenovatel: data existují, ale insight chybí. SAP má transakce, DWH má historii. Chybí vrstva, která data přeloží do rozhodnutelné informace v reálném čase.',
+      'Holding a Finance je hotové — to vidíte dnes. Šablona je připravena. Přidat Supply Chain znamená: jiná data ze SAPu, jiné sekce, stejná architektura, stejná AI vrstva.',
+      '🗣 Pondělí ráno, otevřete laptop, váš divisional cockpit vám ukáže klíčové KPIs za minulý týden — bez čekání na reporty, bez Excelu, aktuálně. To je cíl.',
+      '❓ Jaký report nebo přehled vám dnes trvá nejdéle připravit? A jak často ho skutečně používáte?'
+    ],
+    'M_HOPI · C': [
+      'Čtyři scénáře, jak firmy k AI přistupují — všechny jsou reálné, všechny vidíme v praxi. Scénář A: organický bottom-up. Rychlý start, ale výsledkem jsou AI ostrůvky bez synergie a bez governance.',
+      'Scénář B: Microsoft-first — Copilot for M365, Azure AI. Jednoduchý vstup pro IT, ale omezené pokrytí, SAP mimo dosah, vendor lock je reálný a generické řešení neřeší divize-specifické problémy.',
+      'Scénář C: centrální platforma od IT. Správné myšlení, ale 2 roky do první hodnoty. IT je bottleneck, business čeká. Do té doby může být konkurence dál.',
+      'Scénář D: federated model. Centrální shell, doménové moduly per divize. Business definuje co potřebuje, IT staví a integruje. Governance je centrální, hodnota je lokální. Proof of concept existuje.',
+      '🗣 HOPI Finance implementovala Scénář D. Nemusíme ho navrhovat na papíře — máme living proof. Přidat další divizi je otázka dat a priorit, ne architektury.',
+      '❓ Který scénář nejlépe popisuje, kde HOPI nyní je? A kde chceme být za 18 měsíců?'
+    ],
+    'M2': [
+      'AI ekosystém má 7 vrstev — od fyzického hardwaru po aplikace. Vrstvy 6 a 7 jsou commodity infrastruktura — GPU čipy, datová centra. Musíte je vědět, nemusíte jim rozumět.',
+      'Zajímavé se to stává na vrstvách 4 a 5: foundation models a API. Anthropic Claude, OpenAI GPT, Google Gemini — to jsou motory. API přístup znamená, že platíte za výkon, ne za vlastnictví modelu.',
+      'Vrstva 3 jsou AI aplikace pro end-usery: ChatGPT, Claude.ai, Perplexity, Copilot. Většina lidí zná AI právě odtud. Vrstva 2 jsou enterprise integrace — SAP AI Core, Salesforce Einstein, AI zašitý do existujících systémů.',
+      'A pak je naše vrstva — označená hvězdičkou. Management Cockpit, FI/CO Portal. HOPI-specifická aplikace postavená na vrstvách 4 a 5. Nesoutěžíme s OpenAI — sedíme na jejich ramenou.',
+      '🗣 Naše konkurenční výhoda není v modelu — ten si pronajímáme. Je v tom, co víme o HOPI procesech, datech a potřebách. Domain knowledge plus AI = nenahraditelná kombinace.',
+      '❓ Na které vrstvě si myslíte, že HOPI aktuálně stojí? A kde bychom chtěli být?'
+    ],
+    'M3': [
+      'Pojďme se podívat pod kapotu AI — bez kódu a bez matematiky. Začneme nejdůležitějším pojmem, který ovlivní každou vaši interakci s AI: context window.',
+      'Context window je pracovní paměť modelu. Vše co AI vidí v danou chvíli — vaše otázka, celá dosavadní konverzace, přiložené dokumenty, systémové instrukce. Claude vidí 200 000 tokenů najednou — celá kniha, zhruba 300 stran textu.',
+      'Token je základní jednotka — přibližně 4 znaky nebo 0.75 slova. 1 stránka A4 má zhruba 500 tokenů. Za tokeny se platí — vstupní i výstupní. Proto "tokenomika" — efektivní hospodaření s tím, co do AI pošleme.',
+      'Proč AI zapomíná? Protože nikdy si nic nepamatoval. Každá nová konverzace začíná na čistém listu. Context window je celá paměť. Dáte-li AI dobrý kontext — odpovídá dobře. Dáte-li málo — hádá.',
+      'Agenti jsou LLM s nástroji: mohou vyhledávat na webu, psát a spouštět kód, pracovat se soubory, volat API. Claude Code — s čím pracuji každý den — je agent. Vidí soubory, píše kód, spouští příkazy.',
+      '🗣 Praktický důsledek pro každého z vás: čím lepší kontext AI dáte, tím lepší výsledek dostanete. Garbage in, garbage out platí i pro AI — ale s AI platí ještě víc.',
+      '❓ Co byste potřebovali, aby AI dobře rozuměl vaší práci? Jaký kontext byste mu dali?'
+    ],
+    'M4': [
+      'Nejčastější obavy IT oddělení při zmínce AI: přepíše nám SAP? Bude GDPR problém? Kde to vlastně sedí v naší architektuře? Pojďme to rozebrat konkrétně.',
+      'AI nepřepisuje SAP — čte ho, interpretuje ho a generuje z něj výstupy ve srozumitelném formátu. Data flow je jednoduchý: SAP export do JSON, ten jde do AI vrstvy, výstup se zobrazí v aplikaci. SAP se nedotýkáme.',
+      'Build vs. Buy vs. API: koupit Copilot je rychlé, ale generické — omezené pokrytí a vendor lock. Volat API dává plnou kontrolu nad daty a UI. Budovat vlastní model je 10× dražší a zřídka nutné.',
+      'GDPR: agregovaná business data jsou bezpečná. Posíláme čísla, grafy, reporty — ne jména zaměstnanců, ne osobní údaje. Anthropic a OpenAI mají DPA k dispozici — je potřeba ho podepsat s IT.',
+      'Tři integrační vzory: export file (nejjednodušší, to používáme), REST API (real-time) a RAG (AI prohledává firemní dokumenty sémanticky). Začínáme s nejjednodušším, škálujeme podle potřeby.',
+      '🗣 HOPI Finance dnes používá export file pattern. Funguje, je jednoduché, je bezpečné. A je připravené na upgrade na REST API bez přepisování aplikace.',
+      '❓ Co je z pohledu IT oddělení největší bariéra pro nasazení AI? Data, bezpečnost, nebo integrace?'
+    ],
+    'M5': [
+      'Společný jazyk je základ každé spolupráce. Pokud business mluví o AI potenciálu a IT mluví o inference latency, nedorozumí se. Tyhle pojmy jsou most mezi oběma světy.',
+      'Tři pojmy, které musíte znát absolutně: LLM — motor trénovaný na textu. Context window — pracovní paměť, vše co AI vidí najednou. A hallucination — kdy AI vymyslí informaci, která neexistuje.',
+      'Hallucination je nejdůležitější pojem pro governance. AI není oracle. Je to pravděpodobnostní systém, který generuje nejpravděpodobnější pokračování. Někdy se splétne. Proto quality gate zůstává vždy u člověka.',
+      'RAG — Retrieval-Augmented Generation — je mechanismus, kdy AI nejprve vyhledá relevantní dokumenty a teprve pak odpovídá. Místo aby si vymýšlel, hledá. To je základ bezpečného enterprise AI.',
+      '🗣 Tuhle referenční kartu si nechte — budete tyhle pojmy slýchat v každé AI diskusi. Kdo je nezná, může se cítit ztracen. Kdo je zná, může vést.',
+      '❓ Který z pojmů jste dnes slyšeli poprvé? Který vás překvapil nebo zaujal?'
+    ],
+    'M6': [
+      'Vibe Coding je termín, který zavedl Andrej Karpathy — zakládající člen a přední výzkumník OpenAI. Popisuje přístup k vývoji, kde nepíšete kód — popisujete záměr a AI implementuje.',
+      'Tradiční přístup: specifikace, design, vývoj, review, deploy. Developer je bottleneck. Výsledek za týdny nebo měsíce. Business čeká, IT nestíhá. Tento cyklus znáte.',
+      'Vibe Coding mění rovnici: popíšete co chcete — ne jak to udělat. AI navrhne řešení. Revidujete výsledek, ne každý řádek kódu. Schválíte nebo iterate. Výsledek za hodiny nebo dny.',
+      'Klíčový insight: nemusíte vědět jak to AI udělá. Musíte vědět co chcete a proč. Business domain knowledge je vaše výhoda — AI nemá váš kontext o HOPI procesech, vy ho máte.',
+      '🗣 Tenhle Training Center — 17 slidů s plným obsahem — vznikl dnes ráno od 7:00 do 10:00. Tři hodiny. Žádný kód jsem nepsal, každý záměr jsem popsal, AI implementoval, já revidoval.',
+      'Výsledek Vibe Coding: 1 člověk s AI dokáže víc než malý tým bez AI. Rychlost stavění se mění zásadně. Ale quality gate — rozhodnutí co je správně — zůstává vždy na vás.',
+      '❓ Kde ve vaší práci byste mohli popsat záměr místo manuálního zpracování? Co teď děláte ručně?'
+    ],
+    'M_VC': [
+      'Po 9 týdnech intenzivního Vibe Codingu mám svůj osobní playbook. Tři věci dělají rozdíl mezi průměrným a vynikajícím výsledkem — a dvě věci vím, že spolehlivě nefungují.',
+      'Záměr rozhoduje o výsledku víc než cokoli jiného. AI neví nic o HOPI, o vašem oddělení, o tom co považujete za dobré. Váš záměr je jediný vstup. Garbage in, garbage out platí pro AI dvakrát více než pro jakýkoli jiný nástroj.',
+      'Iterativní přístup: ne "udělej celý report". Ale "udělej strukturu", pak "doplň sekci 1", pak "zkontroluj čísla". Malé kroky dávají kontrolu. Rychlost přichází z mnoha malých rychlých iterací, ne z jednoho velkého záměru.',
+      'Kontext je vaše investice. 5 minut přípravy záměru a kontextu ušetří 30 minut korekcí. AI s dobrým kontextem trefuje na první pokus. AI bez kontextu hádá a vy opravujete.',
+      '🗣 Anti-pattern číslo jedna: "Udělej to líp." AI neví co je líp. Musíte říct co konkrétně chcete jinak a proč. "Krátěji o 30%, zachovej klíčová čísla, přidej závěrečné doporučení" — to je záměr. "Líp" není záměr.',
+      'Quality gate zůstává vždy na člověku. AI navrhuje, implementuje, generuje. Schvaluje vždy jen člověk, který zná byznys a kontext.',
+      '❓ Máte příklad z vlastní práce, kde byste mohli záměr popsat konkrétně? Vyberte jeden reportovací úkol — zkusme záměr popsat společně, hned teď.'
+    ],
+    'M7': [
+      'Vibe Coding bez metodiky je chaos. 500 tasků bez systému je ztráta kontextu. Proto jsme postavili vlastní governance framework — a AI ho dodržuje stejně přísně jako já.',
+      'OIL Tracker obsahuje každou akci, každou myšlenku, každý bug. Status OPEN, IN PROGRESS, REVIEW, CLOSED. Žádná práce se nespustí bez registrovaného ID. V praxi to trvá 30 sekund a zachrání vás, když AI přijde s novým nápadem uprostřed jiné práce.',
+      'DISC Audit Log zachycuje každé rozhodnutí: datum, autor, kontext, závěr. Přes 230 takových záznamů. Kdykoli se zeptám proč jsme to tehdy tak rozhodli, odpověď je v DISC logu do 10 sekund.',
+      'Session Management je protokol jak začít a ukončit práci s AI. BRIEFING handover zajišťuje, že AI má při každém startu plný kontext. Žádné opakování, žádné kde jsme byli.',
+      'Versioned deploy: každá větší funkce je nová verze. 36 verzí za 9 týdnů. Kdykoli něco selže, vrátím se na předchozí verzi za 30 sekund. Staré verze se nikdy nemažou.',
+      '🗣 Metodika není overhead — je to to, co mi umožňuje řídit 500 tasků sám, s AI, bez ztráty kontextu, bez přepracování hotového. Je to základ škálování.',
+      '❓ Jak dnes dokumentujete rozhodnutí ve vašich projektech? A jak rychle je dokážete zpětně dohledat?'
+    ],
+    'M8': [
+      'Pojďme si projít kompletní příběh FI/CO Portalu — od problému po produkci. Tato čísla jsou reálná, z tohoto projektu, z posledních 9 týdnů.',
+      'Problém: HOPI Finance měla data v SAPu, ale manažerský přehled vyžadoval ruční práci — exporty, Excel, formátování. Reporty trvaly hodiny, nebyly real-time, neskalovaly na skupinovou úroveň.',
+      'Architektura: single-page aplikace s modulární strukturou. Každá sekce je samostatný modul. Bilingvní od začátku. Versioning zabudovaný. Backend-ready — swap JSON za REST API je změna v jednom souboru.',
+      'Implementace: 9 týdnů, každý den. David plus Claude. OIL tracking každého úkolu, DISC záznam každého rozhodnutí. Continuous deploy — každá hotová funkce šla okamžitě na produkci.',
+      'Výsledek: 29 sekcí v produkci. IT přebírá SAP integraci. HOPI Finance je reálný zákazník. A tato architektura je šablona — stejný shell, jiná data pro Supply Chain, Foods, Agriculture.',
+      '🗣 0 tradičních vývojářů není statement o tom, že vývojáři nejsou potřeba. Je to statement o tom, co je dnes možné, když má business expert správné nástroje a správnou metodiku.',
+      '❓ Co z tohoto příběhu vás nejvíce překvapilo? Co byste chtěli aplikovat ve vaší oblasti?'
+    ],
+    'M_EFF': [
+      'Tohle je osobní zpověď — ne teorie z knihy, ale 9 týdnů intenzivní práce s AI jako partnerem. Co skutečně funguje a co jsem se musel naučit tvrdou cestou.',
+      'Největší objev nebyl technický — byl organizační. 2 obrazovky plus 2 kognitivní zóny. Monitor je implementační zóna: Claude Code, soubory, browser. NTB je operativní zóna: poznámky, Commander, web. Fyzické oddělení přirozeně vytváří mentální oddělení.',
+      'Dva paralelní streamy nikdy nezastavím. Zatímco AI implementuje — a to trvá minuty — zpracovávám emaily, zapíši rozhodnutí, projdu Teams zprávy. AI pracuje, já pracuji. Žádný dead time na žádné straně.',
+      'AI v Microsoft aplikacích je realita každého dne: Excel plus Copilot pro analýzu dat. Word pro šablony a první drafty. Outlook pro asistovanou komunikaci. Teams pro záznamy ze schůzek. AI není jen Claude Code — je to vrstva přes celou moji pracovní výbavu.',
+      '🗣 4 pravidla, která jsem si dal: AI nikdy nečeká, vždy mám záměr připravený. Já nikdy nečekám, zatímco AI pracuje pracuji i já. 1 session rovná se 1 téma. A pravidlo čtyři, nejdůležitější: rozhoduji vždy já, AI nikdy neschvaluje.',
+      'AI nenahradil mou práci. Zdvojnásobil mou kapacitu. Mám 2 paralelní procesory — svůj mozek a Claude. Oba pracují na 100% a vzájemně se doplňují.',
+      '❓ Kde ve vašem dni máte dead time — čekáte na odpověď, na report, na schůzku? Co byste tam mohli delegovat na AI?'
+    ],
+    'EXPERT': [
+      'Expert Chapter je pro ty z vás, kteří chtějí jít hlouběji — CIO, IT architekti, AI specialisté a vývojáři uvažující o tom, jak AI zapojit do vývojového cyklu.',
+      'Projdeme 6 modulů: naše vlastní řešení pod kapotou, context engineering, AI economics, bezpečnost a governance, a výhled na příštích 2 roky.',
+      '🗣 Expert Chapter roste z praxe. Každý projekt přidá modul ze skutečné zkušenosti, ne z teorie.',
+      '❓ Kdo z vás má zájem jít do hloubky po workshopu? Rád se domluvím na individuálním follow-up pro technické role.'
+    ],
+    'MX1': [
+      'Celé naše řešení stojí na puristickém základě — HTML, CSS a JavaScript bez jediného externího frameworku nebo build systému.',
+      'Proč? Nulová závislost znamená nulové selhání z důvodu aktualizace balíčku, nulové build tooling a přímá deployovatelnost odkudkoli kde máte přístup k souborům.',
+      'AI nástroj je Claude Code — náš virtuální full-stack developer. Nejen píše kód, ale navrhuje architekturu, hledá chyby, vysvětluje rozhodnutí a pamatuje si kontext mezi sezeními díky BRIEFING.md.',
+      'Infrastructure stack je záměrně jednoduchý: OneDrive pro real-time sync a zálohu, Git pro verzování, GitHub Pages pro hosting s free CDN.',
+      '🗣 Toto není proof of concept. Je to 36 verzí, 500+ features a živá platforma. Postavena jedním člověkem s AI za 9 týdnů. Bez jednoho tradičního vývojáře.',
+      '❓ Jaké nástroje dnes vaše IT oddělení používá pro vývoj a provoz? Kde vidíte prostor pro AI asistenci?'
+    ],
+    'MX2': [
+      'Architektura je modulární — každý soubor dělá přesně jednu věc a nic víc. Single Responsibility Principle jako axiom, ne doporučení.',
+      '_shell.js se stará o UI shell, navigaci, jazykový přepínač a hudbu. _data.js je výhradní vstupní bod pro veškerá data. _ver.js spravuje verzování. Každý soubor je zaměnitelný bez dopadu na ostatní.',
+      'Moduly spolu komunikují výhradně přes Event Bus — AppIQ.emit a AppIQ.on. Jeden modul neví nic o druhém. Tím jsme dosáhli škálovatelnosti bez velkého refactoru.',
+      'Procesní vrstva je stejně důležitá jako kód. OIL.json s 512+ záznamy, DISCUSSION_RECORD jako totální audit log každého rozhodnutí, BRIEFING jako session handover dokument pro AI.',
+      '🗣 Backend-Ready princip je klíčový pro budoucnost. Dnes JSON soubory. Zítra REST API. Pozítří SQL databáze. Celá změna bude jen v _data.js. Frontend se nedotkne ani jednoho řádku.',
+      'NEXUS je budoucí Control Brain Center — vrstva orchestrující AI agenty, spravující schválení a řídící celý systém v reálném čase.'
+    ],
+    'MX3': [
+      'Context engineering je disciplína, ne technika. Nejde o to napsat hezký prompt — jde o architektonicky postavený kontext pro každou session.',
+      'Context window je paměť sessiony. Claude Sonnet 4.6 vidí 200 000 tokenů — přibližně 130 000 slov. Claude Opus 4.7 má 1 milion tokenů — zhruba celá série Harry Potter. Co je za tou hranicí, pro AI neexistuje.',
+      'Naše řešení: CLAUDE.md je firemní onboarding dokument pro AI. LEXICON.md definuje společný jazyk. Každá session začíná načtením pravidel, terminologie a posledního stavu projektu.',
+      'Vrstvy kontextu: system prompt nastaví pravidla a personu, memory files dodají projektový kontext, conversation je aktivní dialog, tool results jsou výstupy z nástrojů jako čtení souborů nebo vyhledávání.',
+      '🗣 Proč se vyplatí investovat do struktury kontextu? Protože špatný kontext dá špatné výsledky i od nejlepšího modelu na světě. Garbage in, garbage out platí pro AI stejně jako pro databáze.',
+      '❓ Jak dnes předáváte kontext při práci — kolegům, nástrojům, systémům? AI session management je stejný problém.'
+    ],
+    'MX4': [
+      'Čísla mluví jasně: celkové náklady na AI nástroje za 9 týdnů intenzivního vývoje — přibližně 500 dolarů. Výstup který by externě stál 500 000 korun nebo více.',
+      'Cenový model Claude Code je flat rate — 20 dolarů měsíčně pro neomezené použití v rámci nástroje. Pro development a learning je nástroj mnohem efektivnější než API.',
+      'Pro produkční aplikace má smysl API model — platíte per token, škáluje s využitím, kontrolujete náklady přesně. Enterprise tier přidá SSO, compliance a SLA.',
+      'Build vs buy rozhodnutí: budujte tam kde je unikátní znalost vaší firmy. Kupujte komoditu. AI stack — budujte vlastní kompetenci, infrastrukturu nakupujte.',
+      '🗣 HOPI model je interní pilot jako living proof. Nejde o to ušetřit na vývoji. Jde o to vybudovat interní know-how které pak prodáme trhu jako šestou divizi.',
+      '❓ Kolik platí HOPI ročně za softwarové licence? A kolik z toho pokrývá věci které by dnes AI udělal za zlomek ceny?'
+    ],
+    'MX5': [
+      'Data klasifikace je první a nejdůležitější krok jakékoli firemní AI politiky. Než nasadíte AI — definujte třídy dat.',
+      'Veřejné informace, kód, metodiky — bez omezení do jakéhokoli AI nástroje. Toto je 80 procent veškeré AI práce v enterprise kontextu.',
+      'Interní informace posílám s vědomím. Anonymizuji, generalizuji, nikdy konkrétní jména zákazníků nebo smluvní čísla bez souhlasu.',
+      'Citlivá data — nikdy. Hesla, osobní identifikátory, konkrétní finanční výsledky HOPI. Toto pravidlo nemá výjimku, ani pro mě.',
+      '🗣 Firemní AI politika není 50stránkový dokument. Je to jedna stránka která říká: tato data jdou do těchto nástrojů. Vše ostatní je implementace.',
+      '❓ Má HOPI dnes formalizovanou politiku pro AI nástroje? Kdo ji definoval a kdo ji vymáhá?'
+    ],
+    'MX6': [
+      'V roce 2026 jsme na prahu AI Agents. Claude Code a podobné nástroje začínají pracovat autonomně — plánovat úkoly, používat nástroje, iterovat bez lidského vstupu každý krok.',
+      'NEXUS je naše příprava na tuto éru. Control Brain Center který bude orchestrovat AI agenty pro HOPI v reálném čase — schvalování, monitoring, eskalace.',
+      'V roce 2027 se multimodal stane standardem. Audio, video, real-time přepis schůzek. AI nebude v separátním okně — bude ve schůzkách, v dokumentech, v rozhodnutích.',
+      'Horizont 2028: AI-native enterprise. Kde AI nejen asistuje, ale optimalizuje a rozhoduje v reálném čase. HOPI TechIQ jako šestá divize a komerční SaaS produkt.',
+      '🗣 First mover advantage není o technologii. Je o organizační kultuře, schopnosti adoptovat a experimentovat. Kdo má zkušenost dnes, bude orchestrovat v 2027. Ostatní budou teprve začínat.',
+      '❓ Kde vidíte největší příležitost pro AI v HOPI do dvou let? Jaký process je nejbolestivější a nejopakovanější?'
+    ],
+    'M9+': [
+      'Dostali jsme se k nejdůležitějšímu slidu celého Training Centru — a zatím je prázdný. Záměrně. Protože ho dnes naplníte vy.',
+      'Každá divize HOPI má specifické problémy, specifická data a specifické příležitosti pro AI. Nikdo to nezná lépe než lidé, kteří v těchto divizích pracují. To je váš příspěvek.',
+      'Skupinová práce: 30 minut, každá skupina navrhne 1–2 konkrétní use cases. Ne AI by mohlo pomoci s X — ale konkrétní problém Y, který řešíme ručně Z hodin týdně, a AI by mohl udělat W.',
+      'Co z use case uděláme: zaregistrujeme ho do OIL trackeru, přidáme do Training Center jako novou sekci a použijeme jako vstup pro prioritizaci dalšího rozvoje Cockpitu pro vaši divizi.',
+      '🗣 Výstup dnešního workshopu není slideset ani PDF. Je to tento Training Center s vaším obsahem a první záznamy v OIL trackeru pro vaše use cases. Konkrétní, měřitelné, navazující.',
+      '❓ Jaký je váš jeden nejdůležitější use case, který byste chtěli vidět jako první?'
+    ]
+  };
+
+  /* ─────────────────────────────────────────────────────────────────────
+     SLIDE ENGINE
+  ───────────────────────────────────────────────────────────────────── */
+  let cur = 0;
+  let _viewSlides = null;
+  function activeSlides() { return _viewSlides || SLIDES; }
+  let notesVisible = false;
+  let notesTab = 'bullets';
+
+  function switchNotesTab(tab) {
+    notesTab = tab;
+    document.getElementById('tc-tab-bullets').classList.toggle('active', tab === 'bullets');
+    document.getElementById('tc-tab-script').classList.toggle('active', tab === 'script');
+    document.getElementById('tc-notes-list').classList.toggle('tc-notes-hidden', tab === 'script');
+    document.getElementById('tc-notes-script').classList.toggle('tc-notes-hidden', tab === 'bullets');
+    document.getElementById('tc-notes').classList.toggle('script-mode', tab === 'script');
+  }
+
+  function toggleNotes() {
+    notesVisible = !notesVisible;
+    document.getElementById('tc-notes').classList.toggle('tc-notes-visible', notesVisible);
+    document.getElementById('tc-notes-btn').classList.toggle('active', notesVisible);
+  }
+
+  function renderSlide() {
+    const s   = activeSlides()[cur];
+    const el  = document.getElementById('tc-slide');
+    const lang = document.documentElement.lang || 'cs';
+
+    let innerHtml = '';
+
+    // Chapter + ID row
+    innerHtml += `<div class="tc-chapter-row">
+      <span class="tc-chapter-badge ${s.chapter}">${s.chapterLabel}</span>
+      <span class="tc-slide-id">${s.id}</span>
+    </div>`;
+
+    // Title + subtitle
+    innerHtml += `<div class="tc-title">${s.title}</div>`;
+    if (s.subtitle) innerHtml += `<div class="tc-subtitle">${s.subtitle}</div>`;
+
+    // Content
+    if (s.placeholder) {
+      innerHtml += `<div class="tc-placeholder">
+        <div class="tc-ph-icon">${s.phIcon}</div>
+        <div class="tc-ph-title">${s.id} — ${s.phDesc ? '' : s.title.replace(/<[^>]+>/g,'')}</div>
+        <div class="tc-ph-desc">${s.phDesc || ''}</div>
+        <span class="tc-ph-tag ${s.phTagClass}" style="background:rgba(168,85,247,.15);color:var(--c-violet)">${s.phTag}</span>
+      </div>`;
+    } else {
+      innerHtml += s.html || '';
+    }
+
+    el.innerHTML = innerHtml;
+    el.scrollTop = 0;
+
+    // Notes panel
+    const notesList = document.getElementById('tc-notes-list');
+    if (notesList) {
+      const items = NOTES[s.id] || [];
+      notesList.innerHTML = items.map(n => `<li class="tc-notes-item">${n}</li>`).join('');
+    }
+    // Populate script (2nd layer)
+    const scriptEl = document.getElementById('tc-notes-script');
+    if (scriptEl) {
+      const lines = SCRIPT[s.id] || [];
+      scriptEl.innerHTML = lines.map(line => {
+        const isStory = line.startsWith('🗣');
+        const isQ    = line.startsWith('❓');
+        const cls    = isStory ? 'tc-sc-story' : isQ ? 'tc-sc-q' : '';
+        return `<p class="${cls}">${line}</p>`;
+      }).join('');
+    }
+
+    // Dots
+    document.querySelectorAll('.tc-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === cur);
+    });
+
+    // Buttons
+    document.getElementById('tc-prev').disabled = cur === 0;
+    document.getElementById('tc-next').disabled = cur === activeSlides().length - 1;
+
+    // Counter
+    const vs = activeSlides();
+    document.getElementById('tc-counter').textContent = `${cur + 1} / ${vs.length}`;
+
+    // Filter button state
+    const fbtn = document.getElementById('tc-filter-btn');
+    fbtn.classList.toggle('active', !!_viewSlides && _viewSlides.length < SLIDES.length);
+    fbtn.title = _viewSlides && _viewSlides.length < SLIDES.length
+      ? `Filtr aktivní: ${_viewSlides.length}/${SLIDES.length} slidů (S)`
+      : 'Filtr slidů (S)';
+  }
+
+  function buildDots() {
+    const wrap = document.getElementById('tc-dots');
+    wrap.innerHTML = '';
+    activeSlides().forEach((s, i) => {
+      const d = document.createElement('div');
+      d.className = `tc-dot ${s.chapter}`;
+      d.title = `${s.id}`;
+      d.addEventListener('click', () => { cur = i; renderSlide(); });
+      wrap.appendChild(d);
+    });
+  }
+
+  function goTo(i) {
+    if (i < 0 || i >= activeSlides().length) return;
+    cur = i;
+    renderSlide();
+  }
+
+  // ── Presentation Filter ──────────────────────────────────────────────────
+  function openFilterModal() {
+    const list = document.getElementById('tc-filt-list');
+    list.innerHTML = '';
+    const currentIds = (_viewSlides || SLIDES).map(s => s.id);
+    const groups = {};
+    const groupOrder = [];
+    SLIDES.forEach(s => {
+      const g = s.chapterLabel || 'Obecné';
+      if (!groups[g]) { groups[g] = []; groupOrder.push(g); }
+      groups[g].push(s);
+    });
+    groupOrder.forEach(gName => {
+      const grpEl = document.createElement('div');
+      grpEl.className = 'tc-sel-group';
+      grpEl.textContent = gName;
+      list.appendChild(grpEl);
+      groups[gName].forEach(s => {
+        const label = document.createElement('label');
+        label.className = 'tc-sel-item' + (s.chapter === 'expert' ? ' expert' : '');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.value = s.id; cb.checked = currentIds.includes(s.id);
+        cb.addEventListener('change', updateFiltCount);
+        const idSpan = document.createElement('span');
+        idSpan.className = 'tc-sel-id'; idSpan.textContent = s.id;
+        const lblSpan = document.createElement('span');
+        lblSpan.className = 'tc-sel-lbl';
+        lblSpan.textContent = s.title.replace(/<[^>]+>/g, '');
+        label.appendChild(cb); label.appendChild(idSpan); label.appendChild(lblSpan);
+        list.appendChild(label);
+      });
+    });
+    updateFiltCount();
+    document.getElementById('tc-filt-modal').classList.add('open');
+  }
+
+  function closeFilterModal() {
+    document.getElementById('tc-filt-modal').classList.remove('open');
+  }
+
+  function updateFiltCount() {
+    const total   = document.querySelectorAll('#tc-filt-list input[type="checkbox"]').length;
+    const checked = document.querySelectorAll('#tc-filt-list input[type="checkbox"]:checked').length;
+    document.getElementById('tc-filt-count').textContent = checked + ' / ' + total + ' slidů';
+    document.getElementById('tc-filt-apply').disabled = checked === 0;
+  }
+
+  document.getElementById('tc-filt-all').addEventListener('click', () => {
+    document.querySelectorAll('#tc-filt-list input[type="checkbox"]').forEach(cb => cb.checked = true);
+    updateFiltCount();
+  });
+  document.getElementById('tc-filt-none').addEventListener('click', () => {
+    document.querySelectorAll('#tc-filt-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateFiltCount();
+  });
+  document.getElementById('tc-filt-close').addEventListener('click', closeFilterModal);
+  document.getElementById('tc-filt-apply').addEventListener('click', () => {
+    const ids = [...document.querySelectorAll('#tc-filt-list input[type="checkbox"]:checked')].map(cb => cb.value);
+    _viewSlides = ids.length === SLIDES.length ? null : SLIDES.filter(s => ids.includes(s.id));
+    cur = 0;
+    closeFilterModal();
+    buildDots();
+    renderSlide();
+  });
+  document.getElementById('tc-filt-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('tc-filt-modal')) closeFilterModal();
+  });
+  document.getElementById('tc-filter-btn').addEventListener('click', openFilterModal);
+
+  // Nav buttons
+  document.getElementById('tc-prev').addEventListener('click', () => goTo(cur - 1));
+  document.getElementById('tc-next').addEventListener('click', () => goTo(cur + 1));
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(cur + 1); }
+    if (e.key === 'ArrowLeft')                   { e.preventDefault(); goTo(cur - 1); }
+    if (e.key === 'f' || e.key === 'F')          { toggleFullscreen(); }
+    if (e.key === 'n' || e.key === 'N')          { toggleNotes(); }
+    if (e.key === 'p' || e.key === 'P')          { e.preventDefault(); if (!document.getElementById('tc-sel-modal').classList.contains('open') && !document.getElementById('tc-filt-modal').classList.contains('open')) openPrintMenu(); }
+    if (e.key === 's' || e.key === 'S')          { e.preventDefault(); if (!document.getElementById('tc-sel-modal').classList.contains('open') && !document.getElementById('tc-filt-modal').classList.contains('open')) openFilterModal(); }
+  });
+
+  // Notes button
+  document.getElementById('tc-notes-btn').addEventListener('click', toggleNotes);
+
+  // Notes tab switchers
+  document.getElementById('tc-tab-bullets').addEventListener('click', () => switchNotesTab('bullets'));
+  document.getElementById('tc-tab-script').addEventListener('click',  () => switchNotesTab('script'));
+
+  // Fullscreen
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+  document.getElementById('tc-fs').addEventListener('click', toggleFullscreen);
+
+  // PDF Export
+  function openPrintMenu() {
+    document.getElementById('tc-pdf-menu').classList.toggle('open');
+  }
+  document.getElementById('tc-pdf-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    openPrintMenu();
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#tc-pdf-wrap')) {
+      document.getElementById('tc-pdf-menu').classList.remove('open');
+    }
+  });
+  document.querySelectorAll('.tc-pdf-opt').forEach(btn => {
+    btn.addEventListener('click', () => openSelModal(btn.dataset.mode));
+  });
+
+  let _tcPrintMode = 'pres';
+
+  function openSelModal(mode) {
+    _tcPrintMode = mode;
+    document.getElementById('tc-pdf-menu').classList.remove('open');
+    const list = document.getElementById('tc-sel-list');
+    list.innerHTML = '';
+    const groups = {};
+    const groupOrder = [];
+    SLIDES.forEach(s => {
+      const g = s.chapterLabel || 'Obecné';
+      if (!groups[g]) { groups[g] = []; groupOrder.push(g); }
+      groups[g].push(s);
+    });
+    groupOrder.forEach(gName => {
+      const grpEl = document.createElement('div');
+      grpEl.className = 'tc-sel-group';
+      grpEl.textContent = gName;
+      list.appendChild(grpEl);
+      groups[gName].forEach(s => {
+        const label = document.createElement('label');
+        label.className = 'tc-sel-item' + (s.chapter === 'expert' ? ' expert' : '');
+        const cb = document.createElement('input');
+        cb.type = 'checkbox'; cb.value = s.id; cb.checked = true;
+        cb.addEventListener('change', updateSelCount);
+        const idSpan = document.createElement('span');
+        idSpan.className = 'tc-sel-id'; idSpan.textContent = s.id;
+        const lblSpan = document.createElement('span');
+        lblSpan.className = 'tc-sel-lbl';
+        lblSpan.textContent = s.title.replace(/<[^>]+>/g, '');
+        label.appendChild(cb); label.appendChild(idSpan); label.appendChild(lblSpan);
+        list.appendChild(label);
+      });
+    });
+    updateSelCount();
+    document.getElementById('tc-sel-modal').classList.add('open');
+  }
+
+  function closeSelModal() {
+    document.getElementById('tc-sel-modal').classList.remove('open');
+  }
+
+  function updateSelCount() {
+    const total   = document.querySelectorAll('#tc-sel-list input[type="checkbox"]').length;
+    const checked = document.querySelectorAll('#tc-sel-list input[type="checkbox"]:checked').length;
+    document.getElementById('tc-sel-count').textContent = checked + ' / ' + total + ' slidů vybráno';
+    document.getElementById('tc-sel-export').disabled = checked === 0;
+  }
+
+  document.getElementById('tc-sel-all').addEventListener('click', () => {
+    document.querySelectorAll('#tc-sel-list input[type="checkbox"]').forEach(cb => cb.checked = true);
+    updateSelCount();
+  });
+  document.getElementById('tc-sel-none').addEventListener('click', () => {
+    document.querySelectorAll('#tc-sel-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateSelCount();
+  });
+  document.getElementById('tc-sel-close').addEventListener('click', closeSelModal);
+  document.getElementById('tc-sel-export').addEventListener('click', () => {
+    const ids = [...document.querySelectorAll('#tc-sel-list input[type="checkbox"]:checked')].map(cb => cb.value);
+    closeSelModal();
+    exportPDF(_tcPrintMode, ids);
+  });
+  document.getElementById('tc-sel-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('tc-sel-modal')) closeSelModal();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      if (document.getElementById('tc-sel-modal').classList.contains('open'))  { e.preventDefault(); closeSelModal(); }
+      if (document.getElementById('tc-filt-modal').classList.contains('open')) { e.preventDefault(); closeFilterModal(); }
+    }
+  });
+
+  function exportPDF(mode, selectedIds) {
+    const slides = selectedIds ? SLIDES.filter(s => selectedIds.includes(s.id)) : SLIDES;
+    const container = document.getElementById('tc-print-container');
+    container.innerHTML = '';
+    slides.forEach(s => {
+      const div = document.createElement('div');
+      div.className = 'tc-print-slide';
+      let html = `<div class="tc-print-header">
+        <div class="tc-print-chapter">${s.chapterLabel}</div>
+        <h2 class="tc-print-title">${s.title}</h2>
+        ${s.subtitle ? `<p class="tc-print-subtitle">${s.subtitle}</p>` : ''}
+      </div>`;
+      html += s.placeholder
+        ? `<div class="tc-placeholder">
+             <div class="tc-ph-icon">${s.phIcon || '🔜'}</div>
+             <div class="tc-ph-title">${s.id} — ${s.title.replace(/<[^>]+>/g,'')}</div>
+             <span class="tc-ph-tag ${s.phTagClass||''}">${s.phTag||'Připravujeme'}</span>
+           </div>`
+        : (s.html || '');
+      if (mode === 'full') {
+        const bullets = NOTES[s.id] || [];
+        const script  = SCRIPT[s.id] || [];
+        if (bullets.length)
+          html += `<div class="tc-print-notes-section"><h4>Klíčové body</h4><ul>${bullets.map(b=>`<li>${b}</li>`).join('')}</ul></div>`;
+        if (script.length)
+          html += `<div class="tc-print-notes-section"><h4>Projev prezentátora</h4>${script.map(l=>`<p>${l}</p>`).join('')}</div>`;
+      }
+      div.innerHTML = html;
+      container.appendChild(div);
+    });
+    const ps = document.createElement('style');
+    ps.id = 'tc-ps';
+    ps.textContent = mode === 'pres'
+      ? '@page { size: A4 landscape; margin: 10mm 12mm; }'
+      : '@page { size: A4 portrait; margin: 12mm 15mm; }';
+    document.head.appendChild(ps);
+    document.body.classList.add(mode === 'pres' ? 'tc-print-pres' : 'tc-print-full');
+    window.print();
+    document.body.classList.remove('tc-print-pres', 'tc-print-full');
+    container.innerHTML = '';
+    const old = document.getElementById('tc-ps');
+    if (old) old.remove();
+  }
+
+  // Touch/swipe
+  let _tx = null;
+  document.getElementById('tc-stage').addEventListener('touchstart', e => { _tx = e.touches[0].clientX; }, { passive: true });
+  document.getElementById('tc-stage').addEventListener('touchend',   e => {
+    if (_tx === null) return;
+    const dx = e.changedTouches[0].clientX - _tx;
+    if (Math.abs(dx) > 40) goTo(cur + (dx < 0 ? 1 : -1));
+    _tx = null;
+  });
+
+  // Lang change (shell event)
+  document.addEventListener('appiq:langchange', renderSlide);
+
+  // Init
+  buildDots();
+  renderSlide();
+
+  </script>
+</body>
+</html>

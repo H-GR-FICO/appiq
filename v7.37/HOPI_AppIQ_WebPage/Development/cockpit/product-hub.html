@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Hub — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+
+    /* ── ③ Page ambient gradient ──────────────────── */
+    .cockpit-page {
+      background-image:
+        radial-gradient(ellipse at 8% 18%, rgba(0,125,50,.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 92% 75%, rgba(168,85,247,.05) 0%, transparent 40%);
+    }
+
+    /* ── Branded Hero ─────────────────────────────── */
+    .ph-hero {
+      position: relative; overflow: hidden;
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-left: 4px solid #007d32;
+      border-radius: var(--c-radius);
+      padding: 22px 28px 22px 24px;
+      margin-bottom: 20px;
+      background-image: radial-gradient(ellipse at 12% 60%, rgba(0,125,50,.10) 0%, transparent 55%);
+    }
+    .ph-hero-watermark {
+      position: absolute; right: 20px; top: 50%;
+      transform: translateY(-50%);
+      opacity: 0.65; pointer-events: none;
+    }
+    .ph-hero-logo { margin-bottom: 14px; line-height: 0; }
+    .ph-hero-logo svg { height: 42px; width: auto; max-width: 280px; }
+    .ph-hero-title {
+      font-size: 28px; font-weight: 900; color: var(--c-white);
+      font-family: var(--c-font-sans); letter-spacing: -0.5px;
+      line-height: 1; margin-bottom: 6px;
+    }
+    .ph-hero-sub {
+      font-size: 13px; color: var(--c-muted); font-family: var(--c-font-sans);
+    }
+
+    /* ── KPI strip ────────────────────────────────── */
+    .ph-kpi { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .ph-kpi-card {
+      flex: 1; min-width: 130px;
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius-sm); padding: 14px 18px;
+    }
+    .ph-kpi-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: var(--c-muted);
+      font-family: var(--c-font-sans); margin-bottom: 4px;
+    }
+    .ph-kpi-val {
+      font-size: 22px; font-weight: 800; color: var(--c-white);
+      font-family: var(--c-font-sans); line-height: 1;
+    }
+    .ph-kpi-val span { font-size: 13px; font-weight: 500; color: var(--c-muted); margin-left: 3px; }
+
+    /* ── Flow stepper ─────────────────────────────── */
+    .ph-stepper-outer {
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      margin-bottom: 28px; padding-bottom: 4px;
+      -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+      mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    }
+    .ph-stepper-outer:hover { -webkit-mask-image: none; mask-image: none; }
+    .ph-stepper { display: flex; align-items: center; min-width: max-content; }
+
+    .ph-step {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 11px 16px; border-radius: 10px; border: 1px solid;
+      text-decoration: none; min-width: 108px; text-align: center;
+      transition: background .2s, border-color .2s, transform .15s;
+    }
+    .ph-step:hover { transform: translateY(-2px); }
+    .ph-step-num {
+      font-size: 9px; font-weight: 800; letter-spacing: 2px;
+      font-family: var(--c-font-sans);
+    }
+    .ph-step-q {
+      font-size: 9px; font-weight: 800; letter-spacing: 0.3px;
+      text-transform: uppercase; font-family: var(--c-font-sans);
+      line-height: 1.3; white-space: nowrap;
+    }
+    /* ④ Progress dot */
+    .ph-step-dot {
+      width: 5px; height: 5px; border-radius: 50%; margin-top: 3px;
+    }
+    .ph-dot-live  { background: #22C55E; }
+    .ph-dot-soon  { background: rgba(255,255,255,.15); }
+
+    .ph-step-arr {
+      display: flex; align-items: center; flex-shrink: 0; margin: 0 5px;
+    }
+
+    /* Step colors */
+    .s-violet { border-color: rgba(168,85,247,.3); background: rgba(168,85,247,.06); }
+    .s-violet .ph-step-num, .s-violet .ph-step-q { color: var(--c-violet); }
+    .s-violet:hover { background: rgba(168,85,247,.14); border-color: var(--c-violet); }
+
+    .s-green { border-color: rgba(34,197,94,.3); background: rgba(34,197,94,.06); }
+    .s-green .ph-step-num, .s-green .ph-step-q { color: var(--c-green); }
+    .s-green:hover { background: rgba(34,197,94,.14); border-color: var(--c-green); }
+
+    .s-blue { border-color: rgba(96,165,250,.3); background: rgba(96,165,250,.06); }
+    .s-blue .ph-step-num, .s-blue .ph-step-q { color: var(--c-blue); }
+    .s-blue:hover { background: rgba(96,165,250,.14); border-color: var(--c-blue); }
+
+    .s-amber { border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.06); }
+    .s-amber .ph-step-num, .s-amber .ph-step-q { color: var(--c-amber); }
+    .s-amber:hover { background: rgba(245,158,11,.14); border-color: var(--c-amber); }
+
+    .s-orange { border-color: rgba(249,115,22,.3); background: rgba(249,115,22,.06); }
+    .s-orange .ph-step-num, .s-orange .ph-step-q { color: #F97316; }
+    .s-orange:hover { background: rgba(249,115,22,.14); border-color: #F97316; }
+
+    .ph-step-next {
+      border-color: rgba(255,255,255,.1) !important; background: rgba(255,255,255,.02) !important;
+      cursor: default;
+    }
+    .ph-step-next .ph-step-num, .ph-step-next .ph-step-q { color: rgba(255,255,255,.25) !important; }
+
+    /* ── Sections ─────────────────────────────────── */
+    .ph-sections { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
+
+    .ph-section {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden; border-top-width: 3px;
+    }
+    .ph-section[data-color="violet"] { border-top-color: rgba(168,85,247,.6); }
+    .ph-section[data-color="green"]  { border-top-color: rgba(34,197,94,.6); }
+    .ph-section[data-color="blue"]   { border-top-color: rgba(96,165,250,.6); }
+    .ph-section[data-color="amber"]  { border-top-color: rgba(245,158,11,.6); }
+    .ph-section[data-color="orange"] { border-top-color: rgba(249,115,22,.6); }
+
+    .ph-section-header {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 24px; border-bottom: 1px solid var(--c-border);
+      background: rgba(255,255,255,.02); flex-wrap: wrap;
+    }
+
+    .ph-q-num {
+      font-size: 10px; font-weight: 700; letter-spacing: 2px;
+      text-transform: uppercase; font-family: var(--c-font-sans);
+      padding: 3px 10px; border-radius: 4px; flex-shrink: 0;
+    }
+    .num-violet { background: rgba(168,85,247,.12); color: var(--c-violet); border: 1px solid rgba(168,85,247,.3); }
+    .num-green  { background: rgba(34,197,94,.12);  color: var(--c-green);  border: 1px solid rgba(34,197,94,.3); }
+    .num-blue   { background: rgba(96,165,250,.12); color: var(--c-blue);   border: 1px solid rgba(96,165,250,.3); }
+    .num-amber  { background: rgba(245,158,11,.12); color: var(--c-amber);  border: 1px solid rgba(245,158,11,.3); }
+    .num-orange { background: rgba(249,115,22,.12); color: #F97316;         border: 1px solid rgba(249,115,22,.3); }
+
+    .ph-q-text {
+      font-size: 15px; font-weight: 800; font-family: var(--c-font-sans);
+      letter-spacing: 0.2px; color: var(--c-white);
+    }
+    [data-color="violet"] .ph-q-text { color: var(--c-violet); }
+    [data-color="green"]  .ph-q-text { color: var(--c-green); }
+    [data-color="blue"]   .ph-q-text { color: var(--c-blue); }
+    [data-color="amber"]  .ph-q-text { color: var(--c-amber); }
+    [data-color="orange"] .ph-q-text { color: #F97316; }
+
+    .ph-q-sub {
+      font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans);
+      letter-spacing: 0.5px;
+    }
+
+    /* ① Progress badge */
+    .ph-sec-progress {
+      margin-left: auto; display: flex; align-items: center; gap: 6px;
+      flex-shrink: 0;
+    }
+    .ph-prog-live {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; font-family: var(--c-font-sans);
+      color: #22C55E; background: rgba(34,197,94,.1);
+      border: 1px solid rgba(34,197,94,.25);
+      border-radius: 3px; padding: 2px 7px;
+    }
+    .ph-prog-soon {
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; font-family: var(--c-font-sans);
+      color: var(--c-muted); background: rgba(255,255,255,.04);
+      border: 1px solid var(--c-border);
+      border-radius: 3px; padding: 2px 7px;
+    }
+
+    /* ── Tile grid ────────────────────────────────── */
+    .ph-tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 12px; padding: 16px;
+    }
+
+    /* ── Base tile ────────────────────────────────── */
+    .ph-tile {
+      position: relative; background: var(--c-bg3);
+      border: 1px solid var(--c-border); border-radius: 10px;
+      padding: 14px 14px 28px; display: flex; flex-direction: column;
+      gap: 5px; min-height: 88px; text-decoration: none;
+      border-left-width: 3px;
+      /* ② prep for lift */
+      transition: border-color .18s, background .18s, box-shadow .18s, transform .18s;
+    }
+
+    /* ② Tile lift on hover */
+    a.ph-tile:hover { transform: translateY(-2px); }
+
+    /* Section color per tile */
+    [data-color="violet"] .ph-tile { border-left-color: rgba(168,85,247,.25); }
+    [data-color="green"]  .ph-tile { border-left-color: rgba(34,197,94,.25); }
+    [data-color="blue"]   .ph-tile { border-left-color: rgba(96,165,250,.25); }
+    [data-color="amber"]  .ph-tile { border-left-color: rgba(245,158,11,.25); }
+    [data-color="orange"] .ph-tile { border-left-color: rgba(249,115,22,.25); }
+
+    [data-color="violet"] .ph-tile-cat { color: rgba(168,85,247,.65); }
+    [data-color="green"]  .ph-tile-cat { color: rgba(34,197,94,.65); }
+    [data-color="blue"]   .ph-tile-cat { color: rgba(96,165,250,.65); }
+    [data-color="amber"]  .ph-tile-cat { color: rgba(245,158,11,.65); }
+    [data-color="orange"] .ph-tile-cat { color: rgba(249,115,22,.65); }
+
+    [data-color="violet"] a.ph-tile:hover { border-color: var(--c-violet); background: rgba(168,85,247,.08); box-shadow: 0 4px 16px rgba(168,85,247,.15); }
+    [data-color="violet"] a.ph-tile:hover .ph-tile-title { color: var(--c-violet); }
+    [data-color="violet"] a.ph-tile:hover .ph-tile-open  { opacity: 1; }
+
+    [data-color="green"]  a.ph-tile:hover { border-color: var(--c-green); background: rgba(34,197,94,.08); box-shadow: 0 4px 16px rgba(34,197,94,.15); }
+    [data-color="green"]  a.ph-tile:hover .ph-tile-title { color: var(--c-green); }
+    [data-color="green"]  a.ph-tile:hover .ph-tile-open  { opacity: 1; }
+
+    [data-color="blue"]   a.ph-tile:hover { border-color: var(--c-blue); background: rgba(96,165,250,.08); box-shadow: 0 4px 16px rgba(96,165,250,.15); }
+    [data-color="blue"]   a.ph-tile:hover .ph-tile-title { color: var(--c-blue); }
+    [data-color="blue"]   a.ph-tile:hover .ph-tile-open  { opacity: 1; }
+
+    [data-color="amber"]  a.ph-tile:hover { border-color: var(--c-amber); background: rgba(245,158,11,.08); box-shadow: 0 4px 16px rgba(245,158,11,.15); }
+    [data-color="amber"]  a.ph-tile:hover .ph-tile-title { color: var(--c-amber); }
+    [data-color="amber"]  a.ph-tile:hover .ph-tile-open  { opacity: 1; }
+
+    [data-color="orange"] a.ph-tile:hover { border-color: #F97316; background: rgba(249,115,22,.08); box-shadow: 0 4px 16px rgba(249,115,22,.15); }
+    [data-color="orange"] a.ph-tile:hover .ph-tile-title { color: #F97316; }
+    [data-color="orange"] a.ph-tile:hover .ph-tile-open  { opacity: 1; }
+
+    /* ── Super tile ───────────────────────────────── */
+    .ph-tile-super {
+      grid-column: span 2; border-color: rgba(34,197,94,.3) !important;
+      background: rgba(34,197,94,.04); flex-direction: row;
+      align-items: center; gap: 16px; min-height: 74px;
+      padding: 16px 20px; border-left-width: 3px !important;
+      border-left-color: rgba(34,197,94,.5) !important;
+    }
+    .ph-tile-super .ph-tile-title { font-size: 15px; color: var(--c-green); }
+    .ph-tile-super .ph-tile-icon  { font-size: 26px; flex-shrink: 0; line-height: 1; }
+    .ph-tile-super .ph-tile-info  { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+    .ph-tile-super:hover { border-color: var(--c-green) !important; background: rgba(34,197,94,.12) !important; box-shadow: 0 4px 20px rgba(34,197,94,.18) !important; }
+    .ph-tile-super:hover .ph-tile-title { color: var(--c-green) !important; }
+
+    /* ── Coming Soon tile ─────────────────────────── */
+    .ph-tile-soon { opacity: 0.38; cursor: default; pointer-events: none; }
+
+    /* ── Tile internals ───────────────────────────── */
+    .ph-tile-cat {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; font-family: var(--c-font-sans); color: var(--c-muted);
+    }
+    .ph-tile-title {
+      font-size: 13px; font-weight: 700; color: var(--c-white);
+      font-family: var(--c-font-sans); line-height: 1.3; transition: color .18s;
+    }
+    .ph-tile-desc {
+      font-size: 11px; color: var(--c-muted);
+      font-family: var(--c-font-sans); line-height: 1.5;
+    }
+    .ph-tile-open {
+      position: absolute; bottom: 9px; right: 12px;
+      font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+      font-family: var(--c-font-sans); opacity: 0; transition: opacity .18s;
+    }
+    [data-color="violet"] .ph-tile-open { color: var(--c-violet); }
+    [data-color="green"]  .ph-tile-open { color: var(--c-green); }
+    [data-color="blue"]   .ph-tile-open { color: var(--c-blue); }
+    [data-color="amber"]  .ph-tile-open { color: var(--c-amber); }
+    [data-color="orange"] .ph-tile-open { color: #F97316; }
+
+    .ph-tile-badge-soon {
+      position: absolute; bottom: 9px; right: 10px;
+      font-size: 8px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.1); border-radius: 3px;
+      padding: 2px 6px; color: var(--c-muted); font-family: var(--c-font-sans);
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 640px) {
+      .ph-tile-grid  { grid-template-columns: 1fr 1fr; gap: 8px; padding: 10px; }
+      .ph-tile-super { grid-column: span 2; flex-direction: column; gap: 8px; padding: 14px; }
+      .ph-q-sub, .ph-sec-progress { display: none; }
+      .ph-kpi-card  { min-width: 110px; }
+      .ph-step      { min-width: 90px; padding: 10px 12px; }
+      .ph-hero-logo svg { height: 32px; }
+      .ph-hero-title { font-size: 22px; }
+    }
+    @media (max-width: 400px) {
+      .ph-tile-grid  { grid-template-columns: 1fr; }
+      .ph-tile-super { grid-column: span 1; }
+    }
+
+  </style>
+</head>
+<body>
+<div id="cockpit-shell"></div>
+<div class="cockpit-page">
+
+  <!-- ── Branded Hero ────────────────────────────── -->
+  <div class="ph-hero">
+
+    <!-- B1 Hexagon watermark -->
+    <div class="ph-hero-watermark">
+      <svg viewBox="0 0 120 120" width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ph-hex-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#00b040"/>
+            <stop offset="100%" stop-color="#005220"/>
+          </linearGradient>
+        </defs>
+        <polygon points="60,7 108,33.5 108,86.5 60,113 12,86.5 12,33.5" fill="url(#ph-hex-grad)"/>
+        <polygon points="60,15 100,37.5 100,82.5 60,105 20,82.5 20,37.5" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="1.5"/>
+        <text x="60" y="73" text-anchor="middle" fill="white" font-family="'Segoe UI',Arial,sans-serif" font-size="40" font-weight="900" letter-spacing="-2">IQ</text>
+      </svg>
+    </div>
+
+    <!-- LF2 — HOPI AppIQ logo -->
+    <div class="ph-hero-logo">
+      <svg viewBox="0 0 1260 240.6796" xmlns="http://www.w3.org/2000/svg">
+        <rect width="30.1059" height="240.6796" fill="#007d32"/>
+        <path d="m591.0638,52.7498h-49.2811v142.3268h49.2811V52.7498Zm-134.2544,38.8765h4.4598c6.3731,0,10.8003,1.1359,13.277,3.3984,2.4766,2.2671,3.7196,6.6571,3.7196,13.1699s-1.3128,11.1169-3.9291,13.8076c-2.6256,2.6908-6.9783,4.0362-13.0674,4.0362h-4.4598v-34.4121Zm55.6542,61.073c10.3395-8.1421,15.5115-22.946,15.5115-44.3977s-5.1348-36.0787-15.4044-43.867c-10.2697-7.7883-26.6564-11.6848-49.1741-11.6848h-55.8684v142.3268h49.2811v-30.1664h6.5872c22.3734,0,38.7321-4.0687,49.0669-12.2109m-135.1017-85.1829c-10.7631-11.6848-27.9691-17.5273-51.6181-17.5273s-40.8597,5.8424-51.6181,17.5273c-10.7677,11.6802-16.1446,30.4457-16.1446,56.292s5.4141,44.6444,16.247,56.3991c10.8376,11.7547,28.0436,17.6297,51.6227,17.6297s40.748-5.8424,51.511-17.5226c10.7631-11.6848,16.1446-30.483,16.1446-56.3991s-5.3815-44.7189-16.1446-56.3991m-66.1706,30.3759c2.337-5.3117,7.2576-7.9652,14.7666-7.9652,7.5044,0,12.3505,2.5837,14.5478,7.7511,2.1973,5.1721,3.296,13.8821,3.296,26.1303s-1.1359,20.9955-3.403,26.2327c-2.2671,5.2419-7.1133,7.8628-14.5478,7.8628s-12.3226-2.6582-14.6595-7.9699c-2.337-5.3071-3.5054-13.9799-3.5054-26.0185s1.1685-20.7115,3.5054-26.0232m-67.232,97.1843V52.7498h-49.2811v52.47h-27.8295v-52.47h-49.2811v142.3268h49.2811v-49.7094h27.8295v49.7094h49.2811Z" fill="#fff"/>
+        <text y="194" font-family="'Segoe UI',Arial,sans-serif" x="648">
+          <tspan fill="#E8750A" font-size="192" font-weight="300">App</tspan><tspan fill="#007d32" font-size="208" font-weight="900">IQ</tspan>
+        </text>
+      </svg>
+    </div>
+
+    <div class="ph-hero-title">Product Hub</div>
+    <div class="ph-hero-sub"
+         data-en="Six questions — the full story of our platform.">Šest otázek — celý příběh naší platformy.</div>
+
+  </div>
+
+  <!-- ── KPI strip ───────────────────────────────── -->
+  <div class="ph-kpi">
+    <div class="ph-kpi-card">
+      <div class="ph-kpi-label" data-en="Sections">Sekcí</div>
+      <div class="ph-kpi-val"><span id="kpi-sec">28</span> <span data-en="active">aktivních</span></div>
+    </div>
+    <div class="ph-kpi-card">
+      <div class="ph-kpi-label" data-en="Build Time">Prototype</div>
+      <div class="ph-kpi-val"><span id="kpi-weeks">8</span> <span data-en="wks">týd.</span></div>
+    </div>
+    <div class="ph-kpi-card">
+      <div class="ph-kpi-label" data-en="Tasks">Tasků</div>
+      <div class="ph-kpi-val"><span id="kpi-tasks">493</span><span>+</span></div>
+    </div>
+    <div class="ph-kpi-card">
+      <div class="ph-kpi-label" data-en="Seed Ask">Seed Ask</div>
+      <div class="ph-kpi-val">~<span id="kpi-budget">20</span><span data-en="M CZK / 18 mo.">M CZK / 18 měs.</span></div>
+    </div>
+    <div class="ph-kpi-card">
+      <div class="ph-kpi-label" data-en="B2C Target">B2C Target</div>
+      <div class="ph-kpi-val">Q1 <span>'27</span></div>
+    </div>
+  </div>
+
+  <!-- ── Flow stepper ────────────────────────────── -->
+  <div class="ph-stepper-outer">
+    <nav class="ph-stepper">
+
+      <a class="ph-step s-violet" href="#ph-sec-01">
+        <span class="ph-step-num">01</span>
+        <span class="ph-step-q">WHO WE ARE?</span>
+        <span class="ph-step-dot ph-dot-live"></span>
+      </a>
+      <span class="ph-step-arr" aria-hidden="true"><svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6H15M10 1L16 6L10 11" stroke="#A855F7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+
+      <a class="ph-step s-green" href="#ph-sec-02">
+        <span class="ph-step-num">02</span>
+        <span class="ph-step-q">WHAT WE OFFER?</span>
+        <span class="ph-step-dot ph-dot-live"></span>
+      </a>
+      <span class="ph-step-arr" aria-hidden="true"><svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6H15M10 1L16 6L10 11" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+
+      <a class="ph-step s-blue" href="#ph-sec-03">
+        <span class="ph-step-num">03</span>
+        <span class="ph-step-q">HOW WE WORK?</span>
+        <span class="ph-step-dot ph-dot-live"></span>
+      </a>
+      <span class="ph-step-arr" aria-hidden="true"><svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6H15M10 1L16 6L10 11" stroke="#60A5FA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+
+      <a class="ph-step s-amber" href="#ph-sec-04">
+        <span class="ph-step-num">04</span>
+        <span class="ph-step-q">HOW MUCH?</span>
+        <span class="ph-step-dot ph-dot-live"></span>
+      </a>
+      <span class="ph-step-arr" aria-hidden="true"><svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6H15M10 1L16 6L10 11" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+
+      <a class="ph-step s-orange" href="#ph-sec-05">
+        <span class="ph-step-num">05</span>
+        <span class="ph-step-q">HOW TO START?</span>
+        <span class="ph-step-dot ph-dot-live"></span>
+      </a>
+      <span class="ph-step-arr" aria-hidden="true"><svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6H15M10 1L16 6L10 11" stroke="#F97316" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+
+      <a class="ph-step s-violet" href="#ph-sec-06">
+        <span class="ph-step-num">06</span>
+        <span class="ph-step-q">GO TO MARKET?</span>
+        <span class="ph-step-dot ph-dot-soon"></span>
+      </a>
+      <span class="ph-step-arr" aria-hidden="true"><svg width="20" height="12" viewBox="0 0 20 12" fill="none"><path d="M1 6H15M10 1L16 6L10 11" stroke="#4B5563" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+
+      <div class="ph-step ph-step-next">
+        <span class="ph-step-num">?</span>
+        <span class="ph-step-q">WHAT NEXT?</span>
+      </div>
+
+    </nav>
+  </div>
+
+  <!-- ── Sections ────────────────────────────────── -->
+  <div class="ph-sections">
+
+    <!-- 01 WHO WE ARE -->
+    <div id="ph-sec-01" class="ph-section" data-color="violet">
+      <div class="ph-section-header">
+        <span class="ph-q-num num-violet">01</span>
+        <span class="ph-q-text">WHO WE ARE?</span>
+        <span class="ph-q-sub" data-en="Identity · team · vision documents">Identita · tým · vizionářské dokumenty</span>
+        <span class="ph-sec-progress">
+          <span class="ph-prog-live">6 live</span>
+        </span>
+      </div>
+      <div class="ph-tile-grid">
+
+        <a class="ph-tile" href="founders-board.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title">Founders Board</span>
+          <span class="ph-tile-desc" data-en="Strategic pitch for leadership &amp; investors">Strategický pitch pro leadership a investory</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../PERSONAL_PITCH.html">
+          <span class="ph-tile-cat">portal</span>
+          <span class="ph-tile-title">Personal Pitch</span>
+          <span class="ph-tile-desc" data-en="Founder story &amp; product intent">Příběh zakladatele a záměr produktu</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../CEO_BRIEF.html">
+          <span class="ph-tile-cat">portal</span>
+          <span class="ph-tile-title">CEO Brief</span>
+          <span class="ph-tile-desc" data-en="Daily project status for leadership">Denní stav projektu pro leadership</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../INVESTOR_ENTRY.html">
+          <span class="ph-tile-cat">portal</span>
+          <span class="ph-tile-title">Investor Entry</span>
+          <span class="ph-tile-desc" data-en="Investor entry point &amp; access hub">Vstupní bod pro investory</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../INVESTOR_BRIEF.html">
+          <span class="ph-tile-cat">portal</span>
+          <span class="ph-tile-title">Investor Brief</span>
+          <span class="ph-tile-desc" data-en="Detailed pitch brief for investors">Detailní pitch brief pro investory</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../ANTHROPIC_ONEPAGER.html">
+          <span class="ph-tile-cat">partner</span>
+          <span class="ph-tile-title">Anthropic Onepager</span>
+          <span class="ph-tile-desc" data-en="AI partner onepager for Anthropic">Onepager pro AI partnera Anthropic</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- 02 WHAT WE OFFER -->
+    <div id="ph-sec-02" class="ph-section" data-color="green">
+      <div class="ph-section-header">
+        <span class="ph-q-num num-green">02</span>
+        <span class="ph-q-text">WHAT WE OFFER?</span>
+        <span class="ph-q-sub" data-en="Product · platform · live components">Produkt · platforma · živé komponenty</span>
+        <span class="ph-sec-progress">
+          <span class="ph-prog-live">3 live</span>
+          <span class="ph-prog-soon">2 coming</span>
+        </span>
+      </div>
+      <div class="ph-tile-grid">
+
+        <a class="ph-tile ph-tile-super" href="../MANAGEMENT_COCKPIT.html">
+          <span class="ph-tile-icon">🎛</span>
+          <div class="ph-tile-info">
+            <div class="ph-tile-cat">core product</div>
+            <div class="ph-tile-title">Management Cockpit</div>
+            <div class="ph-tile-desc" data-en="28 sections · 7 clusters · full platform overview">28 sekcí · 7 clusterů · kompletní přehled platformy</div>
+          </div>
+        </a>
+
+        <a class="ph-tile" href="../PORTAL_PRESENTATION.html">
+          <span class="ph-tile-cat">portal</span>
+          <span class="ph-tile-title" data-en="Portal Presentation">Portal Prezentace</span>
+          <span class="ph-tile-desc" data-en="Marketing presentation of the platform">Marketingová prezentace platformy</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../index.html">
+          <span class="ph-tile-cat">app</span>
+          <span class="ph-tile-title" data-en="FICO Portal">FICO Portál</span>
+          <span class="ph-tile-desc" data-en="Finance &amp; Controlling portal — live prototype">Finance &amp; Controlling portál — živý prototyp</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">studio</span>
+          <span class="ph-tile-title">Studio</span>
+          <span class="ph-tile-desc" data-en="Design lab · prototyping environment">Design lab · prototypovací prostředí</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">catalog</span>
+          <span class="ph-tile-title" data-en="Product Catalog">Product Catalog</span>
+          <span class="ph-tile-desc" data-en="Phase 1 HOME B2C product &amp; vertical catalog">Katalog produktů a vertikál Phase 1 HOME B2C</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 03 HOW WE WORK -->
+    <div id="ph-sec-03" class="ph-section" data-color="blue">
+      <div class="ph-section-header">
+        <span class="ph-q-num num-blue">03</span>
+        <span class="ph-q-text">HOW WE WORK?</span>
+        <span class="ph-q-sub" data-en="Methodology · tools · architecture">Metodika · nástroje · architektura</span>
+        <span class="ph-sec-progress">
+          <span class="ph-prog-live">3 live</span>
+          <span class="ph-prog-soon">2 coming</span>
+        </span>
+      </div>
+      <div class="ph-tile-grid">
+
+        <a class="ph-tile" href="ai-control-room.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title">AI Control Room</span>
+          <span class="ph-tile-desc" data-en="Platform infrastructure · hooks · audit log">Platformní infrastruktura · hooky · audit log</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="methodology.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title" data-en="Methodology">Metodika</span>
+          <span class="ph-tile-desc" data-en="AI rules · model selection guide · workflow">AI pravidla · výběr modelu · workflow</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="../BRAND_CONCEPTS.html">
+          <span class="ph-tile-cat">portal</span>
+          <span class="ph-tile-title">Brand Concepts</span>
+          <span class="ph-tile-desc" data-en="Visual identity · iterations · approval">Vizuální identita · iterace · schválení</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">architecture</span>
+          <span class="ph-tile-title">9D Model</span>
+          <span class="ph-tile-desc" data-en="9-dimensional product model">9-dimenzionální produktový model</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">architecture</span>
+          <span class="ph-tile-title">Integration Arch.</span>
+          <span class="ph-tile-desc" data-en="Integration architecture · connectors · phases">Integrační architektura · konektory · fáze</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 04 HOW MUCH -->
+    <div id="ph-sec-04" class="ph-section" data-color="amber">
+      <div class="ph-section-header">
+        <span class="ph-q-num num-amber">04</span>
+        <span class="ph-q-text">HOW MUCH?</span>
+        <span class="ph-q-sub" data-en="Pricing · projections · budget · ROI">Ceník · projekce · budget · ROI</span>
+        <span class="ph-sec-progress">
+          <span class="ph-prog-live">3 live</span>
+          <span class="ph-prog-soon">1 coming</span>
+        </span>
+      </div>
+      <div class="ph-tile-grid">
+
+        <a class="ph-tile" href="business-model.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title" data-en="Business Model">Obchodní model</span>
+          <span class="ph-tile-desc" data-en="Pricing · ARR projections · Exit valuations">Ceník · ARR projekce · Exit valuace</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="financial.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title" data-en="Financial Cockpit">Finanční přehled</span>
+          <span class="ph-tile-desc" data-en="Monthly cost tracker · cash injection pipeline">Monthly cost tracker · cash pipeline</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="budget-track.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title" data-en="Budget Track">Sledování rozpočtu</span>
+          <span class="ph-tile-desc" data-en="Milestone price tags · cash back · ROI">Milestone price tags · cash back · ROI</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">finance</span>
+          <span class="ph-tile-title" data-en="Financial Projections">Finanční projekce</span>
+          <span class="ph-tile-desc" data-en="Detailed financial model · 4 scenarios">Detailní finanční model · 4 scénáře</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 05 HOW TO START -->
+    <div id="ph-sec-05" class="ph-section" data-color="orange">
+      <div class="ph-section-header">
+        <span class="ph-q-num num-orange">05</span>
+        <span class="ph-q-text">HOW TO START?</span>
+        <span class="ph-q-sub" data-en="Launch plan · milestones · project card">Launch plán · milníky · projekt karta</span>
+        <span class="ph-sec-progress">
+          <span class="ph-prog-live">2 live</span>
+          <span class="ph-prog-soon">1 coming</span>
+        </span>
+      </div>
+      <div class="ph-tile-grid">
+
+        <a class="ph-tile" href="launch-plan.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title" data-en="Launch Plan">Plán startu</span>
+          <span class="ph-tile-desc" data-en="WHEN IT HAPPENS · 3 tracks B2C / B2B">KDY SE TO STANE · 3 tracky B2C / B2B</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a class="ph-tile" href="timeline.html">
+          <span class="ph-tile-cat">cockpit</span>
+          <span class="ph-tile-title" data-en="Milestone Timeline">Milníkový plán</span>
+          <span class="ph-tile-desc" data-en="Phase 0 → LLC → B2C Beta → Launch → Enterprise">Fáze 0 → s.r.o. → B2C Beta → Launch → Enterprise</span>
+          <span class="ph-tile-open">Otevřít ↗</span>
+        </a>
+
+        <a href="bos-card-appiq.html" class="ph-tile">
+          <span class="ph-tile-cat">governance</span>
+          <span class="ph-tile-title">BOS Card</span>
+          <span class="ph-tile-desc" data-en="Internal project card · PDF export">Interní projekt karta · PDF export</span>
+          <span class="ph-tile-open" data-en="Open ↗">Otevřít ↗</span>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- 06 GO TO MARKET -->
+    <div id="ph-sec-06" class="ph-section" data-color="violet">
+      <div class="ph-section-header">
+        <span class="ph-q-num num-violet">06</span>
+        <span class="ph-q-text">GO TO MARKET?</span>
+        <span class="ph-q-sub" data-en="GTM strategy · catalog · campaigns · channels">GTM strategie · katalog · kampaně · kanály</span>
+        <span class="ph-sec-progress">
+          <span class="ph-prog-soon">6 coming</span>
+        </span>
+      </div>
+      <div class="ph-tile-grid">
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">strategy</span>
+          <span class="ph-tile-title" data-en="GTM Strategy">GTM Strategie</span>
+          <span class="ph-tile-desc" data-en="Go-to-Market plan · Phase 1 HOME B2C">Go-to-Market plán · Phase 1 HOME B2C</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">catalog</span>
+          <span class="ph-tile-title" data-en="Product Catalog">Product Catalog</span>
+          <span class="ph-tile-desc" data-en="Phase 1 product catalog · verticals &amp; tiers">Katalog produktů Phase 1 · vertikály a tier</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">roadmap</span>
+          <span class="ph-tile-title">Phase Roadmap</span>
+          <span class="ph-tile-desc" data-en="B2C → B2B → Marketplace · multi-year vision">B2C → B2B → Marketplace · víceletá vize</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">marketing</span>
+          <span class="ph-tile-title" data-en="Marketing Communication">Marketingová komunikace</span>
+          <span class="ph-tile-desc" data-en="Brand messaging · content · target segments">Brand messaging · obsah · cílové segmenty</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">marketing</span>
+          <span class="ph-tile-title" data-en="Launch Campaign">Launch Kampaň</span>
+          <span class="ph-tile-desc" data-en="Phase 1 HOME B2C launch campaign plan">Phase 1 HOME B2C launch campaign plán</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+        <div class="ph-tile ph-tile-soon">
+          <span class="ph-tile-cat">sales</span>
+          <span class="ph-tile-title" data-en="Sales Channels">Prodejní kanály</span>
+          <span class="ph-tile-desc" data-en="How we reach customers · direct · partner · online">Jak se dostaneme k zákazníkovi · direct · partner · online</span>
+          <span class="ph-tile-badge-soon">Coming Soon</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /.ph-sections -->
+
+</div><!-- /.cockpit-page -->
+
+<script src="cockpit-data.js"></script>
+<script src="_shell.js"></script>
+<script>
+  Shell.init({
+    section: 'Product Hub',
+    backUrl: '../MANAGEMENT_COCKPIT.html',
+    music:   '../cockpit-music.mp3'
+  });
+
+  /* Smooth scroll with shell header offset */
+  document.querySelectorAll('.ph-step[href^="#"]').forEach(function(a) {
+    a.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+    });
+  });
+
+  /* ⑤ Animated KPI counters — ease-out cubic */
+  function countUp(id, target, duration) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var start = performance.now();
+    (function step(ts) {
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(eased * target);
+      if (p < 1) requestAnimationFrame(step);
+    })(start);
+  }
+  window.addEventListener('load', function() {
+    countUp('kpi-sec',    28,  900);
+    countUp('kpi-weeks',   8,  600);
+    countUp('kpi-tasks', 493, 1400);
+    countUp('kpi-budget', 20,  800);
+  });
+
+  /* Product Hub context marker — set sessionStorage so target pages can show ← Product Hub */
+  document.querySelectorAll('a.ph-tile[href]').forEach(function(a) {
+    a.addEventListener('click', function() {
+      sessionStorage.setItem('_nav_from', 'product-hub');
+    });
+  });
+
+  /* i18n — "Otevřít ↗" → "Open ↗" */
+  document.addEventListener('langChanged', function(e) {
+    var isEn = e.detail === 'en';
+    document.querySelectorAll('.ph-tile-open').forEach(function(el) {
+      el.textContent = isEn ? 'Open ↗' : 'Otevřít ↗';
+    });
+  });
+</script>
+</body>
+</html>
