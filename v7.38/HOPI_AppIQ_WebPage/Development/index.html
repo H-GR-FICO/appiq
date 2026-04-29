@@ -312,6 +312,15 @@ body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;mi
 </div>
 
 <script>
+/* Finance Portal path: GitHub Pages deploys app to /app/, local dev has it at HOPI_AppIQ/Development/ */
+(function() {
+  if (location.protocol === 'file:') {
+    document.querySelectorAll('a[href="../../app/index.html"]').forEach(function(a) {
+      a.href = '../../HOPI_AppIQ/Development/index.html';
+    });
+  }
+})();
+
 function loadAll(){
   loadStatus();
   loadOIL();
