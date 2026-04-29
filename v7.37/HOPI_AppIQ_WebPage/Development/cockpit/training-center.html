@@ -71,6 +71,7 @@
     .tc-chapter-badge.expert     { background: rgba(245,158,11,.18);  color: #F59E0B; }
     .tc-chapter-badge.domain     { background: rgba(16,185,129,.18);  color: #10B981; }
     .tc-chapter-badge.intro      { background: rgba(255,255,255,.08); color: var(--c-text-muted); }
+    .tc-chapter-badge.idea       { background: rgba(20,184,166,.18);  color: #14B8A6; }
 
     .tc-slide-id {
       font-size: 11px;
@@ -105,6 +106,7 @@
     .tc-cols-2 { grid-template-columns: 1fr 1fr; }
     .tc-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
     .tc-cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .tc-cols-5 { grid-template-columns: repeat(5, 1fr); }
 
     .tc-card {
       background: var(--c-bg2);
@@ -117,6 +119,7 @@
     .tc-card.amber     { border-color: #F59E0B; background: rgba(245,158,11,.07); }
     .tc-card.blue      { border-color: #3B82F6; background: rgba(59,130,246,.07); }
     .tc-card.muted     { opacity: .55; }
+    .tc-card.teal      { border-color: #14B8A6; background: rgba(20,184,166,.07); }
 
     .tc-card-label {
       font-size: 10px;
@@ -321,7 +324,17 @@
       max-height: 72px;
       overflow-y: auto;
     }
-    .tc-notes-panel.tc-notes-visible { display: block; }
+    .tc-notes-panel.tc-notes-visible  { display: block; }
+    .tc-notes-panel.tc-notes-expanded {
+      max-height: 42vh;
+      background: rgba(168,85,247,.10);
+      border-top-color: rgba(168,85,247,.38);
+      padding: 12px 48px 16px;
+    }
+    .tc-notes-panel.tc-notes-expanded.script-mode { max-height: 42vh; }
+    .tc-notes-panel.tc-notes-expanded .tc-notes-item { font-size: 15px; line-height: 1.6; }
+    .tc-notes-panel.tc-notes-expanded .tc-notes-script { font-size: 16px; line-height: 1.75; }
+    .tc-notes-panel.tc-notes-expanded .tc-notes-tab { font-size: 11px; padding: 3px 14px 6px; }
     .tc-notes-list {
       list-style: none; padding: 0; margin: 0;
       display: flex; flex-wrap: wrap; gap: 4px 28px;
@@ -345,6 +358,7 @@
     }
     .tc-notes-btn:hover    { border-color: var(--c-violet); color: var(--c-violet); }
     .tc-notes-btn.active   { border-color: var(--c-violet); color: var(--c-violet); background: rgba(168,85,247,.1); }
+    .tc-notes-btn.expanded { border-color: #F59E0B; color: #F59E0B; background: rgba(245,158,11,.1); }
     .tc-notes-tabs { display:flex; gap:0; padding-bottom:4px; border-bottom:1px solid rgba(168,85,247,.18); margin-bottom:6px; flex-shrink:0; }
     .tc-notes-tab  { background:transparent; border:none; border-bottom:2px solid transparent; padding:2px 12px 5px; font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase; color:var(--c-text-muted); font-family:var(--c-font-sans); cursor:pointer; transition:color .15s,border-color .15s; margin-bottom:-1px; }
     .tc-notes-tab.active { color:var(--c-violet); border-bottom-color:var(--c-violet); }
@@ -356,11 +370,180 @@
     .tc-notes-hidden  { display:none !important; }
     .tc-notes-panel.script-mode { max-height:190px; }
 
+    /* ── Presentation Mode — aktivní při fullscreen (body.tc-pres) ─────── */
+    body.tc-pres .c-section-hero  { display: none !important; }
+    body.tc-pres .c-mottos-ribbon { display: none !important; }
+    body.tc-pres .tc-slide        { padding-top: 16px; }
+    /* Titles */
+    body.tc-pres .tc-title        { font-size: clamp(30px, 4vw, 48px); }
+    body.tc-pres .tc-subtitle     { font-size: 17px; margin-bottom: 12px; }
+    /* Cards */
+    body.tc-pres .tc-card-title   { font-size: 17px; }
+    body.tc-pres .tc-card-text    { font-size: 15px; }
+    body.tc-pres .tc-card-label   { font-size: 11px; }
+    /* Lists & insights */
+    body.tc-pres .tc-list li      { font-size: 16px; }
+    body.tc-pres .tc-insight      { font-size: 15px; line-height: 1.6; }
+    /* Big number slide (M8) */
+    body.tc-pres .tc-big-number   { font-size: 58px; }
+    body.tc-pres .tc-big-label    { font-size: 14px; }
+    /* Stack layers (M2) */
+    body.tc-pres .tc-layer-name   { font-size: 16px; }
+    body.tc-pres .tc-layer-exa    { font-size: 13px; }
+    /* Placeholder slides */
+    body.tc-pres .tc-ph-title     { font-size: 24px; }
+    body.tc-pres .tc-ph-desc      { font-size: 16px; }
+
+    /* ── Cover slide — TC_TITLE ─────────────────────────────────────────── */
+    .tc-cover {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex: 1;
+      gap: 14px;
+      padding: 0 40px;
+    }
+    .tc-cover-logo {
+      max-width: 280px;
+      max-height: 60px;
+      object-fit: contain;
+      opacity: .85;
+    }
+    .tc-cover-orb {
+      width: 116px; height: 116px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 36%, rgba(168,85,247,.28) 0%, rgba(168,85,247,.06) 65%);
+      border: 1px solid rgba(168,85,247,.30);
+      box-shadow: 0 0 40px rgba(168,85,247,.18), inset 0 0 20px rgba(168,85,247,.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      line-height: 1;
+    }
+    .tc-cover-headline {
+      font-size: clamp(32px, 4.5vw, 58px);
+      font-weight: 800;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+      line-height: 1.1;
+      letter-spacing: -.5px;
+    }
+    .tc-cover-headline .accent { color: var(--c-violet); }
+    .tc-cover-divider {
+      width: 56px; height: 2px;
+      background: var(--c-violet);
+      border-radius: 2px;
+    }
+    .tc-cover-tagline {
+      font-size: 15px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      max-width: 460px;
+      line-height: 1.5;
+    }
+    .tc-cover-meta {
+      font-size: 12px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      letter-spacing: .4px;
+      opacity: .65;
+    }
+    body.tc-pres .tc-cover-orb      { width: 140px; height: 140px; font-size: 66px; }
+    body.tc-pres .tc-cover-headline { font-size: clamp(44px, 6vw, 74px); }
+    body.tc-pres .tc-cover-tagline  { font-size: 18px; }
+    body.tc-pres .tc-cover-meta     { font-size: 13px; }
+
+    /* ── Agenda slide — TC_AGENDA ────────────────────────────────────────── */
+    .tc-agenda-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      flex: 1;
+    }
+    .tc-agenda-item {
+      display: flex;
+      flex-direction: column;
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-left-width: 3px;
+      border-radius: var(--c-radius);
+      padding: 12px 14px 11px;
+    }
+    .tc-agenda-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 9px;
+    }
+    .tc-agenda-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .tc-agenda-head { flex: 1; }
+    .tc-agenda-label {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      margin-bottom: 1px;
+    }
+    .tc-agenda-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--c-text);
+      font-family: var(--c-font-sans);
+    }
+    .tc-agenda-tag {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-family: var(--c-font-sans);
+      align-self: flex-start;
+      white-space: nowrap;
+    }
+    .tc-agenda-bullets {
+      list-style: none; padding: 0; margin: 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .tc-agenda-bullets li {
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--c-text-muted);
+      font-family: var(--c-font-sans);
+      line-height: 1.35;
+    }
+    .tc-agenda-bullets li::before {
+      content: '→';
+      color: var(--arrow-c, var(--c-text-muted));
+      font-weight: 700;
+      flex-shrink: 0;
+      font-size: 11px;
+      margin-top: 1px;
+    }
+    body.tc-pres .tc-agenda-icon    { width: 42px; height: 42px; font-size: 22px; }
+    body.tc-pres .tc-agenda-label   { font-size: 10px; }
+    body.tc-pres .tc-agenda-name    { font-size: 17px; }
+    body.tc-pres .tc-agenda-bullets li { font-size: 13px; }
+
     /* ── Responsive ─────────────────────────────────────────────────────── */
     @media (max-width: 768px) {
       .tc-slide   { padding: 18px 20px 12px; }
       .tc-nav     { padding: 8px 20px 10px; }
-      .tc-cols-2, .tc-cols-3, .tc-cols-4 { grid-template-columns: 1fr; }
+      .tc-cols-2, .tc-cols-3, .tc-cols-4, .tc-cols-5 { grid-template-columns: 1fr; }
+      .tc-agenda-grid { grid-template-columns: 1fr; }
       .tc-title   { font-size: 20px; }
       .tc-notes-panel { padding: 6px 20px; }
       .tc-notes-btn   { display: none; }
@@ -496,7 +679,7 @@
 
   <main class="cockpit-page tc-main">
 
-    <div class="tc-stage">
+    <div class="tc-stage" id="tc-stage">
       <div class="tc-slide" id="tc-slide"><!-- JS injected --></div>
     </div>
 
@@ -576,12 +759,166 @@
   ───────────────────────────────────────────────────────────────────── */
   const SLIDES = [
 
+    /* ── TC_TITLE — Cover / Titulní slide ───────────────────────── */
+    { id: 'TC_TITLE', chapter: 'intro', chapterLabel: 'HOPI Group · AI Training',
+      title: '',
+      subtitle: '',
+      html: `
+        <div class="tc-cover">
+          <img class="tc-cover-logo"
+               src="../../../HOPI_AppIQ/Development/hopi-holding-horizontal-logo-on-dark-background-rgb.png"
+               alt="HOPI Holding" />
+          <div class="tc-cover-orb">🤖</div>
+          <div class="tc-cover-headline">AI <span class="accent">Training Center</span></div>
+          <div class="tc-cover-divider"></div>
+          <div class="tc-cover-tagline">Vzdělávání v AI pro HOPI Group — od základů po strategické příležitosti</div>
+          <div class="tc-cover-meta">David Gogela · HOPI Holding · 2026</div>
+        </div>` },
+
+    /* ── TC_AGENDA — Osnova / Program ───────────────────────────── */
+    { id: 'TC_AGENDA', chapter: 'intro', chapterLabel: 'Program · Osnova',
+      title: 'Co dnes <span class="accent">probereme</span>',
+      subtitle: 'Přehled témat a kapitol prezentace',
+      html: `
+        <div class="tc-body">
+          <div class="tc-agenda-grid">
+
+            <div class="tc-agenda-item" style="border-left-color:rgba(255,255,255,.25)">
+              <div class="tc-agenda-top">
+                <div class="tc-agenda-icon" style="background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14)">⚡</div>
+                <div class="tc-agenda-head">
+                  <div class="tc-agenda-label">Úvod</div>
+                  <div class="tc-agenda-name">Proč teď?</div>
+                </div>
+                <span class="tc-agenda-tag" style="background:rgba(255,255,255,.08);color:var(--c-text-muted)">M_NOW</span>
+              </div>
+              <ul class="tc-agenda-bullets">
+                <li>AI adopce — osobní i business rovina</li>
+                <li>Přehled Training Center &amp; struktura</li>
+                <li>Proč HOPI začíná právě teď</li>
+              </ul>
+            </div>
+
+            <div class="tc-agenda-item" style="border-left-color:#A855F7">
+              <div class="tc-agenda-top">
+                <div class="tc-agenda-icon" style="background:rgba(168,85,247,.14);border:1px solid rgba(168,85,247,.28)">🏗️</div>
+                <div class="tc-agenda-head">
+                  <div class="tc-agenda-label">Foundation</div>
+                  <div class="tc-agenda-name">Základy AI</div>
+                </div>
+                <span class="tc-agenda-tag tag-dev">M0–M5</span>
+              </div>
+              <ul class="tc-agenda-bullets">
+                <li style="color:#C084FC;--arrow-c:#A855F7">AI ekosystém &amp; klíčové pojmy</li>
+                <li style="color:#C084FC;--arrow-c:#A855F7">Jak AI funguje — bez kódu</li>
+                <li style="color:#C084FC;--arrow-c:#A855F7">HOPI technologický základ &amp; stack</li>
+              </ul>
+            </div>
+
+            <div class="tc-agenda-item" style="border-left-color:#3B82F6">
+              <div class="tc-agenda-top">
+                <div class="tc-agenda-icon" style="background:rgba(59,130,246,.14);border:1px solid rgba(59,130,246,.28)">💻</div>
+                <div class="tc-agenda-head">
+                  <div class="tc-agenda-label">Practice</div>
+                  <div class="tc-agenda-name">Jak to děláme</div>
+                </div>
+                <span class="tc-agenda-tag" style="background:rgba(59,130,246,.2);color:#3B82F6">M6–M8</span>
+              </div>
+              <ul class="tc-agenda-bullets">
+                <li style="color:#93C5FD;--arrow-c:#3B82F6">Vibe Coding — nový způsob práce</li>
+                <li style="color:#93C5FD;--arrow-c:#3B82F6">Náš systém &amp; workflow s AI</li>
+                <li style="color:#93C5FD;--arrow-c:#3B82F6">FI/CO Portal — live case study HOPI</li>
+              </ul>
+            </div>
+
+            <div class="tc-agenda-item" style="border-left-color:#F59E0B">
+              <div class="tc-agenda-top">
+                <div class="tc-agenda-icon" style="background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.28)">🎓</div>
+                <div class="tc-agenda-head">
+                  <div class="tc-agenda-label">Expert Chapter</div>
+                  <div class="tc-agenda-name">Pro odborníky</div>
+                </div>
+                <span class="tc-agenda-tag" style="background:rgba(245,158,11,.2);color:#F59E0B">MX1–MX6</span>
+              </div>
+              <ul class="tc-agenda-bullets">
+                <li style="color:#FCD34D;--arrow-c:#F59E0B">Context Engineering &amp; AI architektura</li>
+                <li style="color:#FCD34D;--arrow-c:#F59E0B">AI ekonomika &amp; bezpečnost / GDPR</li>
+                <li style="color:#FCD34D;--arrow-c:#F59E0B">Agentní systémy &amp; výhled 2026+</li>
+              </ul>
+            </div>
+
+            <div class="tc-agenda-item" style="border-left-color:#10B981">
+              <div class="tc-agenda-top">
+                <div class="tc-agenda-icon" style="background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.28)">🏢</div>
+                <div class="tc-agenda-head">
+                  <div class="tc-agenda-label">Domain</div>
+                  <div class="tc-agenda-name">HOPI Use Cases</div>
+                </div>
+                <span class="tc-agenda-tag" style="background:rgba(16,185,129,.2);color:#10B981">M9+</span>
+              </div>
+              <ul class="tc-agenda-bullets">
+                <li style="color:#6EE7B7;--arrow-c:#10B981">Workshop output — vaše návrhy</li>
+                <li style="color:#6EE7B7;--arrow-c:#10B981">Use cases per divize HOPI</li>
+                <li style="color:#6EE7B7;--arrow-c:#10B981">Implementační roadmap &amp; next steps</li>
+              </ul>
+            </div>
+
+            <div class="tc-agenda-item" style="border-left-color:#14B8A6">
+              <div class="tc-agenda-top">
+                <div class="tc-agenda-icon" style="background:rgba(20,184,166,.14);border:1px solid rgba(20,184,166,.28)">💡</div>
+                <div class="tc-agenda-head">
+                  <div class="tc-agenda-label">Idea Center</div>
+                  <div class="tc-agenda-name">Strategické příležitosti</div>
+                </div>
+                <span class="tc-agenda-tag" style="background:rgba(20,184,166,.2);color:#14B8A6">IC1–IC3</span>
+              </div>
+              <ul class="tc-agenda-bullets">
+                <li style="color:#5EEAD4;--arrow-c:#14B8A6">AI nástroje &amp; adopce pro HOPI Group</li>
+                <li style="color:#5EEAD4;--arrow-c:#14B8A6">Anthropic partnerství &amp; programy</li>
+                <li style="color:#5EEAD4;--arrow-c:#14B8A6">Interní AI projekt — naše platforma</li>
+              </ul>
+            </div>
+
+          </div>
+        </div>` },
+
+    /* ── M_NOW — Motivační intro ─────────────────────────────────── */
+    { id: 'M_NOW', chapter: 'intro', chapterLabel: 'HOPI AppIQ · Proč teď',
+      title: 'Čím déle čekáš, tím více <span class="accent">ztrácíš</span>',
+      subtitle: 'AI adopce není otázka jestli — je to otázka kdy. A kdy je teď.',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2" style="margin-bottom:12px">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Osobní rovina</div>
+              <div class="tc-card-title">Zaměstnanec · Rodina</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Kolega, který AI používá, zvládne 2× více za stejný čas</li>
+                <li>Za 2 roky bude jeho tržní hodnota jiná — a tvoje také</li>
+                <li>Rodina ignorující AI nástroje přichází o standard, který ostatní berou jako samozřejmost</li>
+              </ul>
+            </div>
+            <div class="tc-card blue">
+              <div class="tc-card-label">Business rovina</div>
+              <div class="tc-card-title">Firma · Podnikatel</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Firma s AI platí méně, rozhoduje rychleji, ztrácí méně zákazníků</li>
+                <li>Konkurent s AI tě překoná rychleji, levněji a lépe</li>
+                <li>Podnikatel, který čeká, si sám buduje nevýhodu</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight">
+            <strong>Výzva:</strong> Integruj AI přirozeně tam, kde ze své podstaty přidává hodnotu. Neboj se. Prostě začni — a ber to vážně.
+          </div>
+        </div>` },
+
     /* ── 00 — INTRO ─────────────────────────────────────────────── */
     { id: 'INTRO', chapter: 'intro', chapterLabel: 'HOPI AppIQ', title: 'AI <span class="accent">Training Center</span>',
       subtitle: 'Vzdělávání v AI pro HOPI Group — od základů po praxi',
       html: `
         <div class="tc-body">
-          <div class="tc-cols tc-cols-4" style="margin-bottom:8px">
+          <div class="tc-cols tc-cols-5" style="margin-bottom:8px">
             <div class="tc-card highlight">
               <div class="tc-card-label">Foundation</div>
               <div class="tc-card-title">Základy AI</div>
@@ -606,9 +943,15 @@
               <div class="tc-card-text">Výstupy z workshopu — use cases vašich oddělení</div>
               <span class="tc-card-tag tag-soon">M9+</span>
             </div>
+            <div class="tc-card teal">
+              <div class="tc-card-label">Idea Center</div>
+              <div class="tc-card-title">Vaše nápady</div>
+              <div class="tc-card-text">AI tools, Anthropic partnerství, strategické příležitosti</div>
+              <span class="tc-card-tag tag-soon">IC1 – IC3</span>
+            </div>
           </div>
           <div class="tc-insight">
-            Tento Training Center je živý — každý workshop přidá novou vrstvu. Dnes zakládáme Foundation.
+            Tento Training Center je živý — každý workshop přidá novou vrstvu. Dnes: Foundation → Practice → Expert → Domain → <strong>Idea Center</strong>.
           </div>
         </div>` },
 
@@ -1560,6 +1903,126 @@
           <div class="tc-insight green">
             Tento Training Center čeká na váš příspěvek. Dnešní workshop = první editorial meeting — co přidáme?
           </div>
+        </div>` },
+
+    /* ── IC1 — IDEA CENTER: Start ────────────────────────────────── */
+    { id: 'IC1', chapter: 'idea', chapterLabel: 'Idea · Start',
+      title: '<span class="accent">IDEA CENTER</span>',
+      subtitle: 'Tvoje AI cesta začíná tady — první kroky, první nástroje, první nápad',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-3" style="margin-bottom:12px">
+            <div class="tc-card teal">
+              <div class="tc-card-label">Fact</div>
+              <div class="tc-card-title">Bez bariéry vstupu</div>
+              <div class="tc-card-text">Claude.ai, ChatGPT, Gemini — každý nabízí free tier. Začít lze dnes, bez platební karty, bez IT projektu.</div>
+            </div>
+            <div class="tc-card teal">
+              <div class="tc-card-label">Fact</div>
+              <div class="tc-card-title">Tři ekosystémy</div>
+              <div class="tc-card-text">GPT · Gemini · Claude — různé silné stránky, různý charakter. Zkušenost s jedním nestačí. Každý na něco jiného.</div>
+            </div>
+            <div class="tc-card teal">
+              <div class="tc-card-label">Fact</div>
+              <div class="tc-card-title">Záměr × rychlost</div>
+              <div class="tc-card-text">AI nenahrazuje kreativitu — zesiluje ji. Vstup = tvůj záměr. Výstup = záměr × rychlost AI. Kvalita výstupu roste s kvalitou vstupu.</div>
+            </div>
+          </div>
+          <div class="tc-cols tc-cols-3">
+            <div class="tc-card muted">
+              <div class="tc-card-label">Discussion</div>
+              <div class="tc-card-title">Tvůj time-eater</div>
+              <div class="tc-card-text">Která část tvé práce tě nejvíce stojí čas a opakuje se? AI to umí dnes.</div>
+            </div>
+            <div class="tc-card muted">
+              <div class="tc-card-label">Discussion</div>
+              <div class="tc-card-title">Tvůj jeden projekt</div>
+              <div class="tc-card-text">Kdybys mohl/a mít AI asistenta jen pro jeden projekt — jaký by to byl?</div>
+            </div>
+            <div class="tc-card muted">
+              <div class="tc-card-label">Discussion</div>
+              <div class="tc-card-title">Co tě brzdí</div>
+              <div class="tc-card-text">Pojmenuj jeden konkrétní důvod, proč jsi ještě AI opravdu nezačal/a používat.</div>
+            </div>
+          </div>
+        </div>` },
+
+    /* ── IC2 — Anthropic Partnership ─────────────────────────────── */
+    { id: 'IC2', chapter: 'idea', chapterLabel: 'Idea · Anthropic',
+      title: 'Partnerství s <span class="accent">Anthropicem</span>',
+      subtitle: 'Proč oslovit poskytovatele AI přímo — a co HOPI může získat',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2">
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--c-text-muted);text-transform:uppercase;margin-bottom:10px">Co Anthropic nabízí</div>
+              <div class="tc-cols tc-cols-2" style="gap:8px">
+                <div class="tc-card teal" style="padding:12px 14px">
+                  <div class="tc-card-label">Free Tier</div>
+                  <div class="tc-card-title" style="font-size:14px">Claude.ai zdarma</div>
+                  <div class="tc-card-text">Bez platební karty. Okamžitě. Ideální pro první experimenty a onboarding týmu.</div>
+                </div>
+                <div class="tc-card teal" style="padding:12px 14px">
+                  <div class="tc-card-label">Pro / API</div>
+                  <div class="tc-card-title" style="font-size:14px">$20/měs · pay-per-token</div>
+                  <div class="tc-card-text">Plný výkon Sonnet + Opus. API pro integraci do firemních nástrojů a vlastních aplikací.</div>
+                </div>
+                <div class="tc-card teal" style="padding:12px 14px">
+                  <div class="tc-card-label">Startup Program</div>
+                  <div class="tc-card-title" style="font-size:14px">API kredity zdarma</div>
+                  <div class="tc-card-text">Přes partnery (AWS Activate, Google for Startups): $150–$25 000 kreditů pro kvalifikované firmy.</div>
+                </div>
+                <div class="tc-card teal" style="padding:12px 14px">
+                  <div class="tc-card-label">Enterprise</div>
+                  <div class="tc-card-title" style="font-size:14px">Vlastní podmínky</div>
+                  <div class="tc-card-text">SSO, admin kontrola, datové záruky, dedikovaný support. Pro firemní nasazení v měřítku.</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;color:var(--c-text-muted);text-transform:uppercase;margin-bottom:10px">Co HOPI může získat</div>
+              <ul class="tc-list">
+                <li><strong>Bezplatný nebo zvýhodněný přístup</strong> k AI infrastruktuře v počáteční fázi</li>
+                <li><strong>Early partner positioning</strong> — Anthropic publikuje enterprise case studies</li>
+                <li><strong>Technická podpora</strong> + přístup k novým modelům před veřejným spuštěním</li>
+                <li><strong>Legitimita</strong> — partnerské logo jako signal pro trh i interně</li>
+              </ul>
+              <div class="tc-insight" style="margin-top:12px">
+                Čím dříve vstoupíš jako partner, tím lepší podmínky a silnější positioning. Okno se otevírá nyní.
+              </div>
+            </div>
+          </div>
+        </div>` },
+
+    /* ── IC3 — HOPI Projekt Hook ──────────────────────────────────── */
+    { id: 'IC3', chapter: 'idea', chapterLabel: 'Idea · HOPI Projekt',
+      title: 'Náš <span class="accent">konkrétní důvod</span>',
+      subtitle: 'HOPI má co nabídnout — živý AI projekt jako základ partnerství',
+      html: `
+        <div class="tc-body">
+          <div class="tc-cols tc-cols-2" style="margin-bottom:12px">
+            <div class="tc-card highlight">
+              <div class="tc-card-label">Co máme</div>
+              <div class="tc-card-title">Živý interní AI projekt</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Reálné firemní prostředí, reálná data, reálné use cases</li>
+                <li>Enterprise kontext: více divizí, různé potřeby, strukturovaný přístup</li>
+                <li>Metodika AI spolupráce budovaná 9 týdnů v produkci</li>
+              </ul>
+            </div>
+            <div class="tc-card teal">
+              <div class="tc-card-label">Co to znamená</div>
+              <div class="tc-card-title">Proč je to příležitost</div>
+              <ul class="tc-list" style="margin-top:8px">
+                <li>Partnerství neprosíme — nabízíme reálný use case, který Anthropic může publikovat</li>
+                <li>Nejsme startup bez reference — jsme zavedená firma s výsledky</li>
+                <li>Proaktivní přístup k AI partnerovi = jiná kategorie než pasivní uživatel</li>
+              </ul>
+            </div>
+          </div>
+          <div class="tc-insight">
+            <strong>Pointa pro plénum:</strong> Toto je příklad toho, jak AI myšlení přináší reálné příležitosti — nejde jen o nástroje, jde o strategický přístup. HOPI ho má.
+          </div>
         </div>` }
   ];
 
@@ -1567,6 +2030,8 @@
      SPEAKER NOTES
   ───────────────────────────────────────────────────────────────────── */
   const NOTES = {
+    'TC_TITLE':   ['Titulní slide — spustit před vstupem publika do místnosti', 'Klíčový moment: logo HOPI + AI Training Center = signál, že HOPI bere AI vážně', 'Před prezentací přepnout do fullscreen (klávesa F nebo tlačítko vpravo dole)'],
+    'TC_AGENDA':  ['Projít osnovu rychle — 30 sekund, ne detailní vysvětlování', 'Zdůraznit: Foundation + Practice jsou pro všechny, Expert Chapter pro IT/management', 'Idea Center je highlight na konci — zmínit že tam jsou strategické příležitosti pro HOPI'],
     'INTRO':      ['Toto je živý nástroj — stavěný metodou kterou dnes budeme ukazovat', 'Training Center roste s projektem — vidíte jeho aktuální stav', 'Projdeme Foundation → Practice → vaše otázky'],
     'M0':         ['Stream 1 = tato aplikace. Stream 2 = vaše oddělení', 'Klíčová pointa: řídíme projekt nástrojem, který sami stavíme — eating our own cooking', 'Každá divize dostane vlastní konfiguraci'],
     'M1':         ['500+ tasků, 29 sekcí, 1 člověk — reálná čísla z tohoto projektu, ne z prezentace', 'Inflection point: kdo čeká, dohání. Kdo dohání, platí víc za menší výsledek', 'Tato místnost má 12–18 měsíc výhodu před ostatními firmami'],
@@ -1589,13 +2054,29 @@
     'MX4':        ['Claude Code Pro = $20/měsíc. Za 9 týdnů ≈ $50. Ext. firma za stejný výstup = 500 000+ Kč', 'API vs nástroj: flat rate je pro development. Pay-per-token škáluje pro produkci', 'Fine-tuning má smysl jen pro velký objem uniformních tasků s kvalitními trénovacími daty — pro nás nevhodné'],
     'MX5':        ['Klíčové pravidlo: co je veřejně dostupné, mohu posílat. Co je osobní nebo citlivé finanční — nikdy', 'GDPR kontext: jména, rodná čísla, adresy = osobní data. Anonymizovat PŘED odesláním do AI nástroje', 'Firemní AI politika se nepíše na 50 stran — stačí 1 stránka s klasifikací dat a povoleným toolingem per třída'],
     'MX6':        ['AI Agents 2026: Claude může sám plánovat, používat nástroje a dokončovat úkoly bez lidského vstupu každý krok', 'NEXUS je naše příprava na agentní éru — Control Brain Center orchestrující AI workflow pro HOPI', 'First mover není o technologii — je o organizační schopnosti adoptovat, experimentovat a iterovat rychleji než konkurence'],
-    'M9+':        ['Toto je váš příspěvek — tady čekáme na váš vstup, ne na další PowerPoint', 'Skupinová práce 30 min: každá skupina navrhne 1–2 konkrétní use cases ze své oblasti', 'Výstup workshopu = první obsah tohoto slidu — stane se součástí Training Center']
+    'M9+':        ['Toto je váš příspěvek — tady čekáme na váš vstup, ne na další PowerPoint', 'Skupinová práce 30 min: každá skupina navrhne 1–2 konkrétní use cases ze své oblasti', 'Výstup workshopu = první obsah tohoto slidu — stane se součástí Training Center'],
+    'M_NOW':      ['Tenhle slide není o strachu — je o příležitosti a o tom, že okno se otvírá právě teď', 'Osobní rovina: tržní hodnota zaměstnance se mění rychleji než kdy jindy — AI je nový Excel', 'Business rovina: konkurent s AI nepotřebuje víc lidí — potřebuje méně a výsledky jsou lepší'],
+    'IC1':        ['Fact cards: žádná bariéra vstupu — každý v této místnosti může začít dnes odpoledne', 'Discussion cards: nechte každého říct svůj time-eater nahlas — to je první krok k use case', 'Záměr × rychlost = klíčová rovnice. Kdo má lepší záměr, dostane lepší výstup'],
+    'IC2':        ['Proč oslovit Anthropic: lepší podmínky pro early partnery než pro pozdní uživatele', 'Startup program: $150–$25 000 kreditů není marketing — je to reálná finanční hodnota pro firmu', 'Enterprise track: datové záruky a admin kontrola řeší GDPR obavy, které v IT vždy přijdou'],
+    'IC3':        ['Tenhle slide je o tom, že HOPI není pasivní uživatel AI — je to firma, která něco buduje', 'Živý projekt = reálný argument. Anthropic nechce case study z PowerPointu, chce produkční systém', 'Pointa pro plénum: proaktivní AI myšlení = nová kompetence. A HOPI ji má v DNA od roku 2026']
   };
 
   /* ─────────────────────────────────────────────────────────────────────
      PRESENTER SCRIPT — 5–8 vět na slide (draft DGO, 2026-04-29)
   ───────────────────────────────────────────────────────────────────── */
   const SCRIPT = {
+    'TC_TITLE': [
+      'Toto je AI Training Center HOPI Group. Spusťte fullscreen — klávesa F nebo tlačítko vpravo dole v navigaci — a prezentace se optimalizuje pro promítání.',
+      '🗣 Tento slide nechte běžet při vstupu publika do místnosti. Je to záměrný signál: HOPI bere AI vážně — natolik, že do toho investuje vlastní čas, lidi a infrastrukturu.',
+      'Za názvem a logem je 9 týdnů každodenní práce, 500+ trackovaných úkolů a první produkční AI aplikace v HOPI. To dnes ukážeme.'
+    ],
+    'TC_AGENDA': [
+      'Než začneme — rychlý přehled toho, co dnes probereme. Šest kapitol, každá navazuje na předchozí.',
+      'Foundation a Practice jsou pro všechny v místnosti — bez ohledu na technické zázemí. Expert Chapter je dobrovolný záběr pro ty, kdo chtějí jít hlouběji: IT, management, Finance.',
+      'Idea Center na konci není bonusový slide — je to strategická část. Přinášíme konkrétní příležitosti pro HOPI, které lze zahájit ihned.',
+      '🗣 Celá prezentace je živý nástroj — postavený přesně tou metodou, o které dnes budeme mluvit. To co vidíte, je výsledek 9 týdnů práce jednoho člověka s AI.',
+      '❓ Než začneme: co je váš hlavní zájem nebo otázka na dnešek? Jednou větou.'
+    ],
     'INTRO': [
       'Vítejte na prvním strukturovaném AI workshopu HOPI Group. To co vidíte před sebou není PowerPoint — je to živý nástroj, postavený přesně tou metodou, o které dnes budeme mluvit.',
       'Tenhle Training Center jsem ještě dnes ráno upravoval — přidal jsem 7 nových kapitol a tuto funkci pro projev prezentátora. Celé dopoledne strávil AI stavěním, já usměrňováním a schvalováním.',
@@ -1782,6 +2263,38 @@
       'Co z use case uděláme: zaregistrujeme ho do OIL trackeru, přidáme do Training Center jako novou sekci a použijeme jako vstup pro prioritizaci dalšího rozvoje Cockpitu pro vaši divizi.',
       '🗣 Výstup dnešního workshopu není slideset ani PDF. Je to tento Training Center s vaším obsahem a první záznamy v OIL trackeru pro vaše use cases. Konkrétní, měřitelné, navazující.',
       '❓ Jaký je váš jeden nejdůležitější use case, který byste chtěli vidět jako první?'
+    ],
+    'M_NOW': [
+      'Než se pustíme do samotného obsahu Training Centru, chci říct jednu věc nahlas. A je to věc, která určuje, jestli to co dnes uděláme, bude mít reálný dopad.',
+      'Každý den, který uplyne bez toho, abyste AI začali opravdu používat, je den ztraceného náskoku. Ne v abstraktním smyslu — ale konkrétně, v každodenní práci a v hodnotě, kterou přinášíte.',
+      'Na osobní rovině: kolega, který AI používá každý den, zvládne 2× více za stejný čas. Za 2 roky bude jeho tržní hodnota jiná. A vaše také — v jednom nebo druhém směru.',
+      'Na business rovině: firma, která AI integruje, platí méně, rozhoduje rychleji a ztrácí méně zákazníků. Firma, která čeká, platí víc za horší výsledky. Není to teorie — je to matematika.',
+      '🗣 Tenhle workshop není o tom, abyste odešli a "zvážili možnosti". Je o tom, abyste odešli s konkrétním krokem. Jedním. Malým. Ale opravdovým.',
+      '❓ Kdo z vás byl za poslední měsíc v situaci, kdy víte, že AI by to zvládl rychleji než vy? Ukažte ruce.'
+    ],
+    'IC1': [
+      'IDEA CENTER je místo, kde váš první nebo váš příští AI nápad dostane tvar. Začínáme třemi fakty a třemi otázkami.',
+      'Fakt číslo jedna: bariéra vstupu je dnes nulová. Claude.ai, ChatGPT, Gemini — každý z nich má free tier. Žádná platební karta, žádný IT projekt, žádné schválení. Začít lze dnes odpoledne.',
+      'Fakt číslo dvě: tři různé ekosystémy, tři různé silné stránky. Zkušenost s jedním nestačí — jsou to různé nástroje pro různé typy práce.',
+      'Fakt číslo tři a nejdůležitější: AI nenahrazuje váš záměr — zesiluje ho. Kdo má jasný záměr a umí ho formulovat, dostane exponenciálně lepší výsledek.',
+      '🗣 Discussion karty jsou pro vás: každý si vezme jednu, přemýšlí 2 minuty, pak sdílíme.',
+      '❓ Která discussion karta rezonuje nejvíc? Time-eater, dream projekt, nebo co vás brzdí?'
+    ],
+    'IC2': [
+      'Tady přecházíme od osobní roviny k firemní strategii. Konkrétní příklad toho, jak proaktivní AI myšlení přináší reálné výsledky.',
+      'Anthropic — firma za Claudem — nabízí několik vstupních bodů. Free tier je okamžitý a bez podmínek. Pro a API jsou $20 měsíčně pro plný výkon.',
+      'Klíčový program pro firmy jako HOPI: Startup a Partnership program. Přes AWS Activate a Google for Startups lze získat API kredity v hodnotě $150 až $25 000. To je reálná finanční hodnota — ne jen přístup k nástroji.',
+      'Enterprise track řeší věci, které IT vždy řeší: SSO, admin kontrola, datové záruky, GDPR compliance. To jsou podmínky pro skutečné firemní nasazení.',
+      '🗣 Co HOPI může získat: bezplatný přístup, early partner status, technická podpora — a možnost být publikovaným Anthropic case study. To je jiná liga.',
+      '❓ Jaká z těchto čtyř výhod je pro HOPI nejrelevantnější? Co by přesvědčilo vedení k prvnímu kroku?'
+    ],
+    'IC3': [
+      'A tady je pointa. Proč by Anthropic měl mít zájem o HOPI? Protože máme co nabídnout — ne jen peníze za licenci, ale reálný enterprise use case.',
+      'Máme živý interní AI projekt. Reálné firemní prostředí, reálná data, reálné use cases. Toto není PowerPoint — toto běží v produkci každý den.',
+      'Enterprise kontext je to, co Anthropic hledá pro své case studies: více divizí, různé potřeby, strukturovaný přístup, měřitelné výsledky. To jsme my.',
+      'Partnerství neprosíme — nabízíme. To je jiná pozice u vyjednávacího stolu.',
+      '🗣 A to je pointa pro vás: toto je příklad toho, jak AI myšlení přináší příležitosti, které pasivní uživatel nikdy neuvidí. Proaktivní přístup je nová kompetence.',
+      '❓ Kdybychom Anthropicu napsali příští týden — jaká by byla naše první věta? Co je náš strongest argument?'
     ]
   };
 
@@ -1791,7 +2304,7 @@
   let cur = 0;
   let _viewSlides = null;
   function activeSlides() { return _viewSlides || SLIDES; }
-  let notesVisible = false;
+  let notesMode = 0; // 0=off · 1=compact · 2=expanded
   let notesTab = 'bullets';
 
   function switchNotesTab(tab) {
@@ -1804,9 +2317,15 @@
   }
 
   function toggleNotes() {
-    notesVisible = !notesVisible;
-    document.getElementById('tc-notes').classList.toggle('tc-notes-visible', notesVisible);
-    document.getElementById('tc-notes-btn').classList.toggle('active', notesVisible);
+    notesMode = (notesMode + 1) % 3;
+    const panel = document.getElementById('tc-notes');
+    const btn   = document.getElementById('tc-notes-btn');
+    panel.classList.toggle('tc-notes-visible',  notesMode > 0);
+    panel.classList.toggle('tc-notes-expanded', notesMode === 2);
+    btn.classList.toggle('active',   notesMode === 1);
+    btn.classList.toggle('expanded', notesMode === 2);
+    btn.title = notesMode === 0 ? 'Speaker Notes (N)' :
+                notesMode === 1 ? 'Rozšířit (N)' : 'Zavřít (N)';
   }
 
   function renderSlide() {
@@ -1823,7 +2342,7 @@
     </div>`;
 
     // Title + subtitle
-    innerHtml += `<div class="tc-title">${s.title}</div>`;
+    if (s.title) innerHtml += `<div class="tc-title">${s.title}</div>`;
     if (s.subtitle) innerHtml += `<div class="tc-subtitle">${s.subtitle}</div>`;
 
     // Content
@@ -1998,6 +2517,9 @@
     }
   }
   document.getElementById('tc-fs').addEventListener('click', toggleFullscreen);
+  document.addEventListener('fullscreenchange', () => {
+    document.body.classList.toggle('tc-pres', !!document.fullscreenElement);
+  });
 
   // PDF Export
   function openPrintMenu() {
