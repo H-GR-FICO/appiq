@@ -1,6 +1,6 @@
 ﻿{
-  "latest": "v7.38",
-  "updatedAt": "2026-04-29",
+  "latest": "v7.39",
+  "updatedAt": "2026-04-30",
   "versions": [
     {
         "version":  "v7.20",
@@ -375,6 +375,26 @@
         "pitchUrl":  "v7.38/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
         "docsUrl":  "v7.38/HOPI_AppIQ_WebPage/Development/docs/index.html",
         "protocolUrl":  "v7.38/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
+    },
+    {
+        "version":  "v7.39",
+        "date":  "2026-04-30",
+        "session":  "session_20260430_0209",
+        "title":  "Strategic Study · Founders Board: Study Buttons · 2026-04-30",
+        "mainUrl":  "v7.39/HOPI_AppIQ_WebPage/Development/index.html",
+        "mainLabel":  "Studio Hub",
+        "changes":  [
+                        "Strategic Study — HOPI TechIQ Tech Division Commercialization (AIQ-00523)",
+                        "Founders Board — tlačítka Study (AIQ-00522)"
+                    ],
+        "promoLevel":  null,
+        "promoText":  null,
+        "promoTextEn":  null,
+        "presentationUrl":  "v7.39/HOPI_AppIQ_WebPage/Development/PORTAL_PRESENTATION.html",
+        "hubUrl":  "v7.39/HOPI_AppIQ_WebPage/Development/index.html",
+        "pitchUrl":  "v7.39/HOPI_AppIQ_WebPage/Development/PERSONAL_PITCH.html",
+        "docsUrl":  "v7.39/HOPI_AppIQ_WebPage/Development/docs/index.html",
+        "protocolUrl":  "v7.39/HOPI_AppIQ_WebPage/Development/ARCHIVE_PROTOCOL.json"
     }
   ]
 }

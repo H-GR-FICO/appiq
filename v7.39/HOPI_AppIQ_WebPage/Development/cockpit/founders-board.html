@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Founders Board — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+
+    /* ── Founders Board — page header ─────────────── */
+    .fb-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .fb-print-btn {
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid var(--c-violet);
+      color: var(--c-violet);
+      border-radius: var(--c-radius-sm);
+      padding: 8px 18px;
+      cursor: pointer;
+      font-size: 13px;
+      font-family: var(--c-font-sans);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: background .2s, color .2s;
+      margin-top: 4px;
+    }
+    .fb-print-btn:hover { background: var(--c-violet); color: #fff; }
+
+    /* ── Content blocks ───────────────────────────── */
+    .fb-blocks { display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px; }
+
+    .fb-block {
+      background: var(--c-bg2);
+      border: 1px solid var(--c-border);
+      border-radius: var(--c-radius);
+      overflow: hidden;
+    }
+    .fb-block-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--c-border);
+      background: rgba(255,255,255,0.02);
+    }
+    .fb-block-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: var(--c-font-sans);
+      padding: 3px 10px;
+      border-radius: 4px;
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+    .num-amber  { background: rgba(245,158,11,.12); color: var(--c-amber);  border: 1px solid rgba(245,158,11,.3); }
+    .num-green  { background: rgba(34,197,94,.12);  color: var(--c-green);  border: 1px solid rgba(34,197,94,.3); }
+    .num-blue   { background: rgba(96,165,250,.12); color: var(--c-blue);   border: 1px solid rgba(96,165,250,.3); }
+    .num-violet { background: rgba(168,85,247,.12); color: var(--c-violet); border: 1px solid rgba(168,85,247,.3); }
+    .num-orange { background: rgba(249,115,22,.12); color: #F97316;         border: 1px solid rgba(249,115,22,.3); }
+
+    .fb-block-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--c-white);
+      font-family: var(--c-font-sans);
+    }
+    .fb-block-tag {
+      margin-left: auto;
+      font-size: 10px;
+      color: var(--c-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-family: var(--c-font-sans);
+      white-space: nowrap;
+    }
+
+    .fb-block-body { padding: 20px 24px; }
+
+    .fb-lead {
+      font-size: 14px;
+      color: var(--c-text);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+
+    .fb-items { display: flex; flex-direction: column; gap: 9px; }
+    .fb-item  { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--c-text); line-height: 1.55; }
+    .fb-dot   { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; margin-top: 6px; }
+    .dot-amber  { background: var(--c-amber); }
+    .dot-green  { background: var(--c-green); }
+    .dot-blue   { background: var(--c-blue); }
+    .dot-violet { background: var(--c-violet); }
+    .dot-orange { background: #F97316; }
+
+    .fb-hi { color: var(--c-white); font-weight: 700; }
+
+    /* ── Two-col layout (Block 4) ─────────────────── */
+    .fb-two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .fb-col-card {
+      background: var(--c-bg3);
+      border: 1px solid var(--c-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+    .fb-col-card-us { border-color: rgba(34,197,94,.3); margin-top: 14px; }
+    .fb-col-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      font-family: var(--c-font-sans);
+    }
+    .lbl-them { color: var(--c-amber); }
+    .lbl-us   { color: var(--c-green); }
+
+    /* ── Ask grid (Block 6) ───────────────────────── */
+    .fb-ask-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .fb-ask-card {
+      background: var(--c-bg3);
+      border: 1px solid rgba(34,197,94,.25);
+      border-radius: 10px;
+      padding: 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .fb-ask-step {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--c-green);
+      font-family: var(--c-font-sans);
+    }
+    .fb-ask-title { font-size: 14px; font-weight: 700; color: var(--c-white); line-height: 1.3; }
+    .fb-ask-desc  { font-size: 12px; color: var(--c-muted); line-height: 1.55; }
+
+    /* ── Action column (right side of header) ────── */
+    .fb-action-col {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+      min-width: 200px;
+    }
+    /* shared size for all 3 buttons */
+    .fb-action-col .fb-print-btn,
+    .fb-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      border-radius: var(--c-radius-sm);
+      cursor: pointer;
+      transition: border-color .2s, color .2s, background .2s, opacity .2s;
+      text-decoration: none;
+    }
+    /* All 3 buttons — violet outline style */
+    .fb-action-col .fb-print-btn,
+    .fb-action-btn {
+      background: transparent;
+      border: 1px solid var(--c-violet);
+      color: var(--c-violet);
+      font-family: var(--c-font-sans);
+    }
+    .fb-action-col .fb-print-btn:hover,
+    .fb-action-btn:hover { background: var(--c-violet); color: #fff; }
+
+    .fb-action-btn.disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      border-color: var(--c-muted);
+      color: var(--c-muted);
+    }
+    .fb-action-btn.disabled:hover {
+      background: transparent;
+      color: var(--c-muted);
+      border-color: var(--c-muted);
+    }
+    .fb-action-divider {
+      border: none;
+      border-top: 1px solid var(--c-border);
+      margin: 4px 0;
+    }
+
+    /* ── Print ────────────────────────────────────── */
+    @media print {
+      #cockpit-shell, .fb-print-btn, .fb-cta-strip,
+      .fb-action-col, #ver-badge, #agent-btn { display: none !important; }
+
+      body { background: #fff !important; color: #111 !important; }
+      .cockpit-page { max-width: 100%; padding: 0; }
+
+      .page-title { color: #111 !important; font-size: 22pt; }
+      .page-title span { color: #6d28d9 !important; }
+      .page-subtitle { color: #555 !important; margin-bottom: 20pt; }
+
+      .c-kpi-grid { grid-template-columns: repeat(4, 1fr); margin-bottom: 20pt; }
+      .c-card { background: #f5f5f5 !important; border: 1px solid #ddd !important; break-inside: avoid; }
+      .c-card-value { color: #111 !important; font-size: 20pt; }
+      .c-card-title, .c-card-sub { color: #555 !important; }
+
+      .fb-block { background: #fff !important; border: 1px solid #ccc !important; break-inside: avoid; margin-bottom: 14pt; }
+      .fb-block-header { background: #f0f0f0 !important; border-bottom: 1px solid #ccc !important; padding: 10pt 14pt; }
+      .fb-block-title { color: #111 !important; font-size: 12pt; }
+      .fb-block-tag   { color: #888 !important; }
+      .fb-block-body  { padding: 10pt 14pt; }
+
+      .fb-lead { color: #222 !important; font-size: 10pt; }
+      .fb-item { color: #333 !important; font-size: 10pt; }
+      .fb-hi   { color: #000 !important; }
+
+      .fb-col-card { background: #f8f8f8 !important; border: 1px solid #ddd !important; }
+      .fb-col-card-us { border-color: #bde0bd !important; }
+      .fb-ask-card { background: #f8f8f8 !important; border: 1px solid #bde0bd !important; break-inside: avoid; }
+      .fb-ask-title { color: #111 !important; }
+      .fb-ask-desc  { color: #555 !important; }
+      .fb-ask-step  { color: #166534 !important; }
+      .fb-ask-grid  { grid-template-columns: repeat(3, 1fr); }
+
+      .num-amber  { background: #fef3c7 !important; color: #92400e !important; border-color: #fcd34d !important; }
+      .num-green  { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
+      .num-blue   { background: #dbeafe !important; color: #1d4ed8 !important; border-color: #93c5fd !important; }
+      .num-violet { background: #ede9fe !important; color: #5b21b6 !important; border-color: #c4b5fd !important; }
+      .num-orange { background: #ffedd5 !important; color: #9a3412 !important; border-color: #fdba74 !important; }
+
+      .lbl-them { color: #92400e !important; }
+      .lbl-us   { color: #166534 !important; }
+      .fb-dot { background: #888 !important; }
+
+      .fb-block:nth-child(3) { break-before: page; }
+      .fb-block:nth-child(6) { break-before: page; }
+
+      @page { margin: 15mm 18mm; size: A4; }
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 768px) {
+      .fb-two-col  { grid-template-columns: 1fr; }
+      .fb-ask-grid { grid-template-columns: 1fr; }
+      .fb-header-row { flex-direction: column; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div id="cockpit-shell"></div>
+
+  <main class="cockpit-page">
+
+    <!-- ── Header row ─────────────────────────────── -->
+    <div class="fb-header-row">
+      <div>
+        <h1 class="page-title"><span>⬡</span> Founders Board</h1>
+        <p class="page-subtitle">
+          <span data-en="Strategic Brief · HOPI TechIQ s.r.o. · Founder &amp; Product Lead: David Gogela · April 2026">Strategický brief · HOPI TechIQ s.r.o. · Founder &amp; Product Lead: David Gogela · Duben 2026</span>
+        </p>
+      </div>
+      <div style="display:flex;gap:8px;align-items:flex-start;flex-shrink:0;">
+        <div class="fb-action-col">
+          <button class="fb-action-btn" onclick="window.print()">⎙ Export PDF</button>
+          <a href="product-hub.html" class="fb-action-btn active">⬡ Product Hub</a>
+          <a href="bos-card-appiq.html" class="fb-action-btn">▤ BOS Card</a>
+        </div>
+        <div class="fb-action-col">
+          <a href="strategic-study-2026.html"
+             class="fb-action-btn"
+             target="_blank"
+             title="Otevřít Strategic Study v nové záložce">↗ <span data-en="Strategic Study">Strategic Study</span></a>
+          <span class="fb-action-btn disabled"
+                title="Připravíme po schválení Strategic Study — Feasibility Study ověří konkrétní kroky a reálnou využitelnost">⊘ <span data-en="Feasibility Study">Feasibility Study</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── KPI Strip ──────────────────────────────── -->
+    <div class="c-kpi-grid">
+      <div class="c-card">
+        <div class="c-card-title" data-en="Project Start">Start projektu</div>
+        <div class="c-card-value">3/2026</div>
+        <div class="c-card-sub" data-en="March 2026 — first commit">Březen 2026 — první commit</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title" data-en="Prototype">Prototyp</div>
+        <div class="c-card-value">8 <span style="font-size:16px;color:var(--c-muted)" data-en="wks">týd.</span></div>
+        <div class="c-card-sub" data-en="493+ registered tasks">493+ zaregistrovaných tasků</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title" data-en="Seed Budget Ask">Seed budget ask</div>
+        <div class="c-card-value" style="font-size:22px">~20M</div>
+        <div class="c-card-sub" data-en="CZK / 18 months · Standard scenario">CZK / 18 měs. · Standard scénář</div>
+      </div>
+      <div class="c-card">
+        <div class="c-card-title" data-en="B2C Target Launch">B2C target launch</div>
+        <div class="c-card-value" style="font-size:22px">Q1 '27</div>
+        <div class="c-card-sub" data-en="01.01.2027 stretch goal">01.01.2027 stretch cíl</div>
+      </div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--c-border);margin:0 0 28px"/>
+
+    <!-- ── Content Blocks ─────────────────────────── -->
+    <div class="fb-blocks">
+
+      <!-- 01 — Situace -->
+      <div class="fb-block">
+        <div class="fb-block-header">
+          <span class="fb-block-num num-amber" data-en="01 · SITUATION">01 · SITUACE</span>
+          <span class="fb-block-title" data-en="Fragmented Data Across HOPI Group">Fragmentovaná data v HOPI Group</span>
+          <span class="fb-block-tag" data-en="THE PROBLEM">PROBLÉM</span>
+        </div>
+        <div class="fb-block-body">
+          <p class="fb-lead" data-en="HOPI Group operates 5 divisions with dozens of processes. Management data is split across SAP, DWH, and Power BI — three disconnected systems. Every strategic decision requires hours of manual aggregation in Excel.">HOPI Group funguje napříč 5 divizemi s desítkami procesů. Data managementu jsou rozdělena mezi SAP, DWH a Power BI — tři oddělené systémy. Každé strategické rozhodnutí vyžaduje hodiny ruční agregace v Excelu.</p>
+          <div class="fb-items">
+            <div class="fb-item">
+              <span class="fb-dot dot-amber"></span>
+              <span data-en="No unified management view — CEO reads from 3 separate tools">Žádný unified pohled pro management — CEO čte ze 3 oddělených nástrojů</span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-amber"></span>
+              <span data-en="No automated reporting — every report is a manual project">Žádný automatizovaný reporting — každý report je manuální projekt</span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-amber"></span>
+              <span data-en="No AI narratives — management decides without context or AI recommendations">Žádné AI narativy — management rozhoduje bez kontextu a doporučení AI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 — Co máme -->
+      <div class="fb-block">
+        <div class="fb-block-header">
+          <span class="fb-block-num num-green" data-en="02 · WHAT WE HAVE">02 · CO MÁME</span>
+          <span class="fb-block-title" data-en="Working Prototype — 8 Weeks, 493+ Tasks">Funkční prototyp — 8 týdnů, 493+ tasků</span>
+          <span class="fb-block-tag" data-en="THE ASSET">AKTIVA</span>
+        </div>
+        <div class="fb-block-body">
+          <p class="fb-lead" data-en="Since March 2026 we have built a functional Management Cockpit with 26 active sections across 7 clusters — a working proof of concept demonstrating the full product vision at enterprise scale.">Od března 2026 jsme vybudovali funkční Management Cockpit s 26 aktivními sekcemi v 7 clusterech — živý proof of concept demonstrující celou product vision v enterprise měřítku.</p>
+          <div class="fb-items">
+            <div class="fb-item">
+              <span class="fb-dot dot-green"></span>
+              <span>
+                <span class="fb-hi" data-en="Management Cockpit">Management Cockpit</span>
+                <span data-en=" — 26 sections: KPI · Finance · Launch Plan · Task Control · Team · Methodology · AI Control · Archive"> — 26 sekcí: KPI · Finance · Launch Plan · Task Control · Team · Metodika · AI Control · Archív</span>
+              </span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-green"></span>
+              <span>
+                <span class="fb-hi" data-en="Unification Layer Architecture">Architektura Unification Layer</span>
+                <span data-en=" — sits above SAP / Microsoft / DWH, does not replace them"> — sedí nad SAP / Microsoft / DWH, nenahrazuje je</span>
+              </span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-green"></span>
+              <span>
+                <span class="fb-hi" data-en="AI-augmented development methodology">AI-augmented development metodika</span>
+                <span data-en=" — 493+ tasks tracked, full audit log, session protocol, hooks infrastructure"> — 493+ tasků, full audit log, session protokol, hooks infrastruktura</span>
+              </span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-green"></span>
+              <span>
+                <span class="fb-hi" data-en="9D Product Model">9D Produktový model</span>
+                <span data-en=" — HOME B2C architecture, Phase 1 GTM ready, 7-cluster taxonomy"> — HOME B2C architektura, Phase 1 GTM ready, 7-clusterová taxonomie</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 — AI Window -->
+      <div class="fb-block">
+        <div class="fb-block-header">
+          <span class="fb-block-num num-blue" data-en="03 · THE WINDOW">03 · AI WINDOW</span>
+          <span class="fb-block-title" data-en="12–18 Month First Mover Opportunity">12–18 měsíců first mover příležitost</span>
+          <span class="fb-block-tag" data-en="THE OPPORTUNITY">PŘÍLEŽITOST</span>
+        </div>
+        <div class="fb-block-body">
+          <p class="fb-lead" data-en="AI fundamentally eliminates the traditional speed vs. quality tradeoff in software development. Those who understand this first build better products faster. The window is 12–18 months — after that the advantage normalizes across the market.">AI fundamentálně eliminuje tradiční kompromis rychlost vs. kvalita ve vývoji softwaru. Kdo to pochopí jako první, staví lepší produkt rychleji. Okno je 12–18 měsíců — poté se výhoda normalizuje napříč trhem.</p>
+          <div class="fb-items">
+            <div class="fb-item">
+              <span class="fb-dot dot-blue"></span>
+              <span data-en="AI-augmented team of 8 delivers what a traditional team of 30+ delivers — at a fraction of the cost">AI-augmented tým 8 lidí dodá co tradiční tým 30+ — za zlomek nákladů</span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-blue"></span>
+              <span data-en="First mover = good product built fast — not just fast, not just good. Both simultaneously.">First mover = dobrý produkt postavený rychle — ne jen rychle, ne jen dobře. Obojí najednou.</span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-blue"></span>
+              <span data-en="HOPI Group is a living laboratory — real enterprise data, real use cases, zero Phase 1 sales cost">HOPI Group je živá laboratoř — reálná enterprise data, reálné use cases, nulové Phase 1 sales náklady</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 — Diferenciace -->
+      <div class="fb-block">
+        <div class="fb-block-header">
+          <span class="fb-block-num num-violet" data-en="04 · DIFFERENTIATION">04 · DIFERENCIACE</span>
+          <span class="fb-block-title" data-en="Why We Win">Proč vyhrajeme</span>
+          <span class="fb-block-tag" data-en="OUR EDGE">VÝHODA</span>
+        </div>
+        <div class="fb-block-body">
+          <div class="fb-two-col">
+            <div class="fb-col-card">
+              <div class="fb-col-label lbl-them" data-en="Big Players (SAP · Microsoft)">Big Players (SAP · Microsoft)</div>
+              <div class="fb-items">
+                <div class="fb-item"><span class="fb-dot dot-amber"></span><span data-en="Too complex, too expensive, too generic">Příliš komplexní, drahý, generický</span></div>
+                <div class="fb-item"><span class="fb-dot dot-amber"></span><span data-en="Implementation in years, not weeks">Implementace v letech, ne týdnech</span></div>
+                <div class="fb-item"><span class="fb-dot dot-amber"></span><span data-en="AI bolted on top of legacy architecture">AI přilepené na starý základ, ne AI-native</span></div>
+              </div>
+            </div>
+            <div class="fb-col-card">
+              <div class="fb-col-label lbl-them" data-en="Startups (generic AI tools)">Startupy (generické AI nástroje)</div>
+              <div class="fb-items">
+                <div class="fb-item"><span class="fb-dot dot-amber"></span><span data-en="No domain knowledge, no enterprise integration">Žádná domain knowledge, žádná enterprise integrace</span></div>
+                <div class="fb-item"><span class="fb-dot dot-amber"></span><span data-en="No living proof — demo product, not production">Žádný living proof — demo produkt, ne produkce</span></div>
+                <div class="fb-item"><span class="fb-dot dot-amber"></span><span data-en="Pretty UI over an empty backend">Hezké UI nad prázdným backendem</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="fb-col-card fb-col-card-us">
+            <div class="fb-col-label lbl-us" data-en="HOPI TechIQ — Our Position">HOPI TechIQ — naše pozice</div>
+            <div class="fb-items">
+              <div class="fb-item"><span class="fb-dot dot-green"></span><span data-en="Domain knowledge + AI velocity + unification first (not replacement)">Domain knowledge + AI velocity + unification first (ne náhrada)</span></div>
+              <div class="fb-item"><span class="fb-dot dot-green"></span><span data-en="HOPI Group = living proof and reference customer for Phase 2 B2B enterprise deals">HOPI Group = living proof a referenční zákazník pro Phase 2 B2B enterprise dealy</span></div>
+              <div class="fb-item"><span class="fb-dot dot-green"></span><span data-en="Building an IT company from within — not an acquisition, not external hiring">Budujeme IT firmu zevnitř — ne akvizice, ne externí nábor</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 — Co chybí -->
+      <div class="fb-block">
+        <div class="fb-block-header">
+          <span class="fb-block-num num-orange" data-en="05 · WHAT'S MISSING">05 · CO CHYBÍ</span>
+          <span class="fb-block-title" data-en="3 Prerequisites to Launch">3 předpoklady pro launch</span>
+          <span class="fb-block-tag" data-en="THE GAP">GAP</span>
+        </div>
+        <div class="fb-block-body">
+          <div class="fb-items">
+            <div class="fb-item">
+              <span class="fb-dot dot-orange"></span>
+              <span>
+                <span class="fb-hi" data-en="Legal entity">Právní entita</span>
+                <span data-en=" — HOPI TechIQ s.r.o. registration. Without it: no contracts, no IP ownership, no investment rounds."> — registrace HOPI TechIQ s.r.o. Bez ní: žádné smlouvy, žádné vlastnictví IP, žádná investiční kola.</span>
+              </span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-orange"></span>
+              <span>
+                <span class="fb-hi" data-en="Backend infrastructure">Backend infrastruktura</span>
+                <span data-en=" — auth provider, data storage, API layer for HOME B2C. Architecture decision in progress (ADR)."> — auth provider, data storage, API layer pro HOME B2C. Architektonické rozhodnutí připraveno (ADR).</span>
+              </span>
+            </div>
+            <div class="fb-item">
+              <span class="fb-dot dot-orange"></span>
+              <span>
+                <span class="fb-hi" data-en="Team">Tým</span>
+                <span data-en=" — 3 seniors + 2 juniors (vibe coding, AI-assisted) + UX designer + integration specialist. Total: 8 people including Founder &amp; Product Lead."> — 3 seniori + 2 juniors (vibe coding, AI-assisted) + UX designer + integration specialist. Celkem: 8 lidí včetně Founder &amp; Product Lead.</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06 — Ask -->
+      <div class="fb-block">
+        <div class="fb-block-header">
+          <span class="fb-block-num num-green" data-en="06 · THE ASK">06 · ASK</span>
+          <span class="fb-block-title" data-en="3 Steps to Start">3 kroky ke startu</span>
+          <span class="fb-block-tag" data-en="CALL TO ACTION">VÝZVA K AKCI</span>
+        </div>
+        <div class="fb-block-body">
+          <div class="fb-ask-grid">
+            <div class="fb-ask-card">
+              <span class="fb-ask-step" data-en="STEP 1">KROK 1</span>
+              <div class="fb-ask-title" data-en="Go / No-Go Decision">Go / No-Go rozhodnutí</div>
+              <div class="fb-ask-desc" data-en="Leadership confirms: is HOPI Group in as founding partner? Clear yes or no. No more waiting.">Leadership potvrdí: je HOPI Group in jako founding partner? Jasné ano nebo ne. Žádné další čekání.</div>
+            </div>
+            <div class="fb-ask-card">
+              <span class="fb-ask-step" data-en="STEP 2">KROK 2</span>
+              <div class="fb-ask-title" data-en="Register HOPI TechIQ s.r.o.">Registrace HOPI TechIQ s.r.o.</div>
+              <div class="fb-ask-desc" data-en="Legal vehicle for all IP, contracts, and investment rounds. HOPI Group contribution: Capital + Brand + IT capacity (SAP integration).">Právní entita pro veškeré IP, smlouvy a investiční kola. Příspěvek HOPI Group: Kapitál + Brand + IT kapacita (SAP integrace).</div>
+            </div>
+            <div class="fb-ask-card">
+              <span class="fb-ask-step" data-en="STEP 3">KROK 3</span>
+              <div class="fb-ask-title" data-en="Seed Resources ~20M CZK / 18 months">Seed zdroje ~20M CZK / 18 měs.</div>
+              <div class="fb-ask-desc" data-en="Standard scenario: team + infrastructure + operations until B2C launch Q1 2027. Covers all roles, cloud infra, and legal setup.">Standard scénář: tým + infrastruktura + provoz do B2C launche Q1 2027. Pokrývá všechny role, cloud infrastrukturu a právní setup.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /fb-blocks -->
+
+
+  </main>
+
+  <script src="_shell.js"></script>
+  <script>
+    Shell.init({
+      section: 'Founders Board',
+      backUrl:  '../MANAGEMENT_COCKPIT.html',
+      music:    '../cockpit-music.mp3'
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI TechIQ — Strategic Study 2026</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --violet: #A855F7;
+  --violet-deep: #7c3aed;
+  --violet-light: #f3e8ff;
+  --dark: #0f0f23;
+  --navy: #1a1a2e;
+  --gray: #64748b;
+  --gray-light: #94a3b8;
+  --light: #f8fafc;
+  --border: #e2e8f0;
+  --green: #10b981;
+  --green-light: #d1fae5;
+  --blue: #3b82f6;
+  --blue-light: #dbeafe;
+  --amber: #f59e0b;
+  --amber-light: #fef3c7;
+  --red: #ef4444;
+  --red-light: #fee2e2;
+  --sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--sans);
+  color: var(--navy);
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+/* ── COVER ── */
+.cover {
+  min-height: 100vh;
+  background: var(--dark);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 60px 70px;
+  page-break-after: always;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,85,247,0.15) 0%, transparent 70%);
+}
+
+.cover-tag {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--violet);
+  font-weight: 600;
+}
+
+.cover-title {
+  margin-top: 24px;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+.cover-title span { color: var(--violet); }
+
+.cover-subtitle {
+  margin-top: 16px;
+  font-size: 18px;
+  color: #94a3b8;
+  font-weight: 400;
+  max-width: 560px;
+}
+
+.cover-divider {
+  width: 60px; height: 3px;
+  background: var(--violet);
+  margin-top: 32px;
+}
+
+.cover-meta {
+  display: flex;
+  gap: 48px;
+  margin-top: auto;
+  padding-top: 60px;
+}
+
+.cover-meta-item label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.cover-meta-item span {
+  font-size: 14px;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.cover-confidential {
+  position: absolute;
+  bottom: 60px; right: 70px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #334155;
+  border: 1px solid #334155;
+  padding: 4px 10px;
+}
+
+/* ── PAGE LAYOUT ── */
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 56px 70px;
+  page-break-after: always;
+}
+
+.page:last-child { page-break-after: auto; }
+
+/* ── SECTION HEADER ── */
+.section-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--violet);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.section-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+/* ── EXECUTIVE SUMMARY ── */
+.exec-box {
+  background: var(--violet-light);
+  border-left: 4px solid var(--violet);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  border-radius: 0 8px 8px 0;
+}
+
+.exec-box .lead {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.exec-box p {
+  color: #374151;
+  font-size: 13px;
+}
+
+.ask-box {
+  background: var(--navy);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.ask-box .ask-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.ask-box p { font-size: 14px; line-height: 1.6; }
+
+/* ── CONTENT STYLES ── */
+h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 24px 0 10px;
+}
+
+h3.violet { color: var(--violet); }
+
+p { margin-bottom: 10px; color: #374151; }
+
+ul { margin: 0 0 12px 18px; }
+ul li { margin-bottom: 4px; color: #374151; }
+
+strong { color: var(--navy); }
+
+/* ── TABLES ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0 24px;
+  font-size: 12.5px;
+}
+
+th {
+  background: var(--navy);
+  color: white;
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+tr:nth-child(even) td { background: var(--light); }
+tr:last-child td { border-bottom: none; }
+
+td.ok { color: var(--green); font-weight: 600; }
+td.warn { color: var(--amber); font-weight: 600; }
+td.bad { color: var(--red); font-weight: 600; }
+
+/* ── SCENARIO CARDS ── */
+.scenario-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 20px 0 28px;
+}
+
+.scenario-card {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.scenario-card.a { border-top: 4px solid var(--blue); }
+.scenario-card.b { border-top: 4px solid var(--green); }
+
+.sc-header {
+  padding: 16px 20px 12px;
+}
+
+.scenario-card.a .sc-header { background: var(--blue-light); }
+.scenario-card.b .sc-header { background: var(--green-light); }
+
+.sc-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.scenario-card.a .sc-tag { color: var(--blue); }
+.scenario-card.b .sc-tag { color: var(--green); }
+
+.sc-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.sc-subtitle {
+  font-size: 11px;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+.sc-body {
+  padding: 16px 20px;
+  background: white;
+}
+
+.sc-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.sc-row:last-child { border-bottom: none; }
+.sc-row .label { color: var(--gray); }
+.sc-row .value { font-weight: 600; color: var(--navy); text-align: right; max-width: 55%; }
+
+.sc-recommend {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.scenario-card.a .sc-recommend { background: var(--blue-light); color: var(--blue); }
+.scenario-card.b .sc-recommend { background: var(--green-light); color: var(--green); }
+
+/* ── TIMELINE ── */
+.timeline-wrap {
+  margin: 24px 0;
+  overflow-x: auto;
+}
+
+.timeline-years {
+  display: grid;
+  grid-template-columns: 80px repeat(4, 1fr);
+  gap: 0;
+  margin-bottom: 6px;
+}
+
+.tl-year {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.tl-year:first-child { text-align: left; }
+
+.timeline-row {
+  display: grid;
+  grid-template-columns: 80px repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+  align-items: center;
+}
+
+.tl-label {
+  font-size: 11px;
+  font-weight: 700;
+  padding-right: 8px;
+}
+
+.tl-label.a { color: var(--blue); }
+.tl-label.b { color: var(--green); }
+
+.tl-seg {
+  height: 28px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 0.3px;
+}
+
+.tl-hopi { background: #1d4ed8; }
+.tl-b2b  { background: #2563eb; opacity: 0.8; }
+.tl-b2c  { background: #3b82f6; opacity: 0.6; }
+.tl-b2c-g { background: var(--green); }
+.tl-b2b-g { background: #059669; opacity: 0.8; }
+.tl-mkt  { background: #10b981; opacity: 0.6; }
+
+.timeline-legend {
+  display: flex;
+  gap: 20px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.tl-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--gray);
+}
+
+.tl-dot {
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── RISK MATRIX ── */
+.risk-matrix {
+  display: grid;
+  grid-template-columns: 40px 1fr 1fr;
+  grid-template-rows: 1fr 1fr 40px;
+  gap: 4px;
+  height: 220px;
+  margin: 16px 0 24px;
+}
+
+.rm-cell {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  font-size: 11px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.rm-low  { background: var(--green-light); color: #065f46; }
+.rm-med  { background: var(--amber-light); color: #92400e; }
+.rm-high { background: var(--red-light);   color: #991b1b; }
+
+.rm-axis-y {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rm-axis-x {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rm-placeholder { background: transparent; }
+
+/* ── PHASE STEPS ── */
+.phases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+
+.phase-card {
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid var(--border);
+}
+
+.phase-card.p0 { border-top: 3px solid var(--violet); }
+.phase-card.p1 { border-top: 3px solid var(--blue); }
+.phase-card.p2 { border-top: 3px solid var(--green); }
+
+.phase-num {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.p0 .phase-num { color: var(--violet); }
+.p1 .phase-num { color: var(--blue); }
+.p2 .phase-num { color: var(--green); }
+
+.phase-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.phase-period { font-size: 11px; color: var(--gray); margin-bottom: 8px; }
+.phase-desc { font-size: 12px; color: #374151; line-height: 1.5; }
+
+/* ── RESOURCE TABLE ── */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+
+.res-card {
+  background: var(--light);
+  border-radius: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+}
+
+.res-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+.res-item {
+  font-size: 11.5px;
+  color: #374151;
+  padding: 3px 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.res-item::before {
+  content: '→';
+  color: var(--violet);
+  flex-shrink: 0;
+  font-size: 11px;
+}
+
+/* ── FINANCIAL TABLE ── */
+.fin-highlight {
+  background: var(--navy);
+  color: white;
+  border-radius: 8px;
+  padding: 20px 24px;
+  margin: 16px 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  text-align: center;
+}
+
+.fin-item label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  margin-bottom: 6px;
+}
+
+.fin-item .val {
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+}
+
+.fin-item .val.violet { color: var(--violet); }
+.fin-item .val.green  { color: #34d399; }
+
+.fin-item .sub {
+  font-size: 11px;
+  color: var(--gray-light);
+  margin-top: 3px;
+}
+
+/* ── DECISION BOX ── */
+.decision-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 16px 0 24px;
+}
+
+.dec-card {
+  border-radius: 8px;
+  padding: 16px;
+  border: 2px solid var(--border);
+}
+
+.dec-card.recommended {
+  border-color: var(--violet);
+  background: var(--violet-light);
+}
+
+.dec-tag {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.dec-card.recommended .dec-tag { color: var(--violet); }
+.dec-card:not(.recommended) .dec-tag { color: var(--gray); }
+
+.dec-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
+
+.dec-item {
+  font-size: 11.5px;
+  color: #374151;
+  padding: 3px 0;
+}
+
+/* ── NEXT STEPS ── */
+.steps {
+  counter-reset: step;
+  margin: 16px 0 24px;
+}
+
+.step {
+  display: flex;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+
+.step:last-child { border-bottom: none; }
+
+.step-num {
+  width: 30px; height: 30px;
+  background: var(--violet);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.step-content .step-title {
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.step-content .step-desc {
+  font-size: 12px;
+  color: var(--gray);
+}
+
+.step-content .step-date {
+  display: inline-block;
+  background: var(--violet-light);
+  color: var(--violet-deep);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* ── FOOTER ── */
+.page-footer {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--gray-light);
+  letter-spacing: 0.5px;
+}
+
+/* ── PRINT ── */
+@media print {
+  body { font-size: 12px; }
+  .cover { min-height: auto; padding: 40px 50px; }
+  .cover::before { display: none; }
+  .page { padding: 36px 50px; }
+  .cover-confidential { display: none; }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════
+     COVER
+═══════════════════════════════════════════════ -->
+<div class="cover">
+  <div>
+    <div class="cover-tag">Strategická studie · Důvěrné</div>
+    <div class="cover-title">
+      HOPI <span>TechIQ</span><br>
+      Strategic Study
+    </div>
+    <div class="cover-subtitle">
+      Byznys případ pro vytvoření technologické divize<br>
+      s mandátem vývoje produktů pro HOPI, B2B a B2C trhy
+    </div>
+    <div class="cover-divider"></div>
+  </div>
+
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Datum</label>
+      <span>30. dubna 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Autor</label>
+      <span>David Gogela · HU-GOGD</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Určeno pro</label>
+      <span>HOPI Group CEO · Board</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Verze</label>
+      <span>v1.0 — Draft pro diskusi</span>
+    </div>
+  </div>
+
+  <div class="cover-confidential">Confidential</div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     1. EXECUTIVE SUMMARY
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">01 · Executive Summary</div>
+  <div class="section-title">Příležitost, která nečeká</div>
+
+  <div class="exec-box">
+    <div class="lead">AI snížila náklady na vývoj softwaru o 60–80 %. Kdo tuto vlnu nevyužije v příštích 2–3 letech, bude ji dohánět za násobně vyšší cenu.</div>
+    <p>HOPI Group dnes platí za IT služby externím partnerům bez tvorby vlastní softwarové hodnoty. Interní AI Workshop (29. 4. 2026) potvrdil: zaměstnanci AI aktivně využívají, chybí pouze struktura a governance. <strong>Proof of concept existuje</strong> — AppIQ prototype byl vyvinut interně za 3 měsíce s minimálními náklady a dokazuje, že HOPI má kapacitu budovat software vlastními silami.</p>
+  </div>
+
+  <h3>Co tato studie navrhuje</h3>
+  <p>Vytvořit <strong>HOPI TechIQ</strong> — technologickou divizi s mandátem vývoje produktů primárně pro potřeby HOPI Group, s výhledem na B2B a B2C monetizaci. Studie prezentuje dva variantní scénáře s odlišným risk profilem a časováním výnosů.</p>
+
+  <div class="ask-box">
+    <div class="ask-label">Rozhodnutí k dnešní schůzce</div>
+    <p><strong>Option B — Minimální investice, maximální validace:</strong> Schválit 60denní mandát + přístup k interním datům (Finance / DWH). Výstup: první produkční modul s reálnými daty. Investice: &lt; 300 000 Kč. Rozhodnutí o plném spuštění divize: na základě výsledků za 60 dní.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     2. PROČ TEĎ
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">02 · Context</div>
+  <div class="section-title">Proč právě teď?</div>
+
+  <h3>Co se změnilo — nová ekonomika vývoje</h3>
+  <p>Do roku 2023 vyžadoval vývoj podnikové aplikace tým 4–6 vývojářů, 12+ měsíců a investici v řádu milionů korun. AI development tools (Claude, GitHub Copilot, Cursor) tuto rovnici zásadně změnily:</p>
+
+  <table>
+    <tr><th>Parametr</th><th>Tradiční vývoj (do 2023)</th><th>AI-assisted vývoj (2026)</th></tr>
+    <tr><td>Proof of concept</td><td>3–6 měsíců, tým</td><td class="ok">2–4 týdny, 1 člověk</td></tr>
+    <tr><td>Frontend aplikace</td><td>Junior + senior developer</td><td class="ok">1 domain expert + AI</td></tr>
+    <tr><td>Specifikace → prototype</td><td>Oddělené fáze, měsíce</td><td class="ok">Simultánní, týdny</td></tr>
+    <tr><td>Cena MVP</td><td>500 000 – 2 000 000 Kč</td><td class="ok">50 000 – 300 000 Kč</td></tr>
+  </table>
+
+  <h3>HOPI situace dnes</h3>
+  <table>
+    <tr><th>Oblast</th><th>Současný stav</th><th>Riziko / příležitost</th></tr>
+    <tr><td>IT model</td><td>Outsourcing — ARTIN (AI), INTECS (BI), MIBCON/SABRIS (SAP)</td><td class="warn">Závislost, rostoucí náklady, žádná vlastní hodnota</td></tr>
+    <tr><td>Interní AI adoption</td><td>Živelné — Claude, Copilot, GPT napříč firmou</td><td class="warn">Bezpečnostní riziko bez governance</td></tr>
+    <tr><td>Software ownership</td><td>Nulová — vše od externích dodavatelů</td><td class="bad">Žádný tech asset, žádný moat</td></tr>
+    <tr><td>Proof of concept</td><td>AppIQ v7.38 — interně vyvinutý prototype</td><td class="ok">Validuje feasibility, ready pro next step</td></tr>
+    <tr><td>Trh — sektor peers</td><td>Zemědělství / potravinářství bez vlastního softwaru</td><td class="ok">First-mover příležitost</td></tr>
+  </table>
+
+  <h3>Okno příležitosti — 2–3 roky</h3>
+  <p>Konkurenti v sektoru začínají řešit AI adoption nyní. Za 2–3 roky bude AI development komoditou — first-mover výhoda zmizí. HOPI má oproti peers náskok v podobě funkčního prototype a interní znalosti potřeb oboru. <strong>Toto okno se nezopakuje.</strong></p>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     3. DVA SCÉNÁŘE
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">03 · Strategic Options</div>
+  <div class="section-title">Dva variantní scénáře</div>
+
+  <p>Studie prezentuje dvě rovnocenné strategické cesty. Nejsou v konfliktu — liší se startovací pozicí a prioritizací trhů. Oba vedou ke stejnému cíli: <strong>HOPI TechIQ jako technologická divize s vlastními produkty.</strong></p>
+
+  <div class="scenario-grid">
+    <div class="scenario-card a">
+      <div class="sc-header">
+        <div class="sc-tag">Scénář A</div>
+        <div class="sc-title">HOPI First</div>
+        <div class="sc-subtitle">Mandát zevnitř → škálovat ven</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="label">H1 (0–12 m)</span><span class="value">Interní HOPI nástroje</span></div>
+        <div class="sc-row"><span class="label">H2 (12–36 m)</span><span class="value">B2B — sektor peers</span></div>
+        <div class="sc-row"><span class="label">H3 (36+ m)</span><span class="value">B2C / Marketplace</span></div>
+        <div class="sc-row"><span class="label">První zákazník</span><span class="value">HOPI (garantovaný)</span></div>
+        <div class="sc-row"><span class="label">Revenue timing</span><span class="value">Pomalejší (úspora nákladů)</span></div>
+        <div class="sc-row"><span class="label">Risk profil</span><span class="value">Nízký</span></div>
+        <div class="sc-row"><span class="label">CEO ask</span><span class="value">Mandát + interní data</span></div>
+        <div class="sc-recommend">✅ Doporučeno pro tuto schůzku</div>
+      </div>
+    </div>
+
+    <div class="scenario-card b">
+      <div class="sc-header">
+        <div class="sc-tag">Scénář B</div>
+        <div class="sc-title">Market First</div>
+        <div class="sc-subtitle">Validace trhem → HOPI jako reference</div>
+      </div>
+      <div class="sc-body">
+        <div class="sc-row"><span class="label">H1 (0–12 m)</span><span class="value">B2C — HOME (rodina)</span></div>
+        <div class="sc-row"><span class="label">H2 (12–36 m)</span><span class="value">B2B + HOPI pilot</span></div>
+        <div class="sc-row"><span class="label">H3 (36+ m)</span><span class="value">Marketplace / White-label</span></div>
+        <div class="sc-row"><span class="label">První zákazník</span><span class="value">Spotřebitel (validovaný)</span></div>
+        <div class="sc-row"><span class="label">Revenue timing</span><span class="value">Rychlejší (SaaS subscription)</span></div>
+        <div class="sc-row"><span class="label">Risk profil</span><span class="value">Střední</span></div>
+        <div class="sc-row"><span class="label">CEO ask</span><span class="value">Souhlas + seed budget</span></div>
+        <div class="sc-recommend">✅ Dlouhodobá komerční vize</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Vizuální roadmapa — oba scénáře</h3>
+  <div class="timeline-wrap">
+    <div class="timeline-years">
+      <div class="tl-year"></div>
+      <div class="tl-year">2026</div>
+      <div class="tl-year">2027</div>
+      <div class="tl-year">2028</div>
+      <div class="tl-year">2029+</div>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-label a">Scénář A</div>
+      <div class="tl-seg tl-hopi">HOPI Interní</div>
+      <div class="tl-seg tl-b2b">B2B Sektor</div>
+      <div class="tl-seg tl-b2c">B2C</div>
+      <div class="tl-seg tl-b2c" style="opacity:0.4">Marketplace</div>
+    </div>
+    <div class="timeline-row">
+      <div class="tl-label b">Scénář B</div>
+      <div class="tl-seg tl-b2c-g">B2C — HOME</div>
+      <div class="tl-seg tl-b2b-g">B2B + HOPI</div>
+      <div class="tl-seg tl-mkt">Marketplace</div>
+      <div class="tl-seg tl-mkt" style="opacity:0.4">White-label</div>
+    </div>
+    <div class="timeline-legend">
+      <div class="tl-legend-item"><div class="tl-dot" style="background:#1d4ed8"></div>HOPI Interní</div>
+      <div class="tl-legend-item"><div class="tl-dot" style="background:#2563eb"></div>B2B</div>
+      <div class="tl-legend-item"><div class="tl-dot" style="background:#3b82f6"></div>B2C (Scénář A)</div>
+      <div class="tl-legend-item"><div class="tl-dot" style="background:var(--green)"></div>B2C — HOME (Scénář B)</div>
+      <div class="tl-legend-item"><div class="tl-dot" style="background:#059669"></div>B2B + HOPI (Scénář B)</div>
+      <div class="tl-legend-item"><div class="tl-dot" style="background:#10b981"></div>Marketplace</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     4. MODEL + ZDROJE
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">04 · Operating Model</div>
+  <div class="section-title">Navrhovaný model a zdroje</div>
+
+  <h3>Fázovaný build-up</h3>
+  <div class="phases">
+    <div class="phase-card p0">
+      <div class="phase-num">Phase 0</div>
+      <div class="phase-title">Proof with Real Data</div>
+      <div class="phase-period">0 – 6 měsíců · 2026</div>
+      <div class="phase-desc">1 produkční modul (Finance) napojený na reálná data přes DWH. Ověřit technickou feasibility a byznysovou hodnotu před plným spuštěním divize.</div>
+    </div>
+    <div class="phase-card p1">
+      <div class="phase-num">Phase 1</div>
+      <div class="phase-title">HOPI TechIQ s.r.o.</div>
+      <div class="phase-period">6 – 18 měsíců · 2026–2027</div>
+      <div class="phase-desc">Oddělená entita (100 % HOPI). Produkční backend, SAP S4 integrace, Microsoft SSO. Tým 2–3 lidi. První B2B kontrakt nebo B2C launch dle zvoleného scénáře.</div>
+    </div>
+    <div class="phase-card p2">
+      <div class="phase-num">Phase 2</div>
+      <div class="phase-title">Scale &amp; Monetize</div>
+      <div class="phase-period">18+ měsíců · 2027+</div>
+      <div class="phase-desc">Komerční škálování: multi-tenant architektura, marketplace, white-label / reseller program. Tým 4–6 lidí. HOPI = referenční zákazník pro enterprise dealy.</div>
+    </div>
+  </div>
+
+  <h3>Frontend → Backend: technický bridge</h3>
+  <p>AppIQ prototype je postaven na architektuře která přechod přímo anticipuje. Vrstva <code>_data.js</code> odděluje frontend od zdroje dat — přechod z JSON na REST API nevyžaduje přepsání frontendu.</p>
+
+  <table>
+    <tr><th>Vrstva</th><th>Technologie</th><th>Stav</th><th>Zajistí</th></tr>
+    <tr><td>Frontend</td><td>HTML / CSS / JS (AppIQ v7.38)</td><td class="ok">Hotovo ✓</td><td>David Gogela</td></tr>
+    <tr><td>Data bridge</td><td><code>_data.js</code> → REST API swap</td><td class="ok">Připraveno ✓</td><td>David + developer</td></tr>
+    <tr><td>Backend API</td><td>Node.js + Express nebo .NET Core</td><td class="warn">Chybí</td><td>Senior developer (hire / kontrakt)</td></tr>
+    <tr><td>Databáze</td><td>PostgreSQL / SQL Server</td><td class="warn">Chybí</td><td>Developer + HOPI-IT</td></tr>
+    <tr><td>Autentizace</td><td>Microsoft Entra ID (Azure AD / SSO)</td><td class="warn">Chybí</td><td>Developer + HOPI-IT</td></tr>
+    <tr><td>SAP integrace</td><td>SAP S4 OData API</td><td class="warn">Chybí</td><td>HOPI-IT + SABRIS (konzultace)</td></tr>
+    <tr><td>Hosting</td><td>Microsoft Azure</td><td class="warn">Chybí</td><td>HOPI-IT + developer</td></tr>
+    <tr><td>BI / Reporting</td><td>Power BI integration</td><td class="warn">Chybí</td><td>INTECS (konzultace)</td></tr>
+  </table>
+
+  <h3>Partnerský ekosystém</h3>
+  <div class="resource-grid">
+    <div class="res-card">
+      <div class="res-title">HOPI Interní</div>
+      <div class="res-item">HOPI-IT — SAP správa, Azure infrastruktura</div>
+      <div class="res-item">David Gogela — Product Owner, frontend, AI layer</div>
+    </div>
+    <div class="res-card">
+      <div class="res-title">AI &amp; Data konzultace</div>
+      <div class="res-item">ARTIN s.r.o. — AI integrace a consulting</div>
+      <div class="res-item">INTECS — Power BI, datové modely, reporting</div>
+    </div>
+    <div class="res-card">
+      <div class="res-title">SAP konzultace</div>
+      <div class="res-item">MIBCON — SAP R3 (legacy systém)</div>
+      <div class="res-item">SABRIS — SAP S4 (nový systém, integrace)</div>
+    </div>
+  </div>
+
+  <p><strong>Klíčový chybějící zdroj:</strong> 1 Senior Full-Stack Developer (Node.js nebo .NET, SQL, Azure, SAP OData). Hire nebo kontrakt — toto je jediná zásadní personální investice pro Phase 0.</p>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     5. FINANČNÍ MODEL
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">05 · Financial Model</div>
+  <div class="section-title">Investice, úspory, výnosy</div>
+
+  <div class="fin-highlight">
+    <div class="fin-item">
+      <label>Phase 0 Investice</label>
+      <div class="val violet">150 – 300 K</div>
+      <div class="sub">6 týdnů · 1 developer · proof</div>
+    </div>
+    <div class="fin-item">
+      <label>Roční úspora (externímu IT)</label>
+      <div class="val green">doplnit</div>
+      <div class="sub">vs. stávající IT outsourcing náklady</div>
+    </div>
+    <div class="fin-item">
+      <label>B2B Revenue Potential</label>
+      <div class="val">H2 2027+</div>
+      <div class="sub">SaaS licence · 1. kontrakt</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Položka</th><th>Phase 0 (6 m)</th><th>Phase 1 (12–18 m)</th><th>Phase 2 (18+ m)</th></tr>
+    <tr><td>Developer (hire / kontrakt)</td><td>150–300 K Kč</td><td>600 K–1 M Kč/rok</td><td>1,5–2 M Kč/rok</td></tr>
+    <tr><td>Infrastruktura (Azure)</td><td>~10 K Kč</td><td>~60–120 K Kč/rok</td><td>~200 K Kč/rok</td></tr>
+    <tr><td>SAP integrace (SABRIS)</td><td>—</td><td>100–300 K Kč</td><td>—</td></tr>
+    <tr><td>Právní entita (s.r.o.)</td><td>—</td><td>~20 K Kč jednorázově</td><td>—</td></tr>
+    <tr><td><strong>Celkem investice</strong></td><td><strong>160–310 K Kč</strong></td><td><strong>800 K–1,5 M Kč</strong></td><td><strong>2–3 M Kč/rok</strong></td></tr>
+    <tr><td>Úspora externího IT</td><td>—</td><td>doplnit</td><td>doplnit</td></tr>
+    <tr><td>B2B / B2C Revenue</td><td>—</td><td>první kontrakt</td><td>škálující</td></tr>
+  </table>
+
+  <h3>Klíčový argument pro Finance</h3>
+  <p>Pokud Phase 0 ušetří ≥ vlastní náklady (tj. náhrada části externího IT spend), je Phase 1 financovatelná z úspor — bez navýšení celkového IT rozpočtu. Toto je finanční argument pro CFO/CEO: <strong>přesunout výdaj z nákupu cizí práce na budování vlastního aktiva.</strong></p>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     6. RISK ASSESSMENT
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">06 · Risk Assessment</div>
+  <div class="section-title">Rizika a mitigace</div>
+
+  <table>
+    <tr><th>Riziko</th><th>Scénář</th><th>Pravděp.</th><th>Dopad</th><th>Mitigace</th></tr>
+    <tr>
+      <td>Backend komplexita — produkční systém vyžaduje jiné skills než prototype</td>
+      <td>A + B</td><td class="warn">Střední</td><td class="bad">Vysoký</td>
+      <td>1 senior developer jako podmínka Phase 0 — ne volitelné</td>
+    </tr>
+    <tr>
+      <td>SAP integrace — komplexní, závislost na HOPI-IT a SABRIS kapacitě</td>
+      <td>A</td><td class="warn">Střední</td><td class="warn">Střední</td>
+      <td>Phase 0 přes DWH (neutrální vůči SAP verzi), přímá S4 integrace až Phase 1</td>
+    </tr>
+    <tr>
+      <td>Focus dilution — David současně Product Owner i jediný developer</td>
+      <td>A + B</td><td class="bad">Vysoký</td><td class="warn">Střední</td>
+      <td>Jasná role boundary: David = CPO, developer = stavitel; time-box Phase 0</td>
+    </tr>
+    <tr>
+      <td>Žádný B2B sales — kdo prodá první kontrakt?</td>
+      <td>A</td><td class="bad">Vysoký</td><td class="warn">Střední</td>
+      <td>H1 = interní HOPI (guaranteed), B2B sales kapacita řešit v Phase 1</td>
+    </tr>
+    <tr>
+      <td>Consumer trh — B2C marketing mimo core competence HOPI</td>
+      <td>B</td><td class="bad">Vysoký</td><td class="bad">Vysoký</td>
+      <td>Scénář B doporučen až po validaci Scénáře A nebo se samostatným funding</td>
+    </tr>
+    <tr>
+      <td>Kulturní odpor — „nejsme tech firma"</td>
+      <td>A + B</td><td class="warn">Střední</td><td class="warn">Střední</td>
+      <td>AI Workshop = interní traction; framing „budujeme IT kapacitu, ne startup"</td>
+    </tr>
+    <tr>
+      <td>GDPR / datová bezpečnost při napojení na produkční data</td>
+      <td>A + B</td><td class="ok">Nízká</td><td class="bad">Vysoký</td>
+      <td>Před Phase 1: právní audit + HOPI-IT security review; DWH read-only v Phase 0</td>
+    </tr>
+  </table>
+
+  <h3>Risk/Výnos matice — scénáře</h3>
+  <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top:16px;">
+    <div>
+      <div style="background:var(--blue-light);border-radius:8px;padding:16px;border-left:4px solid var(--blue);">
+        <div style="font-weight:700;color:var(--blue);font-size:12px;margin-bottom:6px;">SCÉNÁŘ A — HOPI FIRST</div>
+        <div style="font-size:12px;color:#374151;">Risk: <strong>Nízký</strong> · Výnos: střední · Time to revenue: pomalejší<br>Vhodný pro získání CEO mandátu. Interní zákazník garantuje první výsledek.</div>
+      </div>
+    </div>
+    <div>
+      <div style="background:var(--green-light);border-radius:8px;padding:16px;border-left:4px solid var(--green);">
+        <div style="font-weight:700;color:var(--green);font-size:12px;margin-bottom:6px;">SCÉNÁŘ B — MARKET FIRST</div>
+        <div style="font-size:12px;color:#374151;">Risk: <strong>Střední–Vysoký</strong> · Výnos: vyšší · Time to revenue: rychlejší<br>Vyžaduje oddělenou entitu a seed funding. Vhodný jako Phase 2 po validaci Scénáře A.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     7. ROZHODNUTÍ A NEXT STEPS
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">07 · Decision &amp; Next Steps</div>
+  <div class="section-title">Tři možnosti — jedno doporučení</div>
+
+  <div class="decision-grid">
+    <div class="dec-card">
+      <div class="dec-tag">Option A</div>
+      <div class="dec-title">Nic neměnit</div>
+      <div class="dec-item">💰 Investice: 0 Kč</div>
+      <div class="dec-item">⚠️ Risk: opportunity cost</div>
+      <div class="dec-item">📈 Upside: žádný</div>
+      <div class="dec-item" style="margin-top:8px;font-size:11px;color:var(--gray);">Outsourcing pokračuje, AI adoption zůstane živelná, konkurenti dohánějí.</div>
+    </div>
+
+    <div class="dec-card recommended">
+      <div class="dec-tag">Option B · Doporučeno</div>
+      <div class="dec-title">60denní mandát</div>
+      <div class="dec-item">💰 Investice: &lt; 300 K Kč</div>
+      <div class="dec-item">✅ Risk: minimální</div>
+      <div class="dec-item">📈 Upside: proof → Phase 1</div>
+      <div class="dec-item" style="margin-top:8px;font-size:11px;color:#374151;">1 developer + přístup k DWH/Finance datům. Za 60 dní: první reálný modul. Rozhodnutí o divizi: na základě výsledků.</div>
+    </div>
+
+    <div class="dec-card">
+      <div class="dec-tag">Option C</div>
+      <div class="dec-title">Full Launch</div>
+      <div class="dec-item">💰 Investice: 1–2 M Kč/rok</div>
+      <div class="dec-item">⚠️ Risk: střední</div>
+      <div class="dec-item">📈 Upside: tech divize</div>
+      <div class="dec-item" style="margin-top:8px;font-size:11px;color:var(--gray);">Tým 3–4 lidi, HOPI TechIQ s.r.o., plný mandát. Vhodné po validaci Option B.</div>
+    </div>
+  </div>
+
+  <h3>Next Steps — Option B schválen</h3>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <div class="step-title">CEO schválí mandát + datový přístup</div>
+        <div class="step-desc">Formální souhlas: David = Product Owner pro HOPI TechIQ pilot. Přístup k Finance / DWH read-only.</div>
+        <div class="step-date">Tato schůzka</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <div class="step-title">Zajistit Senior Full-Stack Developera</div>
+        <div class="step-desc">Kontrakt nebo hire. Node.js / .NET, SQL, Azure. Definovat job description a zdroj (HOPI-IT, externí).</div>
+        <div class="step-date">Týden 1–2</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <div class="step-title">Phase 0 Kickoff — první produkční modul</div>
+        <div class="step-desc">Finance modul napojený na DWH. Cíl: reálná data, reálný uživatel, měřitelná hodnota. Stack: Node.js + PostgreSQL nebo Supabase (managed backend).</div>
+        <div class="step-date">Týden 3 – 8</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <div class="step-title">60denní review — go / no-go pro Phase 1</div>
+        <div class="step-desc">Prezentace výsledků Phase 0 boardu. Rozhodnutí: HOPI TechIQ s.r.o. ano/ne, scénář A nebo B pro Phase 1.</div>
+        <div class="step-date">Den 60 — červen 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ask-box" style="margin-top:24px;">
+    <div class="ask-label">Závěrečné shrnutí</div>
+    <p>HOPI má proof of concept, doménovou znalost a příznivé načasování. Chybí jediné: <strong>formální mandát a jeden člověk na backend</strong>. Option B toto řeší za minimální investici s měřitelným výsledkem za 60 dní. Za 3 roky může být HOPI TechIQ zisková divize — nebo referenční zákazník pro komerční SaaS. Obě cesty začínají stejným prvním krokem.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.0</span>
+  </div>
+</div>
+
+</body>
+</html>

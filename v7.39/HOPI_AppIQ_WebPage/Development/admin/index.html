@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="cs" translate="no">
+<head>
+<meta charset="UTF-8">
+<meta name="google" content="notranslate">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HOPI AppIQ — Admin Center (FC-5)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#0d1117;color:#e6edf3;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+/* ── NAV ── */
+.ac-nav{background:#161b22;border-bottom:2px solid #c0392b;padding:0 20px;height:48px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.ac-nav-back{color:#f85149;font-size:12px;font-weight:700;text-decoration:none;border:1px solid rgba(248,81,73,.3);border-radius:5px;padding:4px 12px;transition:all .2s;white-space:nowrap;}
+.ac-nav-back:hover{background:rgba(248,81,73,.15);border-color:#f85149;}
+.ac-nav-brand{font-size:13px;font-weight:700;color:#e6edf3;}
+.ac-nav-badge{font-size:10px;background:rgba(192,57,43,.25);color:#f85149;border:1px solid rgba(192,57,43,.4);border-radius:10px;padding:2px 9px;font-weight:700;white-space:nowrap;}
+
+/* ── TABS ── */
+.ac-tabs{display:flex;gap:0;background:#161b22;border-bottom:1px solid #30363d;flex-shrink:0;}
+.ac-tab{padding:9px 22px;font-size:12px;font-weight:700;cursor:pointer;border:none;background:transparent;color:#8b949e;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'Segoe UI',Arial,sans-serif;transition:all .15s;white-space:nowrap;}
+.ac-tab.active{color:#f85149;border-bottom-color:#c0392b;}
+.ac-tab:hover:not(.active){color:#e6edf3;background:#21262d;}
+
+/* ── LAYOUT ── */
+.ac-body{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.ac-pane{flex:1;overflow:hidden;display:none;flex-direction:column;}
+.ac-pane.active{display:flex;}
+
+/* ══════════ OIL CSS ══════════ */
+.oil-toolbar{padding:10px 16px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #30363d;flex-wrap:wrap;background:#161b22;flex-shrink:0;}
+.oil-filter-btn{background:#21262d;border:1px solid #30363d;border-radius:16px;padding:3px 12px;font-size:12px;cursor:pointer;transition:all .15s;font-family:'Segoe UI',Arial,sans-serif;color:#e6edf3;}
+.oil-filter-btn.active{background:#007d32;color:#fff;border-color:#007d32;}
+.oil-filter-btn:not(.active):hover{background:#30363d;color:#fff;}
+.oil-tb-right{margin-left:auto;display:flex;gap:6px;}
+.oil-tb-btn{border:none;border-radius:6px;padding:5px 13px;font-size:12px;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;font-weight:600;transition:background .15s;}
+.oil-btn-add{background:#e67700;color:#fff;}
+.oil-btn-add:hover{background:#c55f00;}
+.oil-btn-connect{background:#007d32;color:#fff;}
+.oil-btn-connect:hover{background:#005a22;}
+.oil-btn-save{background:#1565c0;color:#fff;}
+.oil-btn-save:hover{background:#0d47a1;}
+.oil-body{flex:1;overflow-y:auto;padding:12px 16px;background:#0d1117;}
+.oil-stream-section{margin-bottom:20px;}
+.oil-stream-hdr{font-size:11px;font-weight:700;color:#3fb950;letter-spacing:.1em;text-transform:uppercase;padding:4px 0;border-bottom:2px solid #3fb950;margin-bottom:8px;}
+.oil-tbl{width:100%;border-collapse:collapse;font-size:13px;color:#e6edf3;}
+.oil-tbl th{background:#161b22;font-weight:600;padding:5px 8px;text-align:left;font-size:11px;color:#8b949e;border-bottom:1px solid #30363d;white-space:nowrap;}
+.oil-tbl td{padding:6px 8px;border-bottom:1px solid #21262d;vertical-align:middle;}
+.oil-tbl tr:hover td{background:#161b22;}
+.oil-status{display:inline-block;border-radius:12px;padding:2px 9px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;user-select:none;}
+.st-OPEN{background:#0c2544;color:#79c0ff;}
+.st-IN_PROGRESS{background:#3d1f00;color:#f0883e;}
+.st-REVIEW{background:#2d0849;color:#d2a8ff;}
+.st-CLOSED{background:#0d4429;color:#3fb950;}
+.st-RETURNED{background:#3d0001;color:#f85149;}
+.oil-prio{display:inline-block;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700;}
+.pr-HIGH{background:#3d0001;color:#f85149;}
+.pr-MED{background:#3d2800;color:#f0883e;}
+.pr-LOW{background:#0d4429;color:#3fb950;}
+.oil-edit-btn{background:transparent;border:1px solid #30363d;border-radius:4px;padding:1px 7px;font-size:11px;cursor:pointer;color:#8b949e;}
+.oil-edit-btn:hover{background:#21262d;color:#e6edf3;}
+.oil-add-form{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 16px;margin-bottom:16px;display:none;}
+.oil-add-form.open{display:block;}
+.oil-form-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center;}
+.oil-form-input{border:1px solid #30363d;border-radius:4px;padding:6px 10px;font-size:13px;font-family:'Segoe UI',Arial,sans-serif;background:#21262d;color:#e6edf3;}
+.oil-form-title{flex:1;min-width:180px;}
+.oil-form-actions{display:flex;gap:8px;}
+.oil-form-ok{background:#007d32;color:#fff;border:none;border-radius:4px;padding:6px 16px;font-size:13px;cursor:pointer;}
+.oil-form-cancel{background:#21262d;color:#8b949e;border:1px solid #30363d;border-radius:4px;padding:6px 12px;font-size:13px;cursor:pointer;}
+.oil-empty{text-align:center;color:#484f58;padding:48px 20px;font-size:14px;line-height:2;}
+.oil-th-sort{cursor:pointer;user-select:none;position:relative;}
+.oil-th-sort:hover{background:#21262d;color:#3fb950;}
+.oil-th-sort.asc::after{content:' \25B2';color:#3fb950;font-size:9px;}
+.oil-th-sort.desc::after{content:' \25BC';color:#3fb950;font-size:9px;}
+.oil-help-section{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#e6edf3;line-height:1.75;}
+.oil-help-section h4{color:#3fb950;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:10px 0 3px;}
+.oil-help-section h4:first-child{margin-top:0;}
+.oil-help-section p{margin:2px 0;color:#8b949e;}
+.oil-help-section code{background:#21262d;border-radius:3px;padding:1px 5px;font-size:11px;font-family:Consolas,monospace;color:#79c0ff;}
+.oil-btn-help{background:#21262d;border:1px solid #30363d;border-radius:16px;padding:3px 12px;font-size:12px;cursor:pointer;transition:all .15s;font-family:'Segoe UI',Arial,sans-serif;color:#e6edf3;}
+.oil-btn-help:hover{background:#30363d;}
+.oil-btn-help.active{background:#1565c0;color:#fff;border-color:#1565c0;}
+.oil-btn-settings{background:#21262d;border:1px solid #30363d;border-radius:16px;padding:3px 12px;font-size:12px;cursor:pointer;transition:all .15s;font-family:'Segoe UI',Arial,sans-serif;color:#e6edf3;}
+.oil-btn-settings:hover{background:#30363d;}
+.oil-btn-settings.active{background:#e67700;color:#fff;border-color:#e67700;}
+.oil-settings-section{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:13px;color:#e6edf3;}
+.oil-settings-section h4{color:#f0883e;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin:10px 0 6px;}
+.oil-settings-section h4:first-child{margin-top:0;}
+/* ── PLATFORM TAB ── */
+.plat-section{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:18px 20px;margin-bottom:16px;}
+.plat-section-title{font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:6px;}
+.plat-section-desc{font-size:12px;color:#8b949e;margin-bottom:14px;line-height:1.6;}
+.plat-form-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+.plat-input{flex:1;min-width:220px;background:#21262d;border:1px solid #30363d;border-radius:4px;padding:7px 12px;font-size:13px;color:#e6edf3;font-family:'Segoe UI',Arial,sans-serif;}
+.plat-btn{border:none;border-radius:4px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:background .15s;white-space:nowrap;}
+.plat-btn-save{background:#007d32;color:#fff;}.plat-btn-save:hover{background:#005a22;}
+.plat-btn-clear{background:#21262d;color:#8b949e;border:1px solid #30363d;}.plat-btn-clear:hover{background:#30363d;color:#e6edf3;}
+.plat-status{font-size:12px;margin-bottom:10px;min-height:18px;}
+.plat-status-ok{color:#3fb950;}.plat-status-err{color:#f85149;}
+.plat-help{font-size:11px;color:#484f58;line-height:1.7;}
+.plat-help code{background:#21262d;border-radius:3px;padding:1px 5px;font-family:Consolas,monospace;color:#79c0ff;font-size:10px;}
+.plat-bypass-row{display:flex;align-items:center;gap:12px;}
+.plat-bypass-badge{font-size:11px;font-weight:800;padding:3px 12px;border-radius:12px;letter-spacing:1px;}
+.bypass-off{background:#21262d;color:#484f58;border:1px solid #30363d;}
+.bypass-on{background:#0c2544;color:#79c0ff;border:1px solid rgba(121,192,255,.3);}
+.oil-set-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.oil-set-row label{cursor:pointer;font-size:13px;color:#e6edf3;}
+.oil-set-row input[type=checkbox]{width:15px;height:15px;cursor:pointer;accent-color:#007d32;}
+.oil-set-select{border:1px solid #30363d;border-radius:4px;padding:4px 8px;font-size:12px;font-family:'Segoe UI',Arial,sans-serif;background:#21262d;color:#e6edf3;}
+.oil-set-note{font-size:11px;color:#484f58;margin-top:4px;}
+.oil-set-reset{background:#21262d;border:1px solid #30363d;border-radius:4px;padding:4px 12px;font-size:11px;cursor:pointer;color:#8b949e;font-family:'Segoe UI',Arial,sans-serif;}
+.oil-set-reset:hover{background:#30363d;color:#e6edf3;}
+.oil-edit-row td{background:#0d4429;border-bottom:2px solid #3fb950;padding:10px 12px;}
+.oil-inline-form{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+.oil-inline-field{display:flex;flex-direction:column;gap:3px;}
+.oil-inline-label{font-size:10px;font-weight:700;color:#3fb950;text-transform:uppercase;letter-spacing:.05em;}
+.oil-inline-input{border:1px solid #30363d;border-radius:4px;padding:5px 8px;font-size:12px;font-family:'Segoe UI',Arial,sans-serif;background:#21262d;color:#e6edf3;}
+.oil-inline-save{background:#007d32;color:#fff;border:none;border-radius:4px;padding:6px 14px;font-size:12px;cursor:pointer;}
+.oil-inline-save:hover{background:#005a22;}
+.oil-inline-cancel{background:#21262d;color:#8b949e;border:1px solid #30363d;border-radius:4px;padding:6px 10px;font-size:12px;cursor:pointer;}
+.oil-assignee{display:inline-block;background:#0d4429;color:#3fb950;border-radius:10px;padding:1px 7px;font-size:11px;font-weight:600;white-space:nowrap;}
+.oil-domain-badge{display:inline-block;background:#0c2544;color:#79c0ff;border-radius:4px;padding:1px 7px;font-size:11px;font-weight:600;white-space:nowrap;}
+.oil-module-badge{display:inline-block;background:#0d4429;color:#3fb950;border-radius:4px;padding:1px 7px;font-size:11px;white-space:nowrap;}
+.oil-comp-text{font-size:11px;color:#484f58;}
+.oil-test-badge{display:inline-block;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:700;white-space:nowrap;font-family:Consolas,monospace;}
+.oil-linked-ref{font-size:10px;color:#58a6ff;font-family:Consolas,monospace;}
+.oil-aud-mode-btn{background:#2d0849;border:1px solid #6a1b9a;border-radius:16px;padding:3px 12px;font-size:12px;cursor:pointer;transition:all .15s;font-family:'Segoe UI',Arial,sans-serif;color:#d2a8ff;font-weight:600;}
+.oil-aud-mode-btn:hover{background:#3d1060;}
+.oil-aud-mode-btn.active{background:#6a1b9a;color:#fff;border-color:#6a1b9a;}
+.oil-aud-card{background:#161b22;border:1px solid #30363d;border-radius:10px;margin-bottom:18px;overflow:hidden;}
+.oil-aud-card-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:linear-gradient(90deg,#2d0849,#161b22);border-bottom:1px solid #30363d;cursor:pointer;}
+.oil-aud-card-hdr:hover{background:linear-gradient(90deg,#3d1060,#1c2128);}
+.oil-aud-id{font-size:11px;font-weight:900;color:#d2a8ff;letter-spacing:.5px;background:#2d0849;border-radius:4px;padding:2px 7px;white-space:nowrap;}
+.oil-aud-title{font-size:13px;font-weight:700;color:#e6edf3;flex:1;}
+.oil-aud-date{font-size:11px;color:#484f58;white-space:nowrap;}
+.oil-aud-status-badge{font-size:10px;font-weight:700;letter-spacing:.5px;border-radius:10px;padding:2px 9px;}
+.oil-aud-status-open{background:#3d2800;color:#f0883e;border:1px solid #f0883e55;}
+.oil-aud-status-progress{background:#0c2544;color:#79c0ff;border:1px solid #79c0ff55;}
+.oil-aud-status-closed{background:#0d4429;color:#3fb950;border:1px solid #3fb95055;}
+.oil-aud-body{padding:14px 16px;}
+.oil-aud-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+.oil-aud-scope-pill{font-size:10px;background:#21262d;color:#8b949e;border-radius:10px;padding:2px 8px;border:1px solid #30363d;}
+.oil-aud-area-pill{font-size:10px;background:#2d0849;color:#d2a8ff;border-radius:10px;padding:2px 8px;border:1px solid #6a1b9a55;}
+.oil-aud-stats-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.oil-aud-stat-box{text-align:center;flex:1;min-width:56px;background:#21262d;border:1px solid #30363d;border-radius:8px;padding:7px 4px;}
+.oil-aud-stat-num{font-size:20px;font-weight:900;line-height:1;}
+.oil-aud-stat-lbl{font-size:9px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#484f58;margin-top:2px;}
+.oil-aud-stat-total .oil-aud-stat-num{color:#e6edf3;}
+.oil-aud-stat-high  .oil-aud-stat-num{color:#f85149;}
+.oil-aud-stat-med   .oil-aud-stat-num{color:#f0883e;}
+.oil-aud-stat-low   .oil-aud-stat-num{color:#79c0ff;}
+.oil-aud-stat-fixed .oil-aud-stat-num{color:#3fb950;}
+.oil-aud-bar-wrap{margin-bottom:8px;}
+.oil-aud-bar-lbl{font-size:10px;color:#484f58;margin-bottom:4px;font-weight:600;}
+.oil-aud-bar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:#21262d;}
+.oil-aud-seg-high{background:#f85149;}
+.oil-aud-seg-med {background:#f0883e;}
+.oil-aud-seg-low {background:#79c0ff;}
+.oil-aud-seg-fixed{background:#3fb950;}
+.oil-aud-progress-wrap{margin-bottom:12px;}
+.oil-aud-progress-lbl{display:flex;justify-content:space-between;font-size:10px;color:#484f58;margin-bottom:4px;}
+.oil-aud-progress-bar{height:8px;background:#21262d;border-radius:4px;overflow:hidden;}
+.oil-aud-progress-fill{height:100%;background:linear-gradient(90deg,#2ea043,#3fb950);border-radius:4px;transition:width .4s;}
+.oil-aud-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.oil-aud-tbl th{background:#2d0849;color:#d2a8ff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:6px 8px;text-align:left;border-bottom:2px solid #6a1b9a55;}
+.oil-aud-tbl td{padding:6px 8px;border-bottom:1px solid #21262d;vertical-align:middle;}
+.oil-aud-tbl tr:hover td{background:#1c2128;}
+.oil-aud-sev{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;}
+.oil-aud-sev-HIGH{background:#3d0001;color:#f85149;border:1px solid #f8514955;}
+.oil-aud-sev-MED {background:#3d2800;color:#f0883e;border:1px solid #f0883e55;}
+.oil-aud-sev-LOW {background:#0c2544;color:#79c0ff;border:1px solid #79c0ff55;}
+.oil-aud-fstatus{display:inline-block;font-size:10px;font-weight:700;border-radius:4px;padding:1px 7px;white-space:nowrap;cursor:pointer;}
+.oil-aud-fstatus-OPEN{background:#3d2800;color:#f0883e;border:1px solid #f0883e55;}
+.oil-aud-fstatus-FIXED{background:#0d4429;color:#3fb950;border:1px solid #3fb95055;}
+.oil-aud-link{font-size:10px;background:#0c2544;color:#79c0ff;border-radius:4px;padding:1px 6px;text-decoration:none;white-space:nowrap;}
+/* ══════════ END OIL CSS ══════════ */
+
+/* ── RELEASE & DEPLOY ── */
+.rel-pane{flex:1;overflow-y:auto;padding:24px;background:#0d1117;}
+.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:860px;}
+.rel-card{background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px;}
+.rel-card-hdr{font-size:15px;font-weight:700;color:#e6edf3;padding-bottom:12px;border-bottom:1px solid #30363d;margin-bottom:4px;}
+.rel-row{display:flex;align-items:baseline;gap:8px;font-size:13px;min-height:22px;}
+.rel-lbl{font-weight:600;color:#484f58;min-width:96px;flex-shrink:0;font-size:12px;}
+.rel-val{color:#e6edf3;}
+.rel-mono{font-family:Consolas,'Courier New',monospace;font-size:12px;color:#79c0ff;word-break:break-all;}
+.rel-actions{margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.rel-btn{border:none;border-radius:8px;padding:9px 22px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.rel-btn:disabled{opacity:.5;cursor:not-allowed;}
+.rel-btn-archive{background:#007d32;color:#fff;}
+.rel-btn-archive:not(:disabled):hover{background:#005522;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,125,50,.3);}
+.rel-btn-deploy{background:#1565c0;color:#fff;}
+.rel-btn-deploy:not(:disabled):hover{background:#0d47a1;transform:translateY(-1px);box-shadow:0 4px 12px rgba(21,101,192,.3);}
+.rel-link{font-size:12px;color:#79c0ff;text-decoration:none;white-space:nowrap;}
+.rel-link:hover{text-decoration:underline;}
+.rel-status{font-size:12px;font-weight:600;font-style:italic;}
+.rel-note{background:#3d2800;border:1px solid #f0883e55;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:12px;color:#f0883e;line-height:1.6;}
+.rel-note strong{color:#f0883e;}
+.rel-note code{background:#161b22;border-radius:3px;padding:1px 5px;font-size:11px;font-family:Consolas,monospace;}
+.ac-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#007d32;color:#fff;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s;}
+.ac-toast.show{opacity:1;}
+
+/* ── ARCHIVE PROTOCOL MODAL ── */
+.prot-overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.prot-modal{background:#161b22;border:1px solid #30363d;border-radius:14px;width:720px;max-width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.6);}
+.prot-header{padding:18px 24px 16px;border-bottom:1px solid #30363d;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.prot-header-title{font-size:14px;font-weight:700;color:#e6edf3;flex:1;}
+.prot-header-sub{font-size:11px;color:#8b949e;margin-top:2px;}
+.prot-badge{display:inline-block;border-radius:6px;padding:3px 11px;font-size:11px;font-weight:700;flex-shrink:0;}
+.prot-badge-ok{background:#0d4429;color:#3fb950;border:1px solid #238636;}
+.prot-badge-warn{background:#3d2800;color:#f0883e;border:1px solid #e67700;}
+.prot-badge-err{background:#3d0001;color:#f85149;border:1px solid #c62828;}
+.prot-close{background:transparent;border:1px solid #30363d;border-radius:6px;padding:4px 12px;font-size:12px;color:#8b949e;cursor:pointer;flex-shrink:0;}
+.prot-close:hover{background:#21262d;color:#e6edf3;}
+.prot-body{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px;}
+.prot-section{background:#0d1117;border:1px solid #21262d;border-radius:8px;padding:14px 16px;}
+.prot-section-hdr{font-size:11px;font-weight:700;color:#8b949e;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;}
+.prot-stats-grid{display:flex;flex-wrap:wrap;gap:8px;}
+.prot-stat-chip{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:4px 10px;font-size:12px;color:#e6edf3;}
+.prot-stat-chip span{color:#8b949e;font-size:10px;margin-right:3px;}
+.prot-verify-list{display:flex;flex-direction:column;gap:4px;}
+.prot-verify-item{display:flex;align-items:center;gap:8px;font-size:12px;font-family:Consolas,monospace;}
+.prot-verify-item.ok{color:#3fb950;}
+.prot-verify-item.fail{color:#f85149;}
+.prot-diff-row{margin-bottom:8px;}
+.prot-diff-label{font-size:11px;font-weight:700;margin-bottom:4px;}
+.prot-diff-label.added{color:#3fb950;}
+.prot-diff-label.removed{color:#f85149;}
+.prot-diff-label.changed{color:#f0883e;}
+.prot-diff-pills{display:flex;flex-wrap:wrap;gap:4px;}
+.prot-pill{font-size:11px;font-family:Consolas,monospace;border-radius:4px;padding:2px 8px;white-space:nowrap;}
+.prot-pill-add{background:#0d4429;color:#3fb950;}
+.prot-pill-rem{background:#3d0001;color:#f85149;}
+.prot-pill-chg{background:#3d2800;color:#f0883e;}
+.prot-pill-more{background:#21262d;color:#8b949e;}
+.prot-changelog{font-size:12px;font-family:Consolas,monospace;color:#c9d1d9;line-height:1.6;white-space:pre-wrap;max-height:200px;overflow-y:auto;background:#0d1117;border-radius:4px;padding:8px;}
+.prot-nodata{color:#8b949e;font-size:13px;text-align:center;padding:20px;}
+
+/* ── LANG SWITCH ── */
+.lang-switch{display:flex;gap:4px;align-items:center;margin-left:auto;}
+.lang-btn{background:transparent;border:1px solid #30363d;border-radius:4px;padding:3px 9px;font-size:11px;font-weight:700;color:#8b949e;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.lang-btn:hover{border-color:#8b949e;color:#e6edf3;}
+.lang-btn.active{border-color:#c0392b;color:#f85149;background:rgba(192,57,43,.1);}
+
+/* ── LANG TAB ── */
+.lang-pane{flex:1;overflow-y:auto;padding:20px 24px;background:#0d1117;}
+.lang-section{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.lang-section-hdr{font-size:11px;font-weight:700;color:#3fb950;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #30363d;}
+.lang-tbl{width:100%;border-collapse:collapse;font-size:13px;}
+.lang-tbl th{background:#21262d;font-weight:600;padding:6px 10px;text-align:left;font-size:11px;color:#8b949e;border-bottom:1px solid #30363d;}
+.lang-tbl td{padding:7px 10px;border-bottom:1px solid #21262d;vertical-align:middle;}
+.lang-tbl tr:last-child td{border-bottom:none;}
+.lang-flag{font-size:16px;margin-right:6px;}
+.lang-cov-bar{display:inline-block;width:80px;height:7px;background:#21262d;border-radius:4px;vertical-align:middle;overflow:hidden;margin-right:6px;}
+.lang-cov-fill{height:100%;background:#3fb950;border-radius:4px;}
+.lang-cov-fill.partial{background:#f0883e;}
+.lang-cov-fill.stub{background:#30363d;}
+.lang-badge-active{background:#0d4429;color:#3fb950;border:1px solid #3fb95055;border-radius:10px;padding:1px 9px;font-size:11px;font-weight:700;}
+.lang-badge-planned{background:#2d0849;color:#d2a8ff;border:1px solid #d2a8ff55;border-radius:10px;padding:1px 9px;font-size:11px;font-weight:700;}
+.lang-scope-all{background:#0c2544;color:#79c0ff;border-radius:4px;padding:1px 7px;font-size:11px;}
+.lang-scope-fin{background:#3d2800;color:#f0883e;border-radius:4px;padding:1px 7px;font-size:11px;}
+.lang-howto ol{padding-left:20px;color:#8b949e;font-size:13px;line-height:1.9;}
+.lang-howto li{padding:1px 0;}
+.lang-howto code{background:#21262d;border-radius:3px;padding:1px 6px;font-size:11px;font-family:Consolas,monospace;color:#79c0ff;}
+.lang-key-search{border:1px solid #30363d;border-radius:6px;padding:6px 12px;font-size:12px;background:#21262d;color:#e6edf3;width:100%;margin-bottom:10px;font-family:'Segoe UI',Arial,sans-serif;}
+.lang-key-search:focus{outline:none;border-color:#3fb950;}
+.lang-key-tbl{width:100%;border-collapse:collapse;font-size:11px;}
+.lang-key-tbl th{background:#21262d;font-weight:700;padding:5px 8px;text-align:left;font-size:10px;color:#8b949e;border-bottom:1px solid #30363d;letter-spacing:.05em;text-transform:uppercase;}
+.lang-key-tbl td{padding:4px 8px;border-bottom:1px solid #21262d;vertical-align:top;font-family:Consolas,monospace;font-size:11px;}
+.lang-key-tbl tr:last-child td{border-bottom:none;}
+.lang-key-code{color:#79c0ff;}
+.lang-key-cs{color:#e6edf3;}
+.lang-key-en{color:#3fb950;}
+.lang-key-missing{color:#f85149;font-style:italic;}
+
+/* ── CAPACITY TAB ── */
+.cap-pane{flex:1;overflow-y:auto;padding:20px 24px;background:#0d1117;}
+.cap-unit-wrap{display:flex;align-items:center;gap:6px;margin-bottom:20px;}
+.cap-unit-lbl{font-size:12px;color:#484f58;font-weight:600;}
+.cap-unit-btn{background:#21262d;border:1px solid #30363d;border-radius:4px;padding:4px 14px;font-size:12px;font-weight:700;color:#8b949e;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;transition:all .2s;}
+.cap-unit-btn:hover{border-color:#8b949e;color:#e6edf3;}
+.cap-unit-btn.active{border-color:#c0392b;color:#f85149;background:rgba(192,57,43,.1);}
+.cap-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px;}
+.cap-card{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:14px 12px;text-align:center;}
+.cap-card-num{font-size:26px;font-weight:900;color:#e6edf3;line-height:1.1;}
+.cap-card-num.c-green{color:#3fb950;}.cap-card-num.c-orange{color:#f0883e;}.cap-card-num.c-blue{color:#79c0ff;}
+.cap-card-lbl{font-size:10px;color:#484f58;margin-top:4px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+.cap-section{background:#161b22;border:1px solid #30363d;border-radius:10px;padding:16px 18px;margin-bottom:16px;}
+.cap-section-hdr{font-size:11px;font-weight:700;color:#3fb950;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #30363d;}
+.cap-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.cap-tbl th{background:#21262d;font-weight:600;padding:5px 8px;text-align:left;font-size:10px;color:#8b949e;border-bottom:1px solid #30363d;text-transform:uppercase;letter-spacing:.05em;}
+.cap-tbl td{padding:6px 8px;border-bottom:1px solid #21262d;vertical-align:middle;}
+.cap-tbl tr:last-child td{border-bottom:none;}
+.cap-mini-bar{display:inline-block;width:70px;height:6px;background:#21262d;border-radius:3px;overflow:hidden;vertical-align:middle;margin-right:5px;}
+.cap-effort-row{display:flex;align-items:center;gap:12px;padding:6px 0;border-bottom:1px solid #21262d;}
+.cap-effort-row:last-child{border-bottom:none;}
+.cap-effort-lbl{min-width:150px;font-size:12px;font-weight:700;font-family:Consolas,monospace;}
+.cap-e-xs{color:#79c0ff;}.cap-e-s{color:#3fb950;}.cap-e-m{color:#f0883e;}.cap-e-l{color:#f85149;}.cap-e-xl{color:#d2a8ff;}
+.cap-effort-bar{flex:1;height:8px;background:#21262d;border-radius:4px;overflow:hidden;}
+.cap-effort-fill{height:100%;border-radius:4px;}
+.cap-effort-cnt{min-width:28px;text-align:right;font-size:12px;font-weight:700;color:#e6edf3;}
+.cap-type-dot{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:middle;}
+.cap-no-data{text-align:center;padding:32px 20px;color:#484f58;font-size:13px;line-height:2;}
+</style>
+<script src="../../../_status.js"></script>
+<script src="../../../_i18n.js"></script>
+</head>
+<body>
+
+<nav class="ac-nav">
+  <a class="ac-nav-back" href="../index.html" data-i18n="common.back">← Studio Hub</a>
+  <div class="ac-nav-brand">⚙️ <span data-i18n="admin.title">Admin Center</span></div>
+  <div class="ac-nav-badge">FC-5</div>
+  <div class="lang-switch">
+    <button class="lang-btn" data-lang="cs" onclick="I18n.setLang('cs')">CZ</button>
+    <button class="lang-btn" data-lang="en" onclick="I18n.setLang('en')">EN</button>
+  </div>
+</nav>
+
+<div class="ac-tabs">
+  <button class="ac-tab active" data-pane="backlog" onclick="acTab('backlog')" data-i18n="admin.tab.backlog">📋 OIL Backlog</button>
+  <button class="ac-tab" data-pane="release" onclick="acTab('release')" data-i18n="admin.tab.release">📦 Release &amp; Deploy</button>
+  <button class="ac-tab" data-pane="lang" onclick="acTab('lang')" data-i18n="admin.tab.lang">🌐 Jazyky</button>
+  <button class="ac-tab" data-pane="cap" onclick="acTab('cap')" data-i18n="admin.tab.capacity">📊 Kapacita</button>
+  <button class="ac-tab" data-pane="platform" onclick="acTab('platform')">🔐 Platforma</button>
+</div>
+
+<div class="ac-body">
+
+  <!-- TAB: OIL Backlog -->
+  <div class="ac-pane active" id="pane-backlog">
+    <div class="oil-toolbar">
+      <button class="oil-filter-btn active" data-f="ALL" onclick="oilFilterClick('ALL')">ALL</button>
+      <button class="oil-filter-btn" data-f="WEB" onclick="oilFilterClick('WEB')">&#127760; WEB</button>
+      <button class="oil-filter-btn" data-f="APP" onclick="oilFilterClick('APP')">&#128241; APP</button>
+      <button class="oil-filter-btn" data-f="TEST" onclick="oilFilterClick('TEST')">&#129514; Testy</button>
+      <button class="oil-aud-mode-btn" id="oilAuditBtn" onclick="switchOILMode(_oilMode==='audits'?'tasks':'audits')" data-i18n="admin.oil.audit">&#128269; Audity</button>
+      <button class="oil-btn-help" id="oilHelpBtn" onclick="toggleOILHelp()" data-i18n="admin.oil.help">&#10067; N&#225;pov&#283;da</button>
+      <button class="oil-btn-settings" id="oilSettingsBtn" onclick="toggleOILSettings()" data-i18n="admin.oil.settings">&#9881;&#65039; Nastaven&#237;</button>
+      <div class="oil-tb-right">
+        <button class="oil-tb-btn oil-btn-add" onclick="toggleOILAddForm()" data-i18n="admin.oil.add">+ P&#345;idat &uacute;kol</button>
+        <button class="oil-tb-btn oil-btn-connect" onclick="connectOIL()" data-i18n="admin.oil.connect">&#128279; Na&#269;&#237;st OIL.json</button>
+        <button class="oil-tb-btn oil-btn-save" id="oilSaveBtn" style="display:none" onclick="saveOIL()" data-i18n="admin.oil.save">&#128190; Ulo&#382;it</button>
+      </div>
+    </div>
+    <div class="oil-body">
+      <div class="oil-add-form" id="oilAddForm">
+        <div class="oil-form-row">
+          <input type="text" id="oilNewTitle" class="oil-form-input oil-form-title" data-i18n-placeholder="admin.oil.title.placeholder" placeholder="N&#225;zev &uacute;kolu..." onkeydown="if(event.key==='Enter')document.getElementById('oilNewDesc').focus();" />
+          <select id="oilNewStream" class="oil-form-input"><option value="WEB">WEB</option><option value="APP">APP</option></select>
+          <select id="oilNewPrio" class="oil-form-input"><option value="HIGH">HIGH</option><option value="MED" selected>MED</option><option value="LOW">LOW</option></select>
+          <input type="text" id="oilNewAssignee" class="oil-form-input" style="width:110px;" data-i18n-placeholder="admin.oil.assignee.placeholder" placeholder="&#344;e&#353;&#237;..." />
+        </div>
+        <div class="oil-form-row" style="align-items:flex-start;">
+          <textarea id="oilNewDesc" class="oil-form-input" style="flex:1;min-height:52px;resize:vertical;font-family:'Segoe UI',Arial,sans-serif;font-size:12px;" data-i18n-placeholder="admin.oil.desc.placeholder" placeholder="Popis &uacute;kolu..."></textarea>
+        </div>
+        <div class="oil-form-row">
+          <select id="oilNewDomain" class="oil-form-input" style="width:120px;" onchange="oilAddDomainChange()">
+            <option value="">&#8212; Dom&#233;na &#8212;</option>
+            <option value="Studio">Studio</option><option value="Finance">Finance</option>
+            <option value="Operations">Operations</option><option value="Purchasing">Purchasing</option>
+            <option value="Platform">Platform</option>
+          </select>
+          <select id="oilNewModule" class="oil-form-input" style="width:140px;"><option value="">&#8212; Modul &#8212;</option></select>
+          <input type="text" id="oilNewComponent" class="oil-form-input" style="width:140px;" placeholder="Komponenta..." />
+        </div>
+        <div class="oil-form-row">
+          <select id="oilNewTaskType" class="oil-form-input" style="width:138px;">
+            <option value="" data-i18n="cap.form.tasktype">&#8212; Typ &#250;kolu &#8212;</option>
+            <option value="development" data-i18n="cap.type.development">Vývoj</option>
+            <option value="fix" data-i18n="cap.type.fix">Oprava</option>
+            <option value="content" data-i18n="cap.type.content">Obsah</option>
+            <option value="design" data-i18n="cap.type.design">Design</option>
+            <option value="review" data-i18n="cap.type.review">Review</option>
+            <option value="approval" data-i18n="cap.type.approval">Schválení</option>
+            <option value="test" data-i18n="cap.type.test">Test</option>
+            <option value="release" data-i18n="cap.type.release">Release</option>
+            <option value="archive" data-i18n="cap.type.archive">Archivace</option>
+            <option value="research" data-i18n="cap.type.research">Průzkum</option>
+            <option value="docs" data-i18n="cap.type.docs">Dokumentace</option>
+          </select>
+          <select id="oilNewEffort" class="oil-form-input" style="width:170px;">
+            <option value="" data-i18n="cap.form.effort">&#8212; Effort &#8212;</option>
+            <option value="XS" data-i18n="cap.effort.xs">XS &#8212; &lt;30 min</option>
+            <option value="S" data-i18n="cap.effort.s">S &#8212; 30 min &#8211; 2 h</option>
+            <option value="M" data-i18n="cap.effort.m">M &#8212; 2 &#8211; 4 h</option>
+            <option value="L" data-i18n="cap.effort.l">L &#8212; 4 &#8211; 8 h</option>
+            <option value="XL" data-i18n="cap.effort.xl">XL &#8212; 8+ h</option>
+          </select>
+          <input type="number" id="oilNewEstTime" class="oil-form-input" style="width:120px;" data-i18n-placeholder="cap.form.esttime" placeholder="Odhad (min)" min="0" />
+        </div>
+        <div class="oil-form-actions">
+          <button class="oil-form-ok" onclick="addOILTask()">P&#345;idat</button>
+          <button class="oil-form-cancel" onclick="toggleOILAddForm()">Zru&#353;it</button>
+        </div>
+      </div>
+      <div id="oilSettings" class="oil-settings-section" style="display:none;">
+        <h4>&#9881;&#65039; Nastaven&#237; OIL</h4>
+        <div class="oil-set-row">
+          <input type="checkbox" id="oilSetAutoSort" onchange="applyOILSettings()" checked />
+          <label for="oilSetAutoSort"><strong>Automatick&#233; &#345;azen&#237;</strong> &mdash; status &rarr; priorita &rarr; datum</label>
+        </div>
+        <div class="oil-set-row">
+          <input type="checkbox" id="oilSetHideClosed" onchange="applyOILSettings()" />
+          <label for="oilSetHideClosed"><strong>Skr&#253;t CLOSED</strong></label>
+        </div>
+        <div class="oil-set-row" style="gap:10px;">
+          <label for="oilSetDefaultFilter" style="font-weight:600;white-space:nowrap;">V&#253;choz&#237; filtr:</label>
+          <select id="oilSetDefaultFilter" class="oil-set-select" onchange="applyOILSettings()">
+            <option value="ALL">ALL</option><option value="WEB">WEB</option><option value="APP">APP</option>
+          </select>
+        </div>
+        <div class="oil-set-row" style="margin-top:8px;border-top:1px solid #30363d;padding-top:8px;">
+          <button class="oil-set-reset" onclick="resetOILSort()">&#8635; Zru&#353;it manu&#225;ln&#237; &#345;azen&#237;</button>
+        </div>
+      </div>
+      <div id="oilHelp" class="oil-help-section" style="display:none;">
+        <h4>&#128260; Workflow</h4>
+        <p>&#128309; OPEN &rarr; &#128992; IN PROGRESS &rarr; &#128995; REVIEW &rarr; &#9989; CLOSED &nbsp;|&nbsp; &#128308; RETURNED</p>
+        <p>Klik na status badge = posun do dal&#353;&#237;ho stavu.</p>
+        <h4>&#128190; Soubor</h4>
+        <p><strong>&#128279; Na&#269;&#237;st OIL.json</strong> &mdash; file picker, vyberte <code>OIL.json</code> v ko&#345;eni projektu.</p>
+        <p><strong>&#128190; Ulo&#382;it</strong> &mdash; zap&#237;&#353;e zm&#283;ny zp&#283;t do souboru.</p>
+        <h4>&#9000;&#65039; Zkratky</h4>
+        <p><code>Esc</code> = zav&#345;e editaci</p>
+      </div>
+      <div id="oilTaskList">
+        <div class="oil-empty">Na&#269;t&#283;te OIL.json &rarr; <strong>&#128279; Na&#269;&#237;st OIL.json</strong></div>
+      </div>
+      <div id="oilAuditPanel" style="display:none;">
+        <div class="oil-empty">&#128269; Na&#269;t&#283;te OIL.json pro zobrazen&#237; audit&#367;.</div>
+      </div>
+    </div><!-- /oil-body -->
+  </div><!-- /pane-backlog -->
+
+  <!-- TAB: Release & Deploy -->
+  <div class="ac-pane" id="pane-release">
+    <div class="rel-pane">
+      <div class="rel-grid">
+        <div class="rel-card">
+          <div class="rel-card-hdr">&#128230; Release</div>
+          <div class="rel-row"><span class="rel-lbl">Verze</span><span id="stt-version" class="rel-val">&#8212;</span></div>
+          <div class="rel-row"><span class="rel-lbl">Archivov&#225;no</span><span id="stt-archiveAt" class="rel-val">&#8212;</span></div>
+          <div class="rel-row"><span class="rel-lbl">WEB slo&#382;ka</span><span id="stt-archiveWeb" class="rel-mono">&#8212;</span></div>
+          <div class="rel-row"><span class="rel-lbl">APP slo&#382;ka</span><span id="stt-archiveApp" class="rel-mono">&#8212;</span></div>
+          <div class="rel-actions">
+            <button id="studio-btn-archive" class="rel-btn rel-btn-archive" onclick="studioAction('archive')">&#9654; Archivovat</button>
+            <span id="studio-archive-status" class="rel-status"></span>
+          </div>
+        </div>
+        <div class="rel-card">
+          <div class="rel-card-hdr">&#128640; Deploy &mdash; GitHub Pages</div>
+          <div class="rel-row"><span class="rel-lbl">Publikov&#225;no</span><span id="stt-deployAt" class="rel-val">&#8212;</span></div>
+          <div class="rel-row"><span class="rel-lbl">Commit</span><span id="stt-deployCommit" class="rel-mono">&#8212;</span></div>
+          <div class="rel-row"><span class="rel-lbl">Branch</span><span id="stt-deployBranch" class="rel-mono">&#8212;</span></div>
+          <div class="rel-row" id="stt-deployLatest-row" style="display:none"><span class="rel-lbl">Aktu&#225;ln&#237; verze</span><a id="stt-deployLatest" href="#" target="_blank" class="rel-mono" style="color:var(--ac-cyan);text-decoration:none;font-size:.75rem"></a></div>
+          <div class="rel-actions">
+            <button id="studio-btn-deploy" class="rel-btn rel-btn-deploy" onclick="studioAction('deploy')">&#9654; Publikovat</button>
+            <a id="stt-deployUrl" href="https://h-gr-fico.github.io/appiq/" target="_blank" class="rel-link">&#128279; V&#253;b&#283;r verz&#237;</a>
+          </div>
+          <span id="studio-deploy-status" class="rel-status"></span>
+        </div>
+      </div>
+      <div class="rel-note">
+        <strong>&#9888; Prvn&#237; spust&#283;n&#237;:</strong> Spus&#357; jednor&#225;zov&#283; <code>DO_REGISTER.ps1</code> v ko&#345;eni projektu &mdash; zaregistruje <code>appiq://</code> protokol ve Windows. Po stisku tla&#269;&#237;tka se automaticky otev&#345;e PowerShell okno.
+      </div>
+    </div>
+  </div><!-- /pane-release -->
+
+  <!-- TAB: Languages -->
+  <div class="ac-pane" id="pane-lang">
+    <div class="lang-pane" id="langTabContent">
+      <div class="oil-empty" data-i18n="lang.loading">Načítám jazykovou službu…</div>
+    </div>
+  </div><!-- /pane-lang -->
+
+  <!-- TAB: Capacity -->
+  <div class="ac-pane" id="pane-cap">
+    <div class="cap-pane">
+      <div class="cap-unit-wrap">
+        <span class="cap-unit-lbl" data-i18n="cap.unit.label">Jednotky:</span>
+        <button class="cap-unit-btn" data-unit="min" onclick="setCapUnit('min')">min</button>
+        <button class="cap-unit-btn active" data-unit="h" onclick="setCapUnit('h')">h</button>
+        <button class="cap-unit-btn" data-unit="d" onclick="setCapUnit('d')">d <span style="font-size:10px;color:#484f58;font-weight:400;" data-i18n="cap.unit.d.note">(1d = 8h)</span></button>
+      </div>
+      <div id="capTabContent">
+        <div class="cap-no-data" data-i18n="cap.no_oil">Načtěte OIL.json → <strong>🔗 Načíst OIL.json</strong></div>
+      </div>
+    </div>
+  </div><!-- /pane-cap -->
+
+  <!-- TAB: Platforma -->
+  <div class="ac-pane" id="pane-platform">
+    <div class="oil-body" style="padding:20px 20px 40px;">
+
+      <div class="plat-section">
+        <div class="plat-section-title">&#128273; GitHub API Token</div>
+        <div class="plat-section-desc">Personal Access Token umožňuje Studio Hub přepínat Maintenance Mode přímo z prohlížeče bez terminálu. Token je uložen jen v tomto prohlížeči (localStorage).</div>
+        <div class="plat-form-row">
+          <input type="password" id="patInput" class="plat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+          <button class="plat-btn plat-btn-save" onclick="savePAT()">Uložit token</button>
+          <button class="plat-btn plat-btn-clear" onclick="clearPAT()">Smazat</button>
+        </div>
+        <div class="plat-status" id="patStatus"></div>
+        <div class="plat-help">
+          Jak získat token: <strong style="color:#e6edf3">GitHub.com</strong> → Settings → Developer settings →
+          Personal access tokens → <em>Tokens (classic)</em> → New token → scope: <code>repo</code> → Generate → zkopíruj sem.
+        </div>
+      </div>
+
+      <div class="plat-section">
+        <div class="plat-section-title">&#128083; Vývojářský přístup</div>
+        <div class="plat-section-desc">Tento prohlížeč obejde Maintenance overlay i když je zapnutý — ty vidíš normální stránku. Testuj pohled návštěvníka v anonymním okně <strong style="color:#e6edf3">Ctrl+Shift+N</strong>.</div>
+        <div class="plat-bypass-row">
+          <span class="plat-bypass-badge bypass-off" id="bypassBadge">OFF</span>
+          <button class="plat-btn plat-btn-save" id="bypassBtn" onclick="toggleBypass()">Aktivovat</button>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /pane-platform -->
+
+</div><!-- /ac-body -->
+
+<!-- Archive Protocol Modal -->
+<div class="prot-overlay" id="protOverlay" style="display:none" onclick="if(event.target===this)closeArchiveModal()">
+  <div class="prot-modal">
+    <div class="prot-header">
+      <div style="flex:1">
+        <div class="prot-header-title" id="protTitle">Protokol archivace</div>
+        <div class="prot-header-sub" id="protSub"></div>
+      </div>
+      <span class="prot-badge" id="protBadge"></span>
+      <button class="prot-close" onclick="closeArchiveModal()">&#10005; Zavřít</button>
+    </div>
+    <div class="prot-body" id="protBody"><div class="prot-nodata">Načítám protokol…</div></div>
+  </div>
+</div>
+
+<div class="ac-toast" id="acToast"></div>
+
+<script>
+// ── TABS ──
+function acTab(pane) {
+  document.querySelectorAll('.ac-tab').forEach(function(b){ b.classList.toggle('active', b.dataset.pane === pane); });
+  document.querySelectorAll('.ac-pane').forEach(function(p){ p.classList.toggle('active', p.id === 'pane-'+pane); });
+  if (pane === 'release') loadStudioStatus();
+  if (pane === 'lang') renderLangTab();
+  if (pane === 'cap') renderCapTab();
+  if (pane === 'platform') initPlatformTab();
+}
+
+// ── CAPACITY TAB ──
+var _capUnit = 'h';
+
+var _CAP_EFFORT = {
+  XS: { label: 'XS \u2014 <30\u00a0min',       color: '#79c0ff', cls: 'cap-e-xs' },
+  S:  { label: 'S \u2014 30\u00a0min\u2013 2\u00a0h', color: '#3fb950', cls: 'cap-e-s'  },
+  M:  { label: 'M \u2014 2\u2013 4\u00a0h',     color: '#f0883e', cls: 'cap-e-m'  },
+  L:  { label: 'L \u2014 4\u2013 8\u00a0h',     color: '#f85149', cls: 'cap-e-l'  },
+  XL: { label: 'XL \u2014 8+\u00a0h',           color: '#d2a8ff', cls: 'cap-e-xl' }
+};
+
+var _CAP_TYPES = ['development','fix','content','design','review','approval','test','release','archive','research','docs'];
+var _CAP_TYPE_COLORS = {
+  development:'#3fb950', fix:'#f85149', content:'#79c0ff', design:'#d2a8ff',
+  review:'#f0883e', approval:'#c0392b', test:'#58a6ff', release:'#2ea043',
+  archive:'#484f58', research:'#7c8ce0', docs:'#8b949e'
+};
+
+// T-shirt labels for OIL table (short form with tooltip)
+var _oilEffortColors = {XS:'#79c0ff',S:'#3fb950',M:'#f0883e',L:'#f85149',XL:'#d2a8ff'};
+var _oilEffortTips   = {XS:'XS \u2014 <30 min',S:'S \u2014 30 min\u20132 h',M:'M \u2014 2\u20134 h',L:'L \u2014 4\u20138 h',XL:'XL \u2014 8+ h'};
+var _testTypeColors  = {functional:'#3fb950',visual:'#79c0ff',content:'#f0883e',integration:'#d2a8ff',regression:'#f85149',acceptance:'#ffa657',codereview:'#8b949e','code-review':'#8b949e'};
+var _testTypeLabels  = {functional:'funk\u010dn\u00ed',visual:'vizu\u00e1ln\u00ed',content:'obsahov\u00e1',integration:'integra\u010dn\u00ed',regression:'regresn\u00ed',acceptance:'akceptace','code-review':'code review'};
+function _testTypeBadge(t){
+  if(t.taskType!=='test'||!t.testType)return '';
+  var c=_testTypeColors[t.testType]||'#8b949e', lbl=_testTypeLabels[t.testType]||t.testType;
+  var linked=t.linkedTask?'<span class="oil-linked-ref" title="Testuje: '+_oilEsc(t.linkedTask)+'"> \u2192 '+_oilEsc(t.linkedTask)+'</span>':'';
+  return '<span class="oil-test-badge" style="background:'+c+'22;color:'+c+';border:1px solid '+c+'66;">&#129514; '+_oilEsc(lbl)+'</span>'+linked;
+}
+
+function setCapUnit(u) {
+  _capUnit = u;
+  document.querySelectorAll('.cap-unit-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.unit === u);
+  });
+  renderCapTab();
+}
+
+function _capFmt(min) {
+  if (min == null || min === 0) return '\u2014';
+  if (_capUnit === 'min') return min + '\u00a0min';
+  if (_capUnit === 'h')   { var v=(min/60); return (v%1===0?v:v.toFixed(1))+'\u00a0h'; }
+  if (_capUnit === 'd')   { var v=(min/480); return (v%1===0?v:v.toFixed(1))+'\u00a0d'; }
+  return min + '\u00a0min';
+}
+
+function _capTypeLbl(tp) {
+  if (!tp) return '';
+  var v = I18n.t('cap.type.' + tp);
+  return (v && v !== 'cap.type.' + tp) ? v : tp;
+}
+
+function renderCapTab() {
+  var el = document.getElementById('capTabContent');
+  if (!el) return;
+
+  if (!_oilData || !_oilData.tasks || !_oilData.tasks.length) {
+    el.innerHTML = '<div class="cap-no-data">'+esc(I18n.t('cap.no_oil'))+'</div>';
+    return;
+  }
+
+  var tasks = _oilData.tasks;
+  var total = tasks.length;
+  var withEst  = tasks.filter(function(t){ return t.estimatedTime != null; }).length;
+  var totalEst = tasks.reduce(function(s,t){ return s + (t.estimatedTime||0); }, 0);
+  var totalAct = tasks.reduce(function(s,t){ return s + (t.actualTime||0); }, 0);
+  var cov = total ? Math.round(withEst/total*100) : 0;
+  var closedWithDur = tasks.filter(function(t){ return t.status==='CLOSED' && t.durationDays!=null; });
+  var avgDur = closedWithDur.length ? Math.round(closedWithDur.reduce(function(s,t){ return s+t.durationDays; }, 0) / closedWithDur.length) : null;
+
+  // Summary cards
+  var html = '<div class="cap-summary">'
+    +'<div class="cap-card"><div class="cap-card-num">'+total+'</div><div class="cap-card-lbl">'+esc(I18n.t('cap.summary.total'))+'</div></div>'
+    +'<div class="cap-card"><div class="cap-card-num'+(withEst?' c-green':'')+'">'+withEst+'</div><div class="cap-card-lbl">'+esc(I18n.t('cap.summary.with_est'))+'</div></div>'
+    +'<div class="cap-card"><div class="cap-card-num c-orange">'+_capFmt(totalEst)+'</div><div class="cap-card-lbl">'+esc(I18n.t('cap.summary.total_est'))+'</div></div>'
+    +'<div class="cap-card"><div class="cap-card-num c-blue">'+_capFmt(totalAct)+'</div><div class="cap-card-lbl">'+esc(I18n.t('cap.summary.total_act'))+'</div></div>'
+    +'<div class="cap-card"><div class="cap-card-num'+(cov>0?' c-green':'')+'">'+cov+'%</div><div class="cap-card-lbl">'+esc(I18n.t('cap.summary.coverage'))+'</div></div>'
+    +'<div class="cap-card"><div class="cap-card-num'+(avgDur!=null?' c-green':'')+'">'+( avgDur!=null ? avgDur+'d' : '\u2014')+'</div><div class="cap-card-lbl">Pr\u016fm. \u0159e\u0161en\u00ed</div></div>'
+    +'</div>';
+
+  // ── Assignee breakdown ──
+  var assignees = {};
+  tasks.forEach(function(t) {
+    var a = t.assignee || '\u2014';
+    if (!assignees[a]) assignees[a] = {tasks:0,est:0,act:0};
+    assignees[a].tasks++; assignees[a].est += t.estimatedTime||0; assignees[a].act += t.actualTime||0;
+  });
+  var maxAT = Math.max(1, Math.max.apply(null, Object.values(assignees).map(function(d){return d.tasks;})));
+  var aRows = Object.keys(assignees).sort(function(a,b){return assignees[b].tasks-assignees[a].tasks;}).map(function(a) {
+    var d=assignees[a], pct=Math.round(d.tasks/maxAT*100);
+    return '<tr><td><span class="oil-assignee">'+esc(a)+'</span></td>'
+      +'<td><div class="cap-mini-bar" style="width:70px;"><div style="width:'+pct+'%;height:100%;background:#3fb950;border-radius:3px;"></div></div>'
+      +'<span style="font-size:11px;color:#e6edf3;">'+d.tasks+'</span></td>'
+      +'<td style="color:#f0883e;font-weight:600;">'+_capFmt(d.est)+'</td>'
+      +'<td style="color:#79c0ff;font-weight:600;">'+_capFmt(d.act)+'</td></tr>';
+  }).join('');
+  html += '<div class="cap-section"><div class="cap-section-hdr">'+esc(I18n.t('cap.assignee.title'))+'</div>'
+    +'<table class="cap-tbl"><thead><tr><th>'+esc(I18n.t('cap.col.assignee'))+'</th><th>'+esc(I18n.t('cap.col.tasks'))+'</th><th>'+esc(I18n.t('cap.col.estimated'))+'</th><th>'+esc(I18n.t('cap.col.actual'))+'</th></tr></thead>'
+    +'<tbody>'+aRows+'</tbody></table></div>';
+
+  // ── Effort distribution ──
+  var eff = {XS:0,S:0,M:0,L:0,XL:0,none:0};
+  tasks.forEach(function(t){ if(t.effort&&eff[t.effort]!==undefined)eff[t.effort]++;else eff.none++; });
+  var maxEff = Math.max(1,eff.XS,eff.S,eff.M,eff.L,eff.XL);
+  var effRows = ['XS','S','M','L','XL'].map(function(e) {
+    var c=eff[e], pct=Math.round(c/maxEff*100), info=_CAP_EFFORT[e];
+    return '<div class="cap-effort-row">'
+      +'<div class="cap-effort-lbl '+info.cls+'">'+info.label+'</div>'
+      +'<div class="cap-effort-bar"><div class="cap-effort-fill" style="width:'+pct+'%;background:'+info.color+';"></div></div>'
+      +'<div class="cap-effort-cnt">'+c+'</div>'
+      +'</div>';
+  }).join('');
+  html += '<div class="cap-section"><div class="cap-section-hdr">'+esc(I18n.t('cap.effort.title'))+'</div>'
+    +effRows
+    +(eff.none?'<div style="font-size:11px;color:#484f58;margin-top:8px;padding-top:8px;border-top:1px solid #30363d;">'+eff.none+' '+esc(I18n.t('cap.effort.none'))+'</div>':'')
+    +'</div>';
+
+  // ── Task type breakdown ──
+  var ttype = {};
+  _CAP_TYPES.forEach(function(tp){ttype[tp]={tasks:0,est:0,act:0};});
+  var typeNone = {tasks:0};
+  tasks.forEach(function(t){
+    if(t.taskType&&ttype[t.taskType]){ttype[t.taskType].tasks++;ttype[t.taskType].est+=t.estimatedTime||0;ttype[t.taskType].act+=t.actualTime||0;}
+    else typeNone.tasks++;
+  });
+  var maxTT = Math.max(1, Math.max.apply(null, _CAP_TYPES.map(function(tp){return ttype[tp].tasks;})));
+  var ttRows = _CAP_TYPES.filter(function(tp){return ttype[tp].tasks>0;}).map(function(tp){
+    var d=ttype[tp], pct=Math.round(d.tasks/maxTT*100), col=_CAP_TYPE_COLORS[tp]||'#8b949e';
+    return '<tr><td><span class="cap-type-dot" style="background:'+col+'"></span>'+esc(_capTypeLbl(tp))+'</td>'
+      +'<td><div class="cap-mini-bar"><div style="width:'+pct+'%;height:100%;background:'+col+';border-radius:3px;"></div></div>'
+      +'<span style="font-size:11px;color:#e6edf3;">'+d.tasks+'</span></td>'
+      +'<td style="color:#f0883e;">'+_capFmt(d.est)+'</td>'
+      +'<td style="color:#79c0ff;">'+_capFmt(d.act)+'</td></tr>';
+  }).join('');
+  html += '<div class="cap-section"><div class="cap-section-hdr">'+esc(I18n.t('cap.type.title'))+'</div>'
+    +(ttRows?'<table class="cap-tbl"><thead><tr><th>'+esc(I18n.t('cap.col.type'))+'</th><th>'+esc(I18n.t('cap.col.tasks'))+'</th><th>'+esc(I18n.t('cap.col.estimated'))+'</th><th>'+esc(I18n.t('cap.col.actual'))+'</th></tr></thead><tbody>'+ttRows+'</tbody></table>'
+      :'<div style="font-size:12px;color:#484f58;padding:8px 0;">'+esc(I18n.t('cap.no_data'))+'</div>')
+    +(typeNone.tasks?'<div style="font-size:11px;color:#484f58;margin-top:8px;">'+typeNone.tasks+' '+esc(I18n.t('cap.type.none'))+'</div>':'')
+    +'</div>';
+
+  // ── Domain breakdown ──
+  var dom = {};
+  tasks.forEach(function(t){
+    var d=t.domain||'\u2014';
+    if(!dom[d])dom[d]={tasks:0,est:0};
+    dom[d].tasks++;dom[d].est+=t.estimatedTime||0;
+  });
+  var maxDom = Math.max(1, Math.max.apply(null, Object.values(dom).map(function(d){return d.tasks;})));
+  var domRows = Object.keys(dom).sort(function(a,b){return dom[b].tasks-dom[a].tasks;}).map(function(d){
+    var dd=dom[d], pct=Math.round(dd.tasks/maxDom*100);
+    return '<tr><td><span class="oil-domain-badge">'+esc(d)+'</span></td>'
+      +'<td><div class="cap-mini-bar"><div style="width:'+pct+'%;height:100%;background:#79c0ff;border-radius:3px;"></div></div>'
+      +'<span style="font-size:11px;color:#e6edf3;">'+dd.tasks+'</span></td>'
+      +'<td style="color:#f0883e;">'+_capFmt(dd.est)+'</td></tr>';
+  }).join('');
+  html += '<div class="cap-section"><div class="cap-section-hdr">'+esc(I18n.t('cap.domain.title'))+'</div>'
+    +'<table class="cap-tbl"><thead><tr><th>'+esc(I18n.t('cap.col.domain'))+'</th><th>'+esc(I18n.t('cap.col.tasks'))+'</th><th>'+esc(I18n.t('cap.col.estimated'))+'</th></tr></thead>'
+    +'<tbody>'+domRows+'</tbody></table></div>';
+
+  // ── Open backlog ──
+  var EFF_ORD={XS:1,S:2,M:3,L:4,XL:5};
+  var PRIO_ORD2={HIGH:1,MED:2,LOW:3};
+  var open=tasks.filter(function(t){return t.status!=='CLOSED';}).slice().sort(function(a,b){
+    var ea=EFF_ORD[a.effort]||0,eb=EFF_ORD[b.effort]||0;
+    if(ea!==eb)return ea-eb;
+    return (PRIO_ORD2[a.priority]||9)-(PRIO_ORD2[b.priority]||9);
+  });
+  var bRows=open.map(function(t){
+    var si=OIL_FLOW[t.status]||OIL_FLOW['OPEN'];
+    var effBadge=t.effort?('<span style="font-size:11px;font-weight:700;font-family:Consolas,monospace;color:'+(_oilEffortColors[t.effort]||'#8b949e')+'" title="'+_oilEsc(_oilEffortTips[t.effort]||t.effort)+'">'+_oilEsc(t.effort)+'</span>'):'<span style="color:#484f58;font-size:11px;">\u2014</span>';
+    return '<tr>'
+      +'<td><code style="font-size:10px;color:#3fb950;font-weight:700;">'+_oilEsc(t.id)+'</code></td>'
+      +'<td style="font-size:11px;max-width:160px;" title="'+_oilEsc(t.title)+'">'+_oilEsc(t.title)+'</td>'
+      +'<td><span class="oil-prio pr-'+t.priority+'">'+t.priority+'</span></td>'
+      +'<td><span class="oil-status '+si.cls+'" style="font-size:10px;padding:1px 6px;">'+si.label+'</span></td>'
+      +'<td>'+effBadge+'</td>'
+      +'<td style="font-size:11px;color:#8b949e;">'+esc(_capTypeLbl(t.taskType||''))+'</td>'
+      +'<td style="font-size:11px;color:#f0883e;">'+_capFmt(t.estimatedTime)+'</td>'
+      +'<td style="font-size:11px;color:#79c0ff;">'+_capFmt(t.actualTime)+'</td>'
+      +'<td>'+_oilDaysBadge(t)+'</td>'
+      +'</tr>';
+  }).join('');
+  html += '<div class="cap-section"><div class="cap-section-hdr">'+esc(I18n.t('cap.backlog.title'))+' ('+open.length+')</div>'
+    +'<table class="cap-tbl"><thead><tr><th>'+esc(I18n.t('cap.col.id'))+'</th><th>'+esc(I18n.t('cap.col.title'))+'</th><th>'+esc(I18n.t('cap.col.priority'))+'</th><th>'+esc(I18n.t('cap.col.status'))+'</th><th>'+esc(I18n.t('cap.col.effort'))+'</th><th>'+esc(I18n.t('cap.col.type'))+'</th><th>'+esc(I18n.t('cap.col.estimated'))+'</th><th>'+esc(I18n.t('cap.col.actual'))+'</th><th title="Dn\u00ed otev\u0159eno">V\u011bk</th></tr></thead>'
+    +'<tbody>'+bRows+'</tbody></table></div>';
+
+  el.innerHTML = html;
+}
+
+// ── LANGUAGES TAB ──
+function renderLangTab() {
+  var el = document.getElementById('langTabContent');
+  if (!el) return;
+
+  var langs = I18n.langs();
+  var allKeys = I18n.allKeys();
+  var data = I18n.data();
+
+  // 1. Registry table
+  var tblRows = langs.map(function(code) {
+    var m = I18n.meta(code);
+    var cov = I18n.coverage(code);
+    var scopeLbl = m.scope === 'all'
+      ? '<span class="lang-scope-all">'+I18n.t('lang.scope.all')+'</span>'
+      : '<span class="lang-scope-fin">'+I18n.t('lang.scope.finance')+'</span>';
+    var statusBadge = m.status === 'active'
+      ? '<span class="lang-badge-active">'+I18n.t('lang.status.active')+'</span>'
+      : '<span class="lang-badge-planned">'+I18n.t('lang.status.planned')+'</span>';
+    var fillCls = cov === 100 ? '' : (cov > 10 ? 'partial' : 'stub');
+    var covBar = '<div class="lang-cov-bar"><div class="lang-cov-fill '+fillCls+'" style="width:'+cov+'%"></div></div>';
+    return '<tr><td><span class="lang-flag">'+m.flag+'</span>'+esc(m.name)+' <code style="font-size:10px;color:#484f58;background:#21262d;border-radius:3px;padding:1px 5px;">'+code+'</code></td>'
+      +'<td>'+scopeLbl+'</td>'
+      +'<td>'+statusBadge+'</td>'
+      +'<td>'+covBar+'<span style="font-size:11px;color:#8b949e;">'+cov+'%</span></td>'
+      +'</tr>';
+  }).join('');
+
+  var registry = '<div class="lang-section">'
+    +'<div class="lang-section-hdr">'+esc(I18n.t('lang.registry'))+'</div>'
+    +'<table class="lang-tbl"><thead><tr>'
+    +'<th>'+esc(I18n.t('lang.col.lang'))+'</th>'
+    +'<th>'+esc(I18n.t('lang.col.scope'))+'</th>'
+    +'<th>'+esc(I18n.t('lang.col.status'))+'</th>'
+    +'<th>'+esc(I18n.t('lang.col.coverage'))+'</th>'
+    +'</tr></thead><tbody>'+tblRows+'</tbody></table>'
+    +'</div>';
+
+  // 2. How-to
+  var steps = ['s1','s2','s3','s4','s5','s6'].map(function(s,i){
+    return '<li>'+esc(I18n.t('lang.howto.'+s))+'</li>';
+  }).join('');
+  var howto = '<div class="lang-section lang-howto">'
+    +'<div class="lang-section-hdr">'+esc(I18n.t('lang.howto.title'))+'</div>'
+    +'<ol>'+steps+'</ol>'
+    +'</div>';
+
+  // 3. Key browser
+  var keyRows = allKeys.map(function(k) {
+    var cs = (data.cs||{})[k] || '';
+    var en = (data.en||{})[k];
+    var enCell = (en === undefined || en === null)
+      ? '<span class="lang-key-missing">'+esc(I18n.t('lang.keys.missing'))+'</span>'
+      : (en === '' ? '<span style="color:#484f58;font-style:italic;">fallback → CS</span>' : '<span class="lang-key-en">'+esc(en)+'</span>');
+    return '<tr class="lang-key-row">'
+      +'<td class="lang-key-code">'+esc(k)+'</td>'
+      +'<td class="lang-key-cs">'+esc(cs)+'</td>'
+      +'<td>'+enCell+'</td>'
+      +'</tr>';
+  }).join('');
+
+  var keyBrowser = '<div class="lang-section">'
+    +'<div class="lang-section-hdr">'+esc(I18n.t('lang.keys.title'))+'</div>'
+    +'<input type="text" class="lang-key-search" id="langKeySearch" placeholder="'+esc(I18n.t('lang.key.filter'))+'" oninput="filterLangKeys()">'
+    +'<table class="lang-key-tbl"><thead><tr>'
+    +'<th>'+esc(I18n.t('lang.keys.key'))+'</th>'
+    +'<th>'+esc(I18n.t('lang.keys.cs'))+'</th>'
+    +'<th>'+esc(I18n.t('lang.keys.en'))+'</th>'
+    +'</tr></thead><tbody id="langKeyTbody">'+keyRows+'</tbody></table>'
+    +'</div>';
+
+  el.innerHTML = registry + howto + keyBrowser;
+}
+
+function filterLangKeys() {
+  var q = (document.getElementById('langKeySearch').value||'').toLowerCase();
+  document.querySelectorAll('#langKeyTbody .lang-key-row').forEach(function(tr) {
+    tr.style.display = !q || tr.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+// ══════════ OIL JS ══════════
+var _oilData       = null;
+var _oilFileHandle = null;
+var _oilFilter     = 'ALL';
+var _oilSort       = {col:null, dir:1};
+var _oilEditOpen   = null;
+var _oilSettings   = {autoSort:true, hideClosed:false, defaultFilter:'ALL'};
+var _oilMode       = 'tasks';
+var _oilAudExpanded = {};
+
+var OIL_FLOW = {
+  'OPEN':        { label:'🔵 OPEN',        cls:'st-OPEN',        next:'IN_PROGRESS' },
+  'IN_PROGRESS': { label:'🟠 IN PROGRESS', cls:'st-IN_PROGRESS', next:'REVIEW'       },
+  'REVIEW':      { label:'🟣 REVIEW',      cls:'st-REVIEW',      next:'CLOSED'       },
+  'CLOSED':      { label:'✅ CLOSED',      cls:'st-CLOSED',      next:'OPEN'         },
+  'RETURNED':    { label:'🔴 RETURNED',    cls:'st-RETURNED',    next:'IN_PROGRESS'  }
+};
+
+var OIL_DOMAINS = {
+  'Studio':    ['Hub','DevCenter','TestCenter','AdminCenter','Promo','Docs'],
+  'Finance':   ['Calendar','Tracking','OrgChart','Reporting','FX','SAP','BNS','SharePoint','HelpSystem'],
+  'Operations':['HelpSystem'],
+  'Purchasing':['HelpSystem'],
+  'Platform':  ['Brand','Architecture','PMO','OIL','ReleaseManager','Changelog','HelpSystem','Presentation','Auth','AppCatalog','TranslationStore']
+};
+
+function oilAddDomainChange() {
+  var dom=document.getElementById('oilNewDomain').value;
+  var modSel=document.getElementById('oilNewModule');
+  var mods=OIL_DOMAINS[dom]||[];
+  modSel.innerHTML='<option value="">\u2014 Modul \u2014</option>'+mods.map(function(m){return '<option value="'+m+'">'+m+'</option>';}).join('');
+}
+function oilInlineDomainChange(taskId){
+  var domSel=document.getElementById('oil-ed-domain-'+taskId);
+  var modSel=document.getElementById('oil-ed-module-'+taskId);
+  if(!domSel||!modSel)return;
+  var mods=OIL_DOMAINS[domSel.value]||[];
+  modSel.innerHTML='<option value="">\u2014 Modul \u2014</option>'+mods.map(function(m){return '<option value="'+m+'">'+m+'</option>';}).join('');
+}
+function oilFilterClick(f){
+  _oilFilter=f;
+  document.querySelectorAll('.oil-filter-btn').forEach(function(b){b.classList.toggle('active',b.dataset.f===f);});
+  renderOIL();
+}
+function oilSortClick(col){
+  if(_oilSort.col===col){_oilSort.dir*=-1;}else{_oilSort.col=col;_oilSort.dir=1;}
+  renderOIL();
+}
+function toggleOILHelp(){
+  var el=document.getElementById('oilHelp'),btn=document.getElementById('oilHelpBtn');
+  if(!el)return;
+  var open=el.style.display!=='block';
+  el.style.display=open?'block':'none';
+  if(btn)btn.classList.toggle('active',open);
+  if(open&&document.getElementById('oilSettings')){document.getElementById('oilSettings').style.display='none';var sb=document.getElementById('oilSettingsBtn');if(sb)sb.classList.remove('active');}
+}
+function toggleOILSettings(){
+  var el=document.getElementById('oilSettings'),btn=document.getElementById('oilSettingsBtn');
+  if(!el)return;
+  var open=el.style.display!=='block';
+  el.style.display=open?'block':'none';
+  if(btn)btn.classList.toggle('active',open);
+  if(open){
+    if(document.getElementById('oilHelp')){document.getElementById('oilHelp').style.display='none';var hb=document.getElementById('oilHelpBtn');if(hb)hb.classList.remove('active');}
+    var as=document.getElementById('oilSetAutoSort'),hc=document.getElementById('oilSetHideClosed'),df=document.getElementById('oilSetDefaultFilter');
+    if(as)as.checked=_oilSettings.autoSort;if(hc)hc.checked=_oilSettings.hideClosed;if(df)df.value=_oilSettings.defaultFilter;
+  }
+}
+function switchOILMode(mode){
+  _oilMode=mode;
+  var btn=document.getElementById('oilAuditBtn'),tl=document.getElementById('oilTaskList'),ap=document.getElementById('oilAuditPanel');
+  if(btn)btn.classList.toggle('active',mode==='audits');
+  if(tl)tl.style.display=(mode==='audits')?'none':'block';
+  if(ap)ap.style.display=(mode==='audits')?'block':'none';
+  var fbtns=document.querySelectorAll('.oil-filter-btn');
+  fbtns.forEach(function(b){b.style.opacity=(mode==='audits')?'.35':'1';b.style.pointerEvents=(mode==='audits')?'none':'';});
+  if(mode==='audits')renderAuditTab();else renderOIL();
+}
+function oilToggleFinding(audId){_oilAudExpanded[audId]=!_oilAudExpanded[audId];renderAuditTab();}
+function oilCycleFindingStatus(audId,fId){
+  if(!_oilData||!_oilData.audits)return;
+  var aud=_oilData.audits.find(function(a){return a.id===audId;});if(!aud)return;
+  var f=aud.findings.find(function(x){return x.id===fId;});if(!f)return;
+  f.status=(f.status==='OPEN')?'FIXED':'OPEN';
+  var openCount=aud.findings.filter(function(x){return x.status==='OPEN';}).length;
+  aud.status=openCount===0?'CLOSED':openCount<aud.findings.length?'IN PROGRESS':'OPEN';
+  renderAuditTab();
+}
+function renderAuditTab(){var el=document.getElementById('oilAuditPanel');if(!el)return;_renderAuditTabInner(el);}
+function _renderAuditTabInner(el){
+  var audits=(_oilData&&_oilData.audits)?_oilData.audits:[];
+  if(!audits.length){
+    var ver=(_oilData&&_oilData.version)?_oilData.version:'?';
+    el.innerHTML='<div style="text-align:center;padding:40px 20px;"><div style="font-size:32px;margin-bottom:12px;">&#128269;</div><div style="font-size:15px;font-weight:700;color:#e6edf3;margin-bottom:8px;">Audity nejsou na\u010dten\u00e9</div><div style="font-size:12px;color:#484f58;margin-bottom:20px;">Verze OIL.json: <code style="background:#21262d;padding:1px 5px;border-radius:3px;color:#79c0ff;">'+ver+'</code></div><button onclick="connectOIL()" style="background:#6a1b9a;color:#fff;border:none;border-radius:8px;padding:12px 28px;font-size:14px;font-weight:700;cursor:pointer;font-family:Segoe UI,Arial,sans-serif;">&#128279; Na\u010d\u00edst OIL.json</button></div>';
+    return;
+  }
+  var SEV_ORD={HIGH:0,MED:1,LOW:2};
+  var html='<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;"><div style="font-size:13px;font-weight:700;color:#d2a8ff;">&#128269; Audit Log</div><div style="font-size:11px;color:#484f58;">'+audits.length+' audity &middot; '+audits.reduce(function(s,a){return s+(a.findings||[]).length;},0)+' n\u00e1lez\u016f &middot; '+audits.reduce(function(s,a){return s+(a.findings||[]).filter(function(f){return f.status==='FIXED';}).length;},0)+' vy\u0159e\u0161eno</div></div>';
+  audits.forEach(function(aud){
+    var ff=aud.findings||[],total=ff.length,high=ff.filter(function(f){return f.severity==='HIGH';}).length,med=ff.filter(function(f){return f.severity==='MED';}).length,low=ff.filter(function(f){return f.severity==='LOW';}).length,fixed=ff.filter(function(f){return f.status==='FIXED';}).length;
+    var pct=total?Math.round(fixed/total*100):0,expanded=!!_oilAudExpanded[aud.id];
+    var stCls=aud.status==='CLOSED'?'closed':aud.status==='IN PROGRESS'?'progress':'open';
+    var stLbl=aud.status==='CLOSED'?'\u2705 Vy\u0159e\u0161eno':aud.status==='IN PROGRESS'?'\uD83D\uDFE0 Prob\u00EDh\u00E1':'\uD83D\uDD34 Otev\u0159eno';
+    html+='<div class="oil-aud-card"><div class="oil-aud-card-hdr" onclick="oilToggleFinding(\''+_oilEsc(aud.id)+'\')"><span class="oil-aud-id">'+_oilEsc(aud.id)+'</span><span class="oil-aud-title">'+_oilEsc(aud.title)+'</span><span class="oil-aud-date">'+_oilEsc(aud.date)+'</span><span class="oil-aud-status-badge oil-aud-status-'+stCls+'">'+stLbl+'</span><span style="font-size:12px;color:#484f58;margin-left:4px;">'+(expanded?'&#9650;':'&#9660;')+'</span></div>';
+    html+='<div class="oil-aud-body"><div class="oil-aud-meta">';
+    (aud.scope||[]).forEach(function(s){html+='<span class="oil-aud-scope-pill">&#128196; '+_oilEsc(s)+'</span>';});
+    (aud.areas||[]).forEach(function(a){html+='<span class="oil-aud-area-pill">'+_oilEsc(a)+'</span>';});
+    html+='</div><div class="oil-aud-stats-row"><div class="oil-aud-stat-box oil-aud-stat-total"><div class="oil-aud-stat-num">'+total+'</div><div class="oil-aud-stat-lbl">N\u00e1lez\u016f</div></div><div class="oil-aud-stat-box oil-aud-stat-high"><div class="oil-aud-stat-num">'+high+'</div><div class="oil-aud-stat-lbl">HIGH</div></div><div class="oil-aud-stat-box oil-aud-stat-med"><div class="oil-aud-stat-num">'+med+'</div><div class="oil-aud-stat-lbl">MED</div></div><div class="oil-aud-stat-box oil-aud-stat-low"><div class="oil-aud-stat-num">'+low+'</div><div class="oil-aud-stat-lbl">LOW</div></div><div class="oil-aud-stat-box oil-aud-stat-fixed"><div class="oil-aud-stat-num">'+fixed+'</div><div class="oil-aud-stat-lbl">&#9989; Vy\u0159.</div></div><div class="oil-aud-stat-box" style="flex:2;"><div class="oil-aud-stat-num" style="color:'+(pct===100?'#3fb950':pct>50?'#f0883e':'#f85149')+';">'+pct+'%</div><div class="oil-aud-stat-lbl">Vy\u0159e\u0161eno</div></div></div>';
+    if(total>0){var hw=Math.round(high/total*100);html+='<div class="oil-aud-bar-wrap"><div class="oil-aud-bar-lbl">Z\u00e1va\u017enost</div><div class="oil-aud-bar">'+(high?'<div class="oil-aud-seg-high" style="flex:'+high+';" title="HIGH: '+high+'"></div>':'')+(med?'<div class="oil-aud-seg-med" style="flex:'+med+';"></div>':'')+(low?'<div class="oil-aud-seg-low" style="flex:'+low+';"></div>':'')+(fixed?'<div class="oil-aud-seg-fixed" style="flex:'+fixed+';"></div>':'')+'</div></div>';}
+    html+='<div class="oil-aud-progress-wrap"><div class="oil-aud-progress-lbl"><span>Pokrok</span><span>'+fixed+' / '+total+'</span></div><div class="oil-aud-progress-bar"><div class="oil-aud-progress-fill" style="width:'+pct+'%"></div></div></div>';
+    if(expanded&&ff.length){
+      html+='<table class="oil-aud-tbl"><thead><tr><th style="width:110px;">ID</th><th style="width:90px;">Oblast</th><th style="width:60px;">Z\u00e1v.</th><th>Popis</th><th style="width:70px;">Status</th><th style="width:70px;">AIQ link</th></tr></thead><tbody>';
+      var sorted=ff.slice().sort(function(a,b){if(a.status==='FIXED'&&b.status!=='FIXED')return 1;if(a.status!=='FIXED'&&b.status==='FIXED')return -1;return(SEV_ORD[a.severity]||9)-(SEV_ORD[b.severity]||9);});
+      sorted.forEach(function(f){
+        var fsCls='oil-aud-fstatus-'+(f.status==='FIXED'?'FIXED':'OPEN');
+        var fsLbl=f.status==='FIXED'?'\u2705 Vy\u0159.':'\uD83D\uDD34 Otev\u0159.';
+        html+='<tr style="'+(f.status==='FIXED'?'opacity:.55;':'')+'"><td><code style="font-size:10px;color:#d2a8ff;">'+_oilEsc(f.id)+'</code></td><td><span style="font-size:10px;color:#8b949e;">'+_oilEsc(f.area)+'</span></td><td><span class="oil-aud-sev oil-aud-sev-'+_oilEsc(f.severity)+'">'+_oilEsc(f.severity)+'</span></td><td style="font-size:11px;color:#e6edf3;">'+_oilEsc(f.description)+'</td><td><span class="oil-aud-fstatus '+fsCls+'" onclick="oilCycleFindingStatus(\''+_oilEsc(aud.id)+'\',\''+_oilEsc(f.id)+'\')">'+fsLbl+'</span></td><td>'+(f.linkedAIQ?'<span class="oil-aud-link">'+_oilEsc(f.linkedAIQ)+'</span>':'<span style="color:#484f58;">—</span>')+'</td></tr>';
+      });
+      html+='</tbody></table>';
+    }
+    if(aud.note)html+='<div style="margin-top:10px;font-size:11px;color:#484f58;border-top:1px solid #30363d;padding-top:8px;">&#128196; '+_oilEsc(aud.note)+'</div>';
+    html+='</div></div>';
+  });
+  el.innerHTML=html;
+}
+function applyOILSettings(){
+  var as=document.getElementById('oilSetAutoSort'),hc=document.getElementById('oilSetHideClosed'),df=document.getElementById('oilSetDefaultFilter');
+  if(as)_oilSettings.autoSort=as.checked;if(hc)_oilSettings.hideClosed=hc.checked;if(df)_oilSettings.defaultFilter=df.value;
+  try{localStorage.setItem('hopi_oil_settings',JSON.stringify(_oilSettings));}catch(e){}
+  renderOIL();
+}
+function resetOILSort(){_oilSort.col=null;_oilSort.dir=1;renderOIL();}
+async function connectOIL(){
+  if(!window.showOpenFilePicker){alert('File System Access API není v tomto prohlížeči.\nPoužijte Chrome nebo Edge.');return;}
+  try{
+    var [handle]=await window.showOpenFilePicker({types:[{description:'JSON',accept:{'application/json':['.json']}}],multiple:false});
+    _oilFileHandle=handle;
+    var file=await handle.getFile(),text=await file.text();
+    _oilData=JSON.parse(text);
+    if(!_oilData.audits)_oilData.audits=[];
+    try{localStorage.setItem('hopi_oil_cache',text);}catch(e){}
+    document.getElementById('oilSaveBtn').style.display='';
+    renderOIL();
+  }catch(e){if(e.name!=='AbortError'){console.error('OIL load:',e);}}
+}
+async function saveOIL(){
+  if(!_oilData)return;
+  var pad=function(v){return String(v).padStart(2,'0');};
+  var now=new Date();
+  _oilData.lastUpdated=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  var text=JSON.stringify(_oilData,null,2);
+  try{localStorage.setItem('hopi_oil_cache',text);}catch(e){}
+  if(_oilFileHandle){
+    try{var w=await _oilFileHandle.createWritable();await w.write(text);await w.close();showToast('Uloženo do OIL.json ✓');}
+    catch(e){showToast('Chyba uložení: '+e.message,true);}
+  }else{
+    var blob=new Blob([text],{type:'application/json'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='OIL.json';a.click();
+    showToast('Staženo jako OIL.json');
+  }
+}
+function toggleOILAddForm(){
+  var f=document.getElementById('oilAddForm');f.classList.toggle('open');
+  if(f.classList.contains('open'))document.getElementById('oilNewTitle').focus();
+}
+function addOILTask(){
+  if(!_oilData){_oilData={version:'1.4',lastUpdated:'',tasks:[],audits:[]};}
+  var title=document.getElementById('oilNewTitle').value.trim();if(!title){document.getElementById('oilNewTitle').focus();return;}
+  var desc=document.getElementById('oilNewDesc').value.trim();
+  var stream=document.getElementById('oilNewStream').value,prio=document.getElementById('oilNewPrio').value;
+  var assignee=document.getElementById('oilNewAssignee').value.trim()||null;
+  var domain=document.getElementById('oilNewDomain').value.trim()||null;
+  var module=document.getElementById('oilNewModule').value.trim()||null;
+  var component=document.getElementById('oilNewComponent').value.trim()||null;
+  var taskType=document.getElementById('oilNewTaskType').value.trim()||null;
+  var effort=document.getElementById('oilNewEffort').value.trim()||null;
+  var estRaw=parseInt(document.getElementById('oilNewEstTime').value,10);
+  var estimatedTime=isNaN(estRaw)?null:estRaw;
+  var maxN=0;_oilData.tasks.forEach(function(t){var n=parseInt(t.id.replace('AIQ-','').replace('OIL-',''),10);if(n>maxN)maxN=n;});
+  var now=new Date(),pad=function(v){return String(v).padStart(2,'0');};
+  var ts=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  _oilData.tasks.push({id:'AIQ-'+String(maxN+1).padStart(5,'0'),title:title,description:desc,stream:stream,priority:prio,status:'OPEN',domain:domain,module:module,component:component,taskType:taskType,effort:effort,estimatedTime:estimatedTime,actualTime:null,assignee:assignee,createdAt:ts,createdBy:'David Gogela',completedBy:null,completedAt:null,durationDays:null,comment:'',note:''});
+  try{localStorage.setItem('hopi_oil_cache',JSON.stringify(_oilData,null,2));}catch(e){}
+  document.getElementById('oilNewTitle').value='';document.getElementById('oilNewDesc').value='';document.getElementById('oilNewAssignee').value='';
+  document.getElementById('oilNewDomain').value='';document.getElementById('oilNewModule').innerHTML='<option value="">\u2014 Modul \u2014</option>';document.getElementById('oilNewComponent').value='';
+  document.getElementById('oilNewTaskType').value='';document.getElementById('oilNewEffort').value='';document.getElementById('oilNewEstTime').value='';
+  toggleOILAddForm();renderOIL();
+}
+function oilCycleStatus(id){
+  if(!_oilData)return;
+  var task=_oilData.tasks.find(function(t){return t.id===id;});if(!task)return;
+  var next=(OIL_FLOW[task.status]||OIL_FLOW['OPEN']).next;task.status=next;
+  if(next==='CLOSED'){var now=new Date(),pad=function(v){return String(v).padStart(2,'0');};task.completedAt=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate())+' '+pad(now.getHours())+':'+pad(now.getMinutes());task.completedBy=task.assignee||'David Gogela';if(task.createdAt){var _cd=new Date(task.createdAt.substring(0,10));var _nd=new Date(now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate()));task.durationDays=Math.max(0,Math.round((_nd-_cd)/86400000));}else{task.durationDays=0;}}
+  try{localStorage.setItem('hopi_oil_cache',JSON.stringify(_oilData,null,2));}catch(e){}
+  renderOIL();
+}
+function oilToggleEdit(id){_oilEditOpen=(_oilEditOpen===id)?null:id;renderOIL();if(_oilEditOpen){var inp=document.getElementById('oil-ed-domain-'+id)||document.getElementById('oil-ed-assignee-'+id);if(inp)inp.focus();}}
+function oilSaveInlineEdit(id){
+  if(!_oilData)return;
+  var task=_oilData.tasks.find(function(t){return t.id===id;});if(!task)return;
+  var descEl=document.getElementById('oil-ed-desc-'+id),domEl=document.getElementById('oil-ed-domain-'+id),modEl=document.getElementById('oil-ed-module-'+id),compEl=document.getElementById('oil-ed-component-'+id),aEl=document.getElementById('oil-ed-assignee-'+id),cEl=document.getElementById('oil-ed-comment-'+id);
+  var ttEl=document.getElementById('oil-ed-tasktype-'+id),efEl=document.getElementById('oil-ed-effort-'+id),etEl=document.getElementById('oil-ed-esttime-'+id),atEl=document.getElementById('oil-ed-acttime-'+id);
+  if(descEl)task.description=descEl.value.trim();if(domEl)task.domain=domEl.value.trim()||null;if(modEl)task.module=modEl.value.trim()||null;if(compEl)task.component=compEl.value.trim()||null;if(aEl)task.assignee=aEl.value.trim()||null;if(cEl)task.comment=cEl.value.trim();
+  if(ttEl)task.taskType=ttEl.value.trim()||null;if(efEl)task.effort=efEl.value.trim()||null;
+  if(etEl){var etv=parseInt(etEl.value,10);task.estimatedTime=isNaN(etv)||etEl.value===''?null:etv;}
+  if(atEl){var atv=parseInt(atEl.value,10);task.actualTime=isNaN(atv)||atEl.value===''?null:atv;}
+  var ttypeEl=document.getElementById('oil-ed-testtype-'+id),linkedEl=document.getElementById('oil-ed-linked-'+id);
+  if(ttypeEl)task.testType=ttypeEl.value.trim()||null;
+  if(linkedEl)task.linkedTask=linkedEl.value.trim()||null;
+  try{localStorage.setItem('hopi_oil_cache',JSON.stringify(_oilData,null,2));}catch(e){}
+  _oilEditOpen=null;renderOIL();
+}
+function oilCloseInlineEdit(){_oilEditOpen=null;renderOIL();}
+function _oilEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function _oilDaysBadge(t){
+  var days=null;
+  if(t.status==='CLOSED'&&t.durationDays!=null){days=t.durationDays;}
+  else if(t.createdAt){var cd=new Date(t.createdAt.substring(0,10));var nd=new Date();nd=new Date(nd.getFullYear()+'-'+(String(nd.getMonth()+1).padStart(2,'0'))+'-'+(String(nd.getDate()).padStart(2,'0')));days=Math.max(0,Math.round((nd-cd)/86400000));}
+  if(days===null)return '<span style="color:#484f58;font-size:11px;">\u2014</span>';
+  var color=t.status==='CLOSED'?'#3fb950':'#f0883e';
+  var title=t.status==='CLOSED'?'Doba \u0159e\u0161en\u00ed: '+days+'d':'Otev\u0159eno: '+days+'d';
+  return '<span style="font-size:11px;font-weight:700;font-family:Consolas,monospace;color:'+color+';" title="'+_oilEsc(title)+'">'+days+'d</span>';
+}
+
+function renderOIL(){
+  var el=document.getElementById('oilTaskList');if(!el)return;
+  if(_oilMode==='audits'){renderAuditTab();return;}
+  if(!_oilData||!_oilData.tasks||!_oilData.tasks.length){
+    el.innerHTML='<div class="oil-empty">Na\u010dt\u011bte OIL.json &rarr; <strong>&#128279; Na\u010d\u00edst OIL.json</strong></div>';return;
+  }
+  var PRIO_ORD={HIGH:1,MED:2,LOW:3},STAT_ORD={OPEN:1,IN_PROGRESS:2,REVIEW:3,RETURNED:4,CLOSED:5};
+  var tasks;
+  if(_oilFilter==='TEST'){
+    tasks=_oilData.tasks.filter(function(t){return t.taskType==='test';});
+  } else {
+    tasks=_oilFilter==='ALL'?_oilData.tasks:_oilData.tasks.filter(function(t){return t.stream===_oilFilter;});
+  }
+  if(_oilSettings.hideClosed)tasks=tasks.filter(function(t){return t.status!=='CLOSED';});
+  var streams=(_oilFilter==='ALL'||_oilFilter==='TEST')?['WEB','APP']:[_oilFilter];
+  var html='';
+  streams.forEach(function(stream){
+    var st=tasks.filter(function(t){return t.stream===stream;});if(!st.length)return;
+    if(_oilSort.col){
+      st=st.slice().sort(function(a,b){
+        var va,vb;
+        switch(_oilSort.col){case 'id':va=parseInt(a.id.replace('AIQ-','').replace('OIL-',''),10);vb=parseInt(b.id.replace('AIQ-','').replace('OIL-',''),10);break;case 'title':va=a.title.toLowerCase();vb=b.title.toLowerCase();break;case 'priority':va=PRIO_ORD[a.priority]||9;vb=PRIO_ORD[b.priority]||9;break;case 'status':va=STAT_ORD[a.status]||9;vb=STAT_ORD[b.status]||9;break;case 'domain':va=(a.domain||'').toLowerCase();vb=(b.domain||'').toLowerCase();break;case 'module':va=(a.module||'').toLowerCase();vb=(b.module||'').toLowerCase();break;case 'assignee':va=(a.assignee||'').toLowerCase();vb=(b.assignee||'').toLowerCase();break;default:return 0;}
+        return va<vb?-_oilSort.dir:va>vb?_oilSort.dir:0;
+      });
+    }else if(_oilSettings.autoSort){
+      st=st.slice().sort(function(a,b){var sa=STAT_ORD[a.status]||9,sb=STAT_ORD[b.status]||9,pa=PRIO_ORD[a.priority]||9,pb=PRIO_ORD[b.priority]||9;if(sa!==sb)return sa-sb;if(pa!==pb)return pa-pb;return(a.createdAt||'')<(b.createdAt||'')?-1:1;});
+    }
+    var autoActive=!_oilSort.col&&_oilSettings.autoSort;
+    var oilTh=function(key,label){var active=_oilSort.col===key;var cls='oil-th-sort'+(active?(_oilSort.dir>0?' asc':' desc'):'');return '<th class="'+cls+'" onclick="oilSortClick(\''+key+'\')" title="Se\u0159adit dle '+label+'">'+label+'</th>';};
+    html+='<div class="oil-stream-section"><div class="oil-stream-hdr">'+(stream==='WEB'?'\uD83C\uDF10 WEB Stream':'\uD83D\uDCF1 APP Stream')+(autoActive?' <span style="font-size:10px;font-weight:400;opacity:.7;">auto-sort: status \u2192 priorita \u2192 datum</span>':'')+'</div>';
+    html+='<table class="oil-tbl"><thead><tr>'+oilTh('id','ID')+oilTh('title','N\u00e1zev')+oilTh('priority','Priorita')+oilTh('status','Status')+'<th title="Effort (T-shirt)">Effort</th><th title="Stáří úkolu / doba řešení">Dní</th>'+oilTh('domain','Dom\u00e9na')+oilTh('module','Modul')+oilTh('assignee','&#344;e\u0161\u00ed')+'<th></th></tr></thead><tbody>';
+    st.forEach(function(t){
+      var si=OIL_FLOW[t.status]||OIL_FLOW['OPEN'],comment=t.comment||t.note||'',assignee=t.assignee||'',editOpen=_oilEditOpen===t.id,desc=t.description||'';
+      html+='<tr'+(editOpen?' style="background:#0d4429;"':'')+'>'+
+        '<td><code style="font-size:11px;color:#3fb950;font-weight:700;">'+_oilEsc(t.id)+'</code></td>'+
+        '<td style="min-width:140px;max-width:340px;">'+_oilEsc(t.title)+(desc&&_oilFilter!=='TEST'?'<span style="color:#484f58;font-size:10px;margin-left:4px;" title="'+_oilEsc(desc)+'">&#8505;</span>':'')+(t.taskType==='test'?'<br>'+_testTypeBadge(t):'')+(desc&&_oilFilter==='TEST'?'<div style="margin-top:5px;font-size:11px;color:#8b949e;line-height:1.5;white-space:pre-wrap;border-left:2px solid #30363d;padding-left:8px;">'+_oilEsc(desc)+'</div>':'')+'</td>'+
+        '<td><span class="oil-prio pr-'+t.priority+'">'+t.priority+'</span></td>'+
+        '<td><span class="oil-status '+si.cls+'" onclick="oilCycleStatus(\''+_oilEsc(t.id)+'\')" title="Klik = dal\u0161\u00ed stav">'+si.label+'</span></td>'+
+        '<td>'+(t.effort?'<span style="font-size:11px;font-weight:700;font-family:Consolas,monospace;color:'+(_oilEffortColors[t.effort]||'#8b949e')+'" title="'+_oilEsc(_oilEffortTips[t.effort]||t.effort)+'">'+_oilEsc(t.effort)+'</span>':'<span style="color:#484f58;font-size:11px;">\u2014</span>')+'</td>'+
+        '<td>'+_oilDaysBadge(t)+'</td>'+
+        '<td>'+(t.domain?'<span class="oil-domain-badge">'+_oilEsc(t.domain)+'</span>':'<span style="color:#484f58;font-size:11px;">\u2014</span>')+'</td>'+
+        '<td>'+(t.module?'<span class="oil-module-badge">'+_oilEsc(t.module)+'</span>':'<span style="color:#484f58;font-size:11px;">\u2014</span>')+'</td>'+
+        '<td>'+(assignee?'<span class="oil-assignee">'+_oilEsc(assignee)+'</span>':'<span style="color:#484f58;font-size:11px;">\u2014</span>')+'</td>'+
+        '<td><button class="oil-edit-btn" onclick="oilToggleEdit(\''+_oilEsc(t.id)+'\')">'+(editOpen?'&#10005;':'&#9998;')+'</button></td>'+
+        '</tr>';
+      if(editOpen){
+        var curDomain=t.domain||'',curModule=t.module||'',curComp=t.component||'';
+        var domMods=OIL_DOMAINS[curDomain]||[];
+        var domOpts='<option value="">\u2014 Dom\u00e9na \u2014</option>'+Object.keys(OIL_DOMAINS).map(function(d){return '<option value="'+d+'"'+(d===curDomain?' selected':'')+'>'+d+'</option>';}).join('');
+        var modOpts='<option value="">\u2014 Modul \u2014</option>'+domMods.map(function(m){return '<option value="'+m+'"'+(m===curModule?' selected':'')+'>'+m+'</option>';}).join('');
+        html+='<tr class="oil-edit-row"><td colspan="10"><div class="oil-inline-form" style="flex-direction:column;gap:8px;">';
+        html+='<div class="oil-inline-field" style="width:100%;"><span class="oil-inline-label">'+esc(I18n.t('oil.field.desc'))+'</span><textarea id="oil-ed-desc-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:100%;min-height:56px;resize:vertical;">'+_oilEsc(desc)+'</textarea></div>';
+        html+='<div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('oil.field.domain'))+'</span><select id="oil-ed-domain-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:110px;" onchange="oilInlineDomainChange(\''+_oilEsc(t.id)+'\')">'+domOpts+'</select></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('oil.field.module'))+'</span><select id="oil-ed-module-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:130px;">'+modOpts+'</select></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('oil.field.component'))+'</span><input type="text" id="oil-ed-component-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:130px;" value="'+_oilEsc(curComp)+'"></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('oil.field.assignee'))+'</span><input type="text" id="oil-ed-assignee-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:120px;" value="'+_oilEsc(assignee)+'" onkeydown="if(event.key===\'Enter\')oilSaveInlineEdit(\''+_oilEsc(t.id)+'\');"></div>';
+        html+='<div class="oil-inline-field" style="flex:1;min-width:180px;"><span class="oil-inline-label">'+esc(I18n.t('oil.field.comment'))+'</span><input type="text" id="oil-ed-comment-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:100%;" value="'+_oilEsc(comment)+'" onkeydown="if(event.key===\'Enter\')oilSaveInlineEdit(\''+_oilEsc(t.id)+'\');"></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('oil.field.created'))+'</span><span style="font-size:11px;color:#484f58;padding:5px 0;">'+_oilEsc(t.createdAt||'\u2014')+'</span></div>';
+        var curTT=t.taskType||'', curEff=t.effort||'', ttOpts='<option value="">'+esc(I18n.t('cap.form.tasktype'))+'</option>'+['development','fix','content','design','review','approval','test','release','archive','research','docs'].map(function(tp){return '<option value="'+tp+'"'+(tp===curTT?' selected':'')+'>'+(esc(_capTypeLbl(tp)))+'</option>';}).join('');
+        var effOpts='<option value="">'+esc(I18n.t('cap.form.effort'))+'</option>'+['XS','S','M','L','XL'].map(function(e){return '<option value="'+e+'"'+(e===curEff?' selected':'')+'>'+(esc(I18n.t('cap.effort.'+e.toLowerCase())))+'</option>';}).join('');
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('oil.field.tasktype'))+'</span><select id="oil-ed-tasktype-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:120px;">'+ttOpts+'</select></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('cap.col.effort'))+'</span><select id="oil-ed-effort-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:155px;">'+effOpts+'</select></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('cap.form.esttime'))+'</span><input type="number" id="oil-ed-esttime-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:90px;" min="0" value="'+(t.estimatedTime!=null?t.estimatedTime:'')+'" /></div>';
+        html+='<div class="oil-inline-field"><span class="oil-inline-label">'+esc(I18n.t('cap.form.acttime'))+'</span><input type="number" id="oil-ed-acttime-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:90px;" min="0" value="'+(t.actualTime!=null?t.actualTime:'')+'" /></div>';
+        if(t.taskType==='test'){
+          var ttypeOpts=['functional','visual','content','integration','regression','acceptance','code-review'].map(function(tt){return '<option value="'+tt+'"'+(tt===(t.testType||'')?' selected':'')+'>'+(_testTypeLabels[tt]||tt)+'</option>';}).join('');
+          html+='<div class="oil-inline-field"><span class="oil-inline-label">Typ testu</span><select id="oil-ed-testtype-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:130px;"><option value="">— typ —</option>'+ttypeOpts+'</select></div>';
+          html+='<div class="oil-inline-field"><span class="oil-inline-label">Testuje AIQ</span><input type="text" id="oil-ed-linked-'+_oilEsc(t.id)+'" class="oil-inline-input" style="width:110px;" placeholder="AIQ-NNNNN" value="'+_oilEsc(t.linkedTask||'')+'" /></div>';
+        }
+        html+='<div style="display:flex;gap:6px;align-self:flex-end;"><button class="oil-inline-save" onclick="oilSaveInlineEdit(\''+_oilEsc(t.id)+'\')">'+esc(I18n.t('oil.inline.save'))+'</button><button class="oil-inline-cancel" onclick="oilCloseInlineEdit()">'+esc(I18n.t('common.cancel'))+'</button></div>';
+        html+='</div></div></td></tr>';
+      }
+    });
+    html+='</tbody></table></div>';
+  });
+  if(!html)html='<div class="oil-empty">\u017d\u00e1dn\u00e9 \u00FAkoly pro filtr '+_oilFilter+'.</div>';
+  el.innerHTML=html;
+  if(_oilEditOpen){var inp=document.getElementById('oil-ed-assignee-'+_oilEditOpen)||document.getElementById('oil-ed-domain-'+_oilEditOpen);if(inp)inp.focus();}
+}
+
+document.addEventListener('keydown',function(e){if(e.key!=='Escape')return;if(_oilEditOpen)oilCloseInlineEdit();});
+
+// Auto-load OIL from localStorage, then try fetch
+(function(){
+  var cached=null;
+  try{cached=localStorage.getItem('hopi_oil_cache');}catch(e){}
+  if(cached){try{_oilData=JSON.parse(cached);}catch(e){}}
+  if(_oilData&&!_oilData.audits)_oilData.audits=[];
+  try{var s=localStorage.getItem('hopi_oil_settings');if(s)_oilSettings=Object.assign(_oilSettings,JSON.parse(s));}catch(e){}
+  _oilFilter=_oilSettings.defaultFilter||'ALL';
+  document.querySelectorAll('.oil-filter-btn').forEach(function(b){b.classList.toggle('active',b.dataset.f===_oilFilter);});
+  setTimeout(function(){renderOIL();},0);
+
+  fetch('../../../OIL.json?_='+Date.now())
+    .then(function(r){if(!r.ok)throw 0;return r.text();})
+    .then(function(text){
+      var fresh=JSON.parse(text);_oilData=fresh;
+      if(!_oilData.audits)_oilData.audits=[];
+      try{localStorage.setItem('hopi_oil_cache',text);}catch(e){}
+      renderOIL();
+      var capPane=document.getElementById('pane-cap');
+      if(capPane&&capPane.classList.contains('active'))renderCapTab();
+    })
+    .catch(function(){/* file:// / CORS — zůstaneme u cache */});
+})();
+
+// ══════════ RELEASE & DEPLOY ══════════
+var _studioStatus=null;
+
+function loadStudioStatus(){
+  // Okamžitě použij _status.js (funguje i na file://)
+  if(window._STUDIO_STATUS&&!_studioStatus){
+    _studioStatus=window._STUDIO_STATUS;
+    renderStudioRelease();
+  }
+  // Fetch pro refresh (funguje na localhost / http)
+  fetch('../../../_status.json?t='+Date.now())
+    .then(function(r){return r.ok?r.json():null;})
+    .then(function(s){if(s){_studioStatus=s;renderStudioRelease();}})
+    .catch(function(){/* file:// — použit _status.js fallback */});
+}
+
+function renderStudioRelease(){
+  var s=_studioStatus||{},v=function(x){return x||'\u2014';};
+  document.getElementById('stt-version').textContent      = v(s.version);
+  document.getElementById('stt-archiveAt').textContent    = v(s.archiveAt);
+  document.getElementById('stt-archiveWeb').textContent   = v(s.archiveWeb);
+  document.getElementById('stt-archiveApp').textContent   = v(s.archiveApp);
+  document.getElementById('stt-deployAt').textContent     = v(s.deployAt);
+  document.getElementById('stt-deployCommit').textContent = v(s.deployCommit);
+  document.getElementById('stt-deployBranch').textContent = v(s.deployBranch);
+  var link=document.getElementById('stt-deployUrl');
+  if(s.deployUrl){link.href=s.deployUrl;link.style.display='';}else{link.style.display='none';}
+  var latestRow=document.getElementById('stt-deployLatest-row');
+  var latestLink=document.getElementById('stt-deployLatest');
+  if(s.deployLatest){
+    latestLink.href=s.deployLatest;
+    latestLink.textContent=s.deployLatest.replace(/^https?:\/\/[^/]+\//,'').replace(/HOPI_AppIQ_WebPage\/Development\//,'');
+    latestRow.style.display='';
+  } else { latestRow.style.display='none'; }
+}
+
+window.studioAction=function(action){
+  var btn=document.getElementById('studio-btn-'+action),statusEl=document.getElementById('studio-'+action+'-status');
+  if(btn)btn.disabled=true;
+  if(statusEl){statusEl.textContent='Spou\u0161t\u00edm\u2026';statusEl.style.color='#f0883e';}
+  var a=document.createElement('a');a.href='appiq:'+action;a.style.display='none';document.body.appendChild(a);a.click();document.body.removeChild(a);
+  var preAt=_studioStatus?_studioStatus[action+'At']:null,polls=0;
+  var iv=setInterval(function(){
+    polls++;
+    if(polls>80){clearInterval(iv);if(btn)btn.disabled=false;if(statusEl){statusEl.textContent='Timeout — zkontroluj PowerShell';statusEl.style.color='#f85149';}return;}
+    fetch('../../../_status.json?t='+Date.now())
+      .then(function(r){return r.ok?r.json():null;})
+      .then(function(s){
+        if(!s)return;var newAt=s[action+'At'];
+        if(newAt&&newAt!==preAt){
+          clearInterval(iv);_studioStatus=s;renderStudioRelease();
+          if(btn)btn.disabled=false;if(statusEl)statusEl.textContent='';
+          if(action==='archive'){
+            showToast('Archivace dokon\u010dena \u2713');
+            loadArchiveProtocol(s.archiveWeb);
+          } else {
+            showToast('Deploy dokon\u010den \u2713');
+          }
+        }
+      }).catch(function(){});
+  },3000);
+};
+
+// ── Archive Protocol Modal ────────────────────────────────────────────────
+function loadArchiveProtocol(stamp){
+  if(!stamp)return;
+  // admin/index.html je v HOPI_AppIQ_WebPage/Development/admin/
+  // Archive je v HOPI_AppIQ_WebPage/Archive/{stamp}/
+  var url='../../Archive/'+stamp+'/ARCHIVE_PROTOCOL.json?t='+Date.now();
+  document.getElementById('protOverlay').style.display='flex';
+  document.getElementById('protBody').innerHTML='<div class="prot-nodata">Na\u010d\u00edt\u00e1m protokol\u2026</div>';
+  document.getElementById('protTitle').textContent='Protokol archivace';
+  document.getElementById('protSub').textContent=stamp;
+  document.getElementById('protBadge').textContent='';
+  document.getElementById('protBadge').className='prot-badge';
+  fetch(url)
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(d){renderArchiveProtocol(d);})
+    .catch(function(e){
+      document.getElementById('protBody').innerHTML=
+        '<div class="prot-nodata">\u26a0\ufe0f Nepoda\u0159ilo se na\u010d\u00edst ARCHIVE_PROTOCOL.json<br><small style="opacity:.6">'+e.message+'</small></div>';
+    });
+}
+
+function renderArchiveProtocol(d){
+  var badge=document.getElementById('protBadge');
+  var status=d.status||'?';
+  badge.textContent=status==='OK'?'\u2705 OK':status==='WARN'?'\u26a0\ufe0f WARN':'\u274c CHYBA';
+  badge.className='prot-badge '+(status==='OK'?'prot-badge-ok':status==='WARN'?'prot-badge-warn':'prot-badge-err');
+  document.getElementById('protTitle').textContent='Protokol archivace '+d.version;
+  document.getElementById('protSub').textContent=(d.session||'')+(d.timestamp?' \u00b7 '+d.timestamp:'');
+
+  var html='';
+
+  // Statistiky
+  var st=d.stats||{};
+  html+='<div class="prot-section">';
+  html+='<div class="prot-section-hdr">\ud83d\udcca Statistiky</div>';
+  html+='<div class="prot-stats-grid">';
+  html+='<div class="prot-stat-chip"><span>Soubor\u016f</span>'+esc(st.totalFiles||0)+'</div>';
+  html+='<div class="prot-stat-chip"><span>Velikost</span>'+(st.totalSizeKb||0)+' kB</div>';
+  if(st.previousTotal){html+='<div class="prot-stat-chip"><span>P\u0159edchoz\u00ed</span>'+esc(st.previousTotal)+' soubor\u016f</div>';}
+  var bt=st.byType||{};
+  var exts=Object.keys(bt).sort();
+  for(var i=0;i<exts.length;i++){
+    html+='<div class="prot-stat-chip"><span>'+esc(exts[i])+'</span>'+esc(bt[exts[i]])+'</div>';
+  }
+  html+='</div></div>';
+
+  // Verify
+  var vf=d.verify||{};
+  var checks=vf.checks||[];
+  html+='<div class="prot-section">';
+  html+='<div class="prot-section-hdr">'+(vf.failed===0?'\u2705':'\u26a0\ufe0f')+' Verify ('+esc(vf.passed||0)+'/'+esc((vf.passed||0)+(vf.failed||0))+' OK)</div>';
+  html+='<div class="prot-verify-list">';
+  for(var j=0;j<checks.length;j++){
+    var c=checks[j];
+    html+='<div class="prot-verify-item '+(c.ok?'ok':'fail')+'">'+(c.ok?'\u2713':'\u2717')+' '+esc(c.file)+'</div>';
+  }
+  html+='</div></div>';
+
+  // Diff
+  var df=d.diff||{};
+  html+='<div class="prot-section">';
+  html+='<div class="prot-section-hdr">\ud83d\udd04 Diff'+(df.previousSession?' oproti '+esc(df.previousSession):'')+'</div>';
+  var added=df.added||[],removed=df.removed||[],changed=df.changed||[];
+  if(!added.length&&!removed.length&&!changed.length){
+    html+='<div style="font-size:12px;color:#8b949e;">Beze zm\u011bn</div>';
+  } else {
+    if(added.length){
+      html+='<div class="prot-diff-row"><div class="prot-diff-label added">+ '+added.length+' p\u0159idano</div>';
+      html+='<div class="prot-diff-pills">';
+      var showAdd=Math.min(added.length,12);
+      for(var a=0;a<showAdd;a++) html+='<span class="prot-pill prot-pill-add">'+esc(added[a])+'</span>';
+      if(added.length>showAdd) html+='<span class="prot-pill prot-pill-more">+' +(added.length-showAdd)+' dal\u0161\u00edch</span>';
+      html+='</div></div>';
+    }
+    if(removed.length){
+      html+='<div class="prot-diff-row"><div class="prot-diff-label removed">\u2212 '+removed.length+' odstran\u011bno</div>';
+      html+='<div class="prot-diff-pills">';
+      var showRem=Math.min(removed.length,12);
+      for(var r=0;r<showRem;r++) html+='<span class="prot-pill prot-pill-rem">'+esc(removed[r])+'</span>';
+      if(removed.length>showRem) html+='<span class="prot-pill prot-pill-more">+'+(removed.length-showRem)+' dal\u0161\u00edch</span>';
+      html+='</div></div>';
+    }
+    if(changed.length){
+      html+='<div class="prot-diff-row"><div class="prot-diff-label changed">\u007e '+changed.length+' zm\u011bn\u011bno</div>';
+      html+='<div class="prot-diff-pills">';
+      var showChg=Math.min(changed.length,12);
+      for(var ch=0;ch<showChg;ch++) html+='<span class="prot-pill prot-pill-chg">'+esc(changed[ch])+'</span>';
+      if(changed.length>showChg) html+='<span class="prot-pill prot-pill-more">+'+(changed.length-showChg)+' dal\u0161\u00edch</span>';
+      html+='</div></div>';
+    }
+  }
+  html+='</div>';
+
+  // Changelog
+  if(d.changelog){
+    html+='<div class="prot-section">';
+    html+='<div class="prot-section-hdr">\ud83d\udcdd Zm\u011bny v t\u00e9to verzi</div>';
+    html+='<pre class="prot-changelog">'+esc(d.changelog)+'</pre>';
+    html+='</div>';
+  }
+
+  document.getElementById('protBody').innerHTML=html;
+}
+
+function closeArchiveModal(){
+  document.getElementById('protOverlay').style.display='none';
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function showToast(msg,isErr){
+  var t=document.getElementById('acToast');if(!t)return;
+  t.style.background=isErr?'#c62828':'#007d32';
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},3500);
+}
+
+// Load status on page load
+I18n.init();
+loadStudioStatus();
+
+// ── PLATFORM TAB ────────────────────────────────────────────────────
+function initPlatformTab(){
+  var saved=localStorage.getItem('appiq_gh_pat');
+  var st=document.getElementById('patStatus');
+  if(st) { st.className='plat-status '+(saved?'plat-status-ok':''); st.textContent=saved?'&#10003; Token je uložen v tomto prohlížeči.':''; }
+  renderBypassUI();
+}
+
+function savePAT(){
+  var val=document.getElementById('patInput').value.trim();
+  var st=document.getElementById('patStatus');
+  if(!val){st.className='plat-status plat-status-err';st.textContent='Token nesmí být prázdný.';return;}
+  st.className='plat-status'; st.textContent='Ověřuji token…';
+  fetch('https://api.github.com/user',{headers:{'Authorization':'token '+val,'Accept':'application/vnd.github.v3+json'}})
+    .then(function(r){return r.json().then(function(d){return{ok:r.ok,status:r.status,data:d};});})
+    .then(function(res){
+      if(res.ok){
+        localStorage.setItem('appiq_gh_pat',val);
+        document.getElementById('patInput').value='';
+        st.className='plat-status plat-status-ok';
+        st.innerHTML='&#10003; Token platný — uložen jako <strong>'+res.data.login+'</strong>.';
+      } else {
+        st.className='plat-status plat-status-err';
+        st.textContent='Chyba '+res.status+': '+(res.data.message||'Neplatný token')+'. Token NEBYL uložen.';
+      }
+    }).catch(function(e){
+      st.className='plat-status plat-status-err';
+      st.textContent='Síťová chyba: '+e.message;
+    });
+}
+
+function clearPAT(){
+  localStorage.removeItem('appiq_gh_pat');
+  document.getElementById('patInput').value='';
+  var st=document.getElementById('patStatus');
+  st.className='plat-status'; st.textContent='Token byl smazán.';
+}
+
+function toggleBypass(){
+  if(localStorage.getItem('appiq_dev_bypass')){
+    localStorage.removeItem('appiq_dev_bypass');
+  } else {
+    localStorage.setItem('appiq_dev_bypass','1');
+  }
+  renderBypassUI();
+}
+
+function renderBypassUI(){
+  var active=!!localStorage.getItem('appiq_dev_bypass');
+  var badge=document.getElementById('bypassBadge');
+  var btn=document.getElementById('bypassBtn');
+  if(badge){badge.className='plat-bypass-badge '+(active?'bypass-on':'bypass-off');badge.textContent=active?'ON — AKTIVNÍ':'OFF';}
+  if(btn){btn.textContent=active?'Deaktivovat':'Aktivovat';btn.className='plat-btn '+(active?'plat-btn-clear':'plat-btn-save');}
+}
+</script>
+<script src="../../../../_hopiq.js"></script>
+<script src="../_ver-badge.js"></script>
+</body>
+</html>

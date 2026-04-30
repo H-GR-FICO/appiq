@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2026-04-25",
+  "audits": [
+    {
+      "id": "AUDIT-001",
+      "date": "2026-04-25",
+      "scope": "Track & Record systém — 5 vrstev (Hooks · Records · Context · Session · Archive)",
+      "duration_min": 60,
+      "auditor": ["HU-GOGD", "AI-CLAU"],
+      "findings_count": 10,
+      "gaps": [
+        { "id": "G1", "title": "PostCompact hook chybí", "severity": "CRITICAL", "status": "FIXED",
+          "fix": "Vytvořen _postcompact_signal.ps1 + PostCompact hook v settings.local.json" },
+        { "id": "G2", "title": "DISCUSSION_TRANSCRIPT.md bez zálohy", "severity": "CRITICAL", "status": "FIXED",
+          "fix": "Přidán do $metaFiles v _run_archive_now.ps1" },
+        { "id": "G3", "title": "COMPACT_LOG.md bez zálohy", "severity": "CRITICAL", "status": "FIXED",
+          "fix": "Přidán do $metaFiles v _run_archive_now.ps1" },
+        { "id": "G4", "title": "BRIEFING bez compact snapshot", "severity": "HIGH", "status": "FIXED",
+          "fix": "Přidán zápis _compact_snapshot.md do _precompact_flush.ps1" },
+        { "id": "G5", "title": "Transcript roste bez limitu", "severity": "MEDIUM", "status": "FIXED",
+          "fix": "Vytvořen _transcript_rotate.ps1 (rotace po 30 dnech)" },
+        { "id": "G6", "title": "ROOT_MANIFEST.md zastaralý", "severity": "HIGH", "status": "FIXED",
+          "fix": "Přidány 4 nové soubory: _precompact_flush.ps1, _postcompact_signal.ps1, _transcript_rotate.ps1, COMPACT_LOG.md" },
+        { "id": "G7", "title": "OIL_CONTEXT konzistence bez kontroly", "severity": "MEDIUM", "status": "FIXED",
+          "fix": "Check přidán do RECORD_COMPACT procedury v CLAUDE.md" },
+        { "id": "G8", "title": "Tool cally mimo transcript", "severity": "LOW", "status": "MITIGATED",
+          "fix": "Tool Call Transparency pravidlo v CLAUDE.md — klíčové výsledky vždy do textu" },
+        { "id": "G9", "title": "DISC sekvence bez validace", "severity": "LOW", "status": "FIXED",
+          "fix": "Vytvořen _disc_validate.ps1 (detekuje mezery, duplicity, next ID)" },
+        { "id": "L3", "title": "L3 kontext jen po CLOSED, ne průběžně", "severity": "HIGH", "status": "FIXED",
+          "fix": "Průběžný [IP NOTE] zápis do OIL_CONTEXT zaveden v CLAUDE.md" }
+      ],
+      "score_before": 75,
+      "score_after": 100,
+      "result": "CLOSED",
+      "disc": "DISC-260425-015",
+      "oil": "AIQ-00474",
+      "notes_cz": "Komplexní audit track & record systémů. Výsledek: systém přešel z 75% na 100% neprůstřelnosti. Všechny kritické mezery opraveny. Zavedena procedura měsíčního auditu (příkaz 'system audit'). Přidána PostCompact Recovery pravidlo + System Audit procedura do CLAUDE.md.",
+      "notes_en": "Comprehensive audit of track & record systems. Result: system moved from 75% to 100% bulletproof. All critical gaps fixed. Monthly audit procedure established (command 'system audit'). PostCompact Recovery rule + System Audit procedure added to CLAUDE.md."
+    }
+  ]
+}

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meeting Room — MNG Cockpit · HOPI AppIQ</title>
+  <link rel="stylesheet" href="_cockpit.css"/>
+  <style>
+    /* ── Tabs ───────────────────────────────────── */
+    .mr-tabs {
+      display: flex; gap: 0; margin-bottom: 28px;
+      border-bottom: 1px solid var(--c-border);
+    }
+    .mr-tab {
+      padding: 12px 24px; font-size: 13px; font-weight: 600;
+      color: var(--c-muted); cursor: pointer; border-bottom: 2px solid transparent;
+      transition: color .15s, border-color .15s; margin-bottom: -1px;
+    }
+    .mr-tab:hover         { color: var(--c-white); }
+    .mr-tab.active        { color: var(--c-white); border-bottom-color: var(--c-orange); }
+    .mr-panel             { display: none; }
+    .mr-panel.active      { display: block; }
+
+    /* ══════════════════════════════════════════════
+       PANEL 1 — FLIPCHART
+    ══════════════════════════════════════════════ */
+    .fc-toolbar {
+      display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; align-items: center;
+    }
+    .fc-btn {
+      padding: 8px 14px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); font-size: 12px; color: var(--c-text);
+      cursor: pointer; transition: all .15s;
+    }
+    .fc-btn:hover     { border-color: var(--c-orange); color: var(--c-white); }
+    .fc-btn.active    { background: var(--c-orange); border-color: var(--c-orange); color: #fff; }
+    .fc-color-swatch  {
+      width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+      border: 2px solid transparent; transition: border-color .15s;
+    }
+    .fc-color-swatch.active { border-color: var(--c-white); }
+
+    /* Sticky notes board */
+    .sticky-board {
+      min-height: 400px; background: var(--c-bg2);
+      border: 1px solid var(--c-border); border-radius: var(--c-radius);
+      padding: 20px; position: relative;
+      display: flex; flex-wrap: wrap; gap: 16px; align-content: flex-start;
+    }
+    .sticky-note {
+      width: 180px; min-height: 120px; padding: 12px;
+      border-radius: 8px; font-size: 12px; line-height: 1.5;
+      position: relative; cursor: default;
+      box-shadow: 2px 3px 8px rgba(0,0,0,.4);
+    }
+    .sticky-note.color-y { background: #fbbf24; color: #1a1a1a; }
+    .sticky-note.color-g { background: #4ade80; color: #1a1a1a; }
+    .sticky-note.color-b { background: #60a5fa; color: #1a1a1a; }
+    .sticky-note.color-p { background: #c084fc; color: #1a1a1a; }
+    .sticky-note.color-r { background: #f87171; color: #1a1a1a; }
+    .sticky-note textarea {
+      width: 100%; min-height: 80px; background: transparent;
+      border: none; outline: none; font-size: 12px; line-height: 1.5;
+      color: inherit; resize: none; font-family: inherit;
+    }
+    .sticky-note-del {
+      position: absolute; top: 4px; right: 6px;
+      font-size: 13px; cursor: pointer; opacity: .4;
+      background: none; border: none; color: inherit;
+    }
+    .sticky-note-del:hover { opacity: 1; }
+
+    /* Add note button */
+    .sticky-add {
+      width: 180px; min-height: 120px; padding: 12px;
+      background: transparent; border: 2px dashed var(--c-border);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 28px; color: var(--c-muted); transition: all .15s;
+    }
+    .sticky-add:hover { border-color: var(--c-orange); color: var(--c-orange); }
+
+    /* ══════════════════════════════════════════════
+       PANEL 2 — DISCUSSION BOARD
+    ══════════════════════════════════════════════ */
+    .db-new-thread {
+      display: flex; gap: 10px; margin-bottom: 24px; align-items: flex-start;
+    }
+    .db-input {
+      flex: 1; padding: 10px 14px; background: var(--c-bg2);
+      border: 1px solid var(--c-border); border-radius: var(--c-radius);
+      color: var(--c-white); font-size: 13px; outline: none; resize: vertical; min-height: 44px;
+      font-family: inherit;
+    }
+    .db-input:focus     { border-color: var(--c-orange); }
+    .db-input::placeholder { color: var(--c-muted); }
+    .db-submit {
+      padding: 10px 20px; background: var(--c-orange); border: none;
+      border-radius: var(--c-radius); color: #fff; font-size: 13px;
+      font-weight: 700; cursor: pointer; white-space: nowrap;
+    }
+    .db-submit:hover { opacity: .9; }
+
+    .db-threads { display: flex; flex-direction: column; gap: 16px; }
+    .db-thread {
+      background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); overflow: hidden;
+    }
+    .db-thread-header {
+      padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
+    }
+    .db-thread-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--c-orange); display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .db-thread-meta { flex: 1; }
+    .db-thread-author { font-size: 12px; font-weight: 700; color: var(--c-white); }
+    .db-thread-time   { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); }
+    .db-thread-text   { font-size: 13px; color: var(--c-text); margin-top: 4px; line-height: 1.6; }
+    .db-thread-actions {
+      padding: 0 16px 10px 60px; display: flex; gap: 12px;
+    }
+    .db-act-btn {
+      font-size: 12px; color: var(--c-muted); background: none; border: none;
+      cursor: pointer; padding: 4px 0;
+    }
+    .db-act-btn:hover { color: var(--c-orange); }
+    .db-votes { font-family: var(--c-font-sans); }
+
+    .db-replies {
+      border-top: 1px solid var(--c-border);
+      background: rgba(0,0,0,.15);
+    }
+    .db-reply {
+      padding: 10px 16px 10px 60px; display: flex; gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,.03);
+    }
+    .db-reply:last-child { border: none; }
+    .db-reply-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--c-violet); display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .db-reply-body { flex: 1; }
+    .db-reply-author { font-size: 11px; font-weight: 700; color: var(--c-white); }
+    .db-reply-text   { font-size: 12px; color: var(--c-text); margin-top: 2px; line-height: 1.5; }
+
+    .db-reply-input-row {
+      padding: 8px 16px 12px 60px; display: flex; gap: 8px;
+    }
+    .db-reply-input {
+      flex: 1; padding: 7px 12px; background: var(--c-bg);
+      border: 1px solid var(--c-border); border-radius: var(--c-radius);
+      color: var(--c-white); font-size: 12px; outline: none; font-family: inherit;
+    }
+    .db-reply-input:focus { border-color: var(--c-orange); }
+    .db-reply-btn {
+      padding: 7px 12px; background: var(--c-bg2); border: 1px solid var(--c-border);
+      border-radius: var(--c-radius); color: var(--c-text); font-size: 12px; cursor: pointer;
+    }
+    .db-reply-btn:hover { border-color: var(--c-orange); color: var(--c-white); }
+
+    .db-empty {
+      padding: 48px; text-align: center; color: var(--c-muted); font-size: 14px;
+    }
+
+    /* ── Participant selector ────────────────── */
+    .who-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+    .who-label { font-size: 11px; color: var(--c-muted); font-family: var(--c-font-sans); white-space: nowrap; }
+    .who-chip {
+      padding: 5px 13px; border: 1px solid var(--c-border); border-radius: 20px;
+      font-size: 11px; font-family: var(--c-font-sans); color: var(--c-muted);
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .who-chip:hover { border-color: rgba(249,115,22,.4); color: #fb923c; }
+    .who-chip.active { background: rgba(249,115,22,.12); border-color: var(--c-orange); color: var(--c-orange); font-weight: 700; }
+  </style>
+</head>
+<body>
+<div id="cockpit-shell"></div>
+
+<main class="cockpit-page">
+
+  <!-- Header -->
+  <h1 style="font-size:22px;font-weight:800;color:var(--c-white);margin-bottom:6px;">Meeting Room</h1>
+  <p style="font-size:14px;color:var(--c-muted);margin-bottom:24px;">
+    Strategická místnost pro real-time spolupráci, brainstorming a diskuse.
+    Data uložena lokálně (localStorage).
+  </p>
+
+  <!-- Tabs -->
+  <div class="mr-tabs">
+    <div class="mr-tab active" onclick="switchTab('flipchart',this)">📌 Digital Flipchart</div>
+    <div class="mr-tab" onclick="switchTab('discuss',this)">💬 Discussion Board</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PANEL 1 — FLIPCHART
+  ════════════════════════════════════════════ -->
+  <div id="panel-flipchart" class="mr-panel active">
+
+    <div class="fc-toolbar">
+      <span style="font-size:12px;color:var(--c-muted);margin-right:4px;">Barva:</span>
+      <div class="fc-color-swatch active" style="background:#fbbf24;" data-color="color-y" onclick="setColor('color-y',this)"></div>
+      <div class="fc-color-swatch" style="background:#4ade80;" data-color="color-g" onclick="setColor('color-g',this)"></div>
+      <div class="fc-color-swatch" style="background:#60a5fa;" data-color="color-b" onclick="setColor('color-b',this)"></div>
+      <div class="fc-color-swatch" style="background:#c084fc;" data-color="color-p" onclick="setColor('color-p',this)"></div>
+      <div class="fc-color-swatch" style="background:#f87171;" data-color="color-r" onclick="setColor('color-r',this)"></div>
+      <div style="flex:1;"></div>
+      <button class="fc-btn" onclick="clearBoard()" style="color:var(--c-red);">🗑 Vymazat vše</button>
+      <button class="fc-btn" onclick="exportNotes()">📥 Export JSON</button>
+    </div>
+
+    <div class="sticky-board" id="sticky-board">
+      <div class="sticky-add" onclick="addNote()" title="Přidat sticky note">＋</div>
+    </div>
+
+    <p style="font-size:11px;color:var(--c-muted);margin-top:12px;">
+      💾 Poznámky se automaticky ukládají do localStorage tohoto prohlížeče.
+    </p>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       PANEL 2 — DISCUSSION BOARD
+  ════════════════════════════════════════════ -->
+  <div id="panel-discuss" class="mr-panel">
+
+    <!-- Participant selector — persistent, platí pro vlákna i odpovědi -->
+    <div class="who-row">
+      <span class="who-label">Kdo píše:</span>
+      <div class="who-chip active" data-code="DG" data-avatar="DG" data-name="David Gogela" onclick="selectAuthor(this)">DG · David</div>
+      <div class="who-chip" data-code="AI" data-avatar="AI" data-name="Claude (AI)" onclick="selectAuthor(this)">AI · Claude</div>
+      <div class="who-chip" data-code="ARTIN" data-avatar="AR" data-name="ARTIN s.r.o." onclick="selectAuthor(this)">ARTIN</div>
+      <div class="who-chip" data-code="INTECS" data-avatar="IN" data-name="INTECS" onclick="selectAuthor(this)">INTECS</div>
+      <div class="who-chip" data-code="HOPI" data-avatar="HM" data-name="HOPI Management" onclick="selectAuthor(this)">HOPI-MGMT</div>
+      <div class="who-chip" data-code="EXT" data-avatar="?" data-name="Jiný" onclick="selectAuthor(this)">Jiný…</div>
+    </div>
+
+    <div class="db-new-thread">
+      <textarea class="db-input" id="new-thread-text" rows="2"
+        placeholder="Zapiš myšlenku, otázku nebo téma k diskusi..." ></textarea>
+      <button class="db-submit" onclick="addThread()">Přidat →</button>
+    </div>
+
+    <div class="db-threads" id="db-threads">
+      <div class="db-empty" id="db-empty">
+        <div style="font-size:32px;margin-bottom:8px;">💬</div>
+        Žádné diskuse zatím. Začni první příspěvkem.
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="_shell.js"></script>
+<script>
+Shell.init({
+  section:    {cs:'Zasedací místnost', en:'Meeting Room'},
+  sectionNum: '20',
+  backUrl:    '../MANAGEMENT_COCKPIT.html',
+  music:      '../cockpit-music.mp3'
+});
+
+(function() {
+  if (Shell.getLang() !== 'en') return;
+  var sub = document.querySelector('p[style*="14px"][style*="color:var(--c-muted)"]');
+  if (sub) sub.textContent = 'Strategic room for real-time collaboration, brainstorming and discussions. Data stored locally (localStorage).';
+  var colorLbl = document.querySelector('.fc-toolbar span');
+  if (colorLbl) colorLbl.textContent = 'Color:';
+  var clearBtn = document.querySelector('.fc-btn[onclick*="clearBoard"]');
+  if (clearBtn) clearBtn.innerHTML = '🗑 Clear all';
+  var addEl = document.querySelector('.sticky-add');
+  if (addEl) addEl.title = 'Add sticky note';
+  var noteInfo = document.querySelector('#panel-flipchart > p');
+  if (noteInfo) noteInfo.textContent = '💾 Notes are automatically saved to this browser\'s localStorage.';
+  var whoLbl = document.querySelector('.who-label');
+  if (whoLbl) whoLbl.textContent = 'Who writes:';
+  var otherChip = document.querySelector('[data-code="EXT"]');
+  if (otherChip) otherChip.textContent = 'Other…';
+  var threadInput = document.getElementById('new-thread-text');
+  if (threadInput) threadInput.placeholder = 'Write a thought, question or topic for discussion...';
+  var addBtn = document.querySelector('.db-submit');
+  if (addBtn) addBtn.textContent = 'Add →';
+  var emptyMsg = document.querySelector('.db-empty');
+  if (emptyMsg) { var icon = emptyMsg.querySelector('div'); emptyMsg.textContent = 'No discussions yet. Start with the first post.'; if (icon) emptyMsg.prepend(icon); }
+})();
+
+/* ── Tab switching ───────────────────────────── */
+function switchTab(name, el) {
+  document.querySelectorAll('.mr-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mr-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+/* ════════════════════════════════════════════════
+   FLIPCHART — Sticky Notes
+════════════════════════════════════════════════ */
+const NOTES_KEY = 'mr_sticky_notes';
+let activeColor = 'color-y';
+
+function setColor(c, el) {
+  activeColor = c;
+  document.querySelectorAll('.fc-color-swatch').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function addNote(text, color) {
+  const col   = color || activeColor;
+  const board = document.getElementById('sticky-board');
+  const addBtn = board.querySelector('.sticky-add');
+
+  const note = document.createElement('div');
+  note.className = 'sticky-note ' + col;
+  note.dataset.color = col;
+
+  const del = document.createElement('button');
+  del.className = 'sticky-note-del';
+  del.textContent = '✕';
+  del.onclick = () => { note.remove(); saveNotes(); };
+
+  const ta = document.createElement('textarea');
+  ta.placeholder = 'Napište poznámku...';
+  ta.value = text || '';
+  ta.oninput = saveNotes;
+
+  note.appendChild(del);
+  note.appendChild(ta);
+  board.insertBefore(note, addBtn);
+
+  if (!text) ta.focus();
+  saveNotes();
+}
+
+function saveNotes() {
+  const notes = [];
+  document.querySelectorAll('.sticky-note').forEach(n => {
+    const ta = n.querySelector('textarea');
+    notes.push({ text: ta.value, color: n.dataset.color });
+  });
+  localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+}
+
+function loadNotes() {
+  try {
+    const data = JSON.parse(localStorage.getItem(NOTES_KEY) || '[]');
+    data.forEach(n => addNote(n.text, n.color));
+  } catch(e) {}
+}
+
+function clearBoard() {
+  if (!confirm('Vymazat všechny sticky notes?')) return;
+  document.querySelectorAll('.sticky-note').forEach(n => n.remove());
+  localStorage.removeItem(NOTES_KEY);
+}
+
+function exportNotes() {
+  const notes = [];
+  document.querySelectorAll('.sticky-note').forEach(n => {
+    const ta = n.querySelector('textarea');
+    notes.push({ text: ta.value, color: n.dataset.color });
+  });
+  const blob = new Blob([JSON.stringify(notes, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'meeting-room-notes-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+
+loadNotes();
+
+/* ════════════════════════════════════════════════
+   DISCUSSION BOARD
+════════════════════════════════════════════════ */
+const THREADS_KEY = 'mr_discussion_threads';
+let threads = [];
+
+function loadThreads() {
+  try { threads = JSON.parse(localStorage.getItem(THREADS_KEY) || '[]'); }
+  catch(e) { threads = []; }
+  renderThreads();
+}
+
+function saveThreads() {
+  localStorage.setItem(THREADS_KEY, JSON.stringify(threads));
+}
+
+function selectAuthor(el) {
+  document.querySelectorAll('.who-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function getAuthor() {
+  const el = document.querySelector('.who-chip.active');
+  return el ? { name: el.dataset.name, avatar: el.dataset.avatar } : { name: 'David Gogela', avatar: 'DG' };
+}
+
+function addThread() {
+  const ta   = document.getElementById('new-thread-text');
+  const text = ta.value.trim();
+  if (!text) return;
+  const { name, avatar } = getAuthor();
+  threads.unshift({
+    id: Date.now(), text,
+    author: name, avatar,
+    time:   new Date().toLocaleString('cs-CZ'),
+    votes: 0, voted: false, replies: []
+  });
+  saveThreads();
+  renderThreads();
+  ta.value = '';
+}
+
+function voteThread(id) {
+  const t = threads.find(t => t.id === id);
+  if (!t) return;
+  t.voted = !t.voted;
+  t.votes += t.voted ? 1 : -1;
+  saveThreads();
+  renderThreads();
+}
+
+function addReply(threadId) {
+  const inp  = document.getElementById('reply-input-' + threadId);
+  const text = inp.value.trim();
+  if (!text) return;
+  const t = threads.find(t => t.id === threadId);
+  if (!t) return;
+  const { name, avatar } = getAuthor();
+  t.replies.push({
+    id: Date.now(), text,
+    author: name, avatar,
+    time: new Date().toLocaleString('cs-CZ')
+  });
+  saveThreads();
+  renderThreads();
+}
+
+function renderThreads() {
+  const container = document.getElementById('db-threads');
+  const empty     = document.getElementById('db-empty');
+
+  if (threads.length === 0) {
+    empty.style.display = 'block';
+    // Remove old thread nodes
+    Array.from(container.children).forEach(c => {
+      if (c !== empty) c.remove();
+    });
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Re-render all threads
+  Array.from(container.children).forEach(c => {
+    if (c !== empty) c.remove();
+  });
+
+  threads.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'db-thread';
+    el.innerHTML = `
+      <div class="db-thread-header">
+        <div class="db-thread-avatar">${t.avatar}</div>
+        <div class="db-thread-meta">
+          <div class="db-thread-author">${t.author} <span style="font-weight:400;color:var(--c-muted);font-size:11px;">· ${t.time}</span></div>
+          <div class="db-thread-text">${escHtml(t.text)}</div>
+        </div>
+      </div>
+      <div class="db-thread-actions">
+        <button class="db-act-btn db-votes" onclick="voteThread(${t.id})">
+          ${t.voted ? '👍' : '👍'} ${t.votes} hlasů
+        </button>
+        <button class="db-act-btn" onclick="focusReply(${t.id})">↩ Odpovědět</button>
+      </div>
+      ${t.replies.length > 0 ? `
+      <div class="db-replies">
+        ${t.replies.map(r => `
+          <div class="db-reply">
+            <div class="db-reply-avatar">${r.avatar}</div>
+            <div class="db-reply-body">
+              <div class="db-reply-author">${r.author} <span style="font-weight:400;color:var(--c-muted);">· ${r.time}</span></div>
+              <div class="db-reply-text">${escHtml(r.text)}</div>
+            </div>
+          </div>`).join('')}
+        <div class="db-reply-input-row">
+          <input class="db-reply-input" id="reply-input-${t.id}" placeholder="Napsat odpověď..."
+                 onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addReply(${t.id});}"/>
+          <button class="db-reply-btn" onclick="addReply(${t.id})">Odeslat</button>
+        </div>
+      </div>` : `
+      <div class="db-replies" style="display:none;" id="replies-${t.id}">
+        <div class="db-reply-input-row">
+          <input class="db-reply-input" id="reply-input-${t.id}" placeholder="Napsat odpověď..."
+                 onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addReply(${t.id});}"/>
+          <button class="db-reply-btn" onclick="addReply(${t.id})">Odeslat</button>
+        </div>
+      </div>`}
+    `;
+    container.appendChild(el);
+  });
+}
+
+function focusReply(threadId) {
+  const inp = document.getElementById('reply-input-' + threadId);
+  if (inp) {
+    const repliesEl = document.getElementById('replies-' + threadId);
+    if (repliesEl) repliesEl.style.display = 'block';
+    inp.focus();
+  }
+}
+
+function escHtml(text) {
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+loadThreads();
+</script>
+</body>
+</html>
