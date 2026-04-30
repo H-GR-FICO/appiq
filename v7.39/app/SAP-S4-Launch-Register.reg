@@ -1,0 +1,18 @@
+Windows Registry Editor Version 5.00
+
+; SAP S/4 HANA ERP System – custom URL protocol handler (bez admin práv)
+; Double-click this file once to register.
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\sap-s4]
+@="SAP S/4 HANA ERP System"
+"URL Protocol"=""
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\sap-s4\DefaultIcon]
+@="\"C:\\Program Files (x86)\\SAP\\FrontEnd\\SAPgui\\saplogon.exe\",0"
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\sap-s4\shell]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\sap-s4\shell\open]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\sap-s4\shell\open\command]
+@="\"C:\\Program Files (x86)\\SAP\\FrontEnd\\SAPgui\\saplogon.exe\""

@@ -1135,5 +1135,232 @@ td.bad { color: var(--red); font-weight: 600; }
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════
+     8. ALT-B DEEP DIVE — AI Dev Studio Klášterec
+═══════════════════════════════════════════════ -->
+<div class="page">
+  <div class="section-label">08 · Alt-B Deep Dive</div>
+  <div class="section-title">AI Dev Studio — <span style="color:var(--violet)">Klášterec</span></div>
+
+  <div style="background:var(--violet-light);border-left:4px solid var(--violet);border-radius:8px;padding:16px 20px;margin-bottom:20px;">
+    <p style="font-size:12px;font-weight:700;color:var(--violet-deep);margin-bottom:4px;">Koncept jednou větou</p>
+    <p style="font-size:12px;color:#374151;">Fyzicky oddělená, právně samostatná, AI-first vývojová jednotka v Klášterci — financovaná DGO seedem a vlastními SaaS příjmy, která dodává hotové aplikace do trhu i do Skupiny způsobem, jakým to HOPI IT z principu nedokáže.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;">
+    <div style="background:var(--navy);color:white;border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">🏢</div>
+      <div style="font-size:11px;font-weight:700;color:var(--violet);margin-bottom:3px;">LOKACE</div>
+      <div style="font-size:11px;">Klášterec n/O<br>Dostavba Admin Budovy KL</div>
+    </div>
+    <div style="background:var(--navy);color:white;border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">⚡</div>
+      <div style="font-size:11px;font-weight:700;color:var(--violet);margin-bottom:3px;">AGILITA</div>
+      <div style="font-size:11px;">Prototype za týdny<br>MVP za měsíce</div>
+    </div>
+    <div style="background:var(--navy);color:white;border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">🤖</div>
+      <div style="font-size:11px;font-weight:700;color:var(--violet);margin-bottom:3px;">AI-FIRST</div>
+      <div style="font-size:11px;">AI agenti = stálí<br>členové týmu</div>
+    </div>
+    <div style="background:var(--navy);color:white;border-radius:8px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">🔓</div>
+      <div style="font-size:11px;font-weight:700;color:var(--violet);margin-bottom:3px;">NEZÁVISLOST</div>
+      <div style="font-size:11px;">Vlastní stack<br>Žádný SAP lock-in</div>
+    </div>
+  </div>
+
+  <!-- PEOPLE TABLE -->
+  <h3>Tým — Phase 1 (launch, 3 osoby + AI)</h3>
+  <table>
+    <tr><th>Role</th><th>Počet</th><th>Model</th><th>Náklady/měsíc</th><th>Náplň práce</th></tr>
+    <tr>
+      <td><strong>Studio Director / CPO</strong></td>
+      <td style="text-align:center">1</td>
+      <td>DGO — zakladatel</td>
+      <td>0 Kč (seed equity)</td>
+      <td>Produkt, strategie, AI layer, CEO komunikace</td>
+    </tr>
+    <tr>
+      <td><strong>Lead Full-Stack Developer</strong></td>
+      <td style="text-align:center">1</td>
+      <td>Kontrakt / IČO</td>
+      <td>90 000 – 110 000 Kč</td>
+      <td>Backend (Node.js / .NET), DB, API design, senior review</td>
+    </tr>
+    <tr>
+      <td><strong>Mid Full-Stack Developer</strong></td>
+      <td style="text-align:center">1</td>
+      <td>Kontrakt / IČO</td>
+      <td>60 000 – 80 000 Kč</td>
+      <td>Frontend, feature delivery, testing, integrace</td>
+    </tr>
+    <tr>
+      <td><strong>Product Designer / UX</strong></td>
+      <td style="text-align:center">1</td>
+      <td>Part-time / IČO</td>
+      <td>40 000 – 55 000 Kč</td>
+      <td>UI design, prototypy, brand konzistence, uživatelské testování</td>
+    </tr>
+    <tr>
+      <td><strong>AI Agenti (Claude, Cursor, GitHub CoPilot)</strong></td>
+      <td style="text-align:center">∞</td>
+      <td>SaaS licence</td>
+      <td>viz SW tabulka</td>
+      <td>Kódování, review, dokumentace, testování — 24/7</td>
+    </tr>
+    <tr style="background:var(--violet-light);">
+      <td colspan="3"><strong>Celkové mzdové náklady / měsíc (Phase 1)</strong></td>
+      <td><strong>190 000 – 245 000 Kč</strong></td>
+      <td style="font-size:11px;color:var(--gray)">Contractors, bez odvodů zaměstnavatele</td>
+    </tr>
+  </table>
+
+  <p style="font-size:11px;color:var(--gray);margin:4px 0 16px;">Phase 2 (2027): rozšíření o +2 developery + delivery/ops → ~350–400 K Kč/měsíc. Rozhodnutí na základě SaaS revenue.</p>
+
+  <!-- HW TABLE -->
+  <h3>Hardware — jednorázová investice (3 pracoviště)</h3>
+  <table>
+    <tr><th>Položka</th><th>Ks</th><th>Cena/ks</th><th>Celkem</th><th>Účel</th></tr>
+    <tr><td>Dell XPS 15 Developer Edition (i9, 32 GB RAM, 1 TB SSD)</td><td>3</td><td>52 000 Kč</td><td>156 000 Kč</td><td>Primární vývojový notebook — HOPI standard</td></tr>
+    <tr><td>Monitor 27" 4K Dell UltraSharp (USB-C)</td><td>3</td><td>12 000 Kč</td><td>36 000 Kč</td><td>Dual-screen setup pro každého</td></tr>
+    <tr><td>Dell Precision Tower 3680 (AI workstation)</td><td>1</td><td>92 000 Kč</td><td>92 000 Kč</td><td>Lokální AI modely, render, batch jobs</td></tr>
+    <tr><td>NAS Storage (Synology)</td><td>1</td><td>28 000 Kč</td><td>28 000 Kč</td><td>Lokální záloha, shared assets</td></tr>
+    <tr><td>Síťová infrastruktura (switch, AP, firewall)</td><td>1 set</td><td>35 000 Kč</td><td>35 000 Kč</td><td>Bezpečná síť, VLAN izolace od HOPI</td></tr>
+    <tr><td>UPS záloha</td><td>1</td><td>9 000 Kč</td><td>9 000 Kč</td><td>Ochrana HW při výpadku</td></tr>
+    <tr><td>Periferie (klávesnice, myš, headset, webkamera)</td><td>3 sety</td><td>6 000 Kč</td><td>18 000 Kč</td><td>Remote meetings, ergonomie</td></tr>
+    <tr style="background:var(--violet-light);">
+      <td colspan="3"><strong>HW CELKEM (jednorázově)</strong></td>
+      <td><strong>374 000 Kč</strong></td>
+      <td style="font-size:11px;color:var(--gray)">±10 % dle konfigurace</td>
+    </tr>
+  </table>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.2</span>
+  </div>
+</div>
+
+<!-- Alt-B strana 2 -->
+<div class="page">
+  <div class="section-label">08 · Alt-B Deep Dive — pokračování</div>
+  <div class="section-title">Software, Investice &amp; Kooperace s HOPI IT</div>
+
+  <!-- SW TABLE -->
+  <h3>Software — roční licence (3 uživatelé)</h3>
+  <table>
+    <tr><th>Nástroj</th><th>Uživatelé</th><th>Kč/měsíc</th><th>Kč/rok</th><th>Kategorie</th></tr>
+    <tr><td>Claude Pro + API (Anthropic)</td><td>3</td><td>2 500</td><td>30 000</td><td>AI coding, analýzy, dokumentace</td></tr>
+    <tr><td>Cursor Pro</td><td>3</td><td>2 700</td><td>32 400</td><td>AI-first IDE, pair programming</td></tr>
+    <tr><td>GitHub Teams + Copilot</td><td>3</td><td>1 500</td><td>18 000</td><td>Verzování, CI/CD, AI code review</td></tr>
+    <tr><td>Microsoft Azure (cloud infra)</td><td>—</td><td>8 000</td><td>96 000</td><td>Hosting, DB, Auth, Functions</td></tr>
+    <tr><td>Microsoft 365 Business</td><td>3</td><td>1 100</td><td>13 200</td><td>Email, Teams, SharePoint</td></tr>
+    <tr><td>Figma Professional</td><td>2</td><td>900</td><td>10 800</td><td>UI design, prototypy</td></tr>
+    <tr><td>Linear (project management)</td><td>5</td><td>750</td><td>9 000</td><td>Tasky, sprinty, roadmap</td></tr>
+    <tr><td>1Password Teams</td><td>5</td><td>400</td><td>4 800</td><td>Password management, bezpečnost</td></tr>
+    <tr><td>Ostatní (monitoring, analytics, CDN)</td><td>—</td><td>1 500</td><td>18 000</td><td>Sentry, Plausible, Cloudflare</td></tr>
+    <tr style="background:var(--violet-light);">
+      <td colspan="2"><strong>SW CELKEM / rok</strong></td>
+      <td><strong>19 350</strong></td>
+      <td><strong>232 200 Kč</strong></td>
+      <td style="font-size:11px;color:var(--gray)">~19 K Kč / měsíc</td>
+    </tr>
+  </table>
+
+  <!-- FIT-OUT TABLE -->
+  <h3 style="margin-top:16px;">Fit-out kanceláří — Klášterec (jednorázově)</h3>
+  <table>
+    <tr><th>Položka</th><th>Odhad</th><th>Poznámka</th></tr>
+    <tr><td>Nábytek — stoly, židle, úložiště (3 pracoviště + meeting)</td><td>80 000 Kč</td><td>Ergonomický setup, stojací stoly</td></tr>
+    <tr><td>Meeting room tech (large display, kamera, audio)</td><td>45 000 Kč</td><td>Hybridní schůzky s HOPI + investory</td></tr>
+    <tr><td>Elektrické rozvody, UTP kabeláž, datové zásuvky</td><td>50 000 Kč</td><td>Součást fit-out Studio prostoru</td></tr>
+    <tr><td>Kuchyňka, odpočinková zóna</td><td>30 000 Kč</td><td>Základ startupu — lidi tráví čas v práci</td></tr>
+    <tr><td>Branding / polepy / tabule</td><td>20 000 Kč</td><td>HOPI TechIQ visual identity</td></tr>
+    <tr style="background:var(--violet-light);"><td><strong>Fit-out CELKEM</strong></td><td><strong>225 000 Kč</strong></td><td>Jednorázově; nájem 400 EUR/m = ~10 000 Kč/měsíc (40 m²)</td></tr>
+  </table>
+
+  <!-- FINANCIAL SUMMARY -->
+  <h3 style="margin-top:16px;">Celková investice — seed potřeba</h3>
+  <div class="fin-highlight">
+    <div class="fin-item">
+      <label>Setup (HW + Fit-out + Právní)</label>
+      <div class="val violet">~670 K Kč</div>
+      <div class="sub">HW 374 K + Fit-out 225 K + Právní 70 K</div>
+    </div>
+    <div class="fin-item">
+      <label>Runway 12 měsíců (tým + SW + nájem)</label>
+      <div class="val violet">~2 870 K Kč</div>
+      <div class="sub">220 K tým + 19 K SW + 10 K nájem = 249 K/m</div>
+    </div>
+    <div class="fin-item">
+      <label>Doporučený seed</label>
+      <div class="val green">3 000 – 3 500 K Kč</div>
+      <div class="sub">12 měsíců runway + setup + rezerva</div>
+    </div>
+  </div>
+
+  <!-- HOPI vs DGO SPLIT -->
+  <h3>Kdo co financuje — vlastnická struktura</h3>
+  <table>
+    <tr><th>Investor</th><th>Typ příspěvku</th><th>Hodnota</th><th>Stake</th></tr>
+    <tr>
+      <td><strong>DGO (David Gogela)</strong></td>
+      <td>Cash seed — primární</td>
+      <td>3 000 – 3 500 K Kč</td>
+      <td style="font-weight:700;color:var(--violet)">80–85 %</td>
+    </tr>
+    <tr>
+      <td><strong>HOPI Group</strong></td>
+      <td>In-kind: IT infrastruktura (Azure tenant, sítě), API přístup k datům (DWH read-only), Microsoft Entra ID / SSO, HOPI brand jako referenční zákazník</td>
+      <td>~150 – 200 K Kč/rok (oceněno)</td>
+      <td style="font-weight:700;color:var(--green)">15–20 %</td>
+    </tr>
+    <tr>
+      <td><strong>Studio (provoz)</strong></td>
+      <td>Nájem kanceláří — 40 m² × 10 EUR/m² = 400 EUR/měsíc</td>
+      <td>~120 K Kč/rok (~10 K Kč/měsíc)</td>
+      <td style="font-size:11px;color:var(--gray)">Standardní komerční nájem, platí Studio</td>
+    </tr>
+    <tr style="background:var(--violet-light);">
+      <td colspan="2"><strong>HOPI Group cash investice</strong></td>
+      <td><strong>0 Kč</strong> (in-kind za equity stake)</td>
+      <td colspan="1" style="font-size:11px;color:var(--gray)">Formalizovat ve shareholder agreement</td>
+    </tr>
+  </table>
+  <p style="font-size:11px;color:var(--gray);margin:4px 0 16px;">Klíčový argument: HOPI Group dostane 15–20% podíl v TechIQ s.r.o. <strong>bez cash investice</strong> — výměnou za IT infrastrukturu a datový přístup. Studio platí standardní komerční nájem (400 EUR/m). DGO nese finanční risk, HOPI nese infrastrukturní a datový závazek.</p>
+
+  <!-- INTEGRATION MODEL -->
+  <h3>Tenká integrace — kooperace s HOPI IT (bez blokace)</h3>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0;">
+    <div style="border:1px solid var(--border);border-radius:8px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--navy);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border);">HOPI IT dělá</div>
+      <div class="res-item">Spravuje SAP, ERP, legacy systémy</div>
+      <div class="res-item">Publikuje definované API endpointy (Swagger)</div>
+      <div class="res-item">Poskytuje Azure tenant + základní bezpečnostní standardy</div>
+      <div class="res-item">Microsoft Entra ID / SSO pro autentizaci</div>
+      <div class="res-item">Quarterly sync — review API smlouvy</div>
+    </div>
+    <div style="border:2px solid var(--violet);border-radius:8px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--violet);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--violet);">AppIQ Studio dělá</div>
+      <div class="res-item">Konzumuje HOPI data přes REST API (read nebo write s SLA)</div>
+      <div class="res-item">Nasazuje produkty nezávisle — žádné tickety HOPI IT</div>
+      <div class="res-item">Buduje vlastní cloud stack (Azure, PG, Node.js)</div>
+      <div class="res-item">Dodává hotové aplikace do trhu i do Skupiny</div>
+      <div class="res-item">Liaison: 1 HOPI IT kontakt, max 2h/týden</div>
+    </div>
+  </div>
+
+  <div style="background:var(--amber-light);border-left:4px solid var(--amber);border-radius:8px;padding:14px 18px;margin-top:4px;">
+    <p style="font-size:11px;font-weight:700;color:#92400e;margin-bottom:4px;">Klíčový princip — mandátová separace</p>
+    <p style="font-size:11px;color:#374151;"><strong>HOPI IT = správce minulosti</strong> (SAP, stabilita, ITIL). <strong>AppIQ Studio = stavitel budoucnosti</strong> (nové produkty, AI, trh). Nejsou v konkurenci — mají jiný mandát. Tenká integrace = konzumace dat přes API, nikdy sdílený stack ani přímý DB přístup.</p>
+  </div>
+
+  <div class="page-footer">
+    <span>HOPI TechIQ — Strategic Study · Důvěrné</span>
+    <span>30. dubna 2026 · v1.2</span>
+  </div>
+</div>
+
 </body>
 </html>

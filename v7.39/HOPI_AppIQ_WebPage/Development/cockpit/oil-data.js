@@ -277,6 +277,27 @@ window.OIL_DATA = {
                       "note":  "CLOSED 2026-04-29. 3 chyby: (1) Product Hub FICO Portal mířil na Studio Hub (../index.html) — opraveno na ../../../app/index.html + JS dual-path detekce file:// → ../../../HOPI_AppIQ/Development/index.html. (2) Studio tile byl div.ph-tile-soon (pointer-events:none) — aktivováno na a.ph-tile href=../index.html. (3) Studio Hub Finance Portal card měl href=../../app/index.html — nefunkovalo lokálně, přidán stejný JS dual-path fix. Commity: 5e38468, 09d4a4f, 443dfe0, 42568c5."
                   },
                   {
+                      "id":  "AIQ-00524",
+                      "title":  "CEO Meeting Alt-B — AI Dev Studio Klášterec (Strategic Study sekce 08)",
+                      "taskType":  "analysis",
+                      "effort":  "M",
+                      "estimatedTime":  180,
+                      "actualTime":  120,
+                      "assignee":  "HU-GOGD + AI-CLAU",
+                      "status":  "REVIEW",
+                      "priority":  "HIGH",
+                      "domain":  "Platform",
+                      "module":  "STRATEGY",
+                      "createdAt":  "2026-04-30",
+                      "completedAt":  "2026-04-30",
+                      "durationDays":  0,
+                      "initiative":  "NEXUS",
+                      "blockedBy":  null,
+                      "department":  "IT_DEV",
+                      "horizon":  "NEXT",
+                      "note":  "REVIEW 2026-04-30. Alt-B deep dive — AI Dev Studio Klášterec. Obsah: tým (4 role + AI agenti, 190–245K/m), HW Dell (374K Kč), SW licence (232K/rok), fit-out (225K Kč), nájem 400 EUR/m (40 m²), seed potřeba 3,0–3,5M Kč, HOPI in-kind (Azure + data API) za 15–20% stake bez cash, DGO seed 80–85%. Integrace: REST API only, liaison 2h/týden, mandátová separace HOPI IT vs Studio. Sekce 08 v Strategic Study. v1.2: Dell XPS 15 místo MacBook, lokace = Dostavba Admin Budovy KL, nájem explicite, jméno majitele odstraněno."
+                  },
+                  {
                       "id":  "AIQ-00522",
                       "title":  "AI Workshop 2026-04-29 — Analýza závěrů a poučení pro AppIQ projekt",
                       "taskType":  "analysis",
@@ -13342,6 +13363,42 @@ window.OIL_DATA = {
                       "completedAt":  "2026-04-23 21:30",
                       "durationDays":  0,
                       "note":  "WhatsApp kešuje link preview podle URL stranky (ne og:image URL) — ?v=2 nestaci. Fix: bump _ver.js v7.27 → v7.28, QUICK_REDEPLOY vytvoril repos/appiq/v7.28/ — nova URL, WhatsApp re-scrape s korektnim cockpit-og.png. CHANGELOG.md v7.28 zapsan retroaktivne po Davidove upozorneni — Pravidlo 5 (release notes vzdy pred deployem) bylo preskoceno, David spravne zkorigoval."
+                  },
+                  {
+                      "id":  "AIQ-00525",
+                      "title":  "FI/CO Portal — EBT Report Automatizace",
+                      "taskType":  "development",
+                      "effort":  "L",
+                      "estimatedTime":  240,
+                      "actualTime":  null,
+                      "assignee":  "AI-CLAU",
+                      "status":  "OPEN",
+                      "priority":  "HIGH",
+                      "domain":  "Finance",
+                      "module":  "FI/CO Portal",
+                      "createdAt":  "2026-04-30",
+                      "completedAt":  null,
+                      "durationDays":  null,
+                      "note":  ""
+                  },
+                  {
+                      "id":  "AIQ-00526",
+                      "title":  "TEST: FI/CO Portal — EBT Report Automatizace",
+                      "taskType":  "test",
+                      "testType":  "manual",
+                      "linkedTask":  "AIQ-00525",
+                      "effort":  "S",
+                      "estimatedTime":  60,
+                      "actualTime":  null,
+                      "assignee":  "AI-CLAU",
+                      "status":  "OPEN",
+                      "priority":  "HIGH",
+                      "domain":  "Finance",
+                      "module":  "FI/CO Portal",
+                      "createdAt":  "2026-04-30",
+                      "completedAt":  null,
+                      "durationDays":  null,
+                      "note":  ""
                   }
               ]
 };
