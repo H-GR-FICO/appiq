@@ -13399,6 +13399,23 @@ window.OIL_DATA = {
                       "completedAt":  null,
                       "durationDays":  null,
                       "note":  ""
+                  },
+                  {
+                      "id":  "AIQ-00527",
+                      "title":  "Strategic Study — Alt-B v2 realistické mzdy + Alt-2 HOPI R&D Lab + porovnání",
+                      "taskType":  "development",
+                      "effort":  "M",
+                      "estimatedTime":  90,
+                      "actualTime":  null,
+                      "assignee":  "AI-CLAU",
+                      "status":  "IN PROGRESS",
+                      "priority":  "HIGH",
+                      "domain":  "Studio",
+                      "module":  "FoundersBoard",
+                      "createdAt":  "2026-04-30",
+                      "completedAt":  null,
+                      "durationDays":  null,
+                      "note":  ""
                   }
               ]
 };
